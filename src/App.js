@@ -49,22 +49,29 @@ const LandingPage = ({ onSelect }) => {
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       {/* Header */}
       <div style={{ background: '#333333', borderTop: '6px solid #F09511' }} className="text-white p-8">
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div className="flex items-center mb-4">
-            <Shield className="w-12 h-12 mr-4" style={{ color: '#F09511' }} />
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="flex items-start mb-6">
+            <Shield className="w-16 h-16 mr-5 flex-shrink-0" style={{ color: '#F09511' }} />
             <div>
-              <h1 className="text-4xl font-bold" style={{ color: '#FFFFFF' }}>U.S. Customs and Border Protection - BetterUp Retention & Wellness ROI Calculator</h1>
-              <p className="mt-2" style={{ color: '#95D9FF' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
+              <h1 className="text-4xl font-bold mb-3" style={{ color: '#FFFFFF', lineHeight: '1.2' }}>
+                U.S. Customs and Border Protection
+              </h1>
+              <h2 className="text-2xl font-bold mb-3" style={{ color: '#F09511', lineHeight: '1.3' }}>
+                BetterUp Retention & Wellness ROI Calculator
+              </h2>
+              <p className="text-base leading-relaxed" style={{ color: '#95D9FF', maxWidth: '900px' }}>
+                Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 20px' }}>
-        <div style={{ background: '#333333', padding: '32px', borderRadius: '12px', marginBottom: '32px' }}>
-          <h2 className="text-3xl font-bold mb-4" style={{ color: '#FFFFFF' }}>Select Your Organization or Sector</h2>
-          <p style={{ color: '#D9D9D6' }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
+        <div style={{ background: '#333333', padding: '24px 32px', borderRadius: '12px', marginBottom: '32px' }}>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: '#FFFFFF' }}>Select Your Organization or Sector</h2>
+          <p style={{ color: '#D9D9D6', fontSize: '15px' }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
         </div>
 
         <div className="mb-6 flex gap-4 items-center">
@@ -277,29 +284,29 @@ const CBPROICalculator = ({ workforce }) => {
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       {/* Header */}
       <div style={{ background: '#333333', borderTop: '6px solid #F09511', padding: '24px' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <Shield className="w-10 h-10 mr-3" style={{ color: '#F09511' }} />
+              <Shield className="w-12 h-12 mr-4 flex-shrink-0" style={{ color: '#F09511' }} />
               <div>
-                <h1 className="text-2xl font-bold" style={{ color: '#FFFFFF' }}>
+                <h1 className="text-3xl font-bold" style={{ color: '#FFFFFF', lineHeight: '1.3' }}>
                   {workforce.name} - BetterUp Retention & Wellness Program ROI Calculator
                 </h1>
-                <p className="text-sm mt-1" style={{ color: '#95D9FF' }}>
+                <p className="text-sm mt-2" style={{ color: '#95D9FF' }}>
                   {workforce.location} ({workforce.personnel.toLocaleString()} personnel)
                 </p>
               </div>
             </div>
             <button
               onClick={() => window.location.reload()}
-              style={{ padding: '10px 20px', background: 'rgba(255,255,255,0.15)', color: '#FFFFFF', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
+              style={{ padding: '10px 20px', background: 'rgba(255,255,255,0.15)', color: '#FFFFFF', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
             >
               ← Change Selection
             </button>
           </div>
 
-          <div style={{ marginTop: '24px', padding: '20px', background: '#3C1053', borderLeft: '4px solid #F09511', borderRadius: '8px' }}>
-            <p style={{ color: '#FFFFFF', lineHeight: '1.6' }}>
+          <div style={{ marginTop: '24px', padding: '20px 24px', background: '#3C1053', borderLeft: '4px solid #F09511', borderRadius: '8px' }}>
+            <p style={{ color: '#FFFFFF', lineHeight: '1.7', fontSize: '15px' }}>
               This calculator demonstrates BetterUp's financial impact through two pathways: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> (CBP faces $90-120M annually with suicide rates 28% higher than other LE) and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing turnover</span> at ${workforce.replacementCost.toLocaleString()} per separation through precision development targeting critical performance drivers. Adjust the inputs below to model ROI for {workforce.name}'s specific context.
             </p>
           </div>
@@ -307,7 +314,7 @@ const CBPROICalculator = ({ workforce }) => {
       </div>
 
       {/* Tabs */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 20px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div className="flex gap-2 mb-6">
           <button onClick={() => setActiveTab('dashboard')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #F09511', background: activeTab === 'dashboard' ? '#F09511' : '#FFFFFF', color: activeTab === 'dashboard' ? '#333333' : '#333333' }}>Dashboard</button>
           <button onClick={() => setActiveTab('details')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #808080', background: activeTab === 'details' ? '#808080' : '#FFFFFF', color: activeTab === 'details' ? '#FFFFFF' : '#333333' }}>Model Details</button>
