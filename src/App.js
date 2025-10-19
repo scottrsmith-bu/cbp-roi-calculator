@@ -96,22 +96,22 @@ const LandingPage = ({ onSelect }) => {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <Shield className="w-12 h-12 mr-3" style={{ color: '#95D9FF' }} />
-              <h1 className="text-4xl font-bold text-white">CBP ROI Calculator</h1>
+              <h1 className="text-4xl font-bold" style={{ color: '#FFFFFF' }}>CBP ROI Calculator</h1>
             </div>
             <p className="text-lg" style={{ color: '#95D9FF' }}>Select {org.name} Region/Sector</p>
           </div>
-          <button onClick={() => { setSelectedOrg(null); setSearchTerm(''); }} className="mb-6 px-4 py-2 rounded-lg transition-all" style={{ background: 'rgba(255, 255, 255, 0.2)' }}>
-            <span className="text-white">← Back to Organizations</span>
+          <button onClick={() => { setSelectedOrg(null); setSearchTerm(''); }} className="mb-6 px-4 py-2 rounded-lg transition-all" style={{ background: 'rgba(255, 255, 255, 0.2)', color: '#FFFFFF' }}>
+            ← Back to Organizations
           </button>
-          <input type="text" placeholder="Search sectors/regions..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full p-4 rounded-lg mb-6 border focus:outline-none text-white placeholder-gray-300" style={{ background: 'rgba(255, 255, 255, 0.2)', borderColor: 'rgba(149, 217, 255, 0.3)' }} />
+          <input type="text" placeholder="Search sectors/regions..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full p-4 rounded-lg mb-6 border focus:outline-none" style={{ background: 'rgba(255, 255, 255, 0.25)', borderColor: 'rgba(149, 217, 255, 0.5)', color: '#FFFFFF' }} />
           <div className="grid md:grid-cols-2 gap-4">
             {filteredRegions.map(region => (
-              <button key={region.id} onClick={() => onSelect({ ...region, orgData: org, attritionRate: org.attritionRate, replacementCost: org.replacementCost, fecaAnnual: org.fecaAnnual * (region.personnel / org.personnel) })} className="p-6 rounded-xl text-left transition-all transform hover:scale-105 border shadow-lg" style={{ background: 'rgba(255, 255, 255, 0.2)', borderColor: 'rgba(149, 217, 255, 0.3)' }}>
-                <h3 className="text-xl font-bold mb-2 text-white">{region.name}</h3>
+              <button key={region.id} onClick={() => onSelect({ ...region, orgData: org, attritionRate: org.attritionRate, replacementCost: org.replacementCost, fecaAnnual: org.fecaAnnual * (region.personnel / org.personnel) })} className="p-6 rounded-xl text-left transition-all transform hover:scale-105 border shadow-lg" style={{ background: 'rgba(255, 255, 255, 0.2)', borderColor: 'rgba(149, 217, 255, 0.5)' }}>
+                <h3 className="text-xl font-bold mb-2" style={{ color: '#FFFFFF' }}>{region.name}</h3>
                 {region.description && <p className="text-sm mb-3" style={{ color: '#95D9FF' }}>{region.description}</p>}
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold" style={{ color: '#95D9FF' }}>{region.personnel.toLocaleString()}</span>
-                  <span className="text-sm" style={{ color: '#AAAAAA' }}>personnel</span>
+                  <span className="text-sm" style={{ color: '#D9D9D6' }}>personnel</span>
                 </div>
               </button>
             ))}
@@ -127,52 +127,54 @@ const LandingPage = ({ onSelect }) => {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <Shield className="w-16 h-16 mr-4" style={{ color: '#95D9FF' }} />
-            <h1 className="text-5xl font-bold text-white">CBP ROI Calculator</h1>
+            <h1 className="text-5xl font-bold" style={{ color: '#FFFFFF' }}>CBP ROI Calculator</h1>
           </div>
           <p className="text-xl mb-4" style={{ color: '#95D9FF' }}>Financial Impact of Retention & Wellness Investment</p>
-          <p className="text-lg max-w-3xl mx-auto" style={{ color: '#AAAAAA' }}>Model BetterUp's dual-pathway impact across U.S. Customs and Border Protection</p>
+          <p className="text-lg max-w-3xl mx-auto" style={{ color: '#D9D9D6' }}>Model BetterUp's dual-pathway impact across U.S. Customs and Border Protection</p>
         </div>
-        <div className="rounded-xl p-8 mb-8 shadow-xl" style={{ background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
-          <h2 className="text-2xl font-bold mb-6 flex items-center text-white"><Users className="mr-3" /> Select Your Organization</h2>
-          <input type="text" placeholder="Search organizations..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full p-4 rounded-lg mb-6 border focus:outline-none text-white placeholder-gray-300" style={{ background: 'rgba(255, 255, 255, 0.2)', borderColor: 'rgba(149, 217, 255, 0.3)' }} />
+        <div className="rounded-xl p-8 mb-8 shadow-xl" style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(10px)' }}>
+          <h2 className="text-2xl font-bold mb-6 flex items-center" style={{ color: '#FFFFFF' }}>
+            <Users className="mr-3" style={{ color: '#95D9FF' }} /> Select Your Organization
+          </h2>
+          <input type="text" placeholder="Search organizations..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full p-4 rounded-lg mb-6 border focus:outline-none" style={{ background: 'rgba(255, 255, 255, 0.25)', borderColor: 'rgba(149, 217, 255, 0.5)', color: '#FFFFFF' }} />
           <button onClick={() => onSelect({ id: allCBP.id, name: allCBP.name, personnel: allCBP.personnel, description: allCBP.description, attritionRate: allCBP.attritionRate, replacementCost: allCBP.replacementCost, fecaAnnual: allCBP.fecaAnnual, orgData: allCBP })} className="w-full p-6 rounded-xl text-left transition-all transform hover:scale-105 border-2 mb-6 shadow-lg" style={{ background: '#1460AA', borderColor: '#95D9FF' }}>
-            <h3 className="text-2xl font-bold mb-2 text-white">{allCBP.name}</h3>
+            <h3 className="text-2xl font-bold mb-2" style={{ color: '#FFFFFF' }}>{allCBP.name}</h3>
             <p className="mb-3" style={{ color: '#95D9FF' }}>{allCBP.description}</p>
             <div className="flex items-center justify-between">
-              <span className="text-3xl font-bold text-white">{allCBP.personnel.toLocaleString()}</span>
+              <span className="text-3xl font-bold" style={{ color: '#FFFFFF' }}>{allCBP.personnel.toLocaleString()}</span>
               <span className="text-lg" style={{ color: '#95D9FF' }}>total personnel</span>
             </div>
           </button>
           <div className="grid md:grid-cols-2 gap-4">
             {filteredOrgs.map(org => (
-              <button key={org.id} onClick={() => setSelectedOrg(org.id)} className="p-6 rounded-xl text-left transition-all transform hover:scale-105 border shadow-lg" style={{ background: 'rgba(255, 255, 255, 0.2)', borderColor: 'rgba(149, 217, 255, 0.3)' }}>
+              <button key={org.id} onClick={() => setSelectedOrg(org.id)} className="p-6 rounded-xl text-left transition-all transform hover:scale-105 border shadow-lg" style={{ background: 'rgba(255, 255, 255, 0.2)', borderColor: 'rgba(149, 217, 255, 0.5)' }}>
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-white">{org.name}</h3>
-                  <span className="text-xs px-2 py-1 rounded text-white" style={{ background: '#1460AA' }}>{org.shortName}</span>
+                  <h3 className="text-xl font-bold" style={{ color: '#FFFFFF' }}>{org.name}</h3>
+                  <span className="text-xs px-2 py-1 rounded" style={{ background: '#1460AA', color: '#FFFFFF' }}>{org.shortName}</span>
                 </div>
                 <p className="text-sm mb-3" style={{ color: '#95D9FF' }}>{org.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold" style={{ color: '#95D9FF' }}>{org.personnel.toLocaleString()}</span>
-                  <span className="text-sm" style={{ color: '#AAAAAA' }}>personnel →</span>
+                  <span className="text-sm" style={{ color: '#D9D9D6' }}>personnel →</span>
                 </div>
               </button>
             ))}
           </div>
         </div>
         <div className="grid md:grid-cols-3 gap-6 text-center">
-          <div className="p-6 rounded-xl border shadow-lg" style={{ background: 'rgba(160, 0, 0, 0.2)', borderColor: 'rgba(250, 178, 170, 0.3)' }}>
+          <div className="p-6 rounded-xl border shadow-lg" style={{ background: 'rgba(160, 0, 0, 0.3)', borderColor: 'rgba(250, 178, 170, 0.5)' }}>
             <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#FAB2AA' }} />
-            <div className="text-3xl font-bold mb-2 text-white">2028 Crisis</div>
+            <div className="text-3xl font-bold mb-2" style={{ color: '#FFFFFF' }}>2028 Crisis</div>
             <p className="text-sm" style={{ color: '#FAB2AA' }}>400% retirement surge threatens capacity</p>
           </div>
-          <div className="p-6 rounded-xl border shadow-lg" style={{ background: 'rgba(20, 96, 170, 0.2)', borderColor: 'rgba(149, 217, 255, 0.3)' }}>
+          <div className="p-6 rounded-xl border shadow-lg" style={{ background: 'rgba(20, 96, 170, 0.3)', borderColor: 'rgba(149, 217, 255, 0.5)' }}>
             <TrendingUp className="w-12 h-12 mx-auto mb-3" style={{ color: '#95D9FF' }} />
-            <div className="text-3xl font-bold mb-2 text-white">$198M Annual</div>
+            <div className="text-3xl font-bold mb-2" style={{ color: '#FFFFFF' }}>$198M Annual</div>
             <p className="text-sm" style={{ color: '#95D9FF' }}>Current replacement costs</p>
           </div>
-          <div className="p-6 rounded-xl border shadow-lg" style={{ background: 'rgba(103, 30, 117, 0.2)', borderColor: 'rgba(201, 177, 208, 0.3)' }}>
+          <div className="p-6 rounded-xl border shadow-lg" style={{ background: 'rgba(103, 30, 117, 0.3)', borderColor: 'rgba(201, 177, 208, 0.5)' }}>
             <Heart className="w-12 h-12 mx-auto mb-3" style={{ color: '#C9B1D0' }} />
-            <div className="text-3xl font-bold mb-2 text-white">28% Higher</div>
+            <div className="text-3xl font-bold mb-2" style={{ color: '#FFFFFF' }}>28% Higher</div>
             <p className="text-sm" style={{ color: '#C9B1D0' }}>CBP suicide rate vs other LE</p>
           </div>
         </div>
