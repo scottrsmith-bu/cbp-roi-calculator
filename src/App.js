@@ -36,14 +36,16 @@ const LandingPage = ({ onSelect }) => {
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       <div style={{ background: '#00416A', borderTop: '6px solid #F09511' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px' }}>
-          <div className="flex items-start">
-            <Shield className="w-16 h-16 mr-5 flex-shrink-0" style={{ color: '#F09511' }} />
-            <div style={{ flex: 1 }}>
-              <h1 className="text-4xl font-bold mb-4" style={{ color: '#FFFFFF', lineHeight: '1.2' }}>U.S. Customs and Border Protection</h1>
-              <h2 className="text-3xl font-bold mb-4" style={{ color: '#F09511', lineHeight: '1.3' }}>BetterUp Retention & Wellness ROI Calculator</h2>
-              <p className="text-base leading-relaxed" style={{ color: '#95D9FF', maxWidth: '1000px' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 20px' }}>
+          <div className="flex items-center">
+            <Shield className="w-14 h-14 mr-4 flex-shrink-0" style={{ color: '#F09511' }} />
+            <div>
+              <h1 className="text-3xl font-bold" style={{ color: '#FFFFFF', lineHeight: '1.2', marginBottom: '8px' }}>U.S. Customs and Border Protection</h1>
+              <h2 className="text-xl font-bold" style={{ color: '#F09511', lineHeight: '1.3' }}>BetterUp Retention & Wellness ROI Calculator</h2>
             </div>
+          </div>
+          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#95D9FF' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
           </div>
         </div>
       </div>
