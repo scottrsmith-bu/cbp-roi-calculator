@@ -48,21 +48,23 @@ const LandingPage = ({ onSelect }) => {
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       {/* Header */}
-      <div style={{ background: '#333333', borderTop: '6px solid #F09511' }} className="text-white p-8">
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ background: '#333333', borderTop: '6px solid #F09511' }} className="pb-6">
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 20px' }}>
           <div className="flex items-start mb-6">
             <Shield className="w-16 h-16 mr-5 flex-shrink-0" style={{ color: '#F09511' }} />
-            <div>
-              <h1 className="text-4xl font-bold mb-3" style={{ color: '#FFFFFF', lineHeight: '1.2' }}>
+            <div style={{ flex: 1 }}>
+              <h1 className="text-4xl font-bold mb-4" style={{ color: '#FFFFFF', lineHeight: '1.2' }}>
                 U.S. Customs and Border Protection
               </h1>
-              <h2 className="text-2xl font-bold mb-3" style={{ color: '#F09511', lineHeight: '1.3' }}>
+              <h2 className="text-3xl font-bold" style={{ color: '#F09511', lineHeight: '1.3' }}>
                 BetterUp Retention & Wellness ROI Calculator
               </h2>
-              <p className="text-base leading-relaxed" style={{ color: '#95D9FF', maxWidth: '900px' }}>
-                Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.
-              </p>
             </div>
+          </div>
+          <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid #555555' }}>
+            <p className="text-base leading-relaxed" style={{ color: '#95D9FF', maxWidth: '1000px' }}>
+              Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.
+            </p>
           </div>
         </div>
       </div>
@@ -322,68 +324,31 @@ const CBPROICalculator = ({ workforce }) => {
 
         {activeTab === 'dashboard' && (
           <div className="space-y-6">
-            {/* Configuration Header */}
-            <div style={{ background: '#333333', padding: '32px', borderRadius: '12px', borderLeft: '8px solid #1460AA' }}>
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h2 className="text-3xl font-bold mb-2" style={{ color: '#F09511' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
-                  <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#F09511', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>Edit</button>
-                  <div className="mt-4 space-y-2">
-                    <p style={{ color: '#FFFFFF' }}>Total {workforce.name} Population: <span className="font-bold">{workforce.personnel.toLocaleString()}</span></p>
-                    <p style={{ color: '#FFFFFF' }}>Engagement rate: <span className="font-bold">{engagementRate}%</span> <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#F09511', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', marginLeft: '8px' }}>Edit</button></p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <button onClick={() => document.getElementById('impact-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: '#F09511', color: '#333333', padding: '16px 32px', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', fontSize: '16px' }}>Show Impact →</button>
-                  <div className="text-xs mt-2" style={{ color: '#F09511' }}>See results for {engagementRate}% engagement rate</div>
-                </div>
-              </div>
+            {/* Top Summary Banner */}
+            <div style={{ background: '#FEF7ED', border: '3px solid #F09511', borderLeft: '6px solid #F09511', borderRadius: '8px', padding: '20px 24px' }}>
+              <p style={{ color: '#333333', fontSize: '16px', lineHeight: '1.6' }}>
+                BetterUp saves {workforce.name} <span style={{ color: '#F09511', fontWeight: '700' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated {calculations.claimsReduced.toFixed(0)} workers' comp claims—by helping personnel build resilience and reduce stress.
+              </p>
             </div>
 
-            {/* Key Parameters */}
-            <div style={{ background: '#EDF3F9', padding: '24px', borderRadius: '12px', border: '2px solid #1460AA' }}>
-              <div className="flex items-center mb-4">
-                <Info className="mr-3" style={{ color: '#1460AA' }} size={24} />
-                <h3 className="text-xl font-bold" style={{ color: '#1460AA' }}>Key Model Parameters</h3>
+            {/* Impact Metrics - Horizontal Cards */}
+            <div id="impact-section" className="grid grid-cols-3 gap-6">
+              <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <div className="text-sm mb-2" style={{ color: '#555555' }}>Net savings</div>
+                <div className="text-5xl font-bold mb-2" style={{ color: '#008000' }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
+                <div className="text-sm" style={{ color: '#808080' }}>After program cost</div>
               </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #95D9FF' }}>
-                  <h4 className="font-bold mb-2" style={{ color: '#1460AA', fontSize: '16px' }}>Engagement Rate ({engagementRate}%)</h4>
-                  <p style={{ color: '#333333', fontSize: '14px' }}>Controls <strong>how many</strong> personnel actively use BetterUp coaching</p>
-                  <p className="text-sm mt-2" style={{ color: '#1460AA' }}>Example: {seats.toLocaleString()} target × {engagementRate}% = {Math.round(calculations.activeSeats).toLocaleString()} engaged</p>
-                </div>
-                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #95D9FF' }}>
-                  <h4 className="font-bold mb-2" style={{ color: '#1460AA', fontSize: '16px' }}>Readiness Rate ({effectiveness}%)</h4>
-                  <p style={{ color: '#333333', fontSize: '14px' }}>Controls <strong>how much</strong> each engaged person's performance improves</p>
-                  <p className="text-sm mt-2" style={{ color: '#1460AA' }}>Auto-calculated from Performance Drivers (Resilience, Leadership, etc.)</p>
-                </div>
-              </div>
-            </div>
 
-            {/* Impact Metrics - Horizontal Layout */}
-            <div id="impact-section" style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #00416A' }}>
-              <h2 className="text-2xl font-bold mb-6" style={{ color: '#00416A' }}>Financial Impact Summary</h2>
-              <div className="grid grid-cols-4 gap-6">
-                <div style={{ textAlign: 'center' }}>
-                  <TrendingUp size={40} className="mb-3 mx-auto" style={{ color: '#008000' }} />
-                  <div className="text-4xl font-bold mb-2" style={{ color: '#008000' }}>{calculations.roi}%</div>
-                  <div className="text-sm" style={{ color: '#555555' }}>Return on Investment</div>
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <DollarSign size={40} className="mb-3 mx-auto" style={{ color: '#1460AA' }} />
-                  <div className="text-4xl font-bold mb-2" style={{ color: '#1460AA' }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
-                  <div className="text-sm" style={{ color: '#555555' }}>Net Annual Savings</div>
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <Calculator size={40} className="mb-3 mx-auto" style={{ color: '#00416A' }} />
-                  <div className="text-4xl font-bold mb-2" style={{ color: '#00416A' }}>{calculations.breakEvenMonths > 0 ? calculations.breakEvenMonths.toFixed(1) : 'Immediate'}</div>
-                  <div className="text-sm" style={{ color: '#555555' }}>Months to Break-Even</div>
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <Users size={40} className="mb-3 mx-auto" style={{ color: '#F09511' }} />
-                  <div className="text-4xl font-bold mb-2" style={{ color: '#F09511' }}>{Math.round(calculations.separationsPrevented)}</div>
-                  <div className="text-sm" style={{ color: '#555555' }}>Separations Prevented</div>
-                </div>
+              <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <div className="text-sm mb-2" style={{ color: '#555555' }}>ROI multiplier</div>
+                <div className="text-5xl font-bold mb-2" style={{ color: '#333333' }}>{(calculations.totalAnnualSavings / calculations.totalCost).toFixed(1)}x</div>
+                <div className="text-sm" style={{ color: '#808080' }}>Return +{calculations.roi}%</div>
+              </div>
+
+              <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <div className="text-sm mb-2" style={{ color: '#555555' }}>Personnel impacted</div>
+                <div className="text-5xl font-bold mb-2" style={{ color: '#333333' }}>{Math.round(calculations.activeSeats)}</div>
+                <div className="text-sm" style={{ color: '#808080' }}>Clinical symptom reduction • 4 factors</div>
               </div>
             </div>
 
