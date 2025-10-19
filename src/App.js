@@ -48,23 +48,21 @@ const LandingPage = ({ onSelect }) => {
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       {/* Header */}
-      <div style={{ background: '#333333', borderTop: '6px solid #F09511' }} className="pb-6">
+      <div style={{ background: '#00416A', borderTop: '6px solid #F09511' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 20px' }}>
-          <div className="flex items-start mb-6">
+          <div className="flex items-start">
             <Shield className="w-16 h-16 mr-5 flex-shrink-0" style={{ color: '#F09511' }} />
             <div style={{ flex: 1 }}>
               <h1 className="text-4xl font-bold mb-4" style={{ color: '#FFFFFF', lineHeight: '1.2' }}>
                 U.S. Customs and Border Protection
               </h1>
-              <h2 className="text-3xl font-bold" style={{ color: '#F09511', lineHeight: '1.3' }}>
+              <h2 className="text-3xl font-bold mb-4" style={{ color: '#F09511', lineHeight: '1.3' }}>
                 BetterUp Retention & Wellness ROI Calculator
               </h2>
+              <p className="text-base leading-relaxed" style={{ color: '#95D9FF', maxWidth: '1000px' }}>
+                Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.
+              </p>
             </div>
-          </div>
-          <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid #555555' }}>
-            <p className="text-base leading-relaxed" style={{ color: '#95D9FF', maxWidth: '1000px' }}>
-              Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.
-            </p>
           </div>
         </div>
       </div>
@@ -285,11 +283,11 @@ const CBPROICalculator = ({ workforce }) => {
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       {/* Header */}
-      <div style={{ background: '#333333', borderTop: '6px solid #F09511', padding: '24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div className="flex items-center justify-between">
+      <div style={{ background: '#333333', borderTop: '6px solid #F09511', padding: '32px 0' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <Shield className="w-12 h-12 mr-4 flex-shrink-0" style={{ color: '#F09511' }} />
+              <Shield className="w-14 h-14 mr-4 flex-shrink-0" style={{ color: '#F09511' }} />
               <div>
                 <h1 className="text-3xl font-bold" style={{ color: '#FFFFFF', lineHeight: '1.3' }}>
                   {workforce.name} - BetterUp Retention & Wellness Program ROI Calculator
@@ -301,22 +299,25 @@ const CBPROICalculator = ({ workforce }) => {
             </div>
             <button
               onClick={() => window.location.reload()}
-              style={{ padding: '10px 20px', background: 'rgba(255,255,255,0.15)', color: '#FFFFFF', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ padding: '10px 20px', background: 'rgba(255,255,255,0.15)', color: '#FFFFFF', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: '14px' }}
             >
               ← Change Selection
             </button>
           </div>
+        </div>
+      </div>
 
-          <div style={{ marginTop: '24px', padding: '20px 24px', background: '#3C1053', borderLeft: '4px solid #F09511', borderRadius: '8px' }}>
-            <p style={{ color: '#FFFFFF', lineHeight: '1.7', fontSize: '15px' }}>
-              This calculator demonstrates BetterUp's financial impact through two pathways: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> (CBP faces $90-120M annually with suicide rates 28% higher than other LE) and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing turnover</span> at ${workforce.replacementCost.toLocaleString()} per separation through precision development targeting critical performance drivers. Adjust the inputs below to model ROI for {workforce.name}'s specific context.
-            </p>
-          </div>
+      {/* Description Banner */}
+      <div style={{ background: '#F6F6F6', padding: '24px 0', borderBottom: '1px solid #EEEEEE' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <p style={{ color: '#555555', lineHeight: '1.7', fontSize: '15px' }}>
+            This calculator demonstrates BetterUp's financial impact through two pathways: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> (CBP faces $90-120M annually with suicide rates 28% higher than other LE) and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing turnover</span> at ${workforce.replacementCost.toLocaleString()} per separation through precision development targeting critical performance drivers. Adjust the inputs below to model ROI for {workforce.name}'s specific context.
+          </p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+      <div style={{ maxWidth: '1200px', margin: '24px auto 0', padding: '0 20px' }}>
         <div className="flex gap-2 mb-6">
           <button onClick={() => setActiveTab('dashboard')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #F09511', background: activeTab === 'dashboard' ? '#F09511' : '#FFFFFF', color: activeTab === 'dashboard' ? '#333333' : '#333333' }}>Dashboard</button>
           <button onClick={() => setActiveTab('details')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #808080', background: activeTab === 'details' ? '#808080' : '#FFFFFF', color: activeTab === 'details' ? '#FFFFFF' : '#333333' }}>Model Details</button>
