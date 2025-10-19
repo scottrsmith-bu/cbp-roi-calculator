@@ -1,4 +1,52 @@
-import React, { useState, useMemo } from 'react';
+{/* Header */}
+      <div style={{ background: '#00416A', borderTop: '6px solid #F09511' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Shield className="w-14 h-14 mr-4 flex-shrink-0" style={{ color: '#F09511' }} />
+              <div>
+                <h1 className="text-3xl font-bold mb-2" style={{ color: '#FFFFFF', lineHeight: '1.3' }}>
+                  {workforce.name}
+                </h1>
+                <h2 className="text-xl font-bold" style={{ color: '#F09511', lineHeight: '1.3' }}>
+                  BetterUp Retention & Wellness Program ROI Calculator
+                </h2>
+                <p className="text-sm mt-2" style={{ color: '#95D9FF' }}>
+                  {workforce.location} ({workforce.personnel.toLocaleString()} personnel)
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => window.location.reload()}
+              style={{ 
+                padding: '12px 24px', 
+                background: 'rgba(255,255,255,0.2)', 
+                color: '#FFFFFF', 
+                borderRadius: '8px', 
+                border: '1px solid rgba(255,255,255,0.3)', 
+                cursor: 'pointer', 
+                whiteSpace: 'nowrap', 
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
+              ← Change Selection
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Description Banner */}
+      <div style={{ background: '#ECF1F4', padding: '24px 0', borderBottom: '1px solid #D9D9D6' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <p style={{ color: '#333333', lineHeight: '1.7', fontSize: '15px' }}>
+            This calculator demonstrates BetterUp's financial impact through two pathways: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> (CBP faces $90-120M annually with suicide rates 28% higher than other LE) and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing turnover</span> at ${workforce.replacementCost.toLocaleString()} per separation through precision development targeting critical performance drivers. Adjust the inputs below to model ROI for {workforce.name}'s specific context.
+          </p>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ maxWidth: '1200px', margin: '24px auto 0', padding: '0 20px' }}>import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import { Calculator, TrendingUp, Users, DollarSign, Shield, Heart, Brain, MessageSquare, ChevronDown, ChevronUp, Info, Settings, Search } from 'lucide-react';
 
