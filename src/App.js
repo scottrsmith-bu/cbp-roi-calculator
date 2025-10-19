@@ -36,13 +36,13 @@ const LandingPage = ({ onSelect }) => {
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       <div style={{ background: '#00416A', borderTop: '6px solid #F09511' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 20px' }}>
-          <div className="flex items-center mb-3">
-            <Shield className="w-10 h-10 mr-3" style={{ color: '#F09511' }} />
-            <h1 className="text-3xl font-bold" style={{ color: '#FFFFFF', lineHeight: '1' }}>U.S. Customs and Border Protection</h1>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+            <Shield size={48} style={{ color: '#F09511', flexShrink: 0 }} />
+            <h1 style={{ color: '#FFFFFF', fontSize: '32px', fontWeight: '700', margin: 0, lineHeight: '1.2' }}>U.S. Customs and Border Protection</h1>
           </div>
-          <h2 className="text-xl font-bold mb-3" style={{ color: '#F09511', lineHeight: '1.3', marginLeft: '52px' }}>BetterUp Retention & Wellness ROI Calculator</h2>
-          <p className="text-sm leading-relaxed" style={{ color: '#95D9FF', marginLeft: '52px', marginTop: '12px' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
+          <h2 style={{ color: '#F09511', fontSize: '24px', fontWeight: '700', margin: 0, marginLeft: '64px', lineHeight: '1.3' }}>BetterUp Retention & Wellness ROI Calculator</h2>
+          <p style={{ color: '#95D9FF', fontSize: '14px', lineHeight: '1.6', marginTop: '16px', marginLeft: '64px' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
         </div>
       </div>
 
