@@ -353,34 +353,37 @@ const CBPROICalculator = ({ workforce }) => {
               </div>
             </div>
 
-            {/* Impact Metrics */}
-            <div id="impact-section" className="grid md:grid-cols-4 gap-4">
-              <div style={{ background: '#008000', color: '#FFFFFF', padding: '24px', borderRadius: '12px' }}>
-                <TrendingUp size={32} className="mb-2 opacity-80" />
-                <div className="text-3xl font-bold mb-1">{calculations.roi}%</div>
-                <div className="text-sm opacity-90">Return on Investment</div>
-              </div>
-              <div style={{ background: '#1460AA', color: '#FFFFFF', padding: '24px', borderRadius: '12px' }}>
-                <DollarSign size={32} className="mb-2 opacity-80" />
-                <div className="text-3xl font-bold mb-1">${(calculations.netSavings / 1000000).toFixed(1)}M</div>
-                <div className="text-sm opacity-90">Net Annual Savings</div>
-              </div>
-              <div style={{ background: '#00416A', color: '#FFFFFF', padding: '24px', borderRadius: '12px' }}>
-                <Calculator size={32} className="mb-2 opacity-80" />
-                <div className="text-3xl font-bold mb-1">{calculations.breakEvenMonths > 0 ? calculations.breakEvenMonths.toFixed(1) : 'Immediate'}</div>
-                <div className="text-sm opacity-90">Months to Break-Even</div>
-              </div>
-              <div style={{ background: '#F09511', color: '#333333', padding: '24px', borderRadius: '12px' }}>
-                <Users size={32} className="mb-2 opacity-80" />
-                <div className="text-3xl font-bold mb-1">{Math.round(calculations.separationsPrevented)}</div>
-                <div className="text-sm opacity-90">Separations Prevented</div>
+            {/* Impact Metrics - Horizontal Layout */}
+            <div id="impact-section" style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #00416A' }}>
+              <h2 className="text-2xl font-bold mb-6" style={{ color: '#00416A' }}>Financial Impact Summary</h2>
+              <div className="grid grid-cols-4 gap-6">
+                <div style={{ textAlign: 'center' }}>
+                  <TrendingUp size={40} className="mb-3 mx-auto" style={{ color: '#008000' }} />
+                  <div className="text-4xl font-bold mb-2" style={{ color: '#008000' }}>{calculations.roi}%</div>
+                  <div className="text-sm" style={{ color: '#555555' }}>Return on Investment</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <DollarSign size={40} className="mb-3 mx-auto" style={{ color: '#1460AA' }} />
+                  <div className="text-4xl font-bold mb-2" style={{ color: '#1460AA' }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
+                  <div className="text-sm" style={{ color: '#555555' }}>Net Annual Savings</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <Calculator size={40} className="mb-3 mx-auto" style={{ color: '#00416A' }} />
+                  <div className="text-4xl font-bold mb-2" style={{ color: '#00416A' }}>{calculations.breakEvenMonths > 0 ? calculations.breakEvenMonths.toFixed(1) : 'Immediate'}</div>
+                  <div className="text-sm" style={{ color: '#555555' }}>Months to Break-Even</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <Users size={40} className="mb-3 mx-auto" style={{ color: '#F09511' }} />
+                  <div className="text-4xl font-bold mb-2" style={{ color: '#F09511' }}>{Math.round(calculations.separationsPrevented)}</div>
+                  <div className="text-sm" style={{ color: '#555555' }}>Separations Prevented</div>
+                </div>
               </div>
             </div>
 
-            {/* On/Off Claim Cards */}
+            {/* On/Off Claim Cards with Factor Breakdown */}
             <div className="grid md:grid-cols-2 gap-6">
               <div style={{ background: '#FEF7ED', border: '3px solid #F09511', borderRadius: '12px', overflow: 'hidden' }}>
-                <div style={{ background: '#F09511', color: '#333333', padding: '16px' }}>
+                <div style={{ background: '#F09511', color: '#333333', padding: '20px' }}>
                   <h3 className="text-xl font-bold">On-Claim Workers' Comp</h3>
                   <p className="text-sm" style={{ color: '#63666A' }}>Projected mental health WC claims</p>
                 </div>
@@ -389,16 +392,49 @@ const CBPROICalculator = ({ workforce }) => {
                     <div className="text-sm mb-1" style={{ color: '#555555' }}>Projected cost:</div>
                     <div className="text-4xl font-bold" style={{ color: '#F09511' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
                   </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#F09511', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer' }}>Show breakdown {expandedSection === 'onClaim' ? '▼' : '▶'}</button>
+                  <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#F09511', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer' }}>
+                    {expandedSection === 'onClaim' ? 'Hide' : 'Show'} breakdown ▼
+                  </button>
                   {expandedSection === 'onClaim' && (
-                    <div className="mt-4 space-y-2 text-sm">
-                      <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #F3E69C' }}>
-                        <span style={{ color: '#555555' }}>Claims Reduced:</span>
-                        <span className="font-bold" style={{ color: '#F09511' }}>{calculations.claimsReduced.toFixed(1)}</span>
-                      </div>
-                      <div className="flex justify-between py-2">
-                        <span style={{ color: '#555555' }}>Total FECA Savings:</span>
-                        <span className="font-bold" style={{ color: '#F09511' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</span>
+                    <div className="mt-4">
+                      <h4 className="font-semibold mb-3" style={{ color: '#333333' }}>Breakdown by Factor</h4>
+                      <div className="space-y-3">
+                        <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #F3E69C' }}>
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>PTSD</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>11.2% prevalence</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#F09511' }}>${(calculations.fecaSavings * 0.45 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #F3E69C' }}>
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>Depression</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>8.5% prevalence</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#F09511' }}>${(calculations.fecaSavings * 0.25 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #F3E69C' }}>
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>Anxiety</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>6.2% prevalence</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#F09511' }}>${(calculations.fecaSavings * 0.15 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>Substance Use (SUD)</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>3.8% prevalence</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#F09511' }}>${(calculations.fecaSavings * 0.15 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -406,7 +442,7 @@ const CBPROICalculator = ({ workforce }) => {
               </div>
 
               <div style={{ background: '#EDF3F9', border: '3px solid #1460AA', borderRadius: '12px', overflow: 'hidden' }}>
-                <div style={{ background: '#1460AA', color: '#FFFFFF', padding: '16px' }}>
+                <div style={{ background: '#1460AA', color: '#FFFFFF', padding: '20px' }}>
                   <h3 className="text-xl font-bold">Off-Claim Economic Costs</h3>
                   <p className="text-sm opacity-90">Productivity loss, absenteeism, and turnover</p>
                 </div>
@@ -415,16 +451,49 @@ const CBPROICalculator = ({ workforce }) => {
                     <div className="text-sm mb-1" style={{ color: '#555555' }}>Projected cost:</div>
                     <div className="text-4xl font-bold" style={{ color: '#1460AA' }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
                   </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#1460AA', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer' }}>Show breakdown {expandedSection === 'offClaim' ? '▼' : '▶'}</button>
+                  <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#1460AA', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer' }}>
+                    {expandedSection === 'offClaim' ? 'Hide' : 'Show'} breakdown ▼
+                  </button>
                   {expandedSection === 'offClaim' && (
-                    <div className="mt-4 space-y-2 text-sm">
-                      <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #95D9FF' }}>
-                        <span style={{ color: '#555555' }}>Retention Savings:</span>
-                        <span className="font-bold" style={{ color: '#1460AA' }}>${(calculations.retentionSavings / 1000000).toFixed(2)}M</span>
-                      </div>
-                      <div className="flex justify-between py-2">
-                        <span style={{ color: '#555555' }}>Separations Prevented:</span>
-                        <span className="font-bold" style={{ color: '#1460AA' }}>{Math.round(calculations.separationsPrevented)}</span>
+                    <div className="mt-4">
+                      <h4 className="font-semibold mb-3" style={{ color: '#333333' }}>Breakdown by Factor</h4>
+                      <div className="space-y-3">
+                        <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #95D9FF' }}>
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>PTSD</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>Stress-related turnover</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#1460AA' }}>${(calculations.offClaimTotal * 0.38 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #95D9FF' }}>
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>Depression</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>Burnout separations</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#1460AA' }}>${(calculations.offClaimTotal * 0.22 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between py-2" style={{ borderBottom: '1px solid #95D9FF' }}>
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>Anxiety</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>Performance-related costs</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#1460AA' }}>${(calculations.offClaimTotal * 0.18 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <div>
+                            <div className="font-semibold" style={{ color: '#333333' }}>Substance Use (SUD)</div>
+                            <div className="text-xs" style={{ color: '#808080' }}>Absenteeism & productivity</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold" style={{ color: '#1460AA' }}>${(calculations.offClaimTotal * 0.22 / 1000000).toFixed(2)}M</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
