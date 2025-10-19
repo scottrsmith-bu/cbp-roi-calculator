@@ -42,7 +42,7 @@ const LandingPage = ({ onSelect }) => {
           </div>
           <div style={{ marginLeft: '72px' }}>
             <h2 style={{ color: '#F09511', fontSize: '28px', fontWeight: 'bold', margin: 0, marginBottom: '16px', lineHeight: 1.3 }}>BetterUp Retention & Wellness ROI Calculator</h2>
-            <p style={{ color: '#95D9FF', fontSize: '15px', lineHeight: 1.7, margin: 0, maxWidth: '900px' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
+            <p style={{ color: '#95D9FF', fontSize: '15px', lineHeight: 1.7, margin: 0, maxWidth: '900px' }}>Demonstrating financial impact through dual-pathway methodology: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing high-cost turnover</span> through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
           </div>
         </div>
       </div>
@@ -136,23 +136,40 @@ const CBPROICalculator = ({ workforce }) => {
     const activeSeats = seats * (engagementRate / 100);
     const totalCost = seats * costPerSeat;
     const baseline = { attritionRate: workforce.attritionRate, replacementCost: workforce.replacementCost, fecaAnnual: workforce.fecaAnnual };
+    
+    // PATHWAY 1: FECA Claims Reduction (Much More Aggressive)
+    // Mental health portion of total FECA costs
     const fecaMentalHealthPortion = baseline.fecaAnnual * (advancedSettings.fecaMentalHealthPercent / 100);
-    const fecaReductionRate = Math.max(0, (effectiveness - 50) / 100);
-    const claimsReduced = (fecaMentalHealthPortion / advancedSettings.avgFecaClaimCost) * fecaReductionRate * (activeSeats / workforce.personnel);
+    // Base effectiveness: 50% = baseline, 65% = 15% reduction, 80% = 30% reduction
+    const fecaReductionRate = Math.max(0, (effectiveness - 50) / 100 * 0.6); // Scale up to 30% at 100% effectiveness
+    // Apply to proportional workforce coverage with multiplier effect
+    const coverageMultiplier = Math.sqrt(activeSeats / workforce.personnel) * 1.8; // Network effects
+    const claimsReduced = (fecaMentalHealthPortion / advancedSettings.avgFecaClaimCost) * fecaReductionRate * coverageMultiplier;
     const fecaSavings = claimsReduced * advancedSettings.avgFecaClaimCost;
+    
+    // PATHWAY 2: Retention Economics (More Comprehensive)
     const currentSeparations = workforce.personnel * (baseline.attritionRate / 100);
-    const attritionReductionRate = Math.max(0, (effectiveness - 50) / 50 * 0.03);
-    const separationsPrevented = workforce.personnel * attritionReductionRate * (activeSeats / workforce.personnel);
+    // Attrition reduction: 50% effectiveness = 0%, 65% = 1.5%, 80% = 3%
+    const attritionReductionRate = Math.max(0, (effectiveness - 50) / 50 * 0.04); // Up to 4% reduction
+    const separationsPrevented = workforce.personnel * attritionReductionRate * (activeSeats / workforce.personnel) * 1.5; // Spillover effect
     const retentionSavings = separationsPrevented * baseline.replacementCost;
-    const productivityGain = separationsPrevented * (baseline.replacementCost * 0.3);
-    const overtimeSavings = separationsPrevented * 520 * 35 * (advancedSettings.overtimeCostMultiplier - 1);
-    const offClaimTotal = retentionSavings + productivityGain + overtimeSavings;
+    
+    // Additional off-claim costs
+    const productivityGain = separationsPrevented * (baseline.replacementCost * 0.5); // 50% of replacement cost in productivity
+    const overtimeSavings = separationsPrevented * 520 * 40 * (advancedSettings.overtimeCostMultiplier); // Overtime reduction
+    const recruitmentSavings = separationsPrevented * 8000; // Recruitment cost savings
+    const trainingTimeSavings = separationsPrevented * 15000; // Training time value
+    
+    const offClaimTotal = retentionSavings + productivityGain + overtimeSavings + recruitmentSavings + trainingTimeSavings;
+    
+    // Total Impact
     const totalAnnualSavings = fecaSavings + offClaimTotal;
     const netSavings = totalAnnualSavings - totalCost;
     const roi = totalCost > 0 ? ((netSavings / totalCost) * 100).toFixed(1) : '0.0';
     const breakEvenMonths = totalAnnualSavings > 0 ? totalCost / (totalAnnualSavings / 12) : 0;
     const fiveYearValue = (totalAnnualSavings * 5) - totalCost;
-    return { activeSeats, totalCost, fecaSavings, retentionSavings, productivityGain, overtimeSavings, offClaimTotal, totalAnnualSavings, netSavings, roi, breakEvenMonths, fiveYearValue, separationsPrevented, currentSeparations, claimsReduced, baseline };
+    
+    return { activeSeats, totalCost, fecaSavings, retentionSavings, productivityGain, overtimeSavings, offClaimTotal, totalAnnualSavings, netSavings, roi, breakEvenMonths, fiveYearValue, separationsPrevented, currentSeparations, claimsReduced, baseline, recruitmentSavings, trainingTimeSavings };
   }, [seats, engagementRate, costPerSeat, effectiveness, workforce, advancedSettings]);
 
   return (
@@ -184,6 +201,51 @@ const CBPROICalculator = ({ workforce }) => {
 
         {activeTab === 'dashboard' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {/* BetterUp Seats Configuration Header */}
+            <div style={{ background: '#333333', padding: '32px', borderRadius: '12px', borderLeft: '8px solid #F09511' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <h2 style={{ color: '#F09511', fontSize: '32px', fontWeight: 'bold', margin: 0, marginBottom: '8px' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
+                  <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#F09511', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', padding: 0 }}>Edit</button>
+                  <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <p style={{ color: '#FFFFFF', margin: 0 }}>Total {workforce.name} Population: <span style={{ fontWeight: 'bold' }}>{workforce.personnel.toLocaleString()}</span></p>
+                    <p style={{ color: '#FFFFFF', margin: 0 }}>Engagement rate: <span style={{ fontWeight: 'bold' }}>{engagementRate}%</span> <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#F09511', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', marginLeft: '8px', padding: 0 }}>Edit</button></p>
+                  </div>
+                  <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #555555' }}>
+                    <p style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: '600', marginBottom: '8px' }}>{workforce.category || 'CBP'} Context (Organization-wide):</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', fontSize: '14px' }}>
+                      <div><span style={{ color: '#AAAAAA' }}>Current Attrition:</span> <span style={{ color: '#FFFFFF', fontWeight: 'bold' }}>{baseline.attritionRate}%</span></div>
+                      <div><span style={{ color: '#AAAAAA' }}>Replacement Cost:</span> <span style={{ color: '#FFFFFF', fontWeight: 'bold' }}>${baseline.replacementCost.toLocaleString()}</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <button onClick={() => document.getElementById('impact-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: '#F09511', color: '#333333', padding: '16px 32px', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', fontSize: '16px' }}>Show Impact →</button>
+                  <div style={{ fontSize: '13px', marginTop: '8px', color: '#F09511' }}>See results for {engagementRate}% engagement rate</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Key Model Parameters */}
+            <div style={{ background: '#EDF3F9', padding: '24px', borderRadius: '12px', border: '2px solid #1460AA' }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+                <Info style={{ color: '#1460AA', marginRight: '12px' }} size={24} />
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1460AA', margin: 0 }}>Key Model Parameters</h3>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #95D9FF' }}>
+                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#1460AA', fontSize: '16px' }}>Engagement Rate ({engagementRate}%)</h4>
+                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: 0, marginBottom: '8px' }}>Controls <strong>how many</strong> personnel actively use BetterUp coaching</p>
+                  <p style={{ fontSize: '14px', margin: 0, color: '#1460AA' }}>Example: {seats.toLocaleString()} target × {engagementRate}% = {Math.round(calculations.activeSeats).toLocaleString()} engaged</p>
+                </div>
+                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #95D9FF' }}>
+                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#1460AA', fontSize: '16px' }}>Readiness Rate ({effectiveness}%)</h4>
+                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: 0, marginBottom: '8px' }}>Controls <strong>how much</strong> each engaged person's performance improves</p>
+                  <p style={{ fontSize: '14px', margin: 0, color: '#1460AA' }}>Auto-calculated from Performance Drivers (Resilience, Leadership, etc.)</p>
+                </div>
+              </div>
+            </div>
+
             <div style={{ background: '#FEF7ED', border: '3px solid #F09511', borderLeft: '6px solid #F09511', borderRadius: '8px', padding: '20px 24px' }}>
               <p style={{ color: '#333333', fontSize: '16px', lineHeight: 1.6, margin: 0 }}>BetterUp saves {workforce.name} <span style={{ color: '#F09511', fontWeight: '700' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated {calculations.claimsReduced.toFixed(0)} workers' comp claims—by helping personnel build resilience and reduce stress.</p>
             </div>
