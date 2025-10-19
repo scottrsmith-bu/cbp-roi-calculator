@@ -36,17 +36,13 @@ const LandingPage = ({ onSelect }) => {
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
       <div style={{ background: '#00416A', borderTop: '6px solid #F09511' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 20px' }}>
-          <div className="flex items-center">
-            <Shield className="w-14 h-14 mr-4 flex-shrink-0" style={{ color: '#F09511' }} />
-            <div>
-              <h1 className="text-3xl font-bold" style={{ color: '#FFFFFF', lineHeight: '1.2', marginBottom: '8px' }}>U.S. Customs and Border Protection</h1>
-              <h2 className="text-xl font-bold" style={{ color: '#F09511', lineHeight: '1.3' }}>BetterUp Retention & Wellness ROI Calculator</h2>
-            </div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 20px' }}>
+          <div className="flex items-center mb-3">
+            <Shield className="w-10 h-10 mr-3" style={{ color: '#F09511' }} />
+            <h1 className="text-3xl font-bold" style={{ color: '#FFFFFF', lineHeight: '1' }}>U.S. Customs and Border Protection</h1>
           </div>
-          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-            <p className="text-sm leading-relaxed" style={{ color: '#95D9FF' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
-          </div>
+          <h2 className="text-xl font-bold mb-3" style={{ color: '#F09511', lineHeight: '1.3', marginLeft: '52px' }}>BetterUp Retention & Wellness ROI Calculator</h2>
+          <p className="text-sm leading-relaxed" style={{ color: '#95D9FF', marginLeft: '52px', marginTop: '12px' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
         </div>
       </div>
 
