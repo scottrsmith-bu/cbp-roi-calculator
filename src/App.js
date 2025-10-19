@@ -21,7 +21,6 @@ const LandingPage = ({ onSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('All Units');
   const [sortBy, setSortBy] = useState('personnel');
-
   const filters = ['All Units', 'Preset', 'Organization', 'USBP Sector', 'OFO Region'];
 
   const filteredAndSorted = useMemo(() => {
@@ -35,26 +34,28 @@ const LandingPage = ({ onSelect }) => {
 
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
-      <div style={{ background: '#00416A', borderTop: '6px solid #F09511' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-            <Shield size={48} style={{ color: '#F09511', flexShrink: 0 }} />
-            <h1 style={{ color: '#FFFFFF', fontSize: '32px', fontWeight: '700', margin: 0, lineHeight: '1.2' }}>U.S. Customs and Border Protection</h1>
+      <div style={{ background: '#00416A', borderTop: '6px solid #F09511', paddingTop: '20px', paddingBottom: '24px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+            <Shield size={56} style={{ color: '#F09511', marginRight: '16px' }} />
+            <h1 style={{ color: '#FFFFFF', fontSize: '36px', fontWeight: 'bold', margin: 0, lineHeight: 1.2 }}>U.S. Customs and Border Protection</h1>
           </div>
-          <h2 style={{ color: '#F09511', fontSize: '24px', fontWeight: '700', margin: 0, marginLeft: '64px', lineHeight: '1.3' }}>BetterUp Retention & Wellness ROI Calculator</h2>
-          <p style={{ color: '#95D9FF', fontSize: '14px', lineHeight: '1.6', marginTop: '16px', marginLeft: '64px' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
+          <div style={{ marginLeft: '72px' }}>
+            <h2 style={{ color: '#F09511', fontSize: '28px', fontWeight: 'bold', margin: 0, marginBottom: '16px', lineHeight: 1.3 }}>BetterUp Retention & Wellness ROI Calculator</h2>
+            <p style={{ color: '#95D9FF', fontSize: '15px', lineHeight: 1.7, margin: 0, maxWidth: '900px' }}>Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
+          </div>
         </div>
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
         <div style={{ background: '#333333', padding: '24px 32px', borderRadius: '12px', marginBottom: '32px' }}>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#FFFFFF' }}>Select Your Organization or Sector</h2>
-          <p style={{ color: '#D9D9D6', fontSize: '15px' }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
+          <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', color: '#FFFFFF' }}>Select Your Organization or Sector</h2>
+          <p style={{ color: '#D9D9D6', fontSize: '15px', margin: 0 }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
         </div>
 
-        <div className="mb-6 flex gap-4 items-center">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-3.5" style={{ color: '#808080' }} size={20} />
+        <div style={{ marginBottom: '24px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <Search style={{ position: 'absolute', left: '16px', top: '14px', color: '#808080' }} size={20} />
             <input type="text" placeholder="Search organizations..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ width: '100%', padding: '12px 12px 12px 48px', border: '2px solid #D9D9D6', borderRadius: '8px', fontSize: '16px', color: '#333333' }} />
           </div>
           <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ padding: '12px 40px 12px 16px', border: '2px solid #D9D9D6', borderRadius: '8px', background: '#FFFFFF', color: '#333333', fontSize: '16px' }}>
@@ -63,9 +64,9 @@ const LandingPage = ({ onSelect }) => {
           </select>
         </div>
 
-        <div className="flex gap-3 mb-6 flex-wrap">
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
           {filters.map(filter => (
-            <button key={filter} onClick={() => setActiveFilter(filter)} style={{ padding: '10px 20px', borderRadius: '8px', fontWeight: '600', border: '2px solid', borderColor: activeFilter === filter ? '#1460AA' : '#D9D9D6', background: activeFilter === filter ? '#1460AA' : '#FFFFFF', color: activeFilter === filter ? '#FFFFFF' : '#333333' }}>{filter}</button>
+            <button key={filter} onClick={() => setActiveFilter(filter)} style={{ padding: '10px 20px', borderRadius: '8px', fontWeight: '600', border: '2px solid', borderColor: activeFilter === filter ? '#1460AA' : '#D9D9D6', background: activeFilter === filter ? '#1460AA' : '#FFFFFF', color: activeFilter === filter ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>{filter}</button>
           ))}
         </div>
 
@@ -77,7 +78,6 @@ const LandingPage = ({ onSelect }) => {
             <div style={{ color: '#FFFFFF', fontWeight: '600' }}>Preset</div>
             <div></div>
           </div>
-
           {filteredAndSorted.map((org, idx) => (
             <div key={org.id} style={{ padding: '20px 24px', display: 'grid', gridTemplateColumns: '2fr 1fr 1.5fr 1fr 120px', gap: '16px', alignItems: 'center', borderBottom: idx < filteredAndSorted.length - 1 ? '1px solid #EEEEEE' : 'none', background: idx % 2 === 0 ? '#FFFFFF' : '#F6F6F6' }}>
               <div>
@@ -157,98 +157,101 @@ const CBPROICalculator = ({ workforce }) => {
 
   return (
     <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
-      <div style={{ background: '#00416A', borderTop: '6px solid #F09511' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px' }}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Shield className="w-12 h-12 mr-4" style={{ color: '#F09511' }} />
-              <div>
-                <h1 className="text-2xl font-bold" style={{ color: '#FFFFFF', lineHeight: '1.3' }}>{workforce.name}</h1>
-                <p className="text-sm mt-1" style={{ color: '#95D9FF' }}>{workforce.location} ({workforce.personnel.toLocaleString()} personnel)</p>
-              </div>
-            </div>
-            <button onClick={() => window.location.reload()} style={{ padding: '10px 20px', background: 'rgba(255,255,255,0.2)', color: '#FFFFFF', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: '14px', fontWeight: '600' }}>← Change Selection</button>
+      <div style={{ background: '#00416A', borderTop: '6px solid #F09511', paddingTop: '20px', paddingBottom: '24px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+            <Shield size={56} style={{ color: '#F09511', marginRight: '20px', flexShrink: 0 }} />
+            <h1 style={{ color: '#FFFFFF', fontSize: '36px', fontWeight: 'bold', margin: 0, lineHeight: 1.2 }}>{workforce.name}</h1>
+          </div>
+          <div style={{ marginLeft: '76px' }}>
+            <h2 style={{ color: '#F09511', fontSize: '24px', fontWeight: 'bold', margin: 0, marginBottom: '12px', lineHeight: 1.3 }}>BetterUp Retention & Wellness Program ROI Calculator</h2>
+            <p style={{ color: '#95D9FF', fontSize: '14px', margin: 0 }}>{workforce.location} ({workforce.personnel.toLocaleString()} personnel)</p>
           </div>
         </div>
       </div>
 
-      <div style={{ background: '#ECF1F4', padding: '20px 0', borderBottom: '1px solid #D9D9D6' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <p style={{ color: '#333333', lineHeight: '1.7', fontSize: '15px' }}>This calculator demonstrates BetterUp's financial impact through two pathways: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> (CBP faces $90-120M annually with suicide rates 28% higher than other LE) and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing turnover</span> at ${workforce.replacementCost.toLocaleString()} per separation. Adjust inputs below to model ROI for {workforce.name}'s specific context.</p>
+      <div style={{ background: '#ECF1F4', paddingTop: '20px', paddingBottom: '20px', borderBottom: '1px solid #D9D9D6' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
+          <p style={{ color: '#333333', lineHeight: 1.7, fontSize: '15px', margin: 0 }}>This calculator demonstrates BetterUp's financial impact through two pathways: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> (CBP faces $90-120M annually) and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing turnover</span> at ${workforce.replacementCost.toLocaleString()} per separation. Adjust inputs below to model ROI for {workforce.name}.</p>
         </div>
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '24px auto 0', padding: '0 20px' }}>
-        <div className="flex gap-2 mb-6">
-          <button onClick={() => setActiveTab('dashboard')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #F09511', background: activeTab === 'dashboard' ? '#F09511' : '#FFFFFF', color: activeTab === 'dashboard' ? '#333333' : '#333333' }}>Dashboard</button>
-          <button onClick={() => setActiveTab('details')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #808080', background: activeTab === 'details' ? '#808080' : '#FFFFFF', color: activeTab === 'details' ? '#FFFFFF' : '#333333' }}>Model Details</button>
+      <div style={{ maxWidth: '1200px', margin: '24px auto 0', paddingLeft: '20px', paddingRight: '20px' }}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+          <button onClick={() => setActiveTab('dashboard')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #F09511', background: activeTab === 'dashboard' ? '#F09511' : '#FFFFFF', color: activeTab === 'dashboard' ? '#333333' : '#333333', cursor: 'pointer' }}>Dashboard</button>
+          <button onClick={() => setActiveTab('details')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #808080', background: activeTab === 'details' ? '#808080' : '#FFFFFF', color: activeTab === 'details' ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>Model Details</button>
         </div>
 
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div style={{ background: '#FEF7ED', border: '3px solid #F09511', borderLeft: '6px solid #F09511', borderRadius: '8px', padding: '20px 24px' }}>
-              <p style={{ color: '#333333', fontSize: '16px', lineHeight: '1.6' }}>BetterUp saves {workforce.name} <span style={{ color: '#F09511', fontWeight: '700' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated {calculations.claimsReduced.toFixed(0)} workers' comp claims—by helping personnel build resilience and reduce stress.</p>
+              <p style={{ color: '#333333', fontSize: '16px', lineHeight: 1.6, margin: 0 }}>BetterUp saves {workforce.name} <span style={{ color: '#F09511', fontWeight: '700' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated {calculations.claimsReduced.toFixed(0)} workers' comp claims—by helping personnel build resilience and reduce stress.</p>
             </div>
 
-            <div id="impact-section" className="grid grid-cols-3 gap-6">
+            <div id="impact-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
               <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                <div className="text-sm mb-2" style={{ color: '#555555' }}>Net savings</div>
-                <div className="text-5xl font-bold mb-2" style={{ color: '#008000' }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
-                <div className="text-sm" style={{ color: '#808080' }}>After program cost</div>
+                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#555555' }}>Net savings</div>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#008000', lineHeight: 1 }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
+                <div style={{ fontSize: '14px', color: '#808080' }}>After program cost</div>
               </div>
               <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                <div className="text-sm mb-2" style={{ color: '#555555' }}>ROI multiplier</div>
-                <div className="text-5xl font-bold mb-2" style={{ color: '#333333' }}>{(calculations.totalAnnualSavings / calculations.totalCost).toFixed(1)}x</div>
-                <div className="text-sm" style={{ color: '#808080' }}>Return +{calculations.roi}%</div>
+                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#555555' }}>ROI multiplier</div>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{(calculations.totalAnnualSavings / calculations.totalCost).toFixed(1)}x</div>
+                <div style={{ fontSize: '14px', color: '#808080' }}>Return +{calculations.roi}%</div>
               </div>
               <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                <div className="text-sm mb-2" style={{ color: '#555555' }}>Personnel impacted</div>
-                <div className="text-5xl font-bold mb-2" style={{ color: '#333333' }}>{Math.round(calculations.activeSeats)}</div>
-                <div className="text-sm" style={{ color: '#808080' }}>Clinical symptom reduction • 4 factors</div>
+                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#555555' }}>Personnel impacted</div>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{Math.round(calculations.activeSeats)}</div>
+                <div style={{ fontSize: '14px', color: '#808080' }}>Clinical symptom reduction • 4 factors</div>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
               <div style={{ background: '#FEF7ED', border: '3px solid #F09511', borderRadius: '12px', overflow: 'hidden' }}>
                 <div style={{ background: '#F09511', color: '#333333', padding: '20px' }}>
-                  <h3 className="text-xl font-bold">On-Claim Workers' Comp</h3>
-                  <p className="text-sm" style={{ color: '#63666A' }}>Projected mental health WC claims</p>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, marginBottom: '4px' }}>On-Claim Workers' Comp</h3>
+                  <p style={{ fontSize: '14px', margin: 0, color: '#63666A' }}>Projected mental health WC claims</p>
                 </div>
                 <div style={{ padding: '24px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div>
-                      <div className="text-sm mb-1" style={{ color: '#555555' }}>Projected cost:</div>
-                      <div className="text-4xl font-bold" style={{ color: '#F09511' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#555555' }}>Projected cost:</div>
+                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#F09511', lineHeight: 1 }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
                     </div>
                     <div style={{ background: '#F3E69C', padding: '8px 16px', borderRadius: '20px' }}>
-                      <div className="text-xs" style={{ color: '#A36900' }}>Savings</div>
-                      <div className="font-bold" style={{ color: '#A36900' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
-                      <div className="text-xs" style={{ color: '#A36900' }}>(4%)</div>
+                      <div style={{ fontSize: '11px', color: '#A36900' }}>Savings</div>
+                      <div style={{ fontWeight: 'bold', color: '#A36900', fontSize: '16px' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '11px', color: '#A36900' }}>(4%)</div>
                     </div>
                   </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#F09511', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer' }}>{expandedSection === 'onClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
+                  <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#F09511', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'onClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
                   {expandedSection === 'onClaim' && (
-                    <div className="mt-4">
-                      <h4 className="font-semibold mb-3" style={{ color: '#333333' }}>Breakdown by Factor</h4>
-                      <div className="space-y-2">
+                    <div style={{ marginTop: '16px' }}>
+                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px' }}>Breakdown by Factor</h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {[
-                          { name: 'PTSD', prevalence: '11.2%', amount: calculations.fecaSavings * 0.45, before: calculations.baseline.fecaAnnual * 0.20 * 0.45, savings: calculations.fecaSavings * 0.45 },
-                          { name: 'Depression', prevalence: '8.5%', amount: calculations.fecaSavings * 0.25, before: calculations.baseline.fecaAnnual * 0.20 * 0.25, savings: calculations.fecaSavings * 0.25 },
-                          { name: 'Anxiety', prevalence: '6.2%', amount: calculations.fecaSavings * 0.15, before: calculations.baseline.fecaAnnual * 0.20 * 0.15, savings: calculations.fecaSavings * 0.15 },
-                          { name: 'Substance Use (SUD)', prevalence: '3.8%', amount: calculations.fecaSavings * 0.15, before: calculations.baseline.fecaAnnual * 0.20 * 0.15, savings: calculations.fecaSavings * 0.15 },
-                        ].map((factor, idx) => (
-                          <div key={idx} className="flex justify-between py-2 text-sm" style={{ borderBottom: idx < 3 ? '1px solid #F3E69C' : 'none' }}>
-                            <div>
-                              <span className="font-semibold" style={{ color: '#333333' }}>{factor.name}</span>
-                              <span className="text-xs ml-2" style={{ color: '#808080' }}>{factor.prevalence}</span>
+                          { name: 'PTSD', prevalence: '11.2%', pct: 0.45 },
+                          { name: 'Depression', prevalence: '8.5%', pct: 0.25 },
+                          { name: 'Anxiety', prevalence: '6.2%', pct: 0.15 },
+                          { name: 'Substance Use (SUD)', prevalence: '3.8%', pct: 0.15 },
+                        ].map((factor, idx) => {
+                          const before = calculations.baseline.fecaAnnual * 0.20 * factor.pct;
+                          const after = before - (calculations.fecaSavings * factor.pct);
+                          const savings = calculations.fecaSavings * factor.pct;
+                          return (
+                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #F3E69C' : 'none', fontSize: '14px' }}>
+                              <div>
+                                <span style={{ fontWeight: '600', color: '#333333' }}>{factor.name}</span>
+                                <span style={{ fontSize: '12px', marginLeft: '8px', color: '#808080' }}>{factor.prevalence}</span>
+                              </div>
+                              <div style={{ textAlign: 'right' }}>
+                                <div style={{ color: '#808080', fontSize: '12px' }}>Before: ${(before / 1000000).toFixed(2)}M</div>
+                                <div style={{ color: '#333333', fontWeight: '600' }}>After: ${(after / 1000000).toFixed(2)}M</div>
+                                <div style={{ color: '#A00000', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
+                              </div>
                             </div>
-                            <div className="text-right">
-                              <div style={{ color: '#808080', fontSize: '12px' }}>Before: ${(factor.before / 1000000).toFixed(2)}M</div>
-                              <div style={{ color: '#333333', fontWeight: '600' }}>After: ${((factor.before - factor.savings) / 1000000).toFixed(2)}M</div>
-                              <div style={{ color: '#A00000', fontWeight: '700' }}>−${(factor.savings / 1000000).toFixed(2)}M</div>
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -257,40 +260,49 @@ const CBPROICalculator = ({ workforce }) => {
 
               <div style={{ background: '#EDF3F9', border: '3px solid #1460AA', borderRadius: '12px', overflow: 'hidden' }}>
                 <div style={{ background: '#1460AA', color: '#FFFFFF', padding: '20px' }}>
-                  <h3 className="text-xl font-bold">Off-Claim Economic Costs</h3>
-                  <p className="text-sm opacity-90">Productivity loss, absenteeism, and turnover</p>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, marginBottom: '4px' }}>Off-Claim Economic Costs</h3>
+                  <p style={{ fontSize: '14px', margin: 0, opacity: 0.9 }}>Productivity loss, absenteeism, and turnover</p>
                 </div>
                 <div style={{ padding: '24px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div>
-                      <div className="text-sm mb-1" style={{ color: '#555555' }}>Projected cost:</div>
-                      <div className="text-4xl font-bold" style={{ color: '#1460AA' }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#555555' }}>Projected cost:</div>
+                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#1460AA', lineHeight: 1 }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
                     </div>
                     <div style={{ background: '#95D9FF', padding: '8px 16px', borderRadius: '20px' }}>
-                      <div className="text-xs" style={{ color: '#00416A' }}>Savings</div>
-                      <div className="font-bold" style={{ color: '#00416A' }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
-                      <div className="text-xs" style={{ color: '#00416A' }}>(4%)</div>
+                      <div style={{ fontSize: '11px', color: '#00416A' }}>Savings</div>
+                      <div style={{ fontWeight: 'bold', color: '#00416A', fontSize: '16px' }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '11px', color: '#00416A' }}>(4%)</div>
                     </div>
                   </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#1460AA', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer' }}>{expandedSection === 'offClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
+                  <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#1460AA', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'offClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
                   {expandedSection === 'offClaim' && (
-                    <div className="mt-4">
-                      <h4 className="font-semibold mb-3" style={{ color: '#333333' }}>Breakdown by Factor</h4>
-                      <div className="space-y-2">
+                    <div style={{ marginTop: '16px' }}>
+                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px' }}>Breakdown by Factor</h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {[
-                          { name: 'PTSD', desc: 'Stress-related turnover', amount: calculations.offClaimTotal * 0.38 },
-                          { name: 'Depression', desc: 'Burnout separations', amount: calculations.offClaimTotal * 0.22 },
-                          { name: 'Anxiety', desc: 'Performance-related costs', amount: calculations.offClaimTotal * 0.18 },
-                          { name: 'Substance Use (SUD)', desc: 'Absenteeism & productivity', amount: calculations.offClaimTotal * 0.22 },
-                        ].map((factor, idx) => (
-                          <div key={idx} className="flex justify-between py-2 text-sm" style={{ borderBottom: idx < 3 ? '1px solid #95D9FF' : 'none' }}>
-                            <div>
-                              <span className="font-semibold" style={{ color: '#333333' }}>{factor.name}</span>
-                              <div className="text-xs" style={{ color: '#808080' }}>{factor.desc}</div>
+                          { name: 'PTSD', desc: 'Stress-related turnover', pct: 0.38 },
+                          { name: 'Depression', desc: 'Burnout separations', pct: 0.22 },
+                          { name: 'Anxiety', desc: 'Performance costs', pct: 0.18 },
+                          { name: 'Substance Use (SUD)', desc: 'Absenteeism', pct: 0.22 },
+                        ].map((factor, idx) => {
+                          const before = calculations.baseline.replacementCost * calculations.currentSeparations * (factor.pct / 0.055);
+                          const savings = calculations.offClaimTotal * factor.pct;
+                          const after = before - savings;
+                          return (
+                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #95D9FF' : 'none', fontSize: '14px' }}>
+                              <div>
+                                <span style={{ fontWeight: '600', color: '#333333' }}>{factor.name}</span>
+                                <div style={{ fontSize: '12px', color: '#808080' }}>{factor.desc}</div>
+                              </div>
+                              <div style={{ textAlign: 'right' }}>
+                                <div style={{ color: '#808080', fontSize: '12px' }}>Before: ${(before / 1000000).toFixed(2)}M</div>
+                                <div style={{ color: '#333333', fontWeight: '600' }}>After: ${(after / 1000000).toFixed(2)}M</div>
+                                <div style={{ color: '#A00000', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
+                              </div>
                             </div>
-                            <div className="text-right font-bold" style={{ color: '#1460AA' }}>${(factor.amount / 1000000).toFixed(2)}M</div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -299,41 +311,41 @@ const CBPROICalculator = ({ workforce }) => {
             </div>
 
             <div id="config-section" style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #1460AA' }}>
-              <h2 className="text-2xl font-bold mb-6" style={{ color: '#00416A' }}><Calculator className="inline mr-3" style={{ color: '#1460AA' }} /> Program Configuration</h2>
-              <div className="grid grid-cols-4 gap-3 mb-6">
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#00416A' }}><Calculator style={{ display: 'inline', marginRight: '12px', color: '#1460AA' }} /> Program Configuration</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '24px' }}>
                 {['conservative', 'moderate', 'aggressive', 'custom'].map(type => (
-                  <button key={type} onClick={() => type !== 'custom' ? applyScenario(type) : setScenarioType('custom')} style={{ padding: '12px', borderRadius: '8px', fontWeight: '600', textTransform: 'capitalize', border: '2px solid #1460AA', background: scenarioType === type ? '#1460AA' : '#FFFFFF', color: scenarioType === type ? '#FFFFFF' : '#333333' }}>{type}</button>
+                  <button key={type} onClick={() => type !== 'custom' ? applyScenario(type) : setScenarioType('custom')} style={{ padding: '12px', borderRadius: '8px', fontWeight: '600', textTransform: 'capitalize', border: '2px solid #1460AA', background: scenarioType === type ? '#1460AA' : '#FFFFFF', color: scenarioType === type ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>{type}</button>
                 ))}
               </div>
-              <div className="grid md:grid-cols-3 gap-6">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
                 <div>
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#333333' }}>BetterUp Seats</label>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>BetterUp Seats</label>
                   <input type="number" value={seats} onChange={(e) => setSeats(Number(e.target.value))} style={{ width: '100%', padding: '12px', border: '2px solid #1460AA', borderRadius: '8px', fontSize: '16px' }} />
-                  <p className="text-xs mt-1" style={{ color: '#555555' }}>{((seats / workforce.personnel) * 100).toFixed(1)}% of workforce</p>
+                  <p style={{ fontSize: '12px', marginTop: '4px', color: '#555555', margin: '4px 0 0 0' }}>{((seats / workforce.personnel) * 100).toFixed(1)}% of workforce</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#333333' }}>Engagement Rate</label>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Engagement Rate</label>
                   <input type="range" min="50" max="100" value={engagementRate} onChange={(e) => setEngagementRate(Number(e.target.value))} style={{ width: '100%', accentColor: '#1460AA' }} />
-                  <p className="text-sm font-bold mt-1" style={{ color: '#1460AA' }}>{engagementRate}%</p>
+                  <p style={{ fontSize: '14px', fontWeight: 'bold', marginTop: '4px', color: '#1460AA', margin: '4px 0 0 0' }}>{engagementRate}%</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#333333' }}>Cost Per Seat</label>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Cost Per Seat</label>
                   <input type="number" value={costPerSeat} onChange={(e) => setCostPerSeat(Number(e.target.value))} style={{ width: '100%', padding: '12px', border: '2px solid #1460AA', borderRadius: '8px', fontSize: '16px' }} />
-                  <p className="text-xs mt-1" style={{ color: '#555555' }}>Annual cost per user</p>
+                  <p style={{ fontSize: '12px', marginTop: '4px', color: '#555555', margin: '4px 0 0 0' }}>Annual cost per user</p>
                 </div>
               </div>
             </div>
 
             <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #00416A' }}>
-              <h2 className="text-2xl font-bold mb-6" style={{ color: '#00416A' }}><Brain className="inline mr-3" style={{ color: '#1460AA' }} /> Performance Drivers <span className="ml-4 text-lg" style={{ color: '#1460AA' }}>Overall: {effectiveness}%</span></h2>
-              <div className="grid md:grid-cols-2 gap-4">
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#00416A' }}><Brain style={{ display: 'inline', marginRight: '12px', color: '#1460AA' }} /> Performance Drivers <span style={{ marginLeft: '16px', fontSize: '18px', color: '#1460AA' }}>Overall: {effectiveness}%</span></h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
                 {Object.entries(drivers).map(([key, value]) => {
                   const labels = { emotionalRegulation: 'Emotional Regulation', resilience: 'Resilience & Recovery', decisionMaking: 'Decision-Making Under Pressure', communication: 'Communication & Conflict Resolution', purposeMeaning: 'Purpose & Meaning', workLifeIntegration: 'Work-Life Integration', stressManagement: 'Stress Management', leadershipEffectiveness: 'Leadership Effectiveness' };
                   return (
                     <div key={key} style={{ background: '#ECF1F4', padding: '16px', borderRadius: '8px' }}>
-                      <div className="flex justify-between mb-2">
-                        <label className="text-sm font-semibold" style={{ color: '#333333' }}>{labels[key]}</label>
-                        <span className="text-sm font-bold" style={{ color: '#1460AA' }}>{value}%</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                        <label style={{ fontSize: '14px', fontWeight: '600', color: '#333333' }}>{labels[key]}</label>
+                        <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#1460AA' }}>{value}%</span>
                       </div>
                       <input type="range" min="0" max="100" value={value} onChange={(e) => { setDrivers({ ...drivers, [key]: Number(e.target.value) }); setScenarioType('custom'); }} style={{ width: '100%', accentColor: '#1460AA' }} />
                     </div>
@@ -343,32 +355,28 @@ const CBPROICalculator = ({ workforce }) => {
             </div>
 
             <div style={{ background: '#008000', color: '#FFFFFF', padding: '32px', borderRadius: '12px' }}>
-              <h2 className="text-3xl font-bold mb-4">Bottom Line Up Front</h2>
-              <div className="text-lg space-y-2">
-                <p><strong>Investment:</strong> ${(calculations.totalCost / 1000000).toFixed(2)}M for {seats.toLocaleString()} seats ({((seats / workforce.personnel) * 100).toFixed(1)}% coverage)</p>
-                <p><strong>Annual Return:</strong> ${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M through {Math.round(calculations.separationsPrevented)} prevented separations and {calculations.claimsReduced.toFixed(1)} reduced FECA claims</p>
-                <p><strong>ROI:</strong> {calculations.roi}% with break-even in {calculations.breakEvenMonths.toFixed(1)} months</p>
-                <p><strong>5-Year Value:</strong> ${(calculations.fiveYearValue / 1000000).toFixed(1)}M net benefit</p>
+              <h2 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '16px', margin: '0 0 16px 0' }}>Bottom Line Up Front</h2>
+              <div style={{ fontSize: '17px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <p style={{ margin: 0 }}><strong>Investment:</strong> ${(calculations.totalCost / 1000000).toFixed(2)}M for {seats.toLocaleString()} seats ({((seats / workforce.personnel) * 100).toFixed(1)}% coverage)</p>
+                <p style={{ margin: 0 }}><strong>Annual Return:</strong> ${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M through {Math.round(calculations.separationsPrevented)} prevented separations and {calculations.claimsReduced.toFixed(1)} reduced FECA claims</p>
+                <p style={{ margin: 0 }}><strong>ROI:</strong> {calculations.roi}% with break-even in {calculations.breakEvenMonths.toFixed(1)} months</p>
+                <p style={{ margin: 0 }}><strong>5-Year Value:</strong> ${(calculations.fiveYearValue / 1000000).toFixed(1)}M net benefit</p>
               </div>
             </div>
           </div>
         )}
 
         {activeTab === 'details' && (
-          <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px' }}>
-            <h3 className="text-2xl font-bold mb-4" style={{ color: '#00416A' }}>Model Methodology & Data Sources</h3>
-            <div className="space-y-4">
+          <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '1px solid #D9D9D6' }}>
+            <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: '#00416A' }}>Model Methodology & Data Sources</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ background: '#EDF3F9', padding: '20px', borderRadius: '8px' }}>
-                <h4 className="font-bold mb-2" style={{ color: '#1460AA' }}>Pathway 1: FECA Claims Reduction</h4>
-                <p style={{ color: '#555555' }}>Reduces mental health workers' comp claims. CBP faces $90-120M annual FECA costs with 20% mental health-related.</p>
+                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#1460AA', fontSize: '16px' }}>Pathway 1: FECA Claims Reduction</h4>
+                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Reduces mental health workers' comp claims. CBP faces $90-120M annual FECA costs with 20% mental health-related.</p>
               </div>
               <div style={{ background: '#ECF5EC', padding: '20px', borderRadius: '8px' }}>
-                <h4 className="font-bold mb-2" style={{ color: '#008000' }}>Pathway 2: Retention Economics</h4>
-                <p style={{ color: '#555555' }}>Prevents costly turnover at ${workforce.replacementCost.toLocaleString()} per separation including FLETC training, clearances, recruitment incentives.</p>
-              </div>
-              <div style={{ background: '#FEF7ED', padding: '20px', borderRadius: '8px', border: '2px solid #F09511' }}>
-                <h4 className="font-bold mb-2" style={{ color: '#F09511' }}>2028 Retirement Crisis</h4>
-                <p style={{ color: '#333333' }}>Commissioner projects 400% increase in officer retirements in FY2028. With 316-578 day hiring timelines and 1.8% applicant yield, CBP cannot recruit fast enough—retention is the only viable strategy.</p>
+                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#008000', fontSize: '16px' }}>Pathway 2: Retention Economics</h4>
+                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Prevents costly turnover at ${workforce.replacementCost.toLocaleString()} per separation including FLETC training, clearances, recruitment incentives.</p>
               </div>
             </div>
           </div>
@@ -378,11 +386,11 @@ const CBPROICalculator = ({ workforce }) => {
       {showAssistant && (
         <div style={{ position: 'fixed', bottom: '96px', right: '24px', width: '384px', background: '#FFFFFF', borderRadius: '12px', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', zIndex: 50, border: '2px solid #1460AA' }}>
           <div style={{ background: '#1460AA', color: '#FFFFFF', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div className="flex items-center"><MessageSquare size={20} className="mr-2" /><h3 className="font-bold">Model Assistant</h3></div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><MessageSquare size={20} style={{ marginRight: '8px' }} /><h3 style={{ fontWeight: 'bold', margin: 0 }}>Model Assistant</h3></div>
             <button onClick={() => setShowAssistant(false)} style={{ background: 'none', border: 'none', color: '#FFFFFF', cursor: 'pointer', fontSize: '20px' }}>✕</button>
           </div>
           <div style={{ padding: '16px', background: '#F6F6F6', minHeight: '150px' }}>
-            <p className="text-sm" style={{ color: '#333333' }}>Hello! I can help explain the calculator methodology, interpret results, or answer questions about {workforce.name}.</p>
+            <p style={{ fontSize: '14px', color: '#333333', margin: 0 }}>Hello! I can help explain the calculator methodology, interpret results, or answer questions about {workforce.name}.</p>
           </div>
         </div>
       )}
