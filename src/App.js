@@ -939,12 +939,18 @@ const CBPROICalculator = ({ workforce }) => {
 
         {activeTab === 'parameters' && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '24px', color: '#0066cc' }}>Model Parameters</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <Activity size={32} color="#0066cc" />
+              <div>
+                <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#0066cc', margin: 0 }}>Global Parameters</h2>
+                <p style={{ fontSize: '17px', color: '#666', margin: 0 }}>Population, wages, role mix, and engagement settings</p>
+              </div>
+            </div>
             
-            <div style={{ display: 'grid', gap: '26px' }}>
-              <div style={{ padding: '22px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <label style={{ display: 'block', fontSize: '19px', fontWeight: 'bold', marginBottom: '14px', color: '#333' }}>
-                  Program Seats: {seats.toLocaleString()}
+            <div style={{ display: 'grid', gap: '32px' }}>
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <label style={{ display: 'block', fontSize: '17px', fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>
+                  BetterUp Seats (Deployment Size): {seats.toLocaleString()}
                 </label>
                 <input
                   type="range"
@@ -954,35 +960,14 @@ const CBPROICalculator = ({ workforce }) => {
                   onChange={(e) => setSeats(parseInt(e.target.value))}
                   style={{ width: '100%', height: '8px', accentColor: '#0066cc' }}
                 />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', color: '#666', marginTop: '10px' }}>
-                  <span>{Math.round(workforce.personnel * 0.05).toLocaleString()} (5%)</span>
-                  <span>{Math.round(workforce.personnel * 0.15).toLocaleString()} (15%)</span>
-                  <span>{Math.round(workforce.personnel * 0.3).toLocaleString()} (30%)</span>
+                <div style={{ fontSize: '14px', color: '#666', marginTop: '8px' }}>
+                  Max: {workforce.personnel.toLocaleString()} ({workforce.name})
                 </div>
               </div>
 
-              <div style={{ padding: '22px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <label style={{ display: 'block', fontSize: '19px', fontWeight: 'bold', marginBottom: '14px', color: '#333' }}>
-                  Engagement Rate: {engagementRate}%
-                </label>
-                <input
-                  type="range"
-                  min="50"
-                  max="85"
-                  value={engagementRate}
-                  onChange={(e) => setEngagementRate(parseInt(e.target.value))}
-                  style={{ width: '100%', height: '8px', accentColor: '#00cc66' }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', color: '#666', marginTop: '10px' }}>
-                  <span>50%</span>
-                  <span>65%</span>
-                  <span>85%</span>
-                </div>
-              </div>
-
-              <div style={{ padding: '22px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <label style={{ display: 'block', fontSize: '19px', fontWeight: 'bold', marginBottom: '14px', color: '#333' }}>
-                  Cost per Seat: ${costPerSeat}/year
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <label style={{ display: 'block', fontSize: '17px', fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>
+                  Ready Cost per Seat: ${costPerSeat}
                 </label>
                 <input
                   type="range"
@@ -991,12 +976,195 @@ const CBPROICalculator = ({ workforce }) => {
                   step="50"
                   value={costPerSeat}
                   onChange={(e) => setCostPerSeat(parseInt(e.target.value))}
-                  style={{ width: '100%', height: '8px', accentColor: '#ff9900' }}
+                  style={{ width: '100%', height: '8px', accentColor: '#0066cc' }}
                 />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', color: '#666', marginTop: '10px' }}>
-                  <span>$100</span>
-                  <span>$200</span>
-                  <span>$300</span>
+              </div>
+
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <label style={{ display: 'block', fontSize: '17px', fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>
+                  Engagement Rate: {engagementRate}%
+                </label>
+                <input
+                  type="range"
+                  min="50"
+                  max="85"
+                  value={engagementRate}
+                  onChange={(e) => setEngagementRate(parseInt(e.target.value))}
+                  style={{ width: '100%', height: '8px', accentColor: '#0066cc' }}
+                />
+                <div style={{ fontSize: '14px', color: '#666', marginTop: '8px' }}>
+                  {calculations.engaged.toLocaleString()} engaged workers
+                </div>
+              </div>
+
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <label style={{ display: 'block', fontSize: '17px', fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>
+                  Hours per Day: 8
+                </label>
+                <input
+                  type="number"
+                  value="8"
+                  readOnly
+                  style={{ width: '100px', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                />
+              </div>
+
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333' }}>Wage/Benefit Rates ($/hr, loaded)</h3>
+                <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>Average hourly wage including benefits (wages × 0.615 = total compensation)</p>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      CBP Officers (OFO): $60/hr
+                    </label>
+                    <input
+                      type="number"
+                      value="60"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      Border Patrol (USBP): $58/hr
+                    </label>
+                    <input
+                      type="number"
+                      value="58"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      Air & Marine (AMO): $65/hr
+                    </label>
+                    <input
+                      type="number"
+                      value="65"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      Support Staff: $45/hr
+                    </label>
+                    <input
+                      type="number"
+                      value="45"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>Factor Effectiveness Rates (%)</h3>
+                <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>% reduction in clinical cases from coaching intervention</p>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+                  {[
+                    { key: 'ptsd', label: 'PTSD', color: '#cc3333' },
+                    { key: 'depression', label: 'Depression', color: '#9966cc' },
+                    { key: 'anxiety', label: 'Anxiety', color: '#ff9900' },
+                    { key: 'sud', label: 'Substance Use (SUD)', color: '#0066cc' }
+                  ].map(factor => (
+                    <div key={factor.key}>
+                      <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#333' }}>
+                        {factor.label}: {factorConfig[factor.key].coachingEffectiveness}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="40"
+                        step="1"
+                        value={factorConfig[factor.key].coachingEffectiveness}
+                        onChange={(e) => setFactorConfig(prev => ({
+                          ...prev,
+                          [factor.key]: { ...prev[factor.key], coachingEffectiveness: parseInt(e.target.value) }
+                        }))}
+                        style={{ width: '100%', height: '8px', accentColor: factor.color }}
+                      />
+                      <p style={{ fontSize: '13px', color: '#666', marginTop: '6px' }}>% reduction in clinical cases</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Role Mix (%)</h3>
+                    <p style={{ fontSize: '14px', color: '#666', marginTop: '4px' }}>Must sum to 100%</p>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      alert('Role mix reset to organizational defaults');
+                    }}
+                    style={{ padding: '8px 16px', borderRadius: '6px', border: '2px solid #0066cc', background: 'white', color: '#0066cc', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
+                  >
+                    Reset to Default
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      OFO
+                    </label>
+                    <input
+                      type="number"
+                      value="43.3"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      USBP
+                    </label>
+                    <input
+                      type="number"
+                      value="33.3"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      AMO
+                    </label>
+                    <input
+                      type="number"
+                      value="3.0"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                      Support
+                    </label>
+                    <input
+                      type="number"
+                      value="20.4"
+                      readOnly
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '12px', padding: '12px', background: '#e6f2ff', borderRadius: '6px' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#0066cc' }}>Current total: 100.0%</span>
                 </div>
               </div>
             </div>
