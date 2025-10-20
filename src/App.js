@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { PieChart, Pie, Cell } from 'recharts';
-import { Calculator, TrendingUp, Users, DollarSign, Shield, Heart, Brain, MessageSquare, ChevronDown, ChevronUp, Info, Settings, Search } from 'lucide-react';
+import { Calculator, Shield, Brain, MessageSquare, Info, Search } from 'lucide-react';
 
 const organizationData = [
   { id: 'all', name: 'All CBP Combined', personnel: 60000, location: 'Nationwide', preset: 'Yes', attritionRate: 5.5, replacementCost: 97500, fecaAnnual: 105000000, description: 'Entire CBP workforce', category: 'All Units' },
@@ -33,16 +32,16 @@ const LandingPage = ({ onSelect }) => {
   }, [searchTerm, activeFilter, sortBy]);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
-      <div style={{ background: '#00416A', borderTop: '6px solid #F09511', paddingTop: '20px', paddingBottom: '24px' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
+      <div style={{ background: '#005288', borderTop: '6px solid #c41230', paddingTop: '20px', paddingBottom: '24px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-            <Shield size={56} style={{ color: '#F09511', marginRight: '16px' }} />
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+            <Shield size={56} style={{ color: '#FFFFFF', marginRight: '20px', flexShrink: 0 }} />
             <h1 style={{ color: '#FFFFFF', fontSize: '36px', fontWeight: 'bold', margin: 0, lineHeight: 1.2 }}>U.S. Customs and Border Protection</h1>
           </div>
-          <div style={{ marginLeft: '72px' }}>
-            <h2 style={{ color: '#F09511', fontSize: '28px', fontWeight: 'bold', margin: 0, marginBottom: '16px', lineHeight: 1.3 }}>BetterUp Retention & Wellness ROI Calculator</h2>
-            <p style={{ color: '#95D9FF', fontSize: '15px', lineHeight: 1.7, margin: 0, maxWidth: '900px' }}>Demonstrating financial impact through dual-pathway methodology: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing high-cost turnover</span> through precision development targeting critical performance drivers. Based on comprehensive GAO, union, and DHS research.</p>
+          <div style={{ marginLeft: '76px' }}>
+            <h2 style={{ color: '#FFFFFF', fontSize: '24px', fontWeight: 'bold', margin: 0, marginBottom: '12px', lineHeight: 1.3 }}>BetterUp Retention & Wellness ROI Calculator</h2>
+            <p style={{ color: '#E0E0E0', fontSize: '14px', margin: 0 }}>Demonstrating financial impact through dual-pathway methodology: <span style={{ fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> and <span style={{ fontWeight: '700' }}>(2) preventing high-cost turnover</span> through precision development. Based on comprehensive GAO, union, and DHS research.</p>
           </div>
         </div>
       </div>
@@ -50,7 +49,7 @@ const LandingPage = ({ onSelect }) => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
         <div style={{ background: '#333333', padding: '24px 32px', borderRadius: '12px', marginBottom: '32px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', color: '#FFFFFF' }}>Select Your Organization or Sector</h2>
-          <p style={{ color: '#D9D9D6', fontSize: '15px', margin: 0 }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
+          <p style={{ color: '#c0c2c4', fontSize: '15px', margin: 0 }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
         </div>
 
         <div style={{ marginBottom: '24px', display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -66,7 +65,7 @@ const LandingPage = ({ onSelect }) => {
 
         <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
           {filters.map(filter => (
-            <button key={filter} onClick={() => setActiveFilter(filter)} style={{ padding: '10px 20px', borderRadius: '8px', fontWeight: '600', border: '2px solid', borderColor: activeFilter === filter ? '#1460AA' : '#D9D9D6', background: activeFilter === filter ? '#1460AA' : '#FFFFFF', color: activeFilter === filter ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>{filter}</button>
+            <button key={filter} onClick={() => setActiveFilter(filter)} style={{ padding: '10px 20px', borderRadius: '8px', fontWeight: '600', border: '2px solid', borderColor: activeFilter === filter ? '#005288' : '#D9D9D6', background: activeFilter === filter ? '#005288' : '#FFFFFF', color: activeFilter === filter ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>{filter}</button>
           ))}
         </div>
 
@@ -89,7 +88,7 @@ const LandingPage = ({ onSelect }) => {
               <div>
                 <span style={{ padding: '4px 12px', borderRadius: '12px', fontSize: '13px', fontWeight: '600', background: org.preset === 'Yes' ? '#C1E8B0' : org.preset === 'Partial' ? '#F3E69C' : '#EEEEEE', color: org.preset === 'Yes' ? '#134D13' : org.preset === 'Partial' ? '#A36900' : '#555555' }}>{org.preset}</span>
               </div>
-              <button onClick={() => onSelect(org)} style={{ padding: '10px 20px', borderRadius: '8px', background: '#1460AA', color: '#FFFFFF', fontWeight: '600', border: 'none', cursor: 'pointer' }} onMouseEnter={(e) => e.target.style.background = '#00416A'} onMouseLeave={(e) => e.target.style.background = '#1460AA'}>Select →</button>
+              <button onClick={() => onSelect(org)} style={{ padding: '10px 20px', borderRadius: '8px', background: '#005288', color: '#FFFFFF', fontWeight: '600', border: 'none', cursor: 'pointer' }} onMouseEnter={(e) => e.target.style.background = '#003d66'} onMouseLeave={(e) => e.target.style.background = '#005288'}>Select →</button>
             </div>
           ))}
         </div>
@@ -106,14 +105,6 @@ const CBPROICalculator = ({ workforce }) => {
   const [scenarioType, setScenarioType] = useState('moderate');
   const [showAssistant, setShowAssistant] = useState(false);
   const [expandedSection, setExpandedSection] = useState(null);
-  const [showAdvanced, setShowAdvanced] = useState(false);
-
-  const [advancedSettings, setAdvancedSettings] = useState({
-    fecaMentalHealthPercent: 20,
-    avgFecaClaimCost: 10000,
-    timeToFullProductivity: 18,
-    overtimeCostMultiplier: 1.5,
-  });
 
   const [drivers, setDrivers] = useState({
     emotionalRegulation: 70, resilience: 70, decisionMaking: 65, communication: 60,
@@ -137,126 +128,91 @@ const CBPROICalculator = ({ workforce }) => {
     const totalCost = seats * costPerSeat;
     const baseline = { attritionRate: workforce.attritionRate, replacementCost: workforce.replacementCost, fecaAnnual: workforce.fecaAnnual };
     
-    // PATHWAY 1: FECA Claims Reduction
-    const fecaMentalHealthPortion = baseline.fecaAnnual * (advancedSettings.fecaMentalHealthPercent / 100);
-    // At 65% effectiveness: ~15% reduction, at 80%: ~30% reduction
-    const effectivenessImpact = (effectiveness - 50) / 50; // 0 at 50%, 0.3 at 65%, 0.6 at 80%
-    const fecaReductionRate = effectivenessImpact * 0.25; // Up to 25% reduction at 100% effectiveness
-    // Apply to workforce with program reach multiplier
+    const fecaMentalHealthPortion = baseline.fecaAnnual * 0.20;
+    const effectivenessImpact = (effectiveness - 50) / 50;
+    const fecaReductionRate = effectivenessImpact * 0.25;
     const programReach = (activeSeats / workforce.personnel);
-    const networkEffect = 1 + (programReach * 0.8); // Network effects boost impact
+    const networkEffect = 1 + (programReach * 0.8);
     const totalFecaImpact = fecaMentalHealthPortion * fecaReductionRate * programReach * networkEffect;
-    const claimsReduced = totalFecaImpact / advancedSettings.avgFecaClaimCost;
+    const claimsReduced = totalFecaImpact / 10000;
     const fecaSavings = totalFecaImpact;
     
-    // PATHWAY 2: Retention Economics  
     const currentSeparations = workforce.personnel * (baseline.attritionRate / 100);
-    // At 65% effectiveness: 1.5% attrition reduction, at 80%: 3% reduction
-    const attritionPointsReduced = effectivenessImpact * 0.03; // Up to 3 percentage points
+    const attritionPointsReduced = effectivenessImpact * 0.03;
     const baseSeparationsPrevented = workforce.personnel * attritionPointsReduced * programReach;
-    const spilloverEffect = 1.3; // 30% spillover to non-participants
+    const spilloverEffect = 1.3;
     const separationsPrevented = baseSeparationsPrevented * spilloverEffect;
-    
-    // Direct replacement cost savings
     const retentionSavings = separationsPrevented * baseline.replacementCost;
-    
-    // Productivity improvements (people staying are more productive)
-    const productivityGain = activeSeats * 2500; // $2,500 per engaged employee in productivity
-    
-    // Overtime reduction from better staffing
-    const overtimeReduction = separationsPrevented * 12000; // $12K per prevented separation in OT savings
-    
-    // Recruitment cost avoidance
+    const productivityGain = activeSeats * 2500;
+    const overtimeReduction = separationsPrevented * 12000;
     const recruitmentSavings = separationsPrevented * 5000;
-    
     const offClaimTotal = retentionSavings + productivityGain + overtimeReduction + recruitmentSavings;
     
-    // Total Impact
     const totalAnnualSavings = fecaSavings + offClaimTotal;
     const netSavings = totalAnnualSavings - totalCost;
     const roi = totalCost > 0 ? ((netSavings / totalCost) * 100).toFixed(1) : '0.0';
     const roiMultiplier = totalCost > 0 ? (totalAnnualSavings / totalCost).toFixed(1) : '0.0';
-    const breakEvenMonths = totalAnnualSavings > totalCost && totalAnnualSavings > 0 ? (totalCost / (totalAnnualSavings / 12)).toFixed(1) : 'N/A';
+    const breakEvenMonths = totalAnnualSavings > totalCost && totalAnnualSavings > 0 ? (totalCost / (totalAnnualSavings / 12)).toFixed(1) : 'Immediate';
     const fiveYearValue = (totalAnnualSavings * 5) - totalCost;
     
-    return { 
-      activeSeats, totalCost, fecaSavings, retentionSavings, productivityGain, 
-      overtimeReduction, recruitmentSavings, offClaimTotal, totalAnnualSavings, 
-      netSavings, roi, roiMultiplier, breakEvenMonths, fiveYearValue, 
-      separationsPrevented, currentSeparations, claimsReduced, baseline 
-    };
-  }, [seats, engagementRate, costPerSeat, effectiveness, workforce, advancedSettings]);
+    return { activeSeats, totalCost, fecaSavings, retentionSavings, productivityGain, overtimeReduction, recruitmentSavings, offClaimTotal, totalAnnualSavings, netSavings, roi, roiMultiplier, breakEvenMonths, fiveYearValue, separationsPrevented, currentSeparations, claimsReduced, baseline };
+  }, [seats, engagementRate, costPerSeat, effectiveness, workforce]);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F6F6F6' }}>
-      <div style={{ background: '#00416A', borderTop: '6px solid #F09511', paddingTop: '20px', paddingBottom: '24px' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
+      <div style={{ background: '#005288', borderTop: '6px solid #c41230', paddingTop: '20px', paddingBottom: '24px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-            <Shield size={56} style={{ color: '#F09511', marginRight: '20px', flexShrink: 0 }} />
+            <Shield size={56} style={{ color: '#FFFFFF', marginRight: '20px', flexShrink: 0 }} />
             <h1 style={{ color: '#FFFFFF', fontSize: '36px', fontWeight: 'bold', margin: 0, lineHeight: 1.2 }}>{workforce.name}</h1>
           </div>
           <div style={{ marginLeft: '76px' }}>
-            <h2 style={{ color: '#F09511', fontSize: '24px', fontWeight: 'bold', margin: 0, marginBottom: '12px', lineHeight: 1.3 }}>BetterUp Retention & Wellness Program ROI Calculator</h2>
-            <p style={{ color: '#95D9FF', fontSize: '14px', margin: 0 }}>{workforce.location} ({workforce.personnel.toLocaleString()} personnel)</p>
+            <h2 style={{ color: '#FFFFFF', fontSize: '24px', fontWeight: 'bold', margin: 0, marginBottom: '12px', lineHeight: 1.3 }}>BetterUp Retention & Wellness Program ROI Calculator</h2>
+            <p style={{ color: '#E0E0E0', fontSize: '14px', margin: 0 }}>{workforce.location} ({workforce.personnel.toLocaleString()} personnel)</p>
           </div>
-        </div>
-      </div>
-
-      <div style={{ background: '#ECF1F4', paddingTop: '20px', paddingBottom: '20px', borderBottom: '1px solid #D9D9D6' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
-          <p style={{ color: '#333333', lineHeight: 1.7, fontSize: '15px', margin: 0 }}>This calculator demonstrates BetterUp's financial impact through two pathways: <span style={{ color: '#F09511', fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> (CBP faces $90-120M annually) and <span style={{ color: '#F09511', fontWeight: '700' }}>(2) preventing turnover</span> at ${workforce.replacementCost.toLocaleString()} per separation. Adjust inputs below to model ROI for {workforce.name}.</p>
         </div>
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '24px auto 0', paddingLeft: '20px', paddingRight: '20px' }}>
         <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
-          <button onClick={() => setActiveTab('dashboard')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #F09511', background: activeTab === 'dashboard' ? '#F09511' : '#FFFFFF', color: activeTab === 'dashboard' ? '#333333' : '#333333', cursor: 'pointer' }}>Dashboard</button>
+          <button onClick={() => setActiveTab('dashboard')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #005288', background: activeTab === 'dashboard' ? '#005288' : '#FFFFFF', color: activeTab === 'dashboard' ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>Dashboard</button>
           <button onClick={() => setActiveTab('details')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #808080', background: activeTab === 'details' ? '#808080' : '#FFFFFF', color: activeTab === 'details' ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>Model Details</button>
         </div>
 
         {activeTab === 'dashboard' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* BetterUp Seats Configuration Header */}
-            <div style={{ background: '#333333', padding: '32px', borderRadius: '12px', borderLeft: '8px solid #F09511' }}>
+            <div style={{ background: '#333333', padding: '32px', borderRadius: '12px', borderLeft: '8px solid #005288' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <h2 style={{ color: '#F09511', fontSize: '32px', fontWeight: 'bold', margin: 0, marginBottom: '8px' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
-                  <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#F09511', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', padding: 0 }}>Edit</button>
+                  <h2 style={{ color: '#FFFFFF', fontSize: '32px', fontWeight: 'bold', margin: 0, marginBottom: '8px' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
+                  <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#FFFFFF', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', padding: 0 }}>Edit</button>
                   <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <p style={{ color: '#FFFFFF', margin: 0 }}>Total {workforce.name} Population: <span style={{ fontWeight: 'bold' }}>{workforce.personnel.toLocaleString()}</span></p>
-                    <p style={{ color: '#FFFFFF', margin: 0 }}>Engagement rate: <span style={{ fontWeight: 'bold' }}>{engagementRate}%</span> <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#F09511', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', marginLeft: '8px', padding: 0 }}>Edit</button></p>
-                  </div>
-                  <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #555555' }}>
-                    <p style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: '600', marginBottom: '8px' }}>{workforce.category || 'CBP'} Context (Organization-wide):</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', fontSize: '14px' }}>
-                      <div><span style={{ color: '#AAAAAA' }}>Current Attrition:</span> <span style={{ color: '#FFFFFF', fontWeight: 'bold' }}>{baseline.attritionRate}%</span></div>
-                      <div><span style={{ color: '#AAAAAA' }}>Replacement Cost:</span> <span style={{ color: '#FFFFFF', fontWeight: 'bold' }}>${baseline.replacementCost.toLocaleString()}</span></div>
-                    </div>
+                    <p style={{ color: '#FFFFFF', margin: 0 }}>Engagement rate: <span style={{ fontWeight: 'bold' }}>{engagementRate}%</span> <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#FFFFFF', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', marginLeft: '8px', padding: 0 }}>Edit</button></p>
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <button onClick={() => document.getElementById('impact-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: '#F09511', color: '#333333', padding: '16px 32px', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', fontSize: '16px' }}>Show Impact →</button>
-                  <div style={{ fontSize: '13px', marginTop: '8px', color: '#F09511' }}>See results for {engagementRate}% engagement rate</div>
+                  <button onClick={() => document.getElementById('impact-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: '#005288', color: '#FFFFFF', padding: '16px 32px', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', fontSize: '16px' }}>Show Impact →</button>
+                  <div style={{ fontSize: '13px', marginTop: '8px', color: '#c0c2c4' }}>See results for {engagementRate}% engagement rate</div>
                 </div>
               </div>
             </div>
 
-            {/* Key Model Parameters */}
-            <div style={{ background: '#EDF3F9', padding: '24px', borderRadius: '12px', border: '2px solid #1460AA' }}>
+            <div style={{ background: '#E8F4F8', padding: '24px', borderRadius: '12px', border: '2px solid #005288' }}>
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-                <Info style={{ color: '#1460AA', marginRight: '12px' }} size={24} />
-                <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1460AA', margin: 0 }}>Key Model Parameters</h3>
+                <Info style={{ color: '#005288', marginRight: '12px' }} size={24} />
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#005288', margin: 0 }}>Key Model Parameters</h3>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #95D9FF' }}>
-                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#1460AA', fontSize: '16px' }}>Engagement Rate ({engagementRate}%)</h4>
-                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: 0, marginBottom: '8px' }}>Controls <strong>how many</strong> personnel actively use BetterUp coaching</p>
-                  <p style={{ fontSize: '14px', margin: 0, color: '#1460AA' }}>Example: {seats.toLocaleString()} target × {engagementRate}% = {Math.round(calculations.activeSeats).toLocaleString()} engaged</p>
+                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '2px solid #005288' }}>
+                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Engagement Rate ({engagementRate}%)</h4>
+                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: '0 0 8px 0' }}>Controls <strong>how many</strong> personnel actively use BetterUp coaching</p>
+                  <p style={{ fontSize: '14px', margin: 0, color: '#005288' }}>Example: {seats.toLocaleString()} target × {engagementRate}% = {Math.round(calculations.activeSeats).toLocaleString()} engaged</p>
                 </div>
-                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #95D9FF' }}>
-                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#1460AA', fontSize: '16px' }}>Readiness Rate ({effectiveness}%)</h4>
-                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: 0, marginBottom: '8px' }}>Controls <strong>how much</strong> each engaged person's performance improves</p>
-                  <p style={{ fontSize: '14px', margin: 0, color: '#1460AA' }}>Auto-calculated from Performance Drivers (Resilience, Leadership, etc.)</p>
+                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '2px solid #005288' }}>
+                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Readiness Rate ({effectiveness}%)</h4>
+                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: '0 0 8px 0' }}>Controls <strong>how much</strong> each engaged person's performance improves</p>
+                  <p style={{ fontSize: '14px', margin: 0, color: '#005288' }}>Auto-calculated from Performance Drivers (Resilience, Leadership, etc.)</p>
                 </div>
               </div>
             </div>
@@ -273,7 +229,7 @@ const CBPROICalculator = ({ workforce }) => {
               </div>
               <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
                 <div style={{ fontSize: '14px', marginBottom: '8px', color: '#666666' }}>ROI multiplier</div>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{(calculations.totalAnnualSavings / calculations.totalCost).toFixed(1)}x</div>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{calculations.roiMultiplier}x</div>
                 <div style={{ fontSize: '14px', color: '#999999' }}>Return +{calculations.roi}%</div>
               </div>
               <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
@@ -301,10 +257,10 @@ const CBPROICalculator = ({ workforce }) => {
                       <div style={{ fontSize: '11px', color: '#005288' }}>(4%)</div>
                     </div>
                   </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#F09511', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'onClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
+                  <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#005288', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'onClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
                   {expandedSection === 'onClaim' && (
                     <div style={{ marginTop: '16px' }}>
-                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px' }}>Breakdown by Factor</h4>
+                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px', margin: '0 0 12px 0' }}>Breakdown by Factor</h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {[
                           { name: 'PTSD', prevalence: '11.2%', pct: 0.45 },
@@ -316,7 +272,7 @@ const CBPROICalculator = ({ workforce }) => {
                           const after = before - (calculations.fecaSavings * factor.pct);
                           const savings = calculations.fecaSavings * factor.pct;
                           return (
-                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #F3E69C' : 'none', fontSize: '14px' }}>
+                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #E8F4F8' : 'none', fontSize: '14px' }}>
                               <div>
                                 <span style={{ fontWeight: '600', color: '#333333' }}>{factor.name}</span>
                                 <span style={{ fontSize: '12px', marginLeft: '8px', color: '#808080' }}>{factor.prevalence}</span>
@@ -324,7 +280,7 @@ const CBPROICalculator = ({ workforce }) => {
                               <div style={{ textAlign: 'right' }}>
                                 <div style={{ color: '#808080', fontSize: '12px' }}>Before: ${(before / 1000000).toFixed(2)}M</div>
                                 <div style={{ color: '#333333', fontWeight: '600' }}>After: ${(after / 1000000).toFixed(2)}M</div>
-                                <div style={{ color: '#A00000', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
+                                <div style={{ color: '#c41230', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
                               </div>
                             </div>
                           );
@@ -355,7 +311,7 @@ const CBPROICalculator = ({ workforce }) => {
                   <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#005288', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'offClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
                   {expandedSection === 'offClaim' && (
                     <div style={{ marginTop: '16px' }}>
-                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px' }}>Breakdown by Factor</h4>
+                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px', margin: '0 0 12px 0' }}>Breakdown by Factor</h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {[
                           { name: 'PTSD', desc: 'Stress-related turnover', pct: 0.38 },
@@ -363,11 +319,11 @@ const CBPROICalculator = ({ workforce }) => {
                           { name: 'Anxiety', desc: 'Performance costs', pct: 0.18 },
                           { name: 'Substance Use (SUD)', desc: 'Absenteeism', pct: 0.22 },
                         ].map((factor, idx) => {
-                          const before = calculations.baseline.replacementCost * calculations.currentSeparations * (factor.pct / 0.055);
+                          const before = calculations.baseline.replacementCost * calculations.currentSeparations * (factor.pct / calculations.baseline.attritionRate * 100);
                           const savings = calculations.offClaimTotal * factor.pct;
                           const after = before - savings;
                           return (
-                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #95D9FF' : 'none', fontSize: '14px' }}>
+                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #E8F4F8' : 'none', fontSize: '14px' }}>
                               <div>
                                 <span style={{ fontWeight: '600', color: '#333333' }}>{factor.name}</span>
                                 <div style={{ fontSize: '12px', color: '#808080' }}>{factor.desc}</div>
@@ -375,7 +331,7 @@ const CBPROICalculator = ({ workforce }) => {
                               <div style={{ textAlign: 'right' }}>
                                 <div style={{ color: '#808080', fontSize: '12px' }}>Before: ${(before / 1000000).toFixed(2)}M</div>
                                 <div style={{ color: '#333333', fontWeight: '600' }}>After: ${(after / 1000000).toFixed(2)}M</div>
-                                <div style={{ color: '#A00000', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
+                                <div style={{ color: '#c41230', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
                               </div>
                             </div>
                           );
@@ -388,7 +344,7 @@ const CBPROICalculator = ({ workforce }) => {
             </div>
 
             <div id="config-section" style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #005288' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#005288', display: 'flex', alignItems: 'center' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#005288', display: 'flex', alignItems: 'center', margin: '0 0 24px 0' }}>
                 <Calculator style={{ marginRight: '12px', color: '#005288' }} size={28} /> Program Configuration
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '32px' }}>
@@ -415,18 +371,21 @@ const CBPROICalculator = ({ workforce }) => {
               </div>
             </div>
 
-            <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #00416A' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#00416A' }}><Brain style={{ display: 'inline', marginRight: '12px', color: '#1460AA' }} /> Performance Drivers <span style={{ marginLeft: '16px', fontSize: '18px', color: '#1460AA' }}>Overall: {effectiveness}%</span></h2>
+            <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #005288' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#005288', margin: '0 0 24px 0' }}>
+                <Brain style={{ display: 'inline', marginRight: '12px', color: '#005288', verticalAlign: 'middle' }} size={28} /> Performance Drivers 
+                <span style={{ marginLeft: '16px', fontSize: '18px', color: '#005288' }}>Overall: {effectiveness}%</span>
+              </h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
                 {Object.entries(drivers).map(([key, value]) => {
                   const labels = { emotionalRegulation: 'Emotional Regulation', resilience: 'Resilience & Recovery', decisionMaking: 'Decision-Making Under Pressure', communication: 'Communication & Conflict Resolution', purposeMeaning: 'Purpose & Meaning', workLifeIntegration: 'Work-Life Integration', stressManagement: 'Stress Management', leadershipEffectiveness: 'Leadership Effectiveness' };
                   return (
-                    <div key={key} style={{ background: '#ECF1F4', padding: '16px', borderRadius: '8px' }}>
+                    <div key={key} style={{ background: '#E8F4F8', padding: '16px', borderRadius: '8px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                         <label style={{ fontSize: '14px', fontWeight: '600', color: '#333333' }}>{labels[key]}</label>
-                        <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#1460AA' }}>{value}%</span>
+                        <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#005288' }}>{value}%</span>
                       </div>
-                      <input type="range" min="0" max="100" value={value} onChange={(e) => { setDrivers({ ...drivers, [key]: Number(e.target.value) }); setScenarioType('custom'); }} style={{ width: '100%', accentColor: '#1460AA' }} />
+                      <input type="range" min="0" max="100" value={value} onChange={(e) => { setDrivers({ ...drivers, [key]: Number(e.target.value) }); setScenarioType('custom'); }} style={{ width: '100%', accentColor: '#005288' }} />
                     </div>
                   );
                 })}
@@ -438,7 +397,7 @@ const CBPROICalculator = ({ workforce }) => {
               <div style={{ fontSize: '17px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <p style={{ margin: 0 }}><strong>Investment:</strong> ${(calculations.totalCost / 1000000).toFixed(2)}M for {seats.toLocaleString()} seats ({((seats / workforce.personnel) * 100).toFixed(1)}% coverage)</p>
                 <p style={{ margin: 0 }}><strong>Annual Return:</strong> ${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M through {Math.round(calculations.separationsPrevented)} prevented separations and {calculations.claimsReduced.toFixed(1)} reduced FECA claims</p>
-                <p style={{ margin: 0 }}><strong>ROI:</strong> {calculations.roi}% with break-even in {calculations.breakEvenMonths.toFixed(1)} months</p>
+                <p style={{ margin: 0 }}><strong>ROI:</strong> {calculations.roi}% with break-even in {calculations.breakEvenMonths} months</p>
                 <p style={{ margin: 0 }}><strong>5-Year Value:</strong> ${(calculations.fiveYearValue / 1000000).toFixed(1)}M net benefit</p>
               </div>
             </div>
@@ -447,15 +406,19 @@ const CBPROICalculator = ({ workforce }) => {
 
         {activeTab === 'details' && (
           <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '1px solid #D9D9D6' }}>
-            <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: '#00416A' }}>Model Methodology & Data Sources</h3>
+            <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: '#005288', margin: '0 0 16px 0' }}>Model Methodology & Data Sources</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ background: '#EDF3F9', padding: '20px', borderRadius: '8px' }}>
-                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#1460AA', fontSize: '16px' }}>Pathway 1: FECA Claims Reduction</h4>
-                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Reduces mental health workers' comp claims. CBP faces $90-120M annual FECA costs with 20% mental health-related.</p>
+              <div style={{ background: '#E8F4F8', padding: '20px', borderRadius: '8px' }}>
+                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Pathway 1: FECA Claims Reduction</h4>
+                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Reduces mental health workers' comp claims. CBP faces $90-120M annual FECA costs with 20% mental health-related (17 Border Patrol suicides in 2022, rate 28% higher than other LE).</p>
               </div>
-              <div style={{ background: '#ECF5EC', padding: '20px', borderRadius: '8px' }}>
-                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#008000', fontSize: '16px' }}>Pathway 2: Retention Economics</h4>
-                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Prevents costly turnover at ${workforce.replacementCost.toLocaleString()} per separation including FLETC training, clearances, recruitment incentives.</p>
+              <div style={{ background: '#E8F4F8', padding: '20px', borderRadius: '8px' }}>
+                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Pathway 2: Retention Economics</h4>
+                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Prevents costly turnover at ${workforce.replacementCost.toLocaleString()} per separation including FLETC training ($17.5-20K), clearances ($9K), recruitment incentives (up to $36.3K), and 18-24 month productivity ramp-up.</p>
+              </div>
+              <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '2px solid #c41230' }}>
+                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#c41230', fontSize: '16px', margin: '0 0 8px 0' }}>2028 Retirement Crisis</h4>
+                <p style={{ color: '#333333', margin: 0, lineHeight: 1.6 }}>Commissioner projects 400% increase in officer retirements in FY2028 (2,220 vs ~500 annual). With 316-578 day hiring timelines and 1.8% applicant yield, CBP cannot recruit fast enough—retention is the only viable strategy.</p>
               </div>
             </div>
           </div>
@@ -463,8 +426,8 @@ const CBPROICalculator = ({ workforce }) => {
       </div>
 
       {showAssistant && (
-        <div style={{ position: 'fixed', bottom: '96px', right: '24px', width: '384px', background: '#FFFFFF', borderRadius: '12px', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', zIndex: 50, border: '2px solid #1460AA' }}>
-          <div style={{ background: '#1460AA', color: '#FFFFFF', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ position: 'fixed', bottom: '96px', right: '24px', width: '384px', background: '#FFFFFF', borderRadius: '12px', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', zIndex: 50, border: '2px solid #005288' }}>
+          <div style={{ background: '#005288', color: '#FFFFFF', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}><MessageSquare size={20} style={{ marginRight: '8px' }} /><h3 style={{ fontWeight: 'bold', margin: 0 }}>Model Assistant</h3></div>
             <button onClick={() => setShowAssistant(false)} style={{ background: 'none', border: 'none', color: '#FFFFFF', cursor: 'pointer', fontSize: '20px' }}>✕</button>
           </div>
@@ -474,7 +437,7 @@ const CBPROICalculator = ({ workforce }) => {
         </div>
       )}
 
-      <button onClick={() => setShowAssistant(!showAssistant)} style={{ position: 'fixed', bottom: '24px', right: '24px', background: '#1460AA', color: '#FFFFFF', padding: '16px', borderRadius: '50%', border: 'none', cursor: 'pointer', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', zIndex: 50 }}>
+      <button onClick={() => setShowAssistant(!showAssistant)} style={{ position: 'fixed', bottom: '24px', right: '24px', background: '#005288', color: '#FFFFFF', padding: '16px', borderRadius: '50%', border: 'none', cursor: 'pointer', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', zIndex: 50 }}>
         <MessageSquare size={24} />
       </button>
     </div>
