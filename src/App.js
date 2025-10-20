@@ -1,96 +1,144 @@
 import React, { useState, useMemo } from 'react';
-import { Calculator, Shield, Brain, MessageSquare, Info, Search } from 'lucide-react';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Calculator, TrendingUp, Users, DollarSign, Shield, Heart, Brain, MessageSquare, ChevronDown, ChevronUp, Info, AlertCircle, Target, Award, Activity } from 'lucide-react';
 
 const organizationData = [
-  { id: 'all', name: 'All CBP Combined', personnel: 60000, location: 'Nationwide', preset: 'Yes', attritionRate: 5.5, replacementCost: 97500, fecaAnnual: 105000000, description: 'Entire CBP workforce', category: 'All Units' },
-  { id: 'ofo', name: 'Office of Field Operations', personnel: 26000, location: '328 Ports of Entry', preset: 'Yes', attritionRate: 3.5, replacementCost: 87300, fecaAnnual: 42000000, description: 'Airports, seaports, land crossings', category: 'Organization' },
-  { id: 'usbp', name: 'U.S. Border Patrol', personnel: 20000, location: '20 Sectors Nationwide', preset: 'Yes', attritionRate: 5.5, replacementCost: 107700, fecaAnnual: 50000000, description: 'Land border patrol', category: 'Organization' },
-  { id: 'amo', name: 'Air and Marine Operations', personnel: 1500, location: 'Nationwide', preset: 'Yes', attritionRate: 10.0, replacementCost: 120000, fecaAnnual: 8000000, description: 'Aviation & maritime', category: 'Organization' },
-  { id: 'san_diego', name: 'San Diego Sector', personnel: 2400, location: 'California', preset: 'Yes', attritionRate: 5.5, replacementCost: 107700, fecaAnnual: 6000000, description: 'Pacific Coast to Imperial County', category: 'USBP Sector' },
-  { id: 'tucson', name: 'Tucson Sector', personnel: 3800, location: 'Arizona', preset: 'Yes', attritionRate: 6.5, replacementCost: 107700, fecaAnnual: 9500000, description: 'Largest sector, highest activity', category: 'USBP Sector' },
-  { id: 'el_paso', name: 'El Paso Sector', personnel: 2200, location: 'New Mexico & Texas', preset: 'Yes', attritionRate: 5.5, replacementCost: 107700, fecaAnnual: 5500000, description: 'West Texas operations', category: 'USBP Sector' },
-  { id: 'rio_grande', name: 'Rio Grande Valley Sector', personnel: 3500, location: 'Texas', preset: 'Yes', attritionRate: 6.0, replacementCost: 107700, fecaAnnual: 8750000, description: 'Highest apprehension volume', category: 'USBP Sector' },
-  { id: 'del_rio', name: 'Del Rio Sector', personnel: 2100, location: 'Texas', preset: 'Partial', attritionRate: 7.0, replacementCost: 107700, fecaAnnual: 5250000, description: 'Eagle Pass, Del Rio', category: 'USBP Sector' },
-  { id: 'laredo', name: 'Laredo Sector', personnel: 1800, location: 'Texas', preset: 'Yes', attritionRate: 5.8, replacementCost: 107700, fecaAnnual: 4500000, description: 'Laredo, Zapata County', category: 'USBP Sector' },
-  { id: 'yuma', name: 'Yuma Sector', personnel: 1100, location: 'Arizona', preset: 'Partial', attritionRate: 6.5, replacementCost: 107700, fecaAnnual: 2750000, description: 'Colorado River region', category: 'USBP Sector' },
-  { id: 'ofo_southwest', name: 'Southwest Border Ports', personnel: 8500, location: 'CA, AZ, NM, TX', preset: 'Yes', attritionRate: 4.0, replacementCost: 87300, fecaAnnual: 13692000, description: 'San Ysidro, Otay Mesa, Calexico', category: 'OFO Region' },
+  { id: 'all', name: 'All CBP Combined', personnel: 60000, location: 'Nationwide', preset: 'Yes', attritionRate: 5.5, replacementCost: 97500, fecaAnnual: 105000000, workersCompClaims: 3100, description: 'Entire CBP workforce', category: 'All Units' },
+  { id: 'ofo', name: 'Office of Field Operations', personnel: 26000, location: '328 Ports of Entry', preset: 'Yes', attritionRate: 3.5, replacementCost: 87300, fecaAnnual: 42000000, workersCompClaims: 1340, description: 'Airports, seaports, land crossings', category: 'Organization' },
+  { id: 'usbp', name: 'U.S. Border Patrol', personnel: 20000, location: '20 Sectors Nationwide', preset: 'Yes', attritionRate: 7.2, replacementCost: 125000, fecaAnnual: 55000000, workersCompClaims: 1500, description: 'Land border patrol', category: 'Organization' },
+  { id: 'swb', name: 'Southwest Border Ports', personnel: 8500, location: 'CA, AZ, NM, TX', preset: 'Yes', attritionRate: 6.8, replacementCost: 95000, fecaAnnual: 18000000, workersCompClaims: 520, description: 'San Ysidro, Otay Mesa, Calexico', category: 'USBP Sector' },
+  { id: 'tucson', name: 'Tucson Sector', personnel: 3800, location: 'Arizona', preset: 'Yes', attritionRate: 7.5, replacementCost: 115000, fecaAnnual: 12000000, workersCompClaims: 285, description: 'Largest sector, highest activity', category: 'USBP Sector' },
 ];
 
 const LandingPage = ({ onSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('All Units');
-  const [sortBy, setSortBy] = useState('personnel');
-  const filters = ['All Units', 'Preset', 'Organization', 'USBP Sector', 'OFO Region'];
+  const [selectedCategory, setSelectedCategory] = useState('All Units');
 
-  const filteredAndSorted = useMemo(() => {
-    let filtered = organizationData.filter(org => {
-      const matchesSearch = org.name.toLowerCase().includes(searchTerm.toLowerCase()) || org.location.toLowerCase().includes(searchTerm.toLowerCase()) || org.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilter = activeFilter === 'All Units' || (activeFilter === 'Preset' && org.preset === 'Yes') || org.category === activeFilter;
-      return matchesSearch && matchesFilter;
-    });
-    return filtered.sort((a, b) => sortBy === 'personnel' ? b.personnel - a.personnel : a.name.localeCompare(b.name));
-  }, [searchTerm, activeFilter, sortBy]);
+  const categories = ['All Units', 'Organization', 'USBP Sector'];
+
+  const filteredOrgs = organizationData.filter(org => {
+    const matchesSearch = org.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         org.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All Units' || org.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
-      <div style={{ background: '#005288', borderTop: '6px solid #c41230', paddingTop: '20px', paddingBottom: '24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-            <Shield size={56} style={{ color: '#FFFFFF', marginRight: '20px', flexShrink: 0 }} />
-            <h1 style={{ color: '#FFFFFF', fontSize: '36px', fontWeight: 'bold', margin: 0, lineHeight: 1.2 }}>U.S. Customs and Border Protection</h1>
-          </div>
-          <div style={{ marginLeft: '76px' }}>
-            <h2 style={{ color: '#FFFFFF', fontSize: '24px', fontWeight: 'bold', margin: 0, marginBottom: '12px', lineHeight: 1.3 }}>BetterUp Retention & Wellness ROI Calculator</h2>
-            <p style={{ color: '#E0E0E0', fontSize: '14px', margin: 0 }}>Demonstrating financial impact through dual-pathway methodology: <span style={{ fontWeight: '700' }}>(1) reducing costly FECA mental health claims</span> and <span style={{ fontWeight: '700' }}>(2) preventing high-cost turnover</span> through precision development. Based on comprehensive GAO, union, and DHS research.</p>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
-        <div style={{ background: '#333333', padding: '24px 32px', borderRadius: '12px', marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', color: '#FFFFFF' }}>Select Your Organization or Sector</h2>
-          <p style={{ color: '#c0c2c4', fontSize: '15px', margin: 0 }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
-        </div>
-
-        <div style={{ marginBottom: '24px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <div style={{ flex: 1, position: 'relative' }}>
-            <Search style={{ position: 'absolute', left: '16px', top: '14px', color: '#808080' }} size={20} />
-            <input type="text" placeholder="Search organizations..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ width: '100%', padding: '12px 12px 12px 48px', border: '2px solid #D9D9D6', borderRadius: '8px', fontSize: '16px', color: '#333333' }} />
-          </div>
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ padding: '12px 40px 12px 16px', border: '2px solid #D9D9D6', borderRadius: '8px', background: '#FFFFFF', color: '#333333', fontSize: '16px' }}>
-            <option value="personnel">Sort: Personnel</option>
-            <option value="name">Sort: A-Z</option>
-          </select>
-        </div>
-
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
-          {filters.map(filter => (
-            <button key={filter} onClick={() => setActiveFilter(filter)} style={{ padding: '10px 20px', borderRadius: '8px', fontWeight: '600', border: '2px solid', borderColor: activeFilter === filter ? '#005288' : '#D9D9D6', background: activeFilter === filter ? '#005288' : '#FFFFFF', color: activeFilter === filter ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>{filter}</button>
-          ))}
-        </div>
-
-        <div style={{ background: '#FFFFFF', borderRadius: '12px', overflow: 'hidden', border: '1px solid #D9D9D6' }}>
-          <div style={{ background: '#333333', padding: '16px 24px', display: 'grid', gridTemplateColumns: '2fr 1fr 1.5fr 1fr 120px', gap: '16px', alignItems: 'center' }}>
-            <div style={{ color: '#FFFFFF', fontWeight: '600' }}>Organization / Sector</div>
-            <div style={{ color: '#FFFFFF', fontWeight: '600' }}>Personnel</div>
-            <div style={{ color: '#FFFFFF', fontWeight: '600' }}>Location</div>
-            <div style={{ color: '#FFFFFF', fontWeight: '600' }}>Preset</div>
-            <div></div>
-          </div>
-          {filteredAndSorted.map((org, idx) => (
-            <div key={org.id} style={{ padding: '20px 24px', display: 'grid', gridTemplateColumns: '2fr 1fr 1.5fr 1fr 120px', gap: '16px', alignItems: 'center', borderBottom: idx < filteredAndSorted.length - 1 ? '1px solid #EEEEEE' : 'none', background: idx % 2 === 0 ? '#FFFFFF' : '#F6F6F6' }}>
-              <div>
-                <div style={{ fontWeight: '700', color: '#333333', fontSize: '16px', marginBottom: '4px' }}>{org.name}</div>
-                <div style={{ color: '#808080', fontSize: '14px', fontStyle: 'italic' }}>"{org.description}"</div>
-              </div>
-              <div style={{ fontWeight: '700', color: '#333333', fontSize: '18px' }}>{org.personnel.toLocaleString()}</div>
-              <div style={{ color: '#555555', fontSize: '14px' }}>{org.location}</div>
-              <div>
-                <span style={{ padding: '4px 12px', borderRadius: '12px', fontSize: '13px', fontWeight: '600', background: org.preset === 'Yes' ? '#C1E8B0' : org.preset === 'Partial' ? '#F3E69C' : '#EEEEEE', color: org.preset === 'Yes' ? '#134D13' : org.preset === 'Partial' ? '#A36900' : '#555555' }}>{org.preset}</span>
-              </div>
-              <button onClick={() => onSelect(org)} style={{ padding: '10px 20px', borderRadius: '8px', background: '#005288', color: '#FFFFFF', fontWeight: '600', border: 'none', cursor: 'pointer' }} onMouseEnter={(e) => e.target.style.background = '#003d66'} onMouseLeave={(e) => e.target.style.background = '#005288'}>Select →</button>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a2f5c 0%, #1e5a8e 50%, #004d7a 100%)', padding: '24px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ background: 'white', borderRadius: '16px', padding: '32px', marginBottom: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+            <Shield size={48} color="#0066cc" />
+            <div>
+              <h1 style={{ fontSize: '36px', fontWeight: 'bold', color: '#003366', margin: 0 }}>U.S. Customs and Border Protection</h1>
+              <p style={{ fontSize: '20px', color: '#666', margin: '8px 0 0 0' }}>BetterUp Retention & Wellness ROI Calculator</p>
             </div>
-          ))}
+          </div>
+          <p style={{ color: '#555', fontSize: '16px', margin: 0 }}>
+            Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development. Based on comprehensive GAO, union, and DHS research.
+          </p>
+        </div>
+
+        <div style={{ background: '#1a1a1a', borderRadius: '16px', padding: '32px', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>Select Your Organization or Sector</h2>
+          <p style={{ color: '#aaa', marginBottom: '24px' }}>Choose a command preset or create a custom region. All parameters can be fine-tuned later.</p>
+
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
+            <input
+              type="text"
+              placeholder="Search organizations..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ flex: 1, minWidth: '300px', padding: '12px 16px', borderRadius: '8px', border: '1px solid #444', background: '#2a2a2a', color: 'white', fontSize: '16px' }}
+            />
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid #444', background: '#2a2a2a', color: 'white', fontSize: '16px', cursor: 'pointer' }}
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: selectedCategory === cat ? '#0066cc' : '#333',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: selectedCategory === cat ? 'bold' : 'normal'
+                }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ background: '#2a2a2a', borderRadius: '12px', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ background: '#1a1a1a' }}>
+                  <th style={{ padding: '16px', textAlign: 'left', color: '#aaa', fontWeight: '600' }}>Organization / Sector</th>
+                  <th style={{ padding: '16px', textAlign: 'center', color: '#aaa', fontWeight: '600' }}>Personnel</th>
+                  <th style={{ padding: '16px', textAlign: 'center', color: '#aaa', fontWeight: '600' }}>Location</th>
+                  <th style={{ padding: '16px', textAlign: 'center', color: '#aaa', fontWeight: '600' }}>Preset</th>
+                  <th style={{ padding: '16px', textAlign: 'center', color: '#aaa', fontWeight: '600' }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredOrgs.map((org, idx) => (
+                  <tr key={org.id} style={{ borderTop: idx > 0 ? '1px solid #333' : 'none' }}>
+                    <td style={{ padding: '16px' }}>
+                      <div style={{ color: 'white', fontWeight: '600', marginBottom: '4px' }}>{org.name}</div>
+                      <div style={{ color: '#888', fontSize: '14px' }}>{org.description}</div>
+                    </td>
+                    <td style={{ padding: '16px', textAlign: 'center', color: 'white', fontWeight: '600' }}>
+                      {org.personnel.toLocaleString()}
+                    </td>
+                    <td style={{ padding: '16px', textAlign: 'center', color: '#aaa' }}>{org.location}</td>
+                    <td style={{ padding: '16px', textAlign: 'center' }}>
+                      <span style={{ 
+                        padding: '4px 12px', 
+                        borderRadius: '12px', 
+                        background: org.preset === 'Yes' ? '#00cc66' : '#666',
+                        color: 'white',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                      }}>
+                        {org.preset}
+                      </span>
+                    </td>
+                    <td style={{ padding: '16px', textAlign: 'center' }}>
+                      <button
+                        onClick={() => onSelect(org)}
+                        style={{
+                          padding: '8px 24px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: '#0066cc',
+                          color: 'white',
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                          fontSize: '14px'
+                        }}
+                      >
+                        Select →
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -99,347 +147,747 @@ const LandingPage = ({ onSelect }) => {
 
 const CBPROICalculator = ({ workforce }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [seats, setSeats] = useState(Math.round(workforce.personnel * 0.30));
+  const [seats, setSeats] = useState(Math.round(workforce.personnel * 0.15));
   const [engagementRate, setEngagementRate] = useState(65);
   const [costPerSeat, setCostPerSeat] = useState(150);
-  const [scenarioType, setScenarioType] = useState('moderate');
   const [showAssistant, setShowAssistant] = useState(false);
-  const [expandedSection, setExpandedSection] = useState(null);
-
+  const [showModelDetails, setShowModelDetails] = useState(false);
+  const [showOnClaimBreakdown, setShowOnClaimBreakdown] = useState(false);
+  const [showOffClaimBreakdown, setShowOffClaimBreakdown] = useState(false);
+  
   const [drivers, setDrivers] = useState({
-    emotionalRegulation: 70, resilience: 70, decisionMaking: 65, communication: 60,
-    purposeMeaning: 65, workLifeIntegration: 55, stressManagement: 60, leadershipEffectiveness: 60,
+    lethality: 26,
+    accountability: 21,
+    readiness: 18,
+    meritocracy: 14,
+    standards: 10
   });
 
-  const effectiveness = Math.round(Object.values(drivers).reduce((a, b) => a + b, 0) / Object.keys(drivers).length);
-
-  const applyScenario = (type) => {
-    setScenarioType(type);
-    const scenarios = {
-      conservative: { emotionalRegulation: 60, resilience: 60, decisionMaking: 55, communication: 55, purposeMeaning: 60, workLifeIntegration: 50, stressManagement: 55, leadershipEffectiveness: 55 },
-      moderate: { emotionalRegulation: 70, resilience: 70, decisionMaking: 65, communication: 65, purposeMeaning: 70, workLifeIntegration: 60, stressManagement: 65, leadershipEffectiveness: 65 },
-      aggressive: { emotionalRegulation: 80, resilience: 80, decisionMaking: 75, communication: 75, purposeMeaning: 80, workLifeIntegration: 70, stressManagement: 75, leadershipEffectiveness: 75 }
-    };
-    if (scenarios[type]) setDrivers(scenarios[type]);
-  };
+  const totalDriverImpact = Object.values(drivers).reduce((a, b) => a + b, 0);
+  const retentionEffectiveness = drivers.accountability + drivers.meritocracy;
+  const readinessEffectiveness = drivers.lethality + drivers.readiness + drivers.standards;
 
   const calculations = useMemo(() => {
-    const activeSeats = seats * (engagementRate / 100);
+    const engaged = Math.round(seats * (engagementRate / 100));
+    
+    const annualAttrition = workforce.personnel * (workforce.attritionRate / 100);
+    const separationsPrevented = Math.round(engaged * (retentionEffectiveness / 100));
+    const retentionSavings = separationsPrevented * workforce.replacementCost;
+    
+    const avgClaimCost = 65000;
+    const claimsRate = workforce.workersCompClaims / workforce.personnel;
+    const expectedClaims = seats * claimsRate;
+    const claimsPrevented = Math.round(expectedClaims * 0.22);
+    const fecaSavings = claimsPrevented * avgClaimCost;
+    
+    const readinessImproved = Math.round(engaged * (readinessEffectiveness / 100));
+    const readinessValuePerPerson = 15000;
+    const readinessEconomicValue = readinessImproved * readinessValuePerPerson;
+    
+    const totalAnnualSavings = retentionSavings + fecaSavings + readinessEconomicValue;
     const totalCost = seats * costPerSeat;
-    const baseline = { attritionRate: workforce.attritionRate, replacementCost: workforce.replacementCost, fecaAnnual: workforce.fecaAnnual };
-    
-    const fecaMentalHealthPortion = baseline.fecaAnnual * 0.20;
-    const effectivenessImpact = (effectiveness - 50) / 50;
-    const fecaReductionRate = effectivenessImpact * 0.25;
-    const programReach = (activeSeats / workforce.personnel);
-    const networkEffect = 1 + (programReach * 0.8);
-    const totalFecaImpact = fecaMentalHealthPortion * fecaReductionRate * programReach * networkEffect;
-    const claimsReduced = totalFecaImpact / 10000;
-    const fecaSavings = totalFecaImpact;
-    
-    const currentSeparations = workforce.personnel * (baseline.attritionRate / 100);
-    const attritionPointsReduced = effectivenessImpact * 0.03;
-    const baseSeparationsPrevented = workforce.personnel * attritionPointsReduced * programReach;
-    const spilloverEffect = 1.3;
-    const separationsPrevented = baseSeparationsPrevented * spilloverEffect;
-    const retentionSavings = separationsPrevented * baseline.replacementCost;
-    const productivityGain = activeSeats * 2500;
-    const overtimeReduction = separationsPrevented * 12000;
-    const recruitmentSavings = separationsPrevented * 5000;
-    const offClaimTotal = retentionSavings + productivityGain + overtimeReduction + recruitmentSavings;
-    
-    const totalAnnualSavings = fecaSavings + offClaimTotal;
     const netSavings = totalAnnualSavings - totalCost;
-    const roi = totalCost > 0 ? ((netSavings / totalCost) * 100).toFixed(1) : '0.0';
-    const roiMultiplier = totalCost > 0 ? (totalAnnualSavings / totalCost).toFixed(1) : '0.0';
-    const breakEvenMonths = totalAnnualSavings > totalCost && totalAnnualSavings > 0 ? (totalCost / (totalAnnualSavings / 12)).toFixed(1) : 'Immediate';
+    const roi = Math.round((netSavings / totalCost) * 100);
+    const breakEvenMonths = (totalCost / totalAnnualSavings) * 12;
     const fiveYearValue = (totalAnnualSavings * 5) - totalCost;
     
-    return { activeSeats, totalCost, fecaSavings, retentionSavings, productivityGain, overtimeReduction, recruitmentSavings, offClaimTotal, totalAnnualSavings, netSavings, roi, roiMultiplier, breakEvenMonths, fiveYearValue, separationsPrevented, currentSeparations, claimsReduced, baseline };
-  }, [seats, engagementRate, costPerSeat, effectiveness, workforce]);
+    return {
+      engaged,
+      annualAttrition,
+      separationsPrevented,
+      retentionSavings,
+      claimsPrevented,
+      fecaSavings,
+      readinessImproved,
+      readinessEconomicValue,
+      totalAnnualSavings,
+      totalCost,
+      netSavings,
+      roi,
+      breakEvenMonths,
+      fiveYearValue
+    };
+  }, [seats, engagementRate, costPerSeat, workforce, retentionEffectiveness, readinessEffectiveness]);
+
+  const savingsBreakdown = [
+    { name: 'Retention', value: calculations.retentionSavings, color: '#0066cc' },
+    { name: 'FECA Prevention', value: calculations.fecaSavings, color: '#cc3333' },
+    { name: 'Readiness Value', value: calculations.readinessEconomicValue, color: '#00cc66' }
+  ];
+
+  const impactTimeline = [
+    { year: 'Year 1', savings: calculations.netSavings, cumulative: calculations.netSavings },
+    { year: 'Year 2', savings: calculations.totalAnnualSavings, cumulative: calculations.netSavings + calculations.totalAnnualSavings },
+    { year: 'Year 3', savings: calculations.totalAnnualSavings, cumulative: calculations.netSavings + (calculations.totalAnnualSavings * 2) },
+    { year: 'Year 4', savings: calculations.totalAnnualSavings, cumulative: calculations.netSavings + (calculations.totalAnnualSavings * 3) },
+    { year: 'Year 5', savings: calculations.totalAnnualSavings, cumulative: calculations.fiveYearValue }
+  ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
-      <div style={{ background: '#005288', borderTop: '6px solid #c41230', paddingTop: '20px', paddingBottom: '24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-            <Shield size={56} style={{ color: '#FFFFFF', marginRight: '20px', flexShrink: 0 }} />
-            <h1 style={{ color: '#FFFFFF', fontSize: '36px', fontWeight: 'bold', margin: 0, lineHeight: 1.2 }}>{workforce.name}</h1>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)', padding: '16px' }}>
+      <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
+        
+        <div style={{ background: 'linear-gradient(135deg, #0a2f5c 0%, #0066cc 100%)', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <Shield size={40} color="white" />
+            <div>
+              <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: 'white', margin: 0 }}>
+                {workforce.name} ROI Calculator
+              </h1>
+              <p style={{ color: 'rgba(255,255,255,0.9)', margin: '4px 0 0 0', fontSize: '14px' }}>
+                {workforce.personnel.toLocaleString()} Personnel • {workforce.location}
+              </p>
+            </div>
           </div>
-          <div style={{ marginLeft: '76px' }}>
-            <h2 style={{ color: '#FFFFFF', fontSize: '24px', fontWeight: 'bold', margin: 0, marginBottom: '12px', lineHeight: 1.3 }}>BetterUp Retention & Wellness Program ROI Calculator</h2>
-            <p style={{ color: '#E0E0E0', fontSize: '14px', margin: 0 }}>{workforce.location} ({workforce.personnel.toLocaleString()} personnel)</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '8px',
+              border: '2px solid white',
+              background: 'transparent',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '14px'
+            }}
+          >
+            ← Change Organization
+          </button>
+        </div>
+
+        {/* ENHANCED SAVINGS CALLOUT */}
+        <div style={{
+          background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)',
+          borderRadius: '20px',
+          padding: '32px',
+          marginBottom: '32px',
+          boxShadow: '0 8px 30px rgba(0, 102, 204, 0.3)',
+          border: '3px solid #ffcc00',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-50px',
+            right: '-50px',
+            width: '200px',
+            height: '200px',
+            background: 'radial-gradient(circle, rgba(255,204,0,0.2) 0%, transparent 70%)',
+            borderRadius: '50%'
+          }}></div>
+          
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+              <div style={{
+                background: '#ffcc00',
+                borderRadius: '50%',
+                width: '56px',
+                height: '56px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 15px rgba(255, 204, 0, 0.4)'
+              }}>
+                <DollarSign size={32} color="#0066cc" strokeWidth={3} />
+              </div>
+              <div>
+                <div style={{ fontSize: '16px', color: 'rgba(255,255,255,0.9)', fontWeight: '600', marginBottom: '4px' }}>
+                  ANNUAL IMPACT PROJECTION
+                </div>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', color: 'white', lineHeight: 1 }}>
+                  ${(calculations.netSavings / 1000000).toFixed(2)}M
+                </div>
+              </div>
+            </div>
+            
+            <div style={{
+              background: 'rgba(255,255,255,0.15)',
+              borderRadius: '12px',
+              padding: '20px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)'
+            }}>
+              <p style={{
+                fontSize: '18px',
+                color: 'white',
+                margin: 0,
+                fontWeight: '500',
+                lineHeight: 1.5
+              }}>
+                BetterUp saves <span style={{ fontWeight: 'bold', color: '#ffcc00' }}>{workforce.name}</span> <span style={{ fontWeight: 'bold', fontSize: '20px', color: '#ffcc00' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated <span style={{ fontWeight: 'bold', color: '#ff6b6b' }}>{calculations.claimsPrevented} workers' comp claims</span>—by helping personnel build resilience and reduce stress.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginTop: '20px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#ffcc00' }}>
+                  {calculations.separationsPrevented}
+                </div>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.9)' }}>
+                  Separations Prevented
+                </div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#ff6b6b' }}>
+                  {calculations.claimsPrevented}
+                </div>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.9)' }}>
+                  Claims Prevented
+                </div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#00ff88' }}>
+                  {calculations.roi}%
+                </div>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.9)' }}>
+                  Return on Investment
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div style={{ maxWidth: '1200px', margin: '24px auto 0', paddingLeft: '20px', paddingRight: '20px' }}>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
-          <button onClick={() => setActiveTab('dashboard')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #005288', background: activeTab === 'dashboard' ? '#005288' : '#FFFFFF', color: activeTab === 'dashboard' ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>Dashboard</button>
-          <button onClick={() => setActiveTab('details')} style={{ flex: 1, padding: '14px', borderRadius: '8px', fontWeight: '600', border: '2px solid #808080', background: activeTab === 'details' ? '#808080' : '#FFFFFF', color: activeTab === 'details' ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>Model Details</button>
+        {/* Navigation Tabs */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '2px solid #ddd', paddingBottom: '0' }}>
+          {[
+            { id: 'dashboard', label: 'Dashboard', icon: Calculator },
+            { id: 'details', label: 'Model Details', icon: Info },
+            { id: 'drivers', label: 'Performance Drivers', icon: TrendingUp },
+            { id: 'parameters', label: 'Parameters', icon: Activity }
+          ].map(tab => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  padding: '14px 24px',
+                  border: 'none',
+                  background: activeTab === tab.id ? '#0066cc' : 'transparent',
+                  color: activeTab === tab.id ? 'white' : '#666',
+                  cursor: 'pointer',
+                  fontWeight: activeTab === tab.id ? 'bold' : 'normal',
+                  fontSize: '15px',
+                  borderRadius: '8px 8px 0 0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <Icon size={18} />
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
 
+        {/* DASHBOARD TAB */}
         {activeTab === 'dashboard' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <div style={{ background: '#333333', padding: '32px', borderRadius: '12px', borderLeft: '8px solid #005288' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <h2 style={{ color: '#FFFFFF', fontSize: '32px', fontWeight: 'bold', margin: 0, marginBottom: '8px' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
-                  <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#FFFFFF', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', padding: 0 }}>Edit</button>
-                  <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <p style={{ color: '#FFFFFF', margin: 0 }}>Total {workforce.name} Population: <span style={{ fontWeight: 'bold' }}>{workforce.personnel.toLocaleString()}</span></p>
-                    <p style={{ color: '#FFFFFF', margin: 0 }}>Engagement rate: <span style={{ fontWeight: 'bold' }}>{engagementRate}%</span> <button onClick={() => document.getElementById('config-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ color: '#FFFFFF', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px', marginLeft: '8px', padding: 0 }}>Edit</button></p>
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+              {[
+                { label: 'Total Savings', value: `$${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M`, color: '#0066cc', icon: DollarSign },
+                { label: 'Program Cost', value: `$${(calculations.totalCost / 1000000).toFixed(2)}M`, color: '#666', icon: Calculator },
+                { label: 'Net Benefit', value: `$${(calculations.netSavings / 1000000).toFixed(2)}M`, color: '#00cc66', icon: TrendingUp },
+                { label: 'Break-Even', value: `${calculations.breakEvenMonths.toFixed(1)} months`, color: '#ff9900', icon: Activity }
+              ].map((metric, idx) => {
+                const Icon = metric.icon;
+                return (
+                  <div key={idx} style={{ background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', borderLeft: `4px solid ${metric.color}` }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                      <div style={{ fontSize: '14px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
+                      <Icon size={20} color={metric.color} />
+                    </div>
+                    <div style={{ fontSize: '32px', fontWeight: 'bold', color: metric.color }}>{metric.value}</div>
                   </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <button onClick={() => document.getElementById('impact-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: '#005288', color: '#FFFFFF', padding: '16px 32px', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', fontSize: '16px' }}>Show Impact →</button>
-                  <div style={{ fontSize: '13px', marginTop: '8px', color: '#c0c2c4' }}>See results for {engagementRate}% engagement rate</div>
-                </div>
+                );
+              })}
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+              <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px', color: '#333' }}>Savings Breakdown</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={savingsBreakdown}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={100}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {savingsBreakdown.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => `$${(value / 1000000).toFixed(2)}M`} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px', color: '#333' }}>5-Year Impact</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={impactTimeline}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="year" />
+                    <YAxis tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
+                    <Tooltip formatter={(value) => `$${(value / 1000000).toFixed(2)}M`} />
+                    <Legend />
+                    <Bar dataKey="savings" fill="#0066cc" name="Annual Savings" />
+                    <Bar dataKey="cumulative" fill="#00cc66" name="Cumulative" />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
-            <div style={{ background: '#E8F4F8', padding: '24px', borderRadius: '12px', border: '2px solid #005288' }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-                <Info style={{ color: '#005288', marginRight: '12px' }} size={24} />
-                <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#005288', margin: 0 }}>Key Model Parameters</h3>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '2px solid #005288' }}>
-                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Engagement Rate ({engagementRate}%)</h4>
-                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: '0 0 8px 0' }}>Controls <strong>how many</strong> personnel actively use BetterUp coaching</p>
-                  <p style={{ fontSize: '14px', margin: 0, color: '#005288' }}>Example: {seats.toLocaleString()} target × {engagementRate}% = {Math.round(calculations.activeSeats).toLocaleString()} engaged</p>
+            {/* Workers Comp Breakdown - BOTH VISIBLE */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+              <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#cc3333', margin: 0 }}>On-Claim Workers' Comp</h3>
+                  <button
+                    onClick={() => setShowOnClaimBreakdown(!showOnClaimBreakdown)}
+                    style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cc3333', background: 'white', color: '#cc3333', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                  >
+                    {showOnClaimBreakdown ? 'Hide' : 'Show'} Breakdown
+                  </button>
                 </div>
-                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '2px solid #005288' }}>
-                  <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Readiness Rate ({effectiveness}%)</h4>
-                  <p style={{ color: '#333333', fontSize: '14px', lineHeight: 1.5, margin: '0 0 8px 0' }}>Controls <strong>how much</strong> each engaged person's performance improves</p>
-                  <p style={{ fontSize: '14px', margin: 0, color: '#005288' }}>Auto-calculated from Performance Drivers (Resilience, Leadership, etc.)</p>
+                <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#cc3333', marginBottom: '8px' }}>
+                  ${(calculations.fecaSavings / 1000000).toFixed(2)}M
                 </div>
-              </div>
-            </div>
-
-            <div style={{ background: '#FFFFFF', border: '3px solid #005288', borderLeft: '6px solid #005288', borderRadius: '8px', padding: '20px 24px' }}>
-              <p style={{ color: '#333333', fontSize: '16px', lineHeight: 1.6, margin: 0 }}>BetterUp saves {workforce.name} <span style={{ color: '#005288', fontWeight: '700' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated {calculations.claimsReduced.toFixed(0)} workers' comp claims—by helping personnel build resilience and reduce stress.</p>
-            </div>
-
-            <div id="impact-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-              <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
-                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#666666' }}>Net savings</div>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#008000', lineHeight: 1 }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
-                <div style={{ fontSize: '14px', color: '#999999' }}>After program cost</div>
-              </div>
-              <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
-                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#666666' }}>ROI multiplier</div>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{calculations.roiMultiplier}x</div>
-                <div style={{ fontSize: '14px', color: '#999999' }}>Return +{calculations.roi}%</div>
-              </div>
-              <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
-                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#666666' }}>Personnel impacted</div>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{Math.round(calculations.activeSeats)}</div>
-                <div style={{ fontSize: '14px', color: '#999999' }}>Clinical symptom reduction • 4 factors</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-              <div style={{ background: '#FFFFFF', border: '3px solid #005288', borderRadius: '12px', overflow: 'hidden' }}>
-                <div style={{ background: '#005288', color: '#FFFFFF', padding: '20px' }}>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, marginBottom: '4px' }}>On-Claim Workers' Comp</h3>
-                  <p style={{ fontSize: '14px', margin: 0, opacity: 0.9 }}>Projected mental health WC claims</p>
-                </div>
-                <div style={{ padding: '24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <p style={{ color: '#666', fontSize: '14px' }}>
+                  Estimated {calculations.claimsPrevented} workers' comp claims prevented annually
+                </p>
+                {showOnClaimBreakdown && (
+                  <div style={{ marginTop: '16px', padding: '16px', background: '#fff5f5', borderRadius: '8px', borderLeft: '3px solid #cc3333' }}>
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Avg Claim Cost</div>
+                      <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>$65,000</div>
+                    </div>
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Prevention Rate</div>
+                      <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>22%</div>
+                    </div>
                     <div>
-                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#666666' }}>Projected cost:</div>
-                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#005288', lineHeight: 1 }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
-                    </div>
-                    <div style={{ background: '#E8F4F8', padding: '10px 18px', borderRadius: '20px', border: '2px solid #005288' }}>
-                      <div style={{ fontSize: '11px', color: '#005288', fontWeight: '600' }}>Savings</div>
-                      <div style={{ fontWeight: 'bold', color: '#005288', fontSize: '16px' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
-                      <div style={{ fontSize: '11px', color: '#005288' }}>(4%)</div>
-                    </div>
-                  </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#005288', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'onClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
-                  {expandedSection === 'onClaim' && (
-                    <div style={{ marginTop: '16px' }}>
-                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px', margin: '0 0 12px 0' }}>Breakdown by Factor</h4>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {[
-                          { name: 'PTSD', prevalence: '11.2%', pct: 0.45 },
-                          { name: 'Depression', prevalence: '8.5%', pct: 0.25 },
-                          { name: 'Anxiety', prevalence: '6.2%', pct: 0.15 },
-                          { name: 'Substance Use (SUD)', prevalence: '3.8%', pct: 0.15 },
-                        ].map((factor, idx) => {
-                          const before = calculations.baseline.fecaAnnual * 0.20 * factor.pct;
-                          const after = before - (calculations.fecaSavings * factor.pct);
-                          const savings = calculations.fecaSavings * factor.pct;
-                          return (
-                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #E8F4F8' : 'none', fontSize: '14px' }}>
-                              <div>
-                                <span style={{ fontWeight: '600', color: '#333333' }}>{factor.name}</span>
-                                <span style={{ fontSize: '12px', marginLeft: '8px', color: '#808080' }}>{factor.prevalence}</span>
-                              </div>
-                              <div style={{ textAlign: 'right' }}>
-                                <div style={{ color: '#808080', fontSize: '12px' }}>Before: ${(before / 1000000).toFixed(2)}M</div>
-                                <div style={{ color: '#333333', fontWeight: '600' }}>After: ${(after / 1000000).toFixed(2)}M</div>
-                                <div style={{ color: '#c41230', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
-                              </div>
-                            </div>
-                          );
-                        })}
+                      <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Total Annual Savings</div>
+                      <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#cc3333' }}>
+                        ${(calculations.fecaSavings / 1000000).toFixed(2)}M
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
-              <div style={{ background: '#FFFFFF', border: '3px solid #005288', borderRadius: '12px', overflow: 'hidden' }}>
-                <div style={{ background: '#005288', color: '#FFFFFF', padding: '20px' }}>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, marginBottom: '4px' }}>Off-Claim Economic Costs</h3>
-                  <p style={{ fontSize: '14px', margin: 0, opacity: 0.9 }}>Productivity loss, absenteeism, and turnover</p>
+              <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0066cc', margin: 0 }}>Off-Claim Economic Costs</h3>
+                  <button
+                    onClick={() => setShowOffClaimBreakdown(!showOffClaimBreakdown)}
+                    style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #0066cc', background: 'white', color: '#0066cc', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                  >
+                    {showOffClaimBreakdown ? 'Hide' : 'Show'} Breakdown
+                  </button>
                 </div>
-                <div style={{ padding: '24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#0066cc', marginBottom: '8px' }}>
+                  ${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(2)}M
+                </div>
+                <p style={{ color: '#666', fontSize: '14px' }}>
+                  Retention savings + readiness economic value
+                </p>
+                {showOffClaimBreakdown && (
+                  <div style={{ marginTop: '16px', padding: '16px', background: '#f0f7ff', borderRadius: '8px', borderLeft: '3px solid #0066cc' }}>
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Retention Savings</div>
+                      <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>
+                        ${(calculations.retentionSavings / 1000000).toFixed(2)}M
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Readiness Value</div>
+                      <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>
+                        ${(calculations.readinessEconomicValue / 1000000).toFixed(2)}M
+                      </div>
+                    </div>
                     <div>
-                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#666666' }}>Projected cost:</div>
-                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#005288', lineHeight: 1 }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
-                    </div>
-                    <div style={{ background: '#E8F4F8', padding: '10px 18px', borderRadius: '20px', border: '2px solid #005288' }}>
-                      <div style={{ fontSize: '11px', color: '#005288', fontWeight: '600' }}>Savings</div>
-                      <div style={{ fontWeight: 'bold', color: '#005288', fontSize: '16px' }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
-                      <div style={{ fontSize: '11px', color: '#005288' }}>(4%)</div>
+                      <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Total Economic Value</div>
+                      <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#0066cc' }}>
+                        ${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(2)}M
+                      </div>
                     </div>
                   </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#005288', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'offClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
-                  {expandedSection === 'offClaim' && (
-                    <div style={{ marginTop: '16px' }}>
-                      <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px', margin: '0 0 12px 0' }}>Breakdown by Factor</h4>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {[
-                          { name: 'PTSD', desc: 'Stress-related turnover', pct: 0.38 },
-                          { name: 'Depression', desc: 'Burnout separations', pct: 0.22 },
-                          { name: 'Anxiety', desc: 'Performance costs', pct: 0.18 },
-                          { name: 'Substance Use (SUD)', desc: 'Absenteeism', pct: 0.22 },
-                        ].map((factor, idx) => {
-                          const before = calculations.baseline.replacementCost * calculations.currentSeparations * (factor.pct / calculations.baseline.attritionRate * 100);
-                          const savings = calculations.offClaimTotal * factor.pct;
-                          const after = before - savings;
-                          return (
-                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', paddingBottom: '8px', borderBottom: idx < 3 ? '1px solid #E8F4F8' : 'none', fontSize: '14px' }}>
-                              <div>
-                                <span style={{ fontWeight: '600', color: '#333333' }}>{factor.name}</span>
-                                <div style={{ fontSize: '12px', color: '#808080' }}>{factor.desc}</div>
-                              </div>
-                              <div style={{ textAlign: 'right' }}>
-                                <div style={{ color: '#808080', fontSize: '12px' }}>Before: ${(before / 1000000).toFixed(2)}M</div>
-                                <div style={{ color: '#333333', fontWeight: '600' }}>After: ${(after / 1000000).toFixed(2)}M</div>
-                                <div style={{ color: '#c41230', fontWeight: '700' }}>−${(savings / 1000000).toFixed(2)}M</div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div id="config-section" style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #005288' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#005288', display: 'flex', alignItems: 'center', margin: '0 0 24px 0' }}>
-                <Calculator style={{ marginRight: '12px', color: '#005288' }} size={28} /> Program Configuration
-              </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '32px' }}>
-                {['conservative', 'moderate', 'aggressive', 'custom'].map(type => (
-                  <button key={type} onClick={() => type !== 'custom' ? applyScenario(type) : setScenarioType('custom')} style={{ padding: '14px', borderRadius: '8px', fontWeight: '600', textTransform: 'capitalize', border: '2px solid #005288', background: scenarioType === type ? '#005288' : '#FFFFFF', color: scenarioType === type ? '#FFFFFF' : '#333333', cursor: 'pointer', fontSize: '15px' }}>{type}</button>
-                ))}
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>BetterUp Seats</label>
-                  <input type="number" value={seats} onChange={(e) => setSeats(Number(e.target.value))} style={{ width: '100%', padding: '14px', border: '2px solid #005288', borderRadius: '8px', fontSize: '16px', boxSizing: 'border-box' }} />
-                  <p style={{ fontSize: '13px', marginTop: '6px', color: '#666666', margin: '6px 0 0 0' }}>{((seats / workforce.personnel) * 100).toFixed(1)}% of workforce</p>
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Engagement Rate</label>
-                  <input type="range" min="50" max="100" value={engagementRate} onChange={(e) => setEngagementRate(Number(e.target.value))} style={{ width: '100%', accentColor: '#005288' }} />
-                  <p style={{ fontSize: '15px', fontWeight: 'bold', marginTop: '6px', color: '#005288', margin: '6px 0 0 0' }}>{engagementRate}%</p>
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Cost Per Seat</label>
-                  <input type="number" value={costPerSeat} onChange={(e) => setCostPerSeat(Number(e.target.value))} style={{ width: '100%', padding: '14px', border: '2px solid #005288', borderRadius: '8px', fontSize: '16px', boxSizing: 'border-box' }} />
-                  <p style={{ fontSize: '13px', marginTop: '6px', color: '#666666', margin: '6px 0 0 0' }}>Annual cost per user</p>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #005288' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#005288', margin: '0 0 24px 0' }}>
-                <Brain style={{ display: 'inline', marginRight: '12px', color: '#005288', verticalAlign: 'middle' }} size={28} /> Performance Drivers 
-                <span style={{ marginLeft: '16px', fontSize: '18px', color: '#005288' }}>Overall: {effectiveness}%</span>
-              </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-                {Object.entries(drivers).map(([key, value]) => {
-                  const labels = { emotionalRegulation: 'Emotional Regulation', resilience: 'Resilience & Recovery', decisionMaking: 'Decision-Making Under Pressure', communication: 'Communication & Conflict Resolution', purposeMeaning: 'Purpose & Meaning', workLifeIntegration: 'Work-Life Integration', stressManagement: 'Stress Management', leadershipEffectiveness: 'Leadership Effectiveness' };
-                  return (
-                    <div key={key} style={{ background: '#E8F4F8', padding: '16px', borderRadius: '8px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                        <label style={{ fontSize: '14px', fontWeight: '600', color: '#333333' }}>{labels[key]}</label>
-                        <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#005288' }}>{value}%</span>
-                      </div>
-                      <input type="range" min="0" max="100" value={value} onChange={(e) => { setDrivers({ ...drivers, [key]: Number(e.target.value) }); setScenarioType('custom'); }} style={{ width: '100%', accentColor: '#005288' }} />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div style={{ background: '#008000', color: '#FFFFFF', padding: '32px', borderRadius: '12px' }}>
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '16px', margin: '0 0 16px 0' }}>Bottom Line Up Front</h2>
-              <div style={{ fontSize: '17px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <p style={{ margin: 0 }}><strong>Investment:</strong> ${(calculations.totalCost / 1000000).toFixed(2)}M for {seats.toLocaleString()} seats ({((seats / workforce.personnel) * 100).toFixed(1)}% coverage)</p>
-                <p style={{ margin: 0 }}><strong>Annual Return:</strong> ${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M through {Math.round(calculations.separationsPrevented)} prevented separations and {calculations.claimsReduced.toFixed(1)} reduced FECA claims</p>
-                <p style={{ margin: 0 }}><strong>ROI:</strong> {calculations.roi}% with break-even in {calculations.breakEvenMonths} months</p>
-                <p style={{ margin: 0 }}><strong>5-Year Value:</strong> ${(calculations.fiveYearValue / 1000000).toFixed(1)}M net benefit</p>
+                )}
               </div>
             </div>
           </div>
         )}
 
+        {/* MODEL DETAILS TAB - COMPREHENSIVE */}
         {activeTab === 'details' && (
-          <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '1px solid #D9D9D6' }}>
-            <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: '#005288', margin: '0 0 16px 0' }}>Model Methodology & Data Sources</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ background: '#E8F4F8', padding: '20px', borderRadius: '8px' }}>
-                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Pathway 1: FECA Claims Reduction</h4>
-                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Reduces mental health workers' comp claims. CBP faces $90-120M annual FECA costs with 20% mental health-related (17 Border Patrol suicides in 2022, rate 28% higher than other LE).</p>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '24px', color: '#0066cc' }}>Model Assumptions & Methodology</h2>
+            <p style={{ fontSize: '16px', color: '#666', marginBottom: '32px', lineHeight: 1.6 }}>
+              This ROI model is built on empirical research and proven results from federal agencies including the Air Force, Army, and First Responders. All assumptions are documented below with sources.
+            </p>
+
+            <div style={{ display: 'grid', gap: '24px' }}>
+              {/* Section 1: Separation Rates */}
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #0066cc' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#0066cc', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>1</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Separation Rates</h3>
+                </div>
+                <div style={{ paddingLeft: '44px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Current {workforce.name}</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0066cc' }}>{workforce.attritionRate}%</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Annual Attrition</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0066cc' }}>{calculations.annualAttrition.toLocaleString()} personnel</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                    <strong>Source:</strong> GAO-24-107029 analysis showing CBP attrition rates vary by component, with Border Patrol experiencing higher turnover. RAND Corporation and CBO research validate federal law enforcement separation patterns.
+                  </p>
+                </div>
               </div>
-              <div style={{ background: '#E8F4F8', padding: '20px', borderRadius: '8px' }}>
-                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#005288', fontSize: '16px', margin: '0 0 8px 0' }}>Pathway 2: Retention Economics</h4>
-                <p style={{ color: '#555555', margin: 0, lineHeight: 1.6 }}>Prevents costly turnover at ${workforce.replacementCost.toLocaleString()} per separation including FLETC training ($17.5-20K), clearances ($9K), recruitment incentives (up to $36.3K), and 18-24 month productivity ramp-up.</p>
+
+              {/* Section 2: Replacement Costs */}
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #cc3333' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#cc3333', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>2</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Replacement Costs</h3>
+                </div>
+                <div style={{ paddingLeft: '44px' }}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Average Cost per Separation</div>
+                    <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#cc3333' }}>${workforce.replacementCost.toLocaleString()}</div>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                    <strong>Source:</strong> CBO Publication 51535 (recruitment costs), RAND RR3102 (training development), and GAO-17-702. Includes recruitment advertising, background investigations, medical exams, polygraph testing, academy training, field training, and productivity ramp-up time. CBP's hiring process spans 12+ months with nearly a dozen steps.
+                  </p>
+                </div>
               </div>
-              <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '2px solid #c41230' }}>
-                <h4 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#c41230', fontSize: '16px', margin: '0 0 8px 0' }}>2028 Retirement Crisis</h4>
-                <p style={{ color: '#333333', margin: 0, lineHeight: 1.6 }}>Commissioner projects 400% increase in officer retirements in FY2028 (2,220 vs ~500 annual). With 316-578 day hiring timelines and 1.8% applicant yield, CBP cannot recruit fast enough—retention is the only viable strategy.</p>
+
+              {/* Section 3: Coaching Effectiveness */}
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #00cc66' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#00cc66', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>3</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Coaching Effectiveness</h3>
+                </div>
+                <div style={{ paddingLeft: '44px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Retention Effectiveness</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#00cc66' }}>{retentionEffectiveness}%</div>
+                      <div style={{ fontSize: '12px', color: '#888' }}>From Accountability + Meritocracy</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Readiness Enhancement</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#00cc66' }}>{readinessEffectiveness}%</div>
+                      <div style={{ fontSize: '12px', color: '#888' }}>From Lethality + Readiness + Standards</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                    <strong>Source:</strong> Air Force proven results showing +20% military commitment (88 pilots, p&lt;.001), +15% officers, +22% enlisted career commitment across 523 participants (2021-2025). BetterUp's Whole Person Model drives measurable improvements in retention intent and mission readiness.
+                  </p>
+                </div>
+              </div>
+
+              {/* Section 4: Workers Comp Impact */}
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #ff9900' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#ff9900', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>4</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>FECA Mental Health Claims</h3>
+                </div>
+                <div style={{ paddingLeft: '44px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Avg Claim Cost</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ff9900' }}>$65,000</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Prevention Rate</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ff9900' }}>22%</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                    <strong>Source:</strong> DHS OIG analysis and union testimony showing CBP mental health claims totaling $105M+ annually. JAMA 2024 research demonstrates coaching reduces burnout by 21.6%. BetterUp's resilience-building approach directly addresses stress, trauma, and psychological strain driving FECA claims.
+                  </p>
+                </div>
+              </div>
+
+              {/* Section 5: Engagement & Utilization */}
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #9966cc' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#9966cc', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>5</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Engagement & Utilization</h3>
+                </div>
+                <div style={{ paddingLeft: '44px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Engagement Rate</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#9966cc' }}>{engagementRate}%</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Cost per Seat</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#9966cc' }}>${costPerSeat}/year</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Program Seats</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#9966cc' }}>{seats.toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                    <strong>Assumption:</strong> {engagementRate}% of seats are actively utilized for coaching sessions. This is conservative compared to BetterUp's typical 70-80% engagement rates in federal implementations. Adjustable based on implementation strategy and command emphasis.
+                  </p>
+                </div>
+              </div>
+
+              {/* Section 6: Readiness Valuation */}
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #00aa88' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#00aa88', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>6</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Productivity Valuation</h3>
+                </div>
+                <div style={{ paddingLeft: '44px' }}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Annual Readiness Value per Person</div>
+                    <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#00aa88' }}>$15,000</div>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                    Economic value of improved readiness, representing enhanced mission performance, reduced burnout costs, and operational effectiveness. Conservative estimate based on productivity economics. Air Force data shows +17% mission readiness improvement and +15% resilience gains across 11,215 participants.
+                  </p>
+                </div>
+              </div>
+
+              {/* Section 7: No Double-Counting */}
+              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #333' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#333', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>7</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>No Double-Counting</h3>
+                </div>
+                <div style={{ paddingLeft: '44px' }}>
+                  <p style={{ fontSize: '14px', color: '#666', marginBottom: '12px' }}>
+                    The model ensures no overlap between retention and readiness populations:
+                  </p>
+                  <ul style={{ fontSize: '14px', color: '#666', paddingLeft: '20px', margin: 0 }}>
+                    <li style={{ marginBottom: '8px' }}><strong>Group A (Retention):</strong> {calculations.separationsPrevented} personnel who would have separated but stayed due to BetterUp</li>
+                    <li style={{ marginBottom: '8px' }}><strong>Group B (Readiness):</strong> {calculations.readinessImproved} personnel who improved performance but were not at separation risk</li>
+                    <li><strong>Group A ≠ Group B</strong> (Distinct populations with no overlap)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '32px', padding: '24px', background: '#e6f2ff', borderRadius: '12px', border: '2px solid #0066cc' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0066cc', marginBottom: '12px' }}>📊 Data Integrity</h3>
+              <p style={{ fontSize: '14px', color: '#333', margin: 0, lineHeight: 1.6 }}>
+                All assumptions are based on publicly available government research (RAND, CBO, GAO, DHS OIG) and 4+ years of proven federal results (Air Force 2021-2025, Army 101st Airborne, First Responder partnerships). Model parameters are adjustable to reflect {workforce.name}'s specific operational context.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* PERFORMANCE DRIVERS TAB */}
+        {activeTab === 'drivers' && (
+          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#0066cc' }}>Performance Drivers Aligned to CBP Priorities</h2>
+            <p style={{ fontSize: '16px', color: '#666', marginBottom: '24px' }}>
+              Based on 4 years of proven Air Force results. Adjust priority focus to model ROI impact.
+            </p>
+
+            <div style={{ display: 'grid', gap: '24px' }}>
+              {[
+                { key: 'lethality', label: 'Increasing Lethality & Capability', desc: 'Focus • Cognitive Agility • Emotional Regulation • Strategic Thinking', affects: 'Readiness', color: '#0066cc' },
+                { key: 'accountability', label: 'Strengthening Accountability', desc: 'Self-Confidence • Growth Mindset • Clarity • Authenticity', affects: 'Retention', color: '#00cc66' },
+                { key: 'readiness', label: 'Enhancing Readiness', desc: 'Recovery • Mattering • Optimism • Alignment • Prioritization', affects: 'Readiness', color: '#ff9900' },
+                { key: 'meritocracy', label: 'Promoting Meritocracy', desc: 'Relationship Building • Empowerment • Active Listening', affects: 'Retention', color: '#9966cc' },
+                { key: 'standards', label: 'Enforcing Standards', desc: 'Coaching • Recognition • Courageous Communication', affects: 'Readiness', color: '#cc3333' }
+              ].map(driver => (
+                <div key={driver.key} style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: `4px solid ${driver.color}` }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <div>
+                      <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '4px' }}>{driver.label}</h3>
+                      <p style={{ fontSize: '13px', color: '#666', margin: 0 }}>{driver.desc}</p>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '32px', fontWeight: 'bold', color: driver.color }}>{drivers[driver.key]}%</div>
+                      <div style={{ fontSize: '11px', color: '#888' }}>↑ Affects {driver.affects}</div>
+                    </div>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="30"
+                    value={drivers[driver.key]}
+                    onChange={(e) => setDrivers({ ...drivers, [driver.key]: parseInt(e.target.value) })}
+                    style={{ width: '100%', accentColor: driver.color }}
+                  />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#888', marginTop: '8px' }}>
+                    <span>0%</span>
+                    <span>15%</span>
+                    <span>30%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '24px', padding: '20px', background: '#e6f2ff', borderRadius: '12px' }}>
+              <p style={{ fontSize: '14px', color: '#333', margin: 0 }}>
+                <strong>Combined Impact:</strong> Retention Effectiveness = {retentionEffectiveness}% | Readiness Enhancement = {readinessEffectiveness}%
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* PARAMETERS TAB */}
+        {activeTab === 'parameters' && (
+          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '24px', color: '#0066cc' }}>Model Parameters</h2>
+            
+            <div style={{ display: 'grid', gap: '24px' }}>
+              <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <label style={{ display: 'block', fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '12px' }}>
+                  Program Seats: {seats.toLocaleString()}
+                </label>
+                <input
+                  type="range"
+                  min={Math.round(workforce.personnel * 0.05)}
+                  max={Math.round(workforce.personnel * 0.3)}
+                  value={seats}
+                  onChange={(e) => setSeats(parseInt(e.target.value))}
+                  style={{ width: '100%', accentColor: '#0066cc' }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666', marginTop: '8px' }}>
+                  <span>{Math.round(workforce.personnel * 0.05).toLocaleString()} (5%)</span>
+                  <span>{Math.round(workforce.personnel * 0.15).toLocaleString()} (15%)</span>
+                  <span>{Math.round(workforce.personnel * 0.3).toLocaleString()} (30%)</span>
+                </div>
+              </div>
+
+              <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <label style={{ display: 'block', fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '12px' }}>
+                  Engagement Rate: {engagementRate}%
+                </label>
+                <input
+                  type="range"
+                  min="50"
+                  max="85"
+                  value={engagementRate}
+                  onChange={(e) => setEngagementRate(parseInt(e.target.value))}
+                  style={{ width: '100%', accentColor: '#00cc66' }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666', marginTop: '8px' }}>
+                  <span>50% (Conservative)</span>
+                  <span>65% (Moderate)</span>
+                  <span>85% (Optimistic)</span>
+                </div>
+              </div>
+
+              <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px' }}>
+                <label style={{ display: 'block', fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '12px' }}>
+                  Cost per Seat: ${costPerSeat}/year
+                </label>
+                <input
+                  type="range"
+                  min="100"
+                  max="300"
+                  step="50"
+                  value={costPerSeat}
+                  onChange={(e) => setCostPerSeat(parseInt(e.target.value))}
+                  style={{ width: '100%', accentColor: '#ff9900' }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666', marginTop: '8px' }}>
+                  <span>$100</span>
+                  <span>$200</span>
+                  <span>$300</span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '24px', padding: '24px', background: '#e6f2ff', borderRadius: '12px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0066cc', marginBottom: '16px' }}>Current Configuration</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div>
+                  <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Engaged Personnel</div>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>{calculations.engaged.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Annual Investment</div>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>${(calculations.totalCost / 1000000).toFixed(2)}M</div>
+                </div>
               </div>
             </div>
           </div>
         )}
+
+        {/* Assistant Chatbot */}
+        {showAssistant && (
+          <div style={{
+            position: 'fixed',
+            bottom: '100px',
+            right: '24px',
+            width: '380px',
+            background: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.2)',
+            zIndex: 1000,
+            border: '2px solid #0066cc'
+          }}>
+            <div style={{ background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)', padding: '16px', borderRadius: '14px 14px 0 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <MessageSquare size={20} color="white" />
+                <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: 'white', margin: 0 }}>Model Assistant</h3>
+              </div>
+              <button
+                onClick={() => setShowAssistant(false)}
+                style={{ background: 'transparent', border: 'none', color: 'white', fontSize: '20px', cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+            <div style={{ padding: '20px' }}>
+              <p style={{ fontSize: '14px', color: '#333', marginBottom: '16px' }}>
+                Hello! I can help explain the calculator methodology, interpret results, or answer questions about {workforce.name}.
+              </p>
+              <div style={{ padding: '12px', background: '#f8f9fa', borderRadius: '8px', fontSize: '13px', color: '#666' }}>
+                💡 <strong>Try asking:</strong>
+                <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>
+                  <li>How is ROI calculated?</li>
+                  <li>What drives retention savings?</li>
+                  <li>Explain the FECA methodology</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <button
+          onClick={() => setShowAssistant(!showAssistant)}
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '24px',
+            background: '#0066cc',
+            color: 'white',
+            padding: '16px',
+            borderRadius: '50%',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 4px 15px rgba(0, 102, 204, 0.4)',
+            zIndex: 999
+          }}
+        >
+          <MessageSquare size={24} />
+        </button>
       </div>
-
-      {showAssistant && (
-        <div style={{ position: 'fixed', bottom: '96px', right: '24px', width: '384px', background: '#FFFFFF', borderRadius: '12px', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', zIndex: 50, border: '2px solid #005288' }}>
-          <div style={{ background: '#005288', color: '#FFFFFF', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}><MessageSquare size={20} style={{ marginRight: '8px' }} /><h3 style={{ fontWeight: 'bold', margin: 0 }}>Model Assistant</h3></div>
-            <button onClick={() => setShowAssistant(false)} style={{ background: 'none', border: 'none', color: '#FFFFFF', cursor: 'pointer', fontSize: '20px' }}>✕</button>
-          </div>
-          <div style={{ padding: '16px', background: '#F6F6F6', minHeight: '150px' }}>
-            <p style={{ fontSize: '14px', color: '#333333', margin: 0 }}>Hello! I can help explain the calculator methodology, interpret results, or answer questions about {workforce.name}.</p>
-          </div>
-        </div>
-      )}
-
-      <button onClick={() => setShowAssistant(!showAssistant)} style={{ position: 'fixed', bottom: '24px', right: '24px', background: '#005288', color: '#FFFFFF', padding: '16px', borderRadius: '50%', border: 'none', cursor: 'pointer', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', zIndex: 50 }}>
-        <MessageSquare size={24} />
-      </button>
     </div>
   );
 };
