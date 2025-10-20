@@ -1,4 +1,68 @@
-import React, { useState, useMemo } from 'react';
+{activeTab === 'advanced' && (
+          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+              <Shield size={32} color="#666" />
+              <div>
+                <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#666', margin: 0 }}>Advanced Settings</h2>
+                <p style={{ fontSize: '17px', color: '#888', margin: 0 }}>Comorbidity method, order, and overlap tuning</p>
+              </div>
+            </div>
+
+            <div style={{ padding: '24px', background: '#f0f7ff', borderRadius: '12px', marginBottom: '32px', border: '2px solid #0066cc' }}>
+              <h3 style={{ fontSize: '19px', fontWeight: 'bold', marginBottom: '12px', color: '#0066cc' }}>Comorbidity Handling</h3>
+              <p style={{ fontSize: '16px', color: '#333', margin: 0, lineHeight: 1.6 }}>
+                Using <strong>ordered attribution</strong> method. Factors are prioritized as: PTSD → Depression → Anxiety → SUD. Cases avoided are attributed to upstream factors first, preventing double-counting.
+              </p>
+            </div>
+
+            <div style={{ padding: '28px', background: '#f8f9fa', borderRadius: '12px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '12px', color: '#333' }}>Overlap Overrides</h3>
+              <p style={{ fontSize: '15px', color: '#666', marginBottom: '24px', lineHeight: 1.6 }}>
+                Adjust the estimated overlap between factors. Values represent P(column | row). These overrides are used in the ordered attribution method to prevent double-counting.
+              </p>
+
+              <div style={{ display: 'grid', gap: '24px' }}>
+                {[
+                  { key: 'ptsdDepression', label: 'PTSD → Depression', desc: 'Estimated overlap rate used during ordered attribution.' },
+                  { key: 'ptsdAnxiety', label: 'PTSD → Anxiety', desc: 'Estimated overlap rate used during ordered attribution.' },
+                  { key: 'ptsdSud', label: 'PTSD → SUD', desc: 'Estimated overlap rate used during ordered attribution.' },
+                  { key: 'depressionAnxiety', label: 'Depression → Anxiety', desc: 'Estimated overlap rate used during ordered attribution.' },
+                  { key: 'depressionSud', label: 'Depression → SUD', desc: 'Estimated overlap rate used during ordered attribution.' },
+                  { key: 'anxietySud', label: 'Anxiety → SUD', desc: 'Estimated overlap rate used during ordered attribution.' }
+                ].map(overlap => (
+                  <div key={overlap.key} style={{ padding: '20px', background: 'white', borderRadius: '10px', border: '1px solid #ddd' }}>
+                    <div style={{ marginBottom: '16px' }}>
+                      <h4 style={{ fontSize: '17px', fontWeight: 'bold', color: '#333', margin: '0 0 4px 0' }}>{overlap.label}</h4>
+                      <p style={{ fontSize: '14px', color: '#888', margin: 0 }}>{overlap.desc}</p>
+                    </div>
+                    
+                    <div style={{ marginBottom: '8px' }}>
+                      <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', color: '#0066cc', marginBottom: '10px' }}>
+                        Overlap Rate: {overlapRates[overlap.key]}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        step="5"
+                        value={overlapRates[overlap.key]}
+                        onChange={(e) => setOverlapRates(prev => ({ ...prev, [overlap.key]: parseInt(e.target.value) }))}
+                        style={{ width: '100%', height: '8px', accentColor: '#0066cc' }}
+                      />
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
+                        <span>0%</span>
+                        <span>50%</span>
+                        <span>100%</span>
+                      </div>
+                    </div>
+                    <p style={{ fontSize: '13px', color: '#666', marginTop: '8px', fontStyle: 'italic' }}>
+                      Drag to adjust shared-case attribution.
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ marginTop: '24px', padding: '16px', background: '#fff8e6', borderRadius: '8import React, { useState, useMemo } from 'react';
 import { Calculator, TrendingUp, DollarSign, Shield, MessageSquare, Info, Activity, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 
 const organizationData = [
@@ -202,6 +266,15 @@ const CBPROICalculator = ({ workforce }) => {
     }
   });
 
+  const [overlapRates, setOverlapRates] = useState({
+    ptsdDepression: 50,
+    ptsdAnxiety: 45,
+    ptsdSud: 45,
+    depressionAnxiety: 60,
+    depressionSud: 25,
+    anxietySud: 25
+  });
+
   const resetFactorDefaults = (factorKey) => {
     const defaults = {
       ptsd: { prevalence: 13.4, coachingEffectiveness: 20, wcFilingRate: 10, wcAcceptanceRate: 81, healthcareCost: 63049, absentDays: 9.7, presenteeismDays: 33.1, otPremium: 1.5, avgWage: 85000 },
@@ -363,7 +436,8 @@ const CBPROICalculator = ({ workforce }) => {
             { id: 'details', label: 'Model Details', icon: Info },
             { id: 'drivers', label: 'Performance Drivers', icon: TrendingUp },
             { id: 'factors', label: 'Factor Configuration', icon: Shield },
-            { id: 'parameters', label: 'Parameters', icon: Activity }
+            { id: 'parameters', label: 'Global Parameters', icon: Activity },
+            { id: 'advanced', label: 'Advanced Settings', icon: Shield }
           ].map(tab => {
             const Icon = tab.icon;
             return (
