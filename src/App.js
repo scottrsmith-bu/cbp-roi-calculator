@@ -102,7 +102,7 @@ const CBPROICalculator = ({ workforce }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [seats, setSeats] = useState(Math.round(workforce.personnel * 0.30));
   const [engagementRate, setEngagementRate] = useState(65);
-  const [costPerSeat, setCostPerSeat] = useState(1000);
+  const [costPerSeat, setCostPerSeat] = useState(150);
   const [scenarioType, setScenarioType] = useState('moderate');
   const [showAssistant, setShowAssistant] = useState(false);
   const [expandedSection, setExpandedSection] = useState(null);
@@ -137,39 +137,54 @@ const CBPROICalculator = ({ workforce }) => {
     const totalCost = seats * costPerSeat;
     const baseline = { attritionRate: workforce.attritionRate, replacementCost: workforce.replacementCost, fecaAnnual: workforce.fecaAnnual };
     
-    // PATHWAY 1: FECA Claims Reduction (Much More Aggressive)
-    // Mental health portion of total FECA costs
+    // PATHWAY 1: FECA Claims Reduction
     const fecaMentalHealthPortion = baseline.fecaAnnual * (advancedSettings.fecaMentalHealthPercent / 100);
-    // Base effectiveness: 50% = baseline, 65% = 15% reduction, 80% = 30% reduction
-    const fecaReductionRate = Math.max(0, (effectiveness - 50) / 100 * 0.6); // Scale up to 30% at 100% effectiveness
-    // Apply to proportional workforce coverage with multiplier effect
-    const coverageMultiplier = Math.sqrt(activeSeats / workforce.personnel) * 1.8; // Network effects
-    const claimsReduced = (fecaMentalHealthPortion / advancedSettings.avgFecaClaimCost) * fecaReductionRate * coverageMultiplier;
-    const fecaSavings = claimsReduced * advancedSettings.avgFecaClaimCost;
+    // At 65% effectiveness: ~15% reduction, at 80%: ~30% reduction
+    const effectivenessImpact = (effectiveness - 50) / 50; // 0 at 50%, 0.3 at 65%, 0.6 at 80%
+    const fecaReductionRate = effectivenessImpact * 0.25; // Up to 25% reduction at 100% effectiveness
+    // Apply to workforce with program reach multiplier
+    const programReach = (activeSeats / workforce.personnel);
+    const networkEffect = 1 + (programReach * 0.8); // Network effects boost impact
+    const totalFecaImpact = fecaMentalHealthPortion * fecaReductionRate * programReach * networkEffect;
+    const claimsReduced = totalFecaImpact / advancedSettings.avgFecaClaimCost;
+    const fecaSavings = totalFecaImpact;
     
-    // PATHWAY 2: Retention Economics (More Comprehensive)
+    // PATHWAY 2: Retention Economics  
     const currentSeparations = workforce.personnel * (baseline.attritionRate / 100);
-    // Attrition reduction: 50% effectiveness = 0%, 65% = 1.5%, 80% = 3%
-    const attritionReductionRate = Math.max(0, (effectiveness - 50) / 50 * 0.04); // Up to 4% reduction
-    const separationsPrevented = workforce.personnel * attritionReductionRate * (activeSeats / workforce.personnel) * 1.5; // Spillover effect
+    // At 65% effectiveness: 1.5% attrition reduction, at 80%: 3% reduction
+    const attritionPointsReduced = effectivenessImpact * 0.03; // Up to 3 percentage points
+    const baseSeparationsPrevented = workforce.personnel * attritionPointsReduced * programReach;
+    const spilloverEffect = 1.3; // 30% spillover to non-participants
+    const separationsPrevented = baseSeparationsPrevented * spilloverEffect;
+    
+    // Direct replacement cost savings
     const retentionSavings = separationsPrevented * baseline.replacementCost;
     
-    // Additional off-claim costs
-    const productivityGain = separationsPrevented * (baseline.replacementCost * 0.5); // 50% of replacement cost in productivity
-    const overtimeSavings = separationsPrevented * 520 * 40 * (advancedSettings.overtimeCostMultiplier); // Overtime reduction
-    const recruitmentSavings = separationsPrevented * 8000; // Recruitment cost savings
-    const trainingTimeSavings = separationsPrevented * 15000; // Training time value
+    // Productivity improvements (people staying are more productive)
+    const productivityGain = activeSeats * 2500; // $2,500 per engaged employee in productivity
     
-    const offClaimTotal = retentionSavings + productivityGain + overtimeSavings + recruitmentSavings + trainingTimeSavings;
+    // Overtime reduction from better staffing
+    const overtimeReduction = separationsPrevented * 12000; // $12K per prevented separation in OT savings
+    
+    // Recruitment cost avoidance
+    const recruitmentSavings = separationsPrevented * 5000;
+    
+    const offClaimTotal = retentionSavings + productivityGain + overtimeReduction + recruitmentSavings;
     
     // Total Impact
     const totalAnnualSavings = fecaSavings + offClaimTotal;
     const netSavings = totalAnnualSavings - totalCost;
     const roi = totalCost > 0 ? ((netSavings / totalCost) * 100).toFixed(1) : '0.0';
-    const breakEvenMonths = totalAnnualSavings > 0 ? totalCost / (totalAnnualSavings / 12) : 0;
+    const roiMultiplier = totalCost > 0 ? (totalAnnualSavings / totalCost).toFixed(1) : '0.0';
+    const breakEvenMonths = totalAnnualSavings > totalCost && totalAnnualSavings > 0 ? (totalCost / (totalAnnualSavings / 12)).toFixed(1) : 'N/A';
     const fiveYearValue = (totalAnnualSavings * 5) - totalCost;
     
-    return { activeSeats, totalCost, fecaSavings, retentionSavings, productivityGain, overtimeSavings, offClaimTotal, totalAnnualSavings, netSavings, roi, breakEvenMonths, fiveYearValue, separationsPrevented, currentSeparations, claimsReduced, baseline, recruitmentSavings, trainingTimeSavings };
+    return { 
+      activeSeats, totalCost, fecaSavings, retentionSavings, productivityGain, 
+      overtimeReduction, recruitmentSavings, offClaimTotal, totalAnnualSavings, 
+      netSavings, roi, roiMultiplier, breakEvenMonths, fiveYearValue, 
+      separationsPrevented, currentSeparations, claimsReduced, baseline 
+    };
   }, [seats, engagementRate, costPerSeat, effectiveness, workforce, advancedSettings]);
 
   return (
@@ -372,28 +387,30 @@ const CBPROICalculator = ({ workforce }) => {
               </div>
             </div>
 
-            <div id="config-section" style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #1460AA' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#00416A' }}><Calculator style={{ display: 'inline', marginRight: '12px', color: '#1460AA' }} /> Program Configuration</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '24px' }}>
+            <div id="config-section" style={{ background: '#FFFFFF', padding: '32px', borderRadius: '12px', border: '2px solid #005288' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#005288', display: 'flex', alignItems: 'center' }}>
+                <Calculator style={{ marginRight: '12px', color: '#005288' }} size={28} /> Program Configuration
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '32px' }}>
                 {['conservative', 'moderate', 'aggressive', 'custom'].map(type => (
-                  <button key={type} onClick={() => type !== 'custom' ? applyScenario(type) : setScenarioType('custom')} style={{ padding: '12px', borderRadius: '8px', fontWeight: '600', textTransform: 'capitalize', border: '2px solid #1460AA', background: scenarioType === type ? '#1460AA' : '#FFFFFF', color: scenarioType === type ? '#FFFFFF' : '#333333', cursor: 'pointer' }}>{type}</button>
+                  <button key={type} onClick={() => type !== 'custom' ? applyScenario(type) : setScenarioType('custom')} style={{ padding: '14px', borderRadius: '8px', fontWeight: '600', textTransform: 'capitalize', border: '2px solid #005288', background: scenarioType === type ? '#005288' : '#FFFFFF', color: scenarioType === type ? '#FFFFFF' : '#333333', cursor: 'pointer', fontSize: '15px' }}>{type}</button>
                 ))}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>BetterUp Seats</label>
-                  <input type="number" value={seats} onChange={(e) => setSeats(Number(e.target.value))} style={{ width: '100%', padding: '12px', border: '2px solid #1460AA', borderRadius: '8px', fontSize: '16px' }} />
-                  <p style={{ fontSize: '12px', marginTop: '4px', color: '#555555', margin: '4px 0 0 0' }}>{((seats / workforce.personnel) * 100).toFixed(1)}% of workforce</p>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>BetterUp Seats</label>
+                  <input type="number" value={seats} onChange={(e) => setSeats(Number(e.target.value))} style={{ width: '100%', padding: '14px', border: '2px solid #005288', borderRadius: '8px', fontSize: '16px', boxSizing: 'border-box' }} />
+                  <p style={{ fontSize: '13px', marginTop: '6px', color: '#666666', margin: '6px 0 0 0' }}>{((seats / workforce.personnel) * 100).toFixed(1)}% of workforce</p>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Engagement Rate</label>
-                  <input type="range" min="50" max="100" value={engagementRate} onChange={(e) => setEngagementRate(Number(e.target.value))} style={{ width: '100%', accentColor: '#1460AA' }} />
-                  <p style={{ fontSize: '14px', fontWeight: 'bold', marginTop: '4px', color: '#1460AA', margin: '4px 0 0 0' }}>{engagementRate}%</p>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Engagement Rate</label>
+                  <input type="range" min="50" max="100" value={engagementRate} onChange={(e) => setEngagementRate(Number(e.target.value))} style={{ width: '100%', accentColor: '#005288' }} />
+                  <p style={{ fontSize: '15px', fontWeight: 'bold', marginTop: '6px', color: '#005288', margin: '6px 0 0 0' }}>{engagementRate}%</p>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Cost Per Seat</label>
-                  <input type="number" value={costPerSeat} onChange={(e) => setCostPerSeat(Number(e.target.value))} style={{ width: '100%', padding: '12px', border: '2px solid #1460AA', borderRadius: '8px', fontSize: '16px' }} />
-                  <p style={{ fontSize: '12px', marginTop: '4px', color: '#555555', margin: '4px 0 0 0' }}>Annual cost per user</p>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#333333' }}>Cost Per Seat</label>
+                  <input type="number" value={costPerSeat} onChange={(e) => setCostPerSeat(Number(e.target.value))} style={{ width: '100%', padding: '14px', border: '2px solid #005288', borderRadius: '8px', fontSize: '16px', boxSizing: 'border-box' }} />
+                  <p style={{ fontSize: '13px', marginTop: '6px', color: '#666666', margin: '6px 0 0 0' }}>Annual cost per user</p>
                 </div>
               </div>
             </div>
