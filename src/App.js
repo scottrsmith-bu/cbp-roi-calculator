@@ -147,22 +147,6 @@ const CBPROICalculator = ({ workforce }) => {
   const [showFactorBreakdown, setShowFactorBreakdown] = useState(false);
 const [expandedFactor, setExpandedFactor] = useState(null);
   
-  const [factorConfig, setFactorConfig] = useState({
-    ptsd: { prevalence: 13.4, coachingEffectiveness: 20, wcFilingRate: 10, wcAcceptanceRate: 81, healthcareCost: 63049, absentDays: 9.7, presenteeismDays: 33.1, otPremium: 1.5, avgWage: 85000 },
-    depression: { prevalence: 8.5, coachingEffectiveness: 18, wcFilingRate: 8, wcAcceptanceRate: 75, healthcareCost: 55000, absentDays: 8.2, presenteeismDays: 28.5, otPremium: 1.5, avgWage: 85000 },
-    anxiety: { prevalence: 5.2, coachingEffectiveness: 15, wcFilingRate: 6, wcAcceptanceRate: 70, healthcareCost: 48000, absentDays: 6.5, presenteeismDays: 22.0, otPremium: 1.5, avgWage: 85000 },
-    sud: { prevalence: 4.1, coachingEffectiveness: 12, wcFilingRate: 0, wcAcceptanceRate: 0, healthcareCost: 70000, absentDays: 12.0, presenteeismDays: 35.0, otPremium: 1.5, avgWage: 85000 }
-  });
-
-  const [overlapRates, setOverlapRates] = useState({
-    ptsdDepression: 50,
-    ptsdAnxiety: 45,
-    ptsdSud: 45,
-    depressionAnxiety: 60,
-    depressionSud: 25,
-    anxietySud: 25
-  });
-
   const resetFactorDefaults = (factorKey) => {
     const defaults = {
       ptsd: { prevalence: 13.4, coachingEffectiveness: 20, wcFilingRate: 10, wcAcceptanceRate: 81, healthcareCost: 63049, absentDays: 9.7, presenteeismDays: 33.1, otPremium: 1.5, avgWage: 85000 },
