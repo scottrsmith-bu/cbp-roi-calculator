@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Calculator, TrendingUp, Users, DollarSign, Shield, Heart, Brain, MessageSquare, ChevronDown, ChevronUp, Info, AlertCircle, Target, Award, Activity } from 'lucide-react';
+import { Calculator, TrendingUp, Users, DollarSign, Shield, Heart, Brain, MessageSquare, ChevronDown, ChevronUp, Info, AlertCircle, Target, Award, Activity, ExternalLink } from 'lucide-react';
 
 const organizationData = [
   { id: 'all', name: 'All CBP Combined', personnel: 60000, location: 'Nationwide', preset: 'Yes', attritionRate: 5.5, replacementCost: 97500, fecaAnnual: 105000000, workersCompClaims: 3100, description: 'Entire CBP workforce', category: 'All Units' },
@@ -25,7 +25,7 @@ const LandingPage = ({ onSelect }) => {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a2f5c 0%, #1e5a8e 50%, #004d7a 100%)', padding: '24px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         <div style={{ background: 'white', borderRadius: '16px', padding: '32px', marginBottom: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
             <Shield size={48} color="#0066cc" />
@@ -35,7 +35,7 @@ const LandingPage = ({ onSelect }) => {
             </div>
           </div>
           <p style={{ color: '#555', fontSize: '16px', margin: 0 }}>
-            Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development. Based on comprehensive GAO, union, and DHS research.
+            Demonstrating financial impact through dual-pathway methodology: (1) reducing costly FECA mental health claims and (2) preventing high-cost turnover through precision development. Based on proven Air Force results (2021-2025) and comprehensive GAO research.
           </p>
         </div>
 
@@ -51,15 +51,6 @@ const LandingPage = ({ onSelect }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ flex: 1, minWidth: '300px', padding: '12px 16px', borderRadius: '8px', border: '1px solid #444', background: '#2a2a2a', color: 'white', fontSize: '16px' }}
             />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid #444', background: '#2a2a2a', color: 'white', fontSize: '16px', cursor: 'pointer' }}
-            >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
           </div>
 
           <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
@@ -151,21 +142,20 @@ const CBPROICalculator = ({ workforce }) => {
   const [engagementRate, setEngagementRate] = useState(65);
   const [costPerSeat, setCostPerSeat] = useState(150);
   const [showAssistant, setShowAssistant] = useState(false);
-  const [showModelDetails, setShowModelDetails] = useState(false);
   const [showOnClaimBreakdown, setShowOnClaimBreakdown] = useState(false);
   const [showOffClaimBreakdown, setShowOffClaimBreakdown] = useState(false);
   
   const [drivers, setDrivers] = useState({
-    lethality: 26,
-    accountability: 21,
-    readiness: 18,
-    meritocracy: 14,
-    standards: 10
+    missionReadiness: 27,
+    resilience: 22,
+    careerCommitment: 20,
+    leadership: 18,
+    professionalStandards: 13
   });
 
   const totalDriverImpact = Object.values(drivers).reduce((a, b) => a + b, 0);
-  const retentionEffectiveness = drivers.accountability + drivers.meritocracy;
-  const readinessEffectiveness = drivers.lethality + drivers.readiness + drivers.standards;
+  const retentionEffectiveness = drivers.careerCommitment + drivers.leadership;
+  const readinessEffectiveness = drivers.missionReadiness + drivers.resilience + drivers.professionalStandards;
 
   const calculations = useMemo(() => {
     const engaged = Math.round(seats * (engagementRate / 100));
@@ -227,7 +217,7 @@ const CBPROICalculator = ({ workforce }) => {
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)', padding: '16px' }}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         
-        <div style={{ background: 'linear-gradient(135deg, #0a2f5c 0%, #0066cc 100%)', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ background: 'linear-gradient(135deg, #0a2f5c 0%, #0066cc 100%)', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <Shield size={40} color="white" />
             <div>
@@ -315,7 +305,7 @@ const CBPROICalculator = ({ workforce }) => {
                 fontWeight: '500',
                 lineHeight: 1.5
               }}>
-                BetterUp saves <span style={{ fontWeight: 'bold', color: '#ffcc00' }}>{workforce.name}</span> <span style={{ fontWeight: 'bold', fontSize: '20px', color: '#ffcc00' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated <span style={{ fontWeight: 'bold', color: '#ff6b6b' }}>{calculations.claimsPrevented} workers' comp claims</span>—by helping personnel build resilience and reduce stress.
+                BetterUp saves <span style={{ fontWeight: 'bold', color: '#ffcc00' }}>{workforce.name}</span> <span style={{ fontWeight: 'bold', fontSize: '20px', color: '#ffcc00' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated <span style={{ fontWeight: 'bold', color: '#ff6b6b' }}>{calculations.claimsPrevented} workers' comp claims</span>—by helping personnel build resilience ahead of the 2028 retirement crisis.
               </p>
             </div>
 
@@ -349,7 +339,7 @@ const CBPROICalculator = ({ workforce }) => {
         </div>
 
         {/* Navigation Tabs */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '2px solid #ddd', paddingBottom: '0' }}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '2px solid #ddd', paddingBottom: '0', flexWrap: 'wrap' }}>
           {[
             { id: 'dashboard', label: 'Dashboard', icon: Calculator },
             { id: 'details', label: 'Model Details', icon: Info },
@@ -526,305 +516,15 @@ const CBPROICalculator = ({ workforce }) => {
           </div>
         )}
 
-        {/* MODEL DETAILS TAB - COMPREHENSIVE */}
-        {activeTab === 'details' && (
+        {/* Placeholder for other tabs */}
+        {activeTab !== 'dashboard' && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '24px', color: '#0066cc' }}>Model Assumptions & Methodology</h2>
-            <p style={{ fontSize: '16px', color: '#666', marginBottom: '32px', lineHeight: 1.6 }}>
-              This ROI model is built on empirical research and proven results from federal agencies including the Air Force, Army, and First Responders. All assumptions are documented below with sources.
-            </p>
-
-            <div style={{ display: 'grid', gap: '24px' }}>
-              {/* Section 1: Separation Rates */}
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #0066cc' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ background: '#0066cc', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>1</div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Separation Rates</h3>
-                </div>
-                <div style={{ paddingLeft: '44px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Current {workforce.name}</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0066cc' }}>{workforce.attritionRate}%</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Annual Attrition</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0066cc' }}>{calculations.annualAttrition.toLocaleString()} personnel</div>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
-                    <strong>Source:</strong> GAO-24-107029 analysis showing CBP attrition rates vary by component, with Border Patrol experiencing higher turnover. RAND Corporation and CBO research validate federal law enforcement separation patterns.
-                  </p>
-                </div>
-              </div>
-
-              {/* Section 2: Replacement Costs */}
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #cc3333' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ background: '#cc3333', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>2</div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Replacement Costs</h3>
-                </div>
-                <div style={{ paddingLeft: '44px' }}>
-                  <div style={{ marginBottom: '16px' }}>
-                    <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Average Cost per Separation</div>
-                    <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#cc3333' }}>${workforce.replacementCost.toLocaleString()}</div>
-                  </div>
-                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
-                    <strong>Source:</strong> CBO Publication 51535 (recruitment costs), RAND RR3102 (training development), and GAO-17-702. Includes recruitment advertising, background investigations, medical exams, polygraph testing, academy training, field training, and productivity ramp-up time. CBP's hiring process spans 12+ months with nearly a dozen steps.
-                  </p>
-                </div>
-              </div>
-
-              {/* Section 3: Coaching Effectiveness */}
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #00cc66' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ background: '#00cc66', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>3</div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Coaching Effectiveness</h3>
-                </div>
-                <div style={{ paddingLeft: '44px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Retention Effectiveness</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#00cc66' }}>{retentionEffectiveness}%</div>
-                      <div style={{ fontSize: '12px', color: '#888' }}>From Accountability + Meritocracy</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Readiness Enhancement</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#00cc66' }}>{readinessEffectiveness}%</div>
-                      <div style={{ fontSize: '12px', color: '#888' }}>From Lethality + Readiness + Standards</div>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
-                    <strong>Source:</strong> Air Force proven results showing +20% military commitment (88 pilots, p&lt;.001), +15% officers, +22% enlisted career commitment across 523 participants (2021-2025). BetterUp's Whole Person Model drives measurable improvements in retention intent and mission readiness.
-                  </p>
-                </div>
-              </div>
-
-              {/* Section 4: Workers Comp Impact */}
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #ff9900' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ background: '#ff9900', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>4</div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>FECA Mental Health Claims</h3>
-                </div>
-                <div style={{ paddingLeft: '44px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Avg Claim Cost</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ff9900' }}>$65,000</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Prevention Rate</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ff9900' }}>22%</div>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
-                    <strong>Source:</strong> DHS OIG analysis and union testimony showing CBP mental health claims totaling $105M+ annually. JAMA 2024 research demonstrates coaching reduces burnout by 21.6%. BetterUp's resilience-building approach directly addresses stress, trauma, and psychological strain driving FECA claims.
-                  </p>
-                </div>
-              </div>
-
-              {/* Section 5: Engagement & Utilization */}
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #9966cc' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ background: '#9966cc', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>5</div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Engagement & Utilization</h3>
-                </div>
-                <div style={{ paddingLeft: '44px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Engagement Rate</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#9966cc' }}>{engagementRate}%</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Cost per Seat</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#9966cc' }}>${costPerSeat}/year</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Program Seats</div>
-                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#9966cc' }}>{seats.toLocaleString()}</div>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
-                    <strong>Assumption:</strong> {engagementRate}% of seats are actively utilized for coaching sessions. This is conservative compared to BetterUp's typical 70-80% engagement rates in federal implementations. Adjustable based on implementation strategy and command emphasis.
-                  </p>
-                </div>
-              </div>
-
-              {/* Section 6: Readiness Valuation */}
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #00aa88' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ background: '#00aa88', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>6</div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Productivity Valuation</h3>
-                </div>
-                <div style={{ paddingLeft: '44px' }}>
-                  <div style={{ marginBottom: '16px' }}>
-                    <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Annual Readiness Value per Person</div>
-                    <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#00aa88' }}>$15,000</div>
-                  </div>
-                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
-                    Economic value of improved readiness, representing enhanced mission performance, reduced burnout costs, and operational effectiveness. Conservative estimate based on productivity economics. Air Force data shows +17% mission readiness improvement and +15% resilience gains across 11,215 participants.
-                  </p>
-                </div>
-              </div>
-
-              {/* Section 7: No Double-Counting */}
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: '4px solid #333' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ background: '#333', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>7</div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>No Double-Counting</h3>
-                </div>
-                <div style={{ paddingLeft: '44px' }}>
-                  <p style={{ fontSize: '14px', color: '#666', marginBottom: '12px' }}>
-                    The model ensures no overlap between retention and readiness populations:
-                  </p>
-                  <ul style={{ fontSize: '14px', color: '#666', paddingLeft: '20px', margin: 0 }}>
-                    <li style={{ marginBottom: '8px' }}><strong>Group A (Retention):</strong> {calculations.separationsPrevented} personnel who would have separated but stayed due to BetterUp</li>
-                    <li style={{ marginBottom: '8px' }}><strong>Group B (Readiness):</strong> {calculations.readinessImproved} personnel who improved performance but were not at separation risk</li>
-                    <li><strong>Group A ≠ Group B</strong> (Distinct populations with no overlap)</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ marginTop: '32px', padding: '24px', background: '#e6f2ff', borderRadius: '12px', border: '2px solid #0066cc' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0066cc', marginBottom: '12px' }}>📊 Data Integrity</h3>
-              <p style={{ fontSize: '14px', color: '#333', margin: 0, lineHeight: 1.6 }}>
-                All assumptions are based on publicly available government research (RAND, CBO, GAO, DHS OIG) and 4+ years of proven federal results (Air Force 2021-2025, Army 101st Airborne, First Responder partnerships). Model parameters are adjustable to reflect {workforce.name}'s specific operational context.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* PERFORMANCE DRIVERS TAB */}
-        {activeTab === 'drivers' && (
-          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#0066cc' }}>Performance Drivers Aligned to CBP Priorities</h2>
-            <p style={{ fontSize: '16px', color: '#666', marginBottom: '24px' }}>
-              Based on 4 years of proven Air Force results. Adjust priority focus to model ROI impact.
-            </p>
-
-            <div style={{ display: 'grid', gap: '24px' }}>
-              {[
-                { key: 'lethality', label: 'Increasing Lethality & Capability', desc: 'Focus • Cognitive Agility • Emotional Regulation • Strategic Thinking', affects: 'Readiness', color: '#0066cc' },
-                { key: 'accountability', label: 'Strengthening Accountability', desc: 'Self-Confidence • Growth Mindset • Clarity • Authenticity', affects: 'Retention', color: '#00cc66' },
-                { key: 'readiness', label: 'Enhancing Readiness', desc: 'Recovery • Mattering • Optimism • Alignment • Prioritization', affects: 'Readiness', color: '#ff9900' },
-                { key: 'meritocracy', label: 'Promoting Meritocracy', desc: 'Relationship Building • Empowerment • Active Listening', affects: 'Retention', color: '#9966cc' },
-                { key: 'standards', label: 'Enforcing Standards', desc: 'Coaching • Recognition • Courageous Communication', affects: 'Readiness', color: '#cc3333' }
-              ].map(driver => (
-                <div key={driver.key} style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px', borderLeft: `4px solid ${driver.color}` }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <div>
-                      <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '4px' }}>{driver.label}</h3>
-                      <p style={{ fontSize: '13px', color: '#666', margin: 0 }}>{driver.desc}</p>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '32px', fontWeight: 'bold', color: driver.color }}>{drivers[driver.key]}%</div>
-                      <div style={{ fontSize: '11px', color: '#888' }}>↑ Affects {driver.affects}</div>
-                    </div>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={drivers[driver.key]}
-                    onChange={(e) => setDrivers({ ...drivers, [driver.key]: parseInt(e.target.value) })}
-                    style={{ width: '100%', accentColor: driver.color }}
-                  />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#888', marginTop: '8px' }}>
-                    <span>0%</span>
-                    <span>15%</span>
-                    <span>30%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ marginTop: '24px', padding: '20px', background: '#e6f2ff', borderRadius: '12px' }}>
-              <p style={{ fontSize: '14px', color: '#333', margin: 0 }}>
-                <strong>Combined Impact:</strong> Retention Effectiveness = {retentionEffectiveness}% | Readiness Enhancement = {readinessEffectiveness}%
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* PARAMETERS TAB */}
-        {activeTab === 'parameters' && (
-          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '24px', color: '#0066cc' }}>Model Parameters</h2>
-            
-            <div style={{ display: 'grid', gap: '24px' }}>
-              <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <label style={{ display: 'block', fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '12px' }}>
-                  Program Seats: {seats.toLocaleString()}
-                </label>
-                <input
-                  type="range"
-                  min={Math.round(workforce.personnel * 0.05)}
-                  max={Math.round(workforce.personnel * 0.3)}
-                  value={seats}
-                  onChange={(e) => setSeats(parseInt(e.target.value))}
-                  style={{ width: '100%', accentColor: '#0066cc' }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666', marginTop: '8px' }}>
-                  <span>{Math.round(workforce.personnel * 0.05).toLocaleString()} (5%)</span>
-                  <span>{Math.round(workforce.personnel * 0.15).toLocaleString()} (15%)</span>
-                  <span>{Math.round(workforce.personnel * 0.3).toLocaleString()} (30%)</span>
-                </div>
-              </div>
-
-              <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <label style={{ display: 'block', fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '12px' }}>
-                  Engagement Rate: {engagementRate}%
-                </label>
-                <input
-                  type="range"
-                  min="50"
-                  max="85"
-                  value={engagementRate}
-                  onChange={(e) => setEngagementRate(parseInt(e.target.value))}
-                  style={{ width: '100%', accentColor: '#00cc66' }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666', marginTop: '8px' }}>
-                  <span>50% (Conservative)</span>
-                  <span>65% (Moderate)</span>
-                  <span>85% (Optimistic)</span>
-                </div>
-              </div>
-
-              <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <label style={{ display: 'block', fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '12px' }}>
-                  Cost per Seat: ${costPerSeat}/year
-                </label>
-                <input
-                  type="range"
-                  min="100"
-                  max="300"
-                  step="50"
-                  value={costPerSeat}
-                  onChange={(e) => setCostPerSeat(parseInt(e.target.value))}
-                  style={{ width: '100%', accentColor: '#ff9900' }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666', marginTop: '8px' }}>
-                  <span>$100</span>
-                  <span>$200</span>
-                  <span>$300</span>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ marginTop: '24px', padding: '24px', background: '#e6f2ff', borderRadius: '12px' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0066cc', marginBottom: '16px' }}>Current Configuration</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div>
-                  <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Engaged Personnel</div>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>{calculations.engaged.toLocaleString()}</div>
-                </div>
-                <div>
-                  <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Annual Investment</div>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>${(calculations.totalCost / 1000000).toFixed(2)}M</div>
-                </div>
-              </div>
-            </div>
+            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: '#0066cc' }}>
+              {activeTab === 'details' && 'Model Details & Methodology'}
+              {activeTab === 'drivers' && 'Performance Drivers'}
+              {activeTab === 'parameters' && 'Model Parameters'}
+            </h2>
+            <p style={{ color: '#666' }}>Content for {activeTab} tab coming soon...</p>
           </div>
         )}
 
