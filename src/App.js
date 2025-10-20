@@ -155,6 +155,63 @@ const CBPROICalculator = ({ workforce }) => {
     professionalStandards: 5
   });
 
+  const [factorConfig, setFactorConfig] = useState({
+    ptsd: {
+      prevalence: 13.4,
+      coachingEffectiveness: 20,
+      wcFilingRate: 10,
+      wcAcceptanceRate: 81,
+      healthcareCost: 63049,
+      absentDays: 9.7,
+      presenteeismDays: 33.1,
+      otPremium: 1.5,
+      avgWage: 85000
+    },
+    depression: {
+      prevalence: 8.5,
+      coachingEffectiveness: 18,
+      wcFilingRate: 8,
+      wcAcceptanceRate: 75,
+      healthcareCost: 55000,
+      absentDays: 8.2,
+      presenteeismDays: 28.5,
+      otPremium: 1.5,
+      avgWage: 85000
+    },
+    anxiety: {
+      prevalence: 5.2,
+      coachingEffectiveness: 15,
+      wcFilingRate: 6,
+      wcAcceptanceRate: 70,
+      healthcareCost: 48000,
+      absentDays: 6.5,
+      presenteeismDays: 22.0,
+      otPremium: 1.5,
+      avgWage: 85000
+    },
+    sud: {
+      prevalence: 4.1,
+      coachingEffectiveness: 12,
+      wcFilingRate: 0,
+      wcAcceptanceRate: 0,
+      healthcareCost: 70000,
+      absentDays: 12.0,
+      presenteeismDays: 35.0,
+      otPremium: 1.5,
+      avgWage: 85000
+    }
+  });
+
+  const resetFactorDefaults = (factorKey) => {
+    const defaults = {
+      ptsd: { prevalence: 13.4, coachingEffectiveness: 20, wcFilingRate: 10, wcAcceptanceRate: 81, healthcareCost: 63049, absentDays: 9.7, presenteeismDays: 33.1, otPremium: 1.5, avgWage: 85000 },
+      depression: { prevalence: 8.5, coachingEffectiveness: 18, wcFilingRate: 8, wcAcceptanceRate: 75, healthcareCost: 55000, absentDays: 8.2, presenteeismDays: 28.5, otPremium: 1.5, avgWage: 85000 },
+      anxiety: { prevalence: 5.2, coachingEffectiveness: 15, wcFilingRate: 6, wcAcceptanceRate: 70, healthcareCost: 48000, absentDays: 6.5, presenteeismDays: 22.0, otPremium: 1.5, avgWage: 85000 },
+      sud: { prevalence: 4.1, coachingEffectiveness: 12, wcFilingRate: 0, wcAcceptanceRate: 0, healthcareCost: 70000, absentDays: 12.0, presenteeismDays: 35.0, otPremium: 1.5, avgWage: 85000 }
+    };
+    setFactorConfig(prev => ({ ...prev, [factorKey]: defaults[factorKey] }));
+  };
+
   const retentionEffectiveness = drivers.careerCommitment + drivers.leadership;
   const readinessEffectiveness = drivers.missionReadiness + drivers.resilience + drivers.professionalStandards;
 
@@ -305,6 +362,7 @@ const CBPROICalculator = ({ workforce }) => {
             { id: 'dashboard', label: 'Dashboard', icon: Calculator },
             { id: 'details', label: 'Model Details', icon: Info },
             { id: 'drivers', label: 'Performance Drivers', icon: TrendingUp },
+            { id: 'factors', label: 'Factor Configuration', icon: Shield },
             { id: 'parameters', label: 'Parameters', icon: Activity }
           ].map(tab => {
             const Icon = tab.icon;
@@ -607,6 +665,274 @@ const CBPROICalculator = ({ workforce }) => {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'factors' && (
+          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <div style={{ marginBottom: '28px' }}>
+              <h2 style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '10px', color: '#0066cc' }}>Factor Configuration</h2>
+              <p style={{ fontSize: '17px', color: '#666', margin: 0, lineHeight: 1.6 }}>
+                Configure prevalence rates, coaching effectiveness, and economic pathways for each mental health factor. All changes update calculations in real-time.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gap: '20px' }}>
+              {[
+                { key: 'ptsd', label: 'PTSD', color: '#cc3333', desc: 'Post-Traumatic Stress Disorder' },
+                { key: 'depression', label: 'Depression', color: '#9966cc', desc: 'Major Depressive Disorder' },
+                { key: 'anxiety', label: 'Anxiety', color: '#ff9900', desc: 'Generalized Anxiety Disorder' },
+                { key: 'sud', label: 'Substance Use (SUD)', color: '#0066cc', desc: 'Substance Use Disorders' }
+              ].map(factor => {
+                const config = factorConfig[factor.key];
+                const isExpanded = expandedFactor === factor.key;
+                
+                const atRiskPopulation = seats * (config.prevalence / 100);
+                const engagedAtRisk = atRiskPopulation * (engagementRate / 100);
+                const casesAvoided = engagedAtRisk * (config.coachingEffectiveness / 100);
+                const claimsFiled = casesAvoided * (config.wcFilingRate / 100);
+                const claimsAccepted = claimsFiled * (config.wcAcceptanceRate / 100);
+                const wcClaimSavings = claimsAccepted * config.healthcareCost;
+                
+                const dailyWage = config.avgWage / 260;
+                const absentCost = casesAvoided * config.absentDays * dailyWage * config.otPremium;
+                const presenteeismCost = casesAvoided * config.presenteeismDays * dailyWage * 0.33;
+                const offClaimSavings = absentCost + presenteeismCost;
+                
+                const totalFactorSavings = wcClaimSavings + offClaimSavings;
+
+                return (
+                  <div key={factor.key} style={{ border: `2px solid ${factor.color}`, borderRadius: '12px', overflow: 'hidden' }}>
+                    <div 
+                      onClick={() => setExpandedFactor(isExpanded ? null : factor.key)}
+                      style={{ 
+                        background: factor.color, 
+                        padding: '20px', 
+                        cursor: 'pointer',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <div>
+                        <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: 'white', margin: '0 0 4px 0' }}>{factor.label}</h3>
+                        <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.9)', margin: 0 }}>{factor.desc} • {Math.round(casesAvoided)} workers impacted</p>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)', marginBottom: '4px' }}>Total Savings</div>
+                          <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'white' }}>${(totalFactorSavings / 1000000).toFixed(2)}M</div>
+                        </div>
+                        {isExpanded ? <ChevronUp size={28} color="white" /> : <ChevronDown size={28} color="white" />}
+                      </div>
+                    </div>
+
+                    {isExpanded && (
+                      <div style={{ padding: '28px', background: '#f8f9fa' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                          <h4 style={{ fontSize: '19px', fontWeight: 'bold', color: '#333', margin: 0 }}>Configuration Parameters</h4>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); resetFactorDefaults(factor.key); }}
+                            style={{ padding: '10px 20px', borderRadius: '6px', border: `2px solid ${factor.color}`, background: 'white', color: factor.color, cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
+                          >
+                            Reset to Defaults
+                          </button>
+                        </div>
+
+                        <div style={{ marginBottom: '28px' }}>
+                          <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#333' }}>
+                            Clinical Prevalence: {config.prevalence}%
+                          </label>
+                          <input
+                            type="range"
+                            min="0"
+                            max="25"
+                            step="0.1"
+                            value={config.prevalence}
+                            onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], prevalence: parseFloat(e.target.value) } }))}
+                            style={{ width: '100%', height: '8px', accentColor: factor.color }}
+                          />
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
+                            <span>0%</span>
+                            <span>25%</span>
+                          </div>
+                          <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% of personnel who have this condition</p>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '28px' }}>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#333' }}>
+                              Coaching Effectiveness: {config.coachingEffectiveness}%
+                            </label>
+                            <input
+                              type="range"
+                              min="0"
+                              max="40"
+                              step="1"
+                              value={config.coachingEffectiveness}
+                              onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], coachingEffectiveness: parseInt(e.target.value) } }))}
+                              style={{ width: '100%', height: '8px', accentColor: factor.color }}
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
+                              <span>0%</span>
+                              <span>40%</span>
+                            </div>
+                            <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% reduction in symptom severity</p>
+                          </div>
+
+                          <div>
+                            <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#333' }}>
+                              WC Filing Rate: {config.wcFilingRate}%
+                            </label>
+                            <input
+                              type="range"
+                              min="0"
+                              max="20"
+                              step="1"
+                              value={config.wcFilingRate}
+                              onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], wcFilingRate: parseInt(e.target.value) } }))}
+                              style={{ width: '100%', height: '8px', accentColor: factor.color }}
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
+                              <span>0%</span>
+                              <span>20%</span>
+                            </div>
+                            <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% of clinical cases who file WC claims</p>
+                          </div>
+
+                          <div>
+                            <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#333' }}>
+                              WC Acceptance Rate: {config.wcAcceptanceRate}%
+                            </label>
+                            <input
+                              type="range"
+                              min="0"
+                              max="100"
+                              step="1"
+                              value={config.wcAcceptanceRate}
+                              onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], wcAcceptanceRate: parseInt(e.target.value) } }))}
+                              style={{ width: '100%', height: '8px', accentColor: factor.color }}
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
+                              <span>0%</span>
+                              <span>100%</span>
+                            </div>
+                            <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% of filed claims that are accepted</p>
+                          </div>
+                        </div>
+
+                        <div style={{ padding: '20px', background: 'white', borderRadius: '10px', marginBottom: '20px', border: '2px solid #e0e0e0' }}>
+                          <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '16px' }}>Economic Pathways</h4>
+                          
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                            <div>
+                              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                                Healthcare Cost per Case ($)
+                              </label>
+                              <input
+                                type="number"
+                                value={config.healthcareCost}
+                                onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], healthcareCost: parseInt(e.target.value) || 0 } }))}
+                                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px' }}
+                              />
+                            </div>
+
+                            <div>
+                              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                                Absent Days per Case
+                              </label>
+                              <input
+                                type="number"
+                                step="0.1"
+                                value={config.absentDays}
+                                onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], absentDays: parseFloat(e.target.value) || 0 } }))}
+                                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px' }}
+                              />
+                            </div>
+
+                            <div>
+                              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                                Presenteeism Days per Case
+                              </label>
+                              <input
+                                type="number"
+                                step="0.1"
+                                value={config.presenteeismDays}
+                                onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], presenteeismDays: parseFloat(e.target.value) || 0 } }))}
+                                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px' }}
+                              />
+                            </div>
+
+                            <div>
+                              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                                OT Premium Multiplier
+                              </label>
+                              <input
+                                type="number"
+                                step="0.1"
+                                value={config.otPremium}
+                                onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], otPremium: parseFloat(e.target.value) || 1 } }))}
+                                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px' }}
+                              />
+                            </div>
+
+                            <div>
+                              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
+                                Average Wage ($)
+                              </label>
+                              <input
+                                type="number"
+                                value={config.avgWage}
+                                onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], avgWage: parseInt(e.target.value) || 0 } }))}
+                                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px' }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ padding: '20px', background: `${factor.color}15`, borderRadius: '10px', border: `2px solid ${factor.color}` }}>
+                          <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: factor.color, marginBottom: '16px' }}>Impact Calculation</h4>
+                          
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                            <div>
+                              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>At-Risk Population</div>
+                              <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#333' }}>{Math.round(atRiskPopulation)}</div>
+                            </div>
+                            <div>
+                              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Engaged At-Risk</div>
+                              <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#333' }}>{Math.round(engagedAtRisk)}</div>
+                            </div>
+                            <div>
+                              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Cases Avoided</div>
+                              <div style={{ fontSize: '22px', fontWeight: 'bold', color: factor.color }}>{Math.round(casesAvoided)}</div>
+                            </div>
+                            <div>
+                              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>WC Claims Prevented</div>
+                              <div style={{ fontSize: '22px', fontWeight: 'bold', color: factor.color }}>{Math.round(claimsAccepted)}</div>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', paddingTop: '16px', borderTop: '2px solid rgba(0,0,0,0.1)' }}>
+                            <div>
+                              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>WC Claim Savings</div>
+                              <div style={{ fontSize: '20px', fontWeight: 'bold', color: factor.color }}>${(wcClaimSavings / 1000000).toFixed(2)}M</div>
+                            </div>
+                            <div>
+                              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Off-Claim Savings</div>
+                              <div style={{ fontSize: '20px', fontWeight: 'bold', color: factor.color }}>${(offClaimSavings / 1000000).toFixed(2)}M</div>
+                            </div>
+                            <div>
+                              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Total Factor Savings</div>
+                              <div style={{ fontSize: '24px', fontWeight: 'bold', color: factor.color }}>${(totalFactorSavings / 1000000).toFixed(2)}M</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
