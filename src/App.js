@@ -1245,15 +1245,6 @@ const CBPROICalculator = ({ workforce }) => {
           </div>
         )}
 
-              <div style={{ marginTop: '24px', padding: '16px', background: '#fff8e6', borderRadius: '8px', border: '1px solid #ffcc00' }}>
-                <p style={{ fontSize: '14px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                  <strong>Note:</strong> Overlap rates are based on research literature estimates. Higher overlap rates reduce total cases avoided by preventing double-counting of comorbid conditions.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {showAssistant && (
           <div style={{ position: 'fixed', bottom: '100px', right: '24px', width: '400px', maxWidth: '90vw', background: 'white', borderRadius: '16px', boxShadow: '0 8px 30px rgba(0,0,0,0.25)', zIndex: 1000, border: '2px solid #0066cc' }}>
             <div style={{ background: '#0066cc', padding: '18px', borderRadius: '14px 14px 0 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
