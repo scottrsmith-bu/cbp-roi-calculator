@@ -246,44 +246,44 @@ const CBPROICalculator = ({ workforce }) => {
               </div>
             </div>
 
-            <div style={{ background: '#FEF7ED', border: '3px solid #F09511', borderLeft: '6px solid #F09511', borderRadius: '8px', padding: '20px 24px' }}>
-              <p style={{ color: '#333333', fontSize: '16px', lineHeight: 1.6, margin: 0 }}>BetterUp saves {workforce.name} <span style={{ color: '#F09511', fontWeight: '700' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated {calculations.claimsReduced.toFixed(0)} workers' comp claims—by helping personnel build resilience and reduce stress.</p>
+            <div style={{ background: '#FFFFFF', border: '3px solid #005288', borderLeft: '6px solid #005288', borderRadius: '8px', padding: '20px 24px' }}>
+              <p style={{ color: '#333333', fontSize: '16px', lineHeight: 1.6, margin: 0 }}>BetterUp saves {workforce.name} <span style={{ color: '#005288', fontWeight: '700' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</span>—including cutting an estimated {calculations.claimsReduced.toFixed(0)} workers' comp claims—by helping personnel build resilience and reduce stress.</p>
             </div>
 
             <div id="impact-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-              <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#555555' }}>Net savings</div>
+              <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#666666' }}>Net savings</div>
                 <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#008000', lineHeight: 1 }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
-                <div style={{ fontSize: '14px', color: '#808080' }}>After program cost</div>
+                <div style={{ fontSize: '14px', color: '#999999' }}>After program cost</div>
               </div>
-              <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#555555' }}>ROI multiplier</div>
+              <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#666666' }}>ROI multiplier</div>
                 <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{(calculations.totalAnnualSavings / calculations.totalCost).toFixed(1)}x</div>
-                <div style={{ fontSize: '14px', color: '#808080' }}>Return +{calculations.roi}%</div>
+                <div style={{ fontSize: '14px', color: '#999999' }}>Return +{calculations.roi}%</div>
               </div>
-              <div style={{ background: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#555555' }}>Personnel impacted</div>
+              <div style={{ background: '#FFFFFF', border: '2px solid #E0E0E0', borderRadius: '12px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+                <div style={{ fontSize: '14px', marginBottom: '8px', color: '#666666' }}>Personnel impacted</div>
                 <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', lineHeight: 1 }}>{Math.round(calculations.activeSeats)}</div>
-                <div style={{ fontSize: '14px', color: '#808080' }}>Clinical symptom reduction • 4 factors</div>
+                <div style={{ fontSize: '14px', color: '#999999' }}>Clinical symptom reduction • 4 factors</div>
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-              <div style={{ background: '#FEF7ED', border: '3px solid #F09511', borderRadius: '12px', overflow: 'hidden' }}>
-                <div style={{ background: '#F09511', color: '#333333', padding: '20px' }}>
+              <div style={{ background: '#FFFFFF', border: '3px solid #005288', borderRadius: '12px', overflow: 'hidden' }}>
+                <div style={{ background: '#005288', color: '#FFFFFF', padding: '20px' }}>
                   <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, marginBottom: '4px' }}>On-Claim Workers' Comp</h3>
-                  <p style={{ fontSize: '14px', margin: 0, color: '#63666A' }}>Projected mental health WC claims</p>
+                  <p style={{ fontSize: '14px', margin: 0, opacity: 0.9 }}>Projected mental health WC claims</p>
                 </div>
                 <div style={{ padding: '24px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div>
-                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#555555' }}>Projected cost:</div>
-                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#F09511', lineHeight: 1 }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#666666' }}>Projected cost:</div>
+                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#005288', lineHeight: 1 }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
                     </div>
-                    <div style={{ background: '#F3E69C', padding: '8px 16px', borderRadius: '20px' }}>
-                      <div style={{ fontSize: '11px', color: '#A36900' }}>Savings</div>
-                      <div style={{ fontWeight: 'bold', color: '#A36900', fontSize: '16px' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
-                      <div style={{ fontSize: '11px', color: '#A36900' }}>(4%)</div>
+                    <div style={{ background: '#E8F4F8', padding: '10px 18px', borderRadius: '20px', border: '2px solid #005288' }}>
+                      <div style={{ fontSize: '11px', color: '#005288', fontWeight: '600' }}>Savings</div>
+                      <div style={{ fontWeight: 'bold', color: '#005288', fontSize: '16px' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '11px', color: '#005288' }}>(4%)</div>
                     </div>
                   </div>
                   <button onClick={() => setExpandedSection(expandedSection === 'onClaim' ? null : 'onClaim')} style={{ color: '#F09511', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'onClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
@@ -320,24 +320,24 @@ const CBPROICalculator = ({ workforce }) => {
                 </div>
               </div>
 
-              <div style={{ background: '#EDF3F9', border: '3px solid #1460AA', borderRadius: '12px', overflow: 'hidden' }}>
-                <div style={{ background: '#1460AA', color: '#FFFFFF', padding: '20px' }}>
+              <div style={{ background: '#FFFFFF', border: '3px solid #005288', borderRadius: '12px', overflow: 'hidden' }}>
+                <div style={{ background: '#005288', color: '#FFFFFF', padding: '20px' }}>
                   <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, marginBottom: '4px' }}>Off-Claim Economic Costs</h3>
                   <p style={{ fontSize: '14px', margin: 0, opacity: 0.9 }}>Productivity loss, absenteeism, and turnover</p>
                 </div>
                 <div style={{ padding: '24px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div>
-                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#555555' }}>Projected cost:</div>
-                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#1460AA', lineHeight: 1 }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '14px', marginBottom: '4px', color: '#666666' }}>Projected cost:</div>
+                      <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#005288', lineHeight: 1 }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
                     </div>
-                    <div style={{ background: '#95D9FF', padding: '8px 16px', borderRadius: '20px' }}>
-                      <div style={{ fontSize: '11px', color: '#00416A' }}>Savings</div>
-                      <div style={{ fontWeight: 'bold', color: '#00416A', fontSize: '16px' }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
-                      <div style={{ fontSize: '11px', color: '#00416A' }}>(4%)</div>
+                    <div style={{ background: '#E8F4F8', padding: '10px 18px', borderRadius: '20px', border: '2px solid #005288' }}>
+                      <div style={{ fontSize: '11px', color: '#005288', fontWeight: '600' }}>Savings</div>
+                      <div style={{ fontWeight: 'bold', color: '#005288', fontSize: '16px' }}>${(calculations.offClaimTotal / 1000000).toFixed(2)}M</div>
+                      <div style={{ fontSize: '11px', color: '#005288' }}>(4%)</div>
                     </div>
                   </div>
-                  <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#1460AA', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'offClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
+                  <button onClick={() => setExpandedSection(expandedSection === 'offClaim' ? null : 'offClaim')} style={{ color: '#005288', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' }}>{expandedSection === 'offClaim' ? 'Hide' : 'Show'} breakdown ▼</button>
                   {expandedSection === 'offClaim' && (
                     <div style={{ marginTop: '16px' }}>
                       <h4 style={{ fontWeight: '600', marginBottom: '12px', color: '#333333', fontSize: '15px' }}>Breakdown by Factor</h4>
