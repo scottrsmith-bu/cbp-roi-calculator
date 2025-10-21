@@ -248,7 +248,8 @@ const [factorConfig, setFactorConfig] = useState({
               <DollarSign size={32} color="#0066cc" strokeWidth={3} />
             </div>
             <div>
-              <div style={{ fontSize: '17px', color: 'white', fontWeight: '600', marginBottom: '4px' }}>ANNUAL IMPACT PROJECTION</div>
+              <div style={{ fontSize: '17px', color: 'white', fontWeight: '600', marginBottom: '4px' }}>NET ANNUAL SAVINGS</div>
+              <div style={{ fontSize: '11px', color: '#cbd5e0', marginBottom: '8px' }}>(After program cost)</div>
               <div style={{ fontSize: '52px', fontWeight: 'bold', color: 'white', lineHeight: 1 }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
             </div>
           </div>
@@ -271,8 +272,9 @@ const [factorConfig, setFactorConfig] = useState({
               <div style={{ fontSize: '15px', color: 'white' }}>Claims Prevented</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#00ff88' }}>{calculations.roi.toLocaleString()}%</div>
-              <div style={{ fontSize: '15px', color: 'white' }}>ROI</div>
+              <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#00ff88' }}>{(calculations.roi / 100 + 1).toFixed(1)}×</div>
+              <div style={{ fontSize: '13px', color: '#cbd5e0', marginTop: '4px' }}>ROI Multiplier</div>
+              <div style={{ fontSize: '11px', color: '#a0aec0' }}>Return +{calculations.roi.toLocaleString()}%</div>
             </div>
           </div>
         </div>
