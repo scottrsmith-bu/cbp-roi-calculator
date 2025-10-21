@@ -37,13 +37,13 @@ const LandingPage = ({ onSelect }) => {
             </div>
           </div>
 
-<div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px', marginTop: '16px' }}>
+          <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px', marginTop: '16px' }}>
             <p style={{ color: '#1f2937', fontSize: '19px', margin: 0, lineHeight: 1.7, fontWeight: '500' }}>
               This calculator projects financial impact through a <strong>dual-pathway methodology</strong>: <span style={{ color: '#dc2626', fontWeight: '600' }}>(1) reducing costly FECA mental health claims (PTSD, depression, anxiety, substance use disorders)</span> and <span style={{ color: '#dc2626', fontWeight: '600' }}>(2) preventing high-cost personnel turnover</span> through precision resilience development. Based on 4 years of proven Air Force results (2021-2025) and comprehensive GAO research.
             </p>
           </div>
 
-<div style={{ marginTop: '20px', padding: '28px', background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', borderRadius: '12px', border: '2px solid #0066cc', boxShadow: '0 2px 8px rgba(0,102,204,0.1)' }}>
+          <div style={{ marginTop: '20px', padding: '28px', background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', borderRadius: '12px', border: '2px solid #0066cc', boxShadow: '0 2px 8px rgba(0,102,204,0.1)' }}>
             <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: '#0066cc', marginBottom: '20px' }}>Conservative Model Assumptions</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
               <div style={{ padding: '20px', background: 'white', borderRadius: '10px', border: '2px solid #ff9900', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
@@ -63,6 +63,7 @@ const LandingPage = ({ onSelect }) => {
               </div>
             </div>
           </div>
+        </div>
 
         <div style={{ background: '#1a1a1a', borderRadius: '16px', padding: '32px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>Select Your Organization or Sector</h2>
@@ -135,7 +136,6 @@ const LandingPage = ({ onSelect }) => {
     </div>
   );
 };
-
 const CBPROICalculator = ({ workforce }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [seats, setSeats] = useState(Math.round(workforce.personnel * 0.15));
@@ -145,7 +145,7 @@ const CBPROICalculator = ({ workforce }) => {
   const [showOnClaimBreakdown, setShowOnClaimBreakdown] = useState(false);
   const [showOffClaimBreakdown, setShowOffClaimBreakdown] = useState(false);
   const [showFactorBreakdown, setShowFactorBreakdown] = useState(false);
-const [expandedFactor, setExpandedFactor] = useState(null);
+  const [expandedFactor, setExpandedFactor] = useState(null);
   
   const [drivers, setDrivers] = useState({
     missionReadiness: 17,
@@ -164,12 +164,12 @@ const [expandedFactor, setExpandedFactor] = useState(null);
     anxietySud: 25
   });
 
-const [factorConfig, setFactorConfig] = useState({
-  ptsd: { prevalence: 13.4, coachingEffectiveness: 20, wcFilingRate: 10, wcAcceptanceRate: 81, healthcareCost: 63049, absentDays: 9.7, presenteeismDays: 33.1, otPremium: 1.5, avgWage: 85000 },
-  depression: { prevalence: 8.5, coachingEffectiveness: 18, wcFilingRate: 8, wcAcceptanceRate: 75, healthcareCost: 55000, absentDays: 8.2, presenteeismDays: 28.5, otPremium: 1.5, avgWage: 85000 },
-  anxiety: { prevalence: 5.2, coachingEffectiveness: 15, wcFilingRate: 6, wcAcceptanceRate: 70, healthcareCost: 48000, absentDays: 6.5, presenteeismDays: 22.0, otPremium: 1.5, avgWage: 85000 },
-  sud: { prevalence: 4.1, coachingEffectiveness: 12, wcFilingRate: 0, wcAcceptanceRate: 0, healthcareCost: 70000, absentDays: 12.0, presenteeismDays: 35.0, otPremium: 1.5, avgWage: 85000 }
-});
+  const [factorConfig, setFactorConfig] = useState({
+    ptsd: { prevalence: 13.4, coachingEffectiveness: 20, wcFilingRate: 10, wcAcceptanceRate: 81, healthcareCost: 63049, absentDays: 9.7, presenteeismDays: 33.1, otPremium: 1.5, avgWage: 85000 },
+    depression: { prevalence: 8.5, coachingEffectiveness: 18, wcFilingRate: 8, wcAcceptanceRate: 75, healthcareCost: 55000, absentDays: 8.2, presenteeismDays: 28.5, otPremium: 1.5, avgWage: 85000 },
+    anxiety: { prevalence: 5.2, coachingEffectiveness: 15, wcFilingRate: 6, wcAcceptanceRate: 70, healthcareCost: 48000, absentDays: 6.5, presenteeismDays: 22.0, otPremium: 1.5, avgWage: 85000 },
+    sud: { prevalence: 4.1, coachingEffectiveness: 12, wcFilingRate: 0, wcAcceptanceRate: 0, healthcareCost: 70000, absentDays: 12.0, presenteeismDays: 35.0, otPremium: 1.5, avgWage: 85000 }
+  });
 
   const resetFactorDefaults = (factorKey) => {
     const defaults = {
@@ -181,51 +181,43 @@ const [factorConfig, setFactorConfig] = useState({
     setFactorConfig(prev => ({ ...prev, [factorKey]: defaults[factorKey] }));
   };
 
-  const retentionEffectiveness = drivers.careerCommitment + drivers.leadership;
-  const readinessEffectiveness = drivers.missionReadiness + drivers.resilience + drivers.professionalStandards;
+ const retentionEffectiveness = drivers.careerCommitment + drivers.leadership;
+const readinessEffectiveness = drivers.missionReadiness + drivers.resilience + drivers.professionalStandards;
 
-  const calculations = useMemo(() => {
-    const engaged = Math.round(seats * (engagementRate / 100));
-    const separationsPrevented = Math.round(engaged * (retentionEffectiveness / 100));
-    const retentionSavings = separationsPrevented * workforce.replacementCost;
-    
-const avgClaimCost = 65000;
-    const totalClaimsRate = workforce.workersCompClaims / workforce.personnel;
-    const mentalHealthClaimsPct = 0.35; // 35% of CBP FECA claims are mental health related
-    const mentalHealthClaimsRate = totalClaimsRate * mentalHealthClaimsPct;
-    const expectedMentalHealthClaims = seats * mentalHealthClaimsRate;
-    const claimsPrevented = Math.round(expectedMentalHealthClaims * 0.22);
-    const fecaSavings = claimsPrevented * avgClaimCost;
-    
-    const readinessImproved = Math.round(engaged * (readinessEffectiveness / 100));
-    const readinessEconomicValue = readinessImproved * 15000;
-    
-    const totalAnnualSavings = retentionSavings + fecaSavings + readinessEconomicValue;
-    const totalCost = seats * costPerSeat;
-    const netSavings = totalAnnualSavings - totalCost;
-    const roi = Math.round((netSavings / totalCost) * 100);
-    const breakEvenMonths = (totalCost / totalAnnualSavings) * 12;
-    const fiveYearValue = (totalAnnualSavings * 5) - totalCost;
-    
-    const baselineFecaCost = (claimsPrevented * avgClaimCost) / 0.22;
-    const afterFecaCost = baselineFecaCost - fecaSavings;
-    const baselineOffClaim = (retentionSavings + readinessEconomicValue) / 0.3;
-    const afterOffClaim = baselineOffClaim - (retentionSavings + readinessEconomicValue);
-    
-    return { 
-      engaged, separationsPrevented, retentionSavings, claimsPrevented, fecaSavings, 
-      readinessImproved, readinessEconomicValue, totalAnnualSavings, totalCost, 
-      netSavings, roi, breakEvenMonths, fiveYearValue,
-      baselineFecaCost, afterFecaCost, baselineOffClaim, afterOffClaim
-    };
-  }, [seats, engagementRate, workforce, retentionEffectiveness, readinessEffectiveness, costPerSeat]);
-
-  const savingsBreakdown = [
-    { name: 'Retention', value: calculations.retentionSavings, color: '#0066cc' },
-    { name: 'FECA Prevention', value: calculations.fecaSavings, color: '#cc3333' },
-    { name: 'Readiness Value', value: calculations.readinessEconomicValue, color: '#00cc66' }
-  ];
-
+const calculations = useMemo(() => {
+  const engaged = Math.round(seats * (engagementRate / 100));
+  const separationsPrevented = Math.round(engaged * (retentionEffectiveness / 100));
+  const retentionSavings = separationsPrevented * workforce.replacementCost;
+  
+  const avgClaimCost = 65000;
+  const totalClaimsRate = workforce.workersCompClaims / workforce.personnel;
+  const mentalHealthClaimsPct = 0.35;
+  const mentalHealthClaimsRate = totalClaimsRate * mentalHealthClaimsPct;
+  const expectedMentalHealthClaims = seats * mentalHealthClaimsRate;
+  const claimsPrevented = Math.round(expectedMentalHealthClaims * 0.22);
+  const fecaSavings = claimsPrevented * avgClaimCost;
+  
+  const readinessImproved = Math.round(engaged * (readinessEffectiveness / 100));
+  const readinessEconomicValue = readinessImproved * 15000;
+  
+  const totalAnnualSavings = retentionSavings + fecaSavings + readinessEconomicValue;
+  const totalCost = seats * costPerSeat;
+  const netSavings = totalAnnualSavings - totalCost;
+  const roi = Math.round((netSavings / totalCost) * 100);
+  const breakEvenMonths = (totalCost / totalAnnualSavings) * 12;
+  
+  const baselineFecaCost = (claimsPrevented * avgClaimCost) / 0.22;
+  const afterFecaCost = baselineFecaCost - fecaSavings;
+  const baselineOffClaim = (retentionSavings + readinessEconomicValue) / 0.3;
+  const afterOffClaim = baselineOffClaim - (retentionSavings + readinessEconomicValue);
+  
+  return { 
+    engaged, separationsPrevented, retentionSavings, claimsPrevented, fecaSavings, 
+    readinessImproved, readinessEconomicValue, totalAnnualSavings, totalCost, 
+    netSavings, roi, breakEvenMonths,
+    baselineFecaCost, afterFecaCost, baselineOffClaim, afterOffClaim
+  };
+}, [seats, engagementRate, workforce, retentionEffectiveness, readinessEffectiveness, costPerSeat]);
   return (
     <div style={{ minHeight: '100vh', background: '#f5f7fa', padding: '16px' }}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
@@ -257,7 +249,7 @@ const avgClaimCost = 65000;
           
           <div style={{ background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
             <div style={{ fontSize: '20px', color: '#333', fontWeight: '500', lineHeight: 1.7 }}>
-                 BetterUp saves {workforce.name} <strong style={{ color: '#0066cc', fontSize: '24px' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(1)}M annually</strong> through 
+              BetterUp saves {workforce.name} <strong style={{ color: '#0066cc', fontSize: '24px' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(1)}M annually</strong> through 
               <strong style={{ color: '#cc3333', fontSize: '22px' }}> (1) reducing costly FECA mental health claims</strong> and 
               <strong style={{ color: '#ff9900', fontSize: '22px' }}> (2) preventing high-cost turnover</strong> ahead of the 2028 retirement crisis.
             </div>
@@ -280,7 +272,7 @@ const avgClaimCost = 65000;
           </div>
         </div>
 
-     <div style={{ background: 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)', borderRadius: '16px', padding: '32px', marginBottom: '24px', border: '1px solid #4a5568' }}>
+        <div style={{ background: 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)', borderRadius: '16px', padding: '32px', marginBottom: '24px', border: '1px solid #4a5568' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <h2 style={{ fontSize: '34px', fontWeight: 'bold', color: 'white', margin: '0 0 8px 0' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
@@ -291,7 +283,7 @@ const avgClaimCost = 65000;
                 const val = prompt('Enter number of seats:', seats);
                 if (val && !isNaN(val)) setSeats(parseInt(val));
               }}
-              style={{ padding: '14px 32px', borderRadius: '8px', background: '#ffcc00', border: 'none', cursor: 'pointer', fontWeight: 'bold', color: '#000', fontSize: '16px' }}
+              style={{ padding: '14px 32px', borderRadius: '8px', background: '#ffcc00', border: 'none', cursor: 'pointer', fontWeight: 'bold', color: '#000', fontSize: '17px' }}
             >
               Edit
             </button>
@@ -299,18 +291,18 @@ const avgClaimCost = 65000;
 
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '12px' }}>
-              
+              <label style={{ fontSize: '21px', color: 'white', fontWeight: '600' }}>Engagement Rate: {engagementRate}%</label>
               <button
                 onClick={() => {
                   const val = prompt('Enter engagement rate %:', engagementRate);
                   if (val && !isNaN(val) && val >= 0 && val <= 100) setEngagementRate(parseInt(val));
                 }}
-                style={{ padding: '10px 24px', borderRadius: '6px', border: '1px solid #ffcc00', background: 'transparent', color: '#ffcc00', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px' }}
+                style={{ padding: '10px 24px', borderRadius: '6px', border: '1px solid #ffcc00', background: 'transparent', color: '#ffcc00', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}
               >
                 Edit
               </button>
             </div>
-           <p style={{ color: '#cbd5e0', fontSize: '17px', margin: '0 0 8px 0' }}>Controls how many personnel actively use BetterUp coaching</p>
+            <p style={{ color: '#cbd5e0', fontSize: '17px', margin: '0 0 8px 0' }}>Controls how many personnel actively use BetterUp coaching</p>
             <p style={{ color: '#a0aec0', fontSize: '16px', margin: 0 }}>Example: {seats.toLocaleString()} × {engagementRate}% = {calculations.engaged.toLocaleString()} engaged</p>
           </div>
 
@@ -364,12 +356,11 @@ const avgClaimCost = 65000;
             );
           })}
         </div>
-
         {activeTab === 'dashboard' && (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '24px' }}>
               {[
-              { label: 'Total Savings', value: `$${(calculations.totalAnnualSavings / 1000000).toFixed(1)}M`, color: '#0066cc', icon: DollarSign },
+                { label: 'Total Savings', value: `$${(calculations.totalAnnualSavings / 1000000).toFixed(1)}M`, color: '#0066cc', icon: DollarSign },
                 { label: 'Program Cost', value: `$${(calculations.totalCost / 1000000).toFixed(1)}M`, color: '#666', icon: Calculator },
                 { label: 'Net Benefit', value: `$${(calculations.netSavings / 1000000).toFixed(1)}M`, color: '#00cc66', icon: TrendingUp },
                 { label: 'Break-Even', value: `${calculations.breakEvenMonths.toFixed(1)} months`, color: '#ff9900', icon: Activity }
@@ -378,7 +369,7 @@ const avgClaimCost = 65000;
                 return (
                   <div key={idx} style={{ background: 'white', borderRadius: '12px', padding: '26px', borderLeft: `5px solid ${metric.color}`, boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-                     <div style={{ fontSize: '19px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
+                      <div style={{ fontSize: '19px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
                       <Icon size={24} color={metric.color} />
                     </div>
                     <div style={{ fontSize: '42px', fontWeight: 'bold', color: metric.color }}>{metric.value}</div>
@@ -387,152 +378,95 @@ const avgClaimCost = 65000;
               })}
             </div>
 
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px', marginBottom: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Mental Health FECA Claims</h3>
-                    <p style={{ color: '#888', fontSize: '14px', margin: 0, lineHeight: 1.5 }}>BetterUp targets mental health claims only (PTSD, depression, anxiety, SUD) — approximately 35% of total CBP FECA claims</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+              <div style={{ background: 'white', borderRadius: '16px', padding: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
+                <div style={{ marginBottom: '20px' }}>
+                  <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Mental Health FECA Claims</h3>
+                  <p style={{ color: '#888', fontSize: '14px', margin: '0 0 12px 0', lineHeight: 1.5 }}>BetterUp targets mental health claims only (PTSD, depression, anxiety, SUD) — approximately 35% of total CBP FECA claims</p>
+                  <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706', display: 'inline-block' }}>
+                    <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
+                    <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${(calculations.fecaSavings / 1000000).toFixed(1)}M</span>
+                    <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}> (22%)</span>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div>
-                      <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706' }}>
-                        <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
-                        <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${(calculations.fecaSavings / 1000000).toFixed(1)}M</span>
-                        <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}> (22% reduction)</span>
-                      </div>
-                      <div style={{ fontSize: '11px', color: '#92400e', marginTop: '4px', fontStyle: 'italic' }}>Mental health claims only</div>
-                    </div>
-                  </div>
+                  <div style={{ fontSize: '11px', color: '#92400e', marginTop: '4px', fontStyle: 'italic' }}>Mental health claims only</div>
                 </div>
 
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '14px', color: '#666' }}>Before: ${(calculations.baselineFecaCost / 1000000).toFixed(2)}M</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: '#888' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <div style={{ width: '16px', height: '16px', background: '#fbbf24', borderRadius: '3px' }}></div>
-                        <span>Before</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <div style={{ width: '16px', height: '16px', background: '#f97316', borderRadius: '3px' }}></div>
-                        <span>After</span>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '14px', color: '#666' }}>After: ${(calculations.afterFecaCost / 1000000).toFixed(2)}M</span>
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px', color: '#666' }}>
+                    <span>Before: ${(calculations.baselineFecaCost / 1000000).toFixed(1)}M</span>
+                    <span>After: ${(calculations.afterFecaCost / 1000000).toFixed(1)}M</span>
                   </div>
                   <div style={{ height: '32px', background: '#fbbf24', borderRadius: '6px', overflow: 'hidden', position: 'relative' }}>
                     <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(calculations.afterFecaCost / calculations.baselineFecaCost) * 100}%`, background: '#f97316', borderRadius: '6px' }}></div>
                   </div>
                 </div>
 
-                <button onClick={() => setShowOnClaimBreakdown(!showOnClaimBreakdown)} style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #d97706', background: 'white', color: '#d97706', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', marginBottom: '16px' }}>
+                <button onClick={() => setShowOnClaimBreakdown(!showOnClaimBreakdown)} style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #d97706', background: 'white', color: '#d97706', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>
                   {showOnClaimBreakdown ? 'Hide' : 'Show'} breakdown
                 </button>
 
                 {showOnClaimBreakdown && (
-                  <div style={{ marginTop: '16px' }}>
-                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '12px', color: '#333' }}>Mental Health Factor Breakdown</h4>
-                    <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px', lineHeight: 1.5 }}>BetterUp's validated effectiveness on specific mental health conditions. Physical injuries excluded.</p>
+                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #eee' }}>
+                    <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', lineHeight: 1.5 }}>BetterUp validated effectiveness on mental health conditions. Physical injuries excluded.</p>
                     {[
-                      { label: 'PTSD', before: calculations.baselineFecaCost * 0.92, after: calculations.afterFecaCost * 0.92, savings: calculations.fecaSavings * 0.92 },
-                      { label: 'Depression', before: calculations.baselineFecaCost * 0.064, after: calculations.afterFecaCost * 0.064, savings: calculations.fecaSavings * 0.064 },
-                      { label: 'Anxiety', before: calculations.baselineFecaCost * 0.014, after: calculations.afterFecaCost * 0.014, savings: calculations.fecaSavings * 0.014 },
-                      { label: 'Substance Use (SUD)', before: 0, after: 0, savings: 0 }
+                      { label: 'PTSD', savings: calculations.fecaSavings * 0.92 },
+                      { label: 'Depression', savings: calculations.fecaSavings * 0.064 },
+                      { label: 'Anxiety', savings: calculations.fecaSavings * 0.014 },
+                      { label: 'SUD', savings: 0 }
                     ].map((item, i) => (
-                      <div key={i} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none' }}>
-                        <div style={{ fontSize: '15px', fontWeight: '600', color: '#333', marginBottom: '6px' }}>{item.label}</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#666' }}>
-                          <span>Before: ${(item.before / 1000000).toFixed(2)}M</span>
-                          <span>After: ${(item.after / 1000000).toFixed(2)}M</span>
-                          <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${(item.savings / 1000000).toFixed(2)}M</span>
-                        </div>
+                      <div key={i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
+                        <span style={{ color: '#333', fontWeight: '600' }}>{item.label}</span>
+                        <span style={{ color: '#d97706', fontWeight: 'bold' }}>${(item.savings / 1000000).toFixed(1)}M</span>
                       </div>
                     ))}
-                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '2px solid #e5e7eb' }}>
-                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '6px' }}>Total</div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
-                        <span style={{ color: '#666' }}>Before: ${(calculations.baselineFecaCost / 1000000).toFixed(2)}M</span>
-                        <span style={{ color: '#666' }}>After: ${(calculations.afterFecaCost / 1000000).toFixed(2)}M</span>
-                        <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${(calculations.fecaSavings / 1000000).toFixed(2)}M</span>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>
 
-              <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Off-Claim Economic Costs</h3>
-                    <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Productivity loss, absenteeism, and turnover</p>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706' }}>
-                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
-                      <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(2)}M</span>
-                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}> (4%)</span>
-                    </div>
+              <div style={{ background: 'white', borderRadius: '16px', padding: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
+                <div style={{ marginBottom: '20px' }}>
+                  <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Off-Claim Economic Costs</h3>
+                  <p style={{ color: '#888', fontSize: '14px', margin: '0 0 12px 0' }}>Productivity loss, absenteeism, and turnover</p>
+                  <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706', display: 'inline-block' }}>
+                    <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
+                    <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(1)}M</span>
                   </div>
                 </div>
 
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '14px', color: '#666' }}>Before: ${(calculations.baselineOffClaim / 1000000).toFixed(2)}M</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: '#888' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <div style={{ width: '16px', height: '16px', background: '#fbbf24', borderRadius: '3px' }}></div>
-                        <span>Before</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <div style={{ width: '16px', height: '16px', background: '#f97316', borderRadius: '3px' }}></div>
-                        <span>After</span>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '14px', color: '#666' }}>After: ${(calculations.afterOffClaim / 1000000).toFixed(2)}M</span>
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px', color: '#666' }}>
+                    <span>Before: ${(calculations.baselineOffClaim / 1000000).toFixed(1)}M</span>
+                    <span>After: ${(calculations.afterOffClaim / 1000000).toFixed(1)}M</span>
                   </div>
                   <div style={{ height: '32px', background: '#fbbf24', borderRadius: '6px', overflow: 'hidden', position: 'relative' }}>
                     <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(calculations.afterOffClaim / calculations.baselineOffClaim) * 100}%`, background: '#f97316', borderRadius: '6px' }}></div>
                   </div>
                 </div>
 
-                <button onClick={() => setShowOffClaimBreakdown(!showOffClaimBreakdown)} style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #d97706', background: 'white', color: '#d97706', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', marginBottom: '16px' }}>
+                <button onClick={() => setShowOffClaimBreakdown(!showOffClaimBreakdown)} style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #d97706', background: 'white', color: '#d97706', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>
                   {showOffClaimBreakdown ? 'Hide' : 'Show'} breakdown
                 </button>
 
                 {showOffClaimBreakdown && (
-                  <div style={{ marginTop: '16px' }}>
-                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '16px', color: '#333' }}>Breakdown by Factor</h4>
+                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #eee' }}>
                     {[
-                      { label: 'PTSD', before: calculations.baselineOffClaim * 0.672, after: calculations.afterOffClaim * 0.672, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.672 },
-                      { label: 'Depression', before: calculations.baselineOffClaim * 0.172, after: calculations.afterOffClaim * 0.172, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.172 },
-                      { label: 'Anxiety', before: calculations.baselineOffClaim * 0.041, after: calculations.afterOffClaim * 0.041, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.041 },
-                      { label: 'Substance Use (SUD)', before: calculations.baselineOffClaim * 0.115, after: calculations.afterOffClaim * 0.115, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.115 }
+                      { label: 'PTSD', pct: 0.672 },
+                      { label: 'Depression', pct: 0.172 },
+                      { label: 'Anxiety', pct: 0.041 },
+                      { label: 'SUD', pct: 0.115 }
                     ].map((item, i) => (
-                      <div key={i} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none' }}>
-                        <div style={{ fontSize: '15px', fontWeight: '600', color: '#333', marginBottom: '6px' }}>{item.label}</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#666' }}>
-                          <span>Before: ${(item.before / 1000000).toFixed(2)}M</span>
-                          <span>After: ${(item.after / 1000000).toFixed(2)}M</span>
-                          <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${(item.savings / 1000000).toFixed(2)}M</span>
-                        </div>
+                      <div key={i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
+                        <span style={{ color: '#333', fontWeight: '600' }}>{item.label}</span>
+                        <span style={{ color: '#d97706', fontWeight: 'bold' }}>${((calculations.retentionSavings + calculations.readinessEconomicValue) * item.pct / 1000000).toFixed(1)}M</span>
                       </div>
                     ))}
-                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '2px solid #e5e7eb' }}>
-                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '6px' }}>Total</div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
-                        <span style={{ color: '#666' }}>Before: ${(calculations.baselineOffClaim / 1000000).toFixed(2)}M</span>
-                        <span style={{ color: '#666' }}>After: ${(calculations.afterOffClaim / 1000000).toFixed(2)}M</span>
-                        <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(2)}M</span>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>
             </div>
           </div>
         )}
-
-{activeTab === 'details' && (
+        {activeTab === 'details' && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <h2 style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '20px', color: '#0066cc' }}>Model Assumptions & Methodology</h2>
             
@@ -600,37 +534,6 @@ const avgClaimCost = 65000;
                 </div>
               ))}
             </div>
-
-            <div style={{ padding: '26px', background: '#f8f9fa', borderRadius: '12px', border: '2px solid #666' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', cursor: 'pointer' }} onClick={() => setShowFactorBreakdown(!showFactorBreakdown)}>
-                <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#333', margin: 0 }}>Factor Breakdown Methodology</h3>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <button style={{ padding: '8px 18px', borderRadius: '6px', border: '1px solid #666', background: 'white', color: '#666', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>
-                    {showFactorBreakdown ? 'Hide' : 'Show'} Details
-                  </button>
-                  {showFactorBreakdown ? <ChevronUp size={20} color="#666" /> : <ChevronDown size={20} color="#666" />}
-                </div>
-              </div>
-              <p style={{ fontSize: '16px', color: '#666', marginBottom: '12px', lineHeight: 1.6 }}>
-                Per-factor cost savings and cases avoided. Configurable parameters available in Parameters tab.
-              </p>
-              
-              {showFactorBreakdown && (
-                <div style={{ marginTop: '24px', padding: '24px', background: 'white', borderRadius: '10px' }}>
-                  {[
-                    { name: 'PTSD', color: '#cc3333', desc: 'Role-specific prevalence 13.4% | Coaching effectiveness: 20% reduction | Economic pathways: Healthcare ($63,049), absent days (9.7), presenteeism (33.1 days)' },
-                    { name: 'Depression', color: '#cc3333', desc: 'Prevalence varies by role | Coaching effectiveness: 18% reduction | Pathways: Healthcare, absenteeism, productivity loss' },
-                    { name: 'Anxiety', color: '#cc3333', desc: 'Prevalence varies by role | Coaching effectiveness: 15% reduction | Pathways: Healthcare, productivity impacts' },
-                    { name: 'SUD', color: '#cc3333', desc: 'Conservative model: Minimal WC claims, significant off-claim costs through turnover and absenteeism' }
-                  ].map((factor, i) => (
-                    <div key={i} style={{ marginBottom: i < 3 ? '20px' : 0, paddingBottom: i < 3 ? '20px' : 0, borderBottom: i < 3 ? '1px solid #eee' : 'none' }}>
-                      <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: factor.color, marginBottom: '8px' }}>{factor.name}</h4>
-                      <p style={{ fontSize: '15px', color: '#666', margin: 0, lineHeight: 1.6 }}>{factor.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         )}
 
@@ -692,13 +595,12 @@ const avgClaimCost = 65000;
             </div>
           </div>
         )}
-
         {activeTab === 'factors' && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <div style={{ marginBottom: '28px' }}>
               <h2 style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '10px', color: '#0066cc' }}>Factor Configuration</h2>
               <p style={{ fontSize: '17px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                Configure prevalence rates, coaching effectiveness, and economic pathways for each mental health factor. All changes update calculations in real-time.
+                Configure prevalence rates, coaching effectiveness, and economic pathways for each mental health factor.
               </p>
             </div>
 
@@ -746,7 +648,7 @@ const avgClaimCost = 65000;
                       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <div style={{ textAlign: 'right' }}>
                           <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)', marginBottom: '4px' }}>Total Savings</div>
-                          <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'white' }}>${(totalFactorSavings / 1000000).toFixed(2)}M</div>
+                          <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'white' }}>${(totalFactorSavings / 1000000).toFixed(1)}M</div>
                         </div>
                         {isExpanded ? <ChevronUp size={28} color="white" /> : <ChevronDown size={28} color="white" />}
                       </div>
@@ -777,11 +679,6 @@ const avgClaimCost = 65000;
                             onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], prevalence: parseFloat(e.target.value) } }))}
                             style={{ width: '100%', height: '8px', accentColor: factor.color }}
                           />
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
-                            <span>0%</span>
-                            <span>25%</span>
-                          </div>
-                          <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% of personnel who have this condition</p>
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '28px' }}>
@@ -798,11 +695,6 @@ const avgClaimCost = 65000;
                               onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], coachingEffectiveness: parseInt(e.target.value) } }))}
                               style={{ width: '100%', height: '8px', accentColor: factor.color }}
                             />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
-                              <span>0%</span>
-                              <span>40%</span>
-                            </div>
-                            <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% reduction in symptom severity</p>
                           </div>
 
                           <div>
@@ -818,11 +710,6 @@ const avgClaimCost = 65000;
                               onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], wcFilingRate: parseInt(e.target.value) } }))}
                               style={{ width: '100%', height: '8px', accentColor: factor.color }}
                             />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
-                              <span>0%</span>
-                              <span>20%</span>
-                            </div>
-                            <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% of clinical cases who file WC claims</p>
                           </div>
 
                           <div>
@@ -838,11 +725,6 @@ const avgClaimCost = 65000;
                               onChange={(e) => setFactorConfig(prev => ({ ...prev, [factor.key]: { ...prev[factor.key], wcAcceptanceRate: parseInt(e.target.value) } }))}
                               style={{ width: '100%', height: '8px', accentColor: factor.color }}
                             />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
-                              <span>0%</span>
-                              <span>100%</span>
-                            </div>
-                            <p style={{ fontSize: '13px', color: '#666', marginTop: '6px', lineHeight: 1.4 }}>% of filed claims that are accepted</p>
                           </div>
                         </div>
 
@@ -940,15 +822,15 @@ const avgClaimCost = 65000;
                           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', paddingTop: '16px', borderTop: '2px solid rgba(0,0,0,0.1)' }}>
                             <div>
                               <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>WC Claim Savings</div>
-                              <div style={{ fontSize: '20px', fontWeight: 'bold', color: factor.color }}>${(wcClaimSavings / 1000000).toFixed(2)}M</div>
+                              <div style={{ fontSize: '20px', fontWeight: 'bold', color: factor.color }}>${(wcClaimSavings / 1000000).toFixed(1)}M</div>
                             </div>
                             <div>
                               <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Off-Claim Savings</div>
-                              <div style={{ fontSize: '20px', fontWeight: 'bold', color: factor.color }}>${(offClaimSavings / 1000000).toFixed(2)}M</div>
+                              <div style={{ fontSize: '20px', fontWeight: 'bold', color: factor.color }}>${(offClaimSavings / 1000000).toFixed(1)}M</div>
                             </div>
                             <div>
                               <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>Total Factor Savings</div>
-                              <div style={{ fontSize: '24px', fontWeight: 'bold', color: factor.color }}>${(totalFactorSavings / 1000000).toFixed(2)}M</div>
+                              <div style={{ fontSize: '24px', fontWeight: 'bold', color: factor.color }}>${(totalFactorSavings / 1000000).toFixed(1)}M</div>
                             </div>
                           </div>
                         </div>
@@ -1020,252 +902,67 @@ const avgClaimCost = 65000;
                   {calculations.engaged.toLocaleString()} engaged workers
                 </div>
               </div>
+            </div>
+          </div>
+        )}
 
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <label style={{ display: 'block', fontSize: '17px', fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>
-                  Hours per Day: 8
-                </label>
-                <input
-                  type="number"
-                  value="8"
-                  readOnly
-                  style={{ width: '100px', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                />
+        {activeTab === 'advanced' && (
+          <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+              <Shield size={32} color="#666" />
+              <div>
+                <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#666', margin: 0 }}>Advanced Settings</h2>
+                <p style={{ fontSize: '17px', color: '#888', margin: 0 }}>Comorbidity method, order, and overlap tuning</p>
               </div>
+            </div>
 
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333' }}>Wage/Benefit Rates ($/hr, loaded)</h3>
-                <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>Average hourly wage including benefits (wages × 0.615 = total compensation)</p>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      CBP Officers (OFO): $60/hr
-                    </label>
-                    <input
-                      type="number"
-                      value="60"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      Border Patrol (USBP): $58/hr
-                    </label>
-                    <input
-                      type="number"
-                      value="58"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      Air & Marine (AMO): $65/hr
-                    </label>
-                    <input
-                      type="number"
-                      value="65"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      Support Staff: $45/hr
-                    </label>
-                    <input
-                      type="number"
-                      value="45"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                    />
-                  </div>
-                </div>
-              </div>
+            <div style={{ padding: '24px', background: '#f0f7ff', borderRadius: '12px', marginBottom: '32px', border: '2px solid #0066cc' }}>
+              <h3 style={{ fontSize: '19px', fontWeight: 'bold', marginBottom: '12px', color: '#0066cc' }}>Comorbidity Handling</h3>
+              <p style={{ fontSize: '16px', color: '#333', margin: 0, lineHeight: 1.6 }}>
+                Using <strong>ordered attribution</strong> method. Factors are prioritized as: PTSD → Depression → Anxiety → SUD. Cases avoided are attributed to upstream factors first, preventing double-counting.
+              </p>
+            </div>
 
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>Factor Effectiveness Rates (%)</h3>
-                <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>% reduction in clinical cases from coaching intervention</p>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-                  {[
-                    { key: 'ptsd', label: 'PTSD', color: '#cc3333' },
-                    { key: 'depression', label: 'Depression', color: '#9966cc' },
-                    { key: 'anxiety', label: 'Anxiety', color: '#ff9900' },
-                    { key: 'sud', label: 'Substance Use (SUD)', color: '#0066cc' }
-                  ].map(factor => (
-                    <div key={factor.key}>
-                      <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#333' }}>
-                        {factor.label}: {factorConfig[factor.key].coachingEffectiveness}%
-                      </label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="40"
-                        step="1"
-                        value={factorConfig[factor.key].coachingEffectiveness}
-                        onChange={(e) => setFactorConfig(prev => ({
-                          ...prev,
-                          [factor.key]: { ...prev[factor.key], coachingEffectiveness: parseInt(e.target.value) }
-                        }))}
-                        style={{ width: '100%', height: '8px', accentColor: factor.color }}
-                      />
-                      <p style={{ fontSize: '13px', color: '#666', marginTop: '6px' }}>% reduction in clinical cases</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div style={{ padding: '28px', background: '#f8f9fa', borderRadius: '12px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '12px', color: '#333' }}>Overlap Overrides</h3>
+              <p style={{ fontSize: '15px', color: '#666', marginBottom: '24px', lineHeight: 1.6 }}>
+                Adjust the estimated overlap between factors. These overrides are used in the ordered attribution method to prevent double-counting.
+              </p>
 
-              <div style={{ padding: '24px', background: '#f8f9fa', borderRadius: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: 0 }}>Role Mix (%)</h3>
-                    <p style={{ fontSize: '14px', color: '#666', marginTop: '4px' }}>Must sum to 100%</p>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      alert('Role mix reset to organizational defaults');
-                    }}
-                    style={{ padding: '8px 16px', borderRadius: '6px', border: '2px solid #0066cc', background: 'white', color: '#0066cc', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
-                  >
-                    Reset to Default
-                  </button>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      OFO
+              <div style={{ display: 'grid', gap: '24px' }}>
+                {[
+                  { key: 'ptsdDepression', label: 'PTSD → Depression' },
+                  { key: 'ptsdAnxiety', label: 'PTSD → Anxiety' },
+                  { key: 'ptsdSud', label: 'PTSD → SUD' },
+                  { key: 'depressionAnxiety', label: 'Depression → Anxiety' },
+                  { key: 'depressionSud', label: 'Depression → SUD' },
+                  { key: 'anxietySud', label: 'Anxiety → SUD' }
+                ].map(overlap => (
+                  <div key={overlap.key} style={{ padding: '20px', background: 'white', borderRadius: '10px', border: '1px solid #ddd' }}>
+                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>{overlap.label}</h4>
+                    <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', color: '#0066cc', marginBottom: '10px' }}>
+                      Overlap Rate: {overlapRates[overlap.key]}%
                     </label>
                     <input
-                      type="number"
-                      value="43.3"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="5"
+                      value={overlapRates[overlap.key]}
+                      onChange={(e) => setOverlapRates(prev => ({ ...prev, [overlap.key]: parseInt(e.target.value) }))}
+                      style={{ width: '100%', height: '8px', accentColor: '#0066cc' }}
                     />
                   </div>
-                  
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      USBP
-                    </label>
-                    <input
-                      type="number"
-                      value="33.3"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      AMO
-                    </label>
-                    <input
-                      type="number"
-                      value="3.0"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#666' }}>
-                      Support
-                    </label>
-                    <input
-                      type="number"
-                      value="20.4"
-                      readOnly
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '15px', background: '#fff' }}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ marginTop: '12px', padding: '12px', background: '#e6f2ff', borderRadius: '6px' }}>
-                  <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#0066cc' }}>Current total: 100.0%</span>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         )}
-{activeTab === 'advanced' && (
-  <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
-      <Shield size={32} color="#666" />
-      <div>
-        <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#666', margin: 0 }}>Advanced Settings</h2>
-        <p style={{ fontSize: '17px', color: '#888', margin: 0 }}>Comorbidity method, order, and overlap tuning</p>
-      </div>
-    </div>
 
-    <div style={{ padding: '24px', background: '#f0f7ff', borderRadius: '12px', marginBottom: '32px', border: '2px solid #0066cc' }}>
-      <h3 style={{ fontSize: '19px', fontWeight: 'bold', marginBottom: '12px', color: '#0066cc' }}>Comorbidity Handling</h3>
-      <p style={{ fontSize: '16px', color: '#333', margin: 0, lineHeight: 1.6 }}>
-        Using <strong>ordered attribution</strong> method. Factors are prioritized as: PTSD → Depression → Anxiety → SUD. Cases avoided are attributed to upstream factors first, preventing double-counting.
-      </p>
-    </div>
+        <button onClick={() => setShowAssistant(!showAssistant)} style={{ position: 'fixed', bottom: '24px', right: '24px', background: '#0066cc', color: 'white', padding: '18px', borderRadius: '50%', border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(0,102,204,0.4)', zIndex: 999 }}>
+          <MessageSquare size={26} />
+        </button>
 
-    <div style={{ padding: '28px', background: '#f8f9fa', borderRadius: '12px' }}>
-      <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '12px', color: '#333' }}>Overlap Overrides</h3>
-      <p style={{ fontSize: '15px', color: '#666', marginBottom: '24px', lineHeight: 1.6 }}>
-        Adjust the estimated overlap between factors. Values represent P(column | row). These overrides are used in the ordered attribution method to prevent double-counting.
-      </p>
-
-      <div style={{ display: 'grid', gap: '24px' }}>
-        {[
-          { key: 'ptsdDepression', label: 'PTSD → Depression', desc: 'Estimated overlap rate used during ordered attribution.' },
-          { key: 'ptsdAnxiety', label: 'PTSD → Anxiety', desc: 'Estimated overlap rate used during ordered attribution.' },
-          { key: 'ptsdSud', label: 'PTSD → SUD', desc: 'Estimated overlap rate used during ordered attribution.' },
-          { key: 'depressionAnxiety', label: 'Depression → Anxiety', desc: 'Estimated overlap rate used during ordered attribution.' },
-          { key: 'depressionSud', label: 'Depression → SUD', desc: 'Estimated overlap rate used during ordered attribution.' },
-          { key: 'anxietySud', label: 'Anxiety → SUD', desc: 'Estimated overlap rate used during ordered attribution.' }
-        ].map(overlap => (
-          <div key={overlap.key} style={{ padding: '20px', background: 'white', borderRadius: '10px', border: '1px solid #ddd' }}>
-            <div style={{ marginBottom: '16px' }}>
-              <h4 style={{ fontSize: '17px', fontWeight: 'bold', color: '#333', margin: '0 0 4px 0' }}>{overlap.label}</h4>
-              <p style={{ fontSize: '14px', color: '#888', margin: 0 }}>{overlap.desc}</p>
-            </div>
-            
-            <div style={{ marginBottom: '8px' }}>
-              <label style={{ display: 'block', fontSize: '16px', fontWeight: '600', color: '#0066cc', marginBottom: '10px' }}>
-                Overlap Rate: {overlapRates[overlap.key]}%
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="5"
-                value={overlapRates[overlap.key]}
-                onChange={(e) => setOverlapRates(prev => ({ ...prev, [overlap.key]: parseInt(e.target.value) }))}
-                style={{ width: '100%', height: '8px', accentColor: '#0066cc' }}
-              />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#888', marginTop: '6px' }}>
-                <span>0%</span>
-                <span>50%</span>
-                <span>100%</span>
-              </div>
-            </div>
-            <p style={{ fontSize: '13px', color: '#666', marginTop: '8px', fontStyle: 'italic' }}>
-              Drag to adjust shared-case attribution.
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ marginTop: '24px', padding: '16px', background: '#fff8e6', borderRadius: '8px', border: '1px solid #ffcc00' }}>
-        <p style={{ fontSize: '14px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-          <strong>Note:</strong> Overlap rates are based on research literature estimates. Higher overlap rates reduce total cases avoided by preventing double-counting of comorbid conditions.
-        </p>
-      </div>
-    </div>
-  </div>
-)}
         {showAssistant && (
           <div style={{ position: 'fixed', bottom: '100px', right: '24px', width: '400px', maxWidth: '90vw', background: 'white', borderRadius: '16px', boxShadow: '0 8px 30px rgba(0,0,0,0.25)', zIndex: 1000, border: '2px solid #0066cc' }}>
             <div style={{ background: '#0066cc', padding: '18px', borderRadius: '14px 14px 0 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1290,10 +987,6 @@ const avgClaimCost = 65000;
             </div>
           </div>
         )}
-
-        <button onClick={() => setShowAssistant(!showAssistant)} style={{ position: 'fixed', bottom: '24px', right: '24px', background: '#0066cc', color: 'white', padding: '18px', borderRadius: '50%', border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(0,102,204,0.4)', zIndex: 999 }}>
-          <MessageSquare size={26} />
-        </button>
       </div>
     </div>
   );
