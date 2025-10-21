@@ -63,7 +63,7 @@ const LandingPage = ({ onSelect }) => {
               </div>
             </div>
           </div>
-        </div>
+          </div>
 
         <div style={{ background: '#1a1a1a', borderRadius: '16px', padding: '32px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>Select Your Organization or Sector</h2>
@@ -190,10 +190,12 @@ const [factorConfig, setFactorConfig] = useState({
     const separationsPrevented = Math.round(engaged * (retentionEffectiveness / 100));
     const retentionSavings = separationsPrevented * workforce.replacementCost;
     
-    const avgClaimCost = 65000;
-    const claimsRate = workforce.workersCompClaims / workforce.personnel;
-    const expectedClaims = seats * claimsRate;
-    const claimsPrevented = Math.round(expectedClaims * 0.22);
+const avgClaimCost = 65000;
+    const totalClaimsRate = workforce.workersCompClaims / workforce.personnel;
+    const mentalHealthClaimsPct = 0.35; // 35% of CBP FECA claims are mental health related
+    const mentalHealthClaimsRate = totalClaimsRate * mentalHealthClaimsPct;
+    const expectedMentalHealthClaims = seats * mentalHealthClaimsRate;
+    const claimsPrevented = Math.round(expectedMentalHealthClaims * 0.22);
     const fecaSavings = claimsPrevented * avgClaimCost;
     
     const readinessImproved = Math.round(engaged * (readinessEffectiveness / 100));
@@ -390,14 +392,17 @@ const [factorConfig, setFactorConfig] = useState({
               <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
-                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>On-Claim Workers' Comp</h3>
-                    <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Projected mental health WC claims</p>
+                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Mental Health FECA Claims</h3>
+                    <p style={{ color: '#888', fontSize: '14px', margin: 0, lineHeight: 1.5 }}>BetterUp targets mental health claims only (PTSD, depression, anxiety, SUD) — approximately 35% of total CBP FECA claims</p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706' }}>
-                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
-                      <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</span>
-                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}> (4%)</span>
+                    <div>
+                      <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706' }}>
+                        <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
+                        <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${(calculations.fecaSavings / 1000000).toFixed(1)}M</span>
+                        <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}> (22% reduction)</span>
+                      </div>
+                      <div style={{ fontSize: '11px', color: '#92400e', marginTop: '4px', fontStyle: 'italic' }}>Mental health claims only</div>
                     </div>
                   </div>
                 </div>
@@ -428,7 +433,8 @@ const [factorConfig, setFactorConfig] = useState({
 
                 {showOnClaimBreakdown && (
                   <div style={{ marginTop: '16px' }}>
-                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '16px', color: '#333' }}>Breakdown by Factor</h4>
+                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '12px', color: '#333' }}>Mental Health Factor Breakdown</h4>
+                    <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px', lineHeight: 1.5 }}>BetterUp's validated effectiveness on specific mental health conditions. Physical injuries excluded.</p>
                     {[
                       { label: 'PTSD', before: calculations.baselineFecaCost * 0.92, after: calculations.afterFecaCost * 0.92, savings: calculations.fecaSavings * 0.92 },
                       { label: 'Depression', before: calculations.baselineFecaCost * 0.064, after: calculations.afterFecaCost * 0.064, savings: calculations.fecaSavings * 0.064 },
@@ -573,8 +579,11 @@ const [factorConfig, setFactorConfig] = useState({
                   num: 4,
                   title: 'FECA Mental Health Claims',
                   color: '#ff9900',
-                  content: '$65,000 avg claim. 22% prevention rate. NTEU: 156 CBP suicides (2007-2022).',
-                  links: [{ url: 'https://www.nteu.org/legislative-action/congressional-testimony/fy-2025-budget-request-cbp', label: 'NTEU Testimony' }]
+                  content: '$65,000 avg claim. 22% prevention rate (JAMA 2024). Model applies BetterUp effectiveness ONLY to mental health claims (PTSD, depression, anxiety, SUD), which represent ~35% of total CBP FECA claims. Physical injury claims are excluded. NTEU reports 156 CBP suicides (2007-2022).',
+                  links: [
+                    { url: 'https://www.nteu.org/legislative-action/congressional-testimony/fy-2025-budget-request-cbp', label: 'NTEU Testimony' },
+                    { url: 'https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2816987', label: 'JAMA 2024 Study' }
+                  ]
                 }
               ].map((section) => (
                 <div key={section.num} style={{ padding: '26px', background: '#f8f9fa', borderRadius: '12px', borderLeft: `5px solid ${section.color}` }}>
