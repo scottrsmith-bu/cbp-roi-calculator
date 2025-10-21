@@ -249,13 +249,13 @@ const [factorConfig, setFactorConfig] = useState({
             </div>
             <div>
               <div style={{ fontSize: '17px', color: 'white', fontWeight: '600', marginBottom: '4px' }}>ANNUAL IMPACT PROJECTION</div>
-              <div style={{ fontSize: '52px', fontWeight: 'bold', color: 'white', lineHeight: 1 }}>${(calculations.netSavings / 1000000).toFixed(2)}M</div>
+              <div style={{ fontSize: '52px', fontWeight: 'bold', color: 'white', lineHeight: 1 }}>${(calculations.netSavings / 1000000).toFixed(1)}M</div>
             </div>
           </div>
           
           <div style={{ background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
             <div style={{ fontSize: '20px', color: '#333', fontWeight: '500', lineHeight: 1.7 }}>
-              BetterUp saves {workforce.name} <strong style={{ color: '#0066cc', fontSize: '24px' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M annually</strong> through 
+                 BetterUp saves {workforce.name} <strong style={{ color: '#0066cc', fontSize: '24px' }}>${(calculations.totalAnnualSavings / 1000000).toFixed(1)}M annually</strong> through 
               <strong style={{ color: '#cc3333', fontSize: '22px' }}> (1) reducing costly FECA mental health claims</strong> and 
               <strong style={{ color: '#ff9900', fontSize: '22px' }}> (2) preventing high-cost turnover</strong> ahead of the 2028 retirement crisis.
             </div>
@@ -277,11 +277,11 @@ const [factorConfig, setFactorConfig] = useState({
           </div>
         </div>
 
-        <div style={{ background: '#2a2a2a', borderRadius: '16px', padding: '32px', marginBottom: '24px' }}>
+     <div style={{ background: 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)', borderRadius: '16px', padding: '32px', marginBottom: '24px', border: '1px solid #4a5568' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: 'white', margin: '0 0 8px 0' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
-              <p style={{ color: '#aaa', margin: 0, fontSize: '16px' }}>Population: {workforce.personnel.toLocaleString()}</p>
+              <h2 style={{ fontSize: '34px', fontWeight: 'bold', color: 'white', margin: '0 0 8px 0' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
+              <p style={{ color: '#cbd5e0', margin: 0, fontSize: '18px' }}>Population: {workforce.personnel.toLocaleString()}</p>
             </div>
             <button
               onClick={() => {
@@ -296,7 +296,7 @@ const [factorConfig, setFactorConfig] = useState({
 
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '12px' }}>
-              <label style={{ fontSize: '19px', color: 'white', fontWeight: '600' }}>Engagement Rate: {engagementRate}%</label>
+              
               <button
                 onClick={() => {
                   const val = prompt('Enter engagement rate %:', engagementRate);
@@ -307,21 +307,21 @@ const [factorConfig, setFactorConfig] = useState({
                 Edit
               </button>
             </div>
-            <p style={{ color: '#aaa', fontSize: '16px', margin: '0 0 8px 0' }}>Controls how many personnel actively use BetterUp coaching</p>
-            <p style={{ color: '#888', fontSize: '15px', margin: 0 }}>Example: {seats.toLocaleString()} × {engagementRate}% = {calculations.engaged.toLocaleString()} engaged</p>
+           <p style={{ color: '#cbd5e0', fontSize: '17px', margin: '0 0 8px 0' }}>Controls how many personnel actively use BetterUp coaching</p>
+            <p style={{ color: '#a0aec0', fontSize: '16px', margin: 0 }}>Example: {seats.toLocaleString()} × {engagementRate}% = {calculations.engaged.toLocaleString()} engaged</p>
           </div>
 
-          <div style={{ padding: '24px', background: '#1a1a1a', borderRadius: '12px', border: '1px solid #333' }}>
-            <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>Key Model Parameters</h3>
+          <div style={{ padding: '24px', background: '#1a202c', borderRadius: '12px', border: '1px solid #4a5568' }}>
+            <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>Key Model Parameters</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
               <div>
-                <div style={{ fontSize: '17px', color: '#aaa', marginBottom: '6px', fontWeight: '600' }}>Engagement Rate ({engagementRate}%)</div>
-                <div style={{ fontSize: '15px', color: '#888', lineHeight: 1.5 }}>Controls <strong style={{ color: 'white' }}>how many</strong> personnel use coaching</div>
+                <div style={{ fontSize: '18px', color: '#cbd5e0', marginBottom: '6px', fontWeight: '600' }}>Engagement Rate ({engagementRate}%)</div>
+                <div style={{ fontSize: '16px', color: '#a0aec0', lineHeight: 1.5 }}>Controls <strong style={{ color: 'white' }}>how many</strong> personnel use coaching</div>
               </div>
               <div>
-                <div style={{ fontSize: '17px', color: '#aaa', marginBottom: '6px', fontWeight: '600' }}>Readiness Rate ({readinessEffectiveness}%)</div>
-                <div style={{ fontSize: '15px', color: '#888', lineHeight: 1.5 }}>Controls <strong style={{ color: 'white' }}>how much</strong> performance improves</div>
-                <div style={{ fontSize: '14px', color: '#666', marginTop: '4px' }}>Auto-calculated from Performance Drivers</div>
+                <div style={{ fontSize: '18px', color: '#cbd5e0', marginBottom: '6px', fontWeight: '600' }}>Readiness Rate ({readinessEffectiveness}%)</div>
+                <div style={{ fontSize: '16px', color: '#a0aec0', lineHeight: 1.5 }}>Controls <strong style={{ color: 'white' }}>how much</strong> performance improves</div>
+                <div style={{ fontSize: '15px', color: '#718096', marginTop: '4px' }}>Auto-calculated from Performance Drivers</div>
               </div>
             </div>
           </div>
@@ -366,19 +366,19 @@ const [factorConfig, setFactorConfig] = useState({
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '24px' }}>
               {[
-                { label: 'Total Savings', value: `$${(calculations.totalAnnualSavings / 1000000).toFixed(2)}M`, color: '#0066cc', icon: DollarSign },
-                { label: 'Program Cost', value: `$${(calculations.totalCost / 1000000).toFixed(2)}M`, color: '#666', icon: Calculator },
-                { label: 'Net Benefit', value: `$${(calculations.netSavings / 1000000).toFixed(2)}M`, color: '#00cc66', icon: TrendingUp },
+              { label: 'Total Savings', value: `$${(calculations.totalAnnualSavings / 1000000).toFixed(1)}M`, color: '#0066cc', icon: DollarSign },
+                { label: 'Program Cost', value: `$${(calculations.totalCost / 1000000).toFixed(1)}M`, color: '#666', icon: Calculator },
+                { label: 'Net Benefit', value: `$${(calculations.netSavings / 1000000).toFixed(1)}M`, color: '#00cc66', icon: TrendingUp },
                 { label: 'Break-Even', value: `${calculations.breakEvenMonths.toFixed(1)} months`, color: '#ff9900', icon: Activity }
               ].map((metric, idx) => {
                 const Icon = metric.icon;
                 return (
                   <div key={idx} style={{ background: 'white', borderRadius: '12px', padding: '26px', borderLeft: `5px solid ${metric.color}`, boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-                      <div style={{ fontSize: '17px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
+                     <div style={{ fontSize: '19px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
                       <Icon size={24} color={metric.color} />
                     </div>
-                    <div style={{ fontSize: '38px', fontWeight: 'bold', color: metric.color }}>{metric.value}</div>
+                    <div style={{ fontSize: '19px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
                   </div>
                 );
               })}
