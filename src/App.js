@@ -388,8 +388,8 @@ const avgClaimCost = 65000;
               })}
             </div>
 
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '24px', marginBottom: '24px' }}>
-              <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Mental Health FECA Claims</h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
                     <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Mental Health FECA Claims</h3>
@@ -465,7 +465,7 @@ const avgClaimCost = 65000;
               <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
-                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Off-Claim Economic Costs</h3>
+                    <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Off-Claim Economic Costs</h3>
                     <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Productivity loss, absenteeism, and turnover</p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
