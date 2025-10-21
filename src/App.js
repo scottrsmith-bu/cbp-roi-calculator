@@ -36,7 +36,7 @@ const LandingPage = ({ onSelect }) => {
               <p style={{ fontSize: '16px', color: '#cc3333', margin: '4px 0 0 0', fontWeight: '600' }}>Multi-Factor Risk Reduction Model</p>
             </div>
           </div>
-          
+
 <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '12px', marginTop: '16px' }}>
             <p style={{ color: '#1f2937', fontSize: '19px', margin: 0, lineHeight: 1.7, fontWeight: '500' }}>
               This calculator projects financial impact through a <strong>dual-pathway methodology</strong>: <span style={{ color: '#dc2626', fontWeight: '600' }}>(1) reducing costly FECA mental health claims (PTSD, depression, anxiety, substance use disorders)</span> and <span style={{ color: '#dc2626', fontWeight: '600' }}>(2) preventing high-cost personnel turnover</span> through precision resilience development. Based on 4 years of proven Air Force results (2021-2025) and comprehensive GAO research.
