@@ -63,7 +63,6 @@ const LandingPage = ({ onSelect }) => {
               </div>
             </div>
           </div>
-          </div>
 
         <div style={{ background: '#1a1a1a', borderRadius: '16px', padding: '32px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>Select Your Organization or Sector</h2>
@@ -389,7 +388,6 @@ const avgClaimCost = 65000;
             </div>
 
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Mental Health FECA Claims</h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
                     <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Mental Health FECA Claims</h3>
