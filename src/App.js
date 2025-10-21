@@ -383,50 +383,72 @@ const [factorConfig, setFactorConfig] = useState({
               })}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '24px', marginBottom: '24px' }}>
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '24px', marginBottom: '24px' }}>
               <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
-                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#cc3333', margin: '0 0 6px 0' }}>On-Claim Workers Comp</h3>
+                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>On-Claim Workers' Comp</h3>
                     <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Projected mental health WC claims</p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '14px', color: '#ff9900', marginBottom: '4px', fontWeight: '600' }}>
-                      Savings ${(calculations.fecaSavings / 1000000).toFixed(2)}M (22%)
+                    <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706' }}>
+                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
+                      <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${(calculations.fecaSavings / 1000000).toFixed(2)}M</span>
+                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}> (4%)</span>
                     </div>
-                    <button onClick={() => setShowOnClaimBreakdown(!showOnClaimBreakdown)} style={{ padding: '8px 18px', borderRadius: '6px', border: '1px solid #cc3333', background: 'white', color: '#cc3333', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>
-                      {showOnClaimBreakdown ? 'Hide' : 'Show'} Breakdown
-                    </button>
                   </div>
                 </div>
 
-                <div style={{ background: '#fff5f0', borderRadius: '10px', padding: '16px', marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <span style={{ fontSize: '15px', color: '#666' }}>Before:</span>
-                    <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#999' }}>${(calculations.baselineFecaCost / 1000000).toFixed(2)}M</span>
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '14px', color: '#666' }}>Before: ${(calculations.baselineFecaCost / 1000000).toFixed(2)}M</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: '#888' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ width: '16px', height: '16px', background: '#fbbf24', borderRadius: '3px' }}></div>
+                        <span>Before</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ width: '16px', height: '16px', background: '#f97316', borderRadius: '3px' }}></div>
+                        <span>After</span>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '14px', color: '#666' }}>After: ${(calculations.afterFecaCost / 1000000).toFixed(2)}M</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '15px', color: '#666' }}>After:</span>
-                    <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#cc3333' }}>${(calculations.afterFecaCost / 1000000).toFixed(2)}M</span>
+                  <div style={{ height: '32px', background: '#fbbf24', borderRadius: '6px', overflow: 'hidden', position: 'relative' }}>
+                    <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(calculations.afterFecaCost / calculations.baselineFecaCost) * 100}%`, background: '#f97316', borderRadius: '6px' }}></div>
                   </div>
                 </div>
+
+                <button onClick={() => setShowOnClaimBreakdown(!showOnClaimBreakdown)} style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #d97706', background: 'white', color: '#d97706', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', marginBottom: '16px' }}>
+                  {showOnClaimBreakdown ? 'Hide' : 'Show'} breakdown
+                </button>
 
                 {showOnClaimBreakdown && (
-                  <div style={{ marginTop: '20px', padding: '20px', background: '#fff5f5', borderRadius: '10px', borderLeft: '3px solid #cc3333' }}>
-                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '14px', color: '#cc3333' }}>Breakdown by Factor</h4>
+                  <div style={{ marginTop: '16px' }}>
+                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '16px', color: '#333' }}>Breakdown by Factor</h4>
                     {[
-                      { label: 'PTSD', pct: 0.92, savings: calculations.fecaSavings * 0.92 },
-                      { label: 'Depression', pct: 0.064, savings: calculations.fecaSavings * 0.064 },
-                      { label: 'Anxiety', pct: 0.014, savings: calculations.fecaSavings * 0.014 },
-                      { label: 'Substance Use (SUD)', pct: 0, savings: 0 }
+                      { label: 'PTSD', before: calculations.baselineFecaCost * 0.92, after: calculations.afterFecaCost * 0.92, savings: calculations.fecaSavings * 0.92 },
+                      { label: 'Depression', before: calculations.baselineFecaCost * 0.064, after: calculations.afterFecaCost * 0.064, savings: calculations.fecaSavings * 0.064 },
+                      { label: 'Anxiety', before: calculations.baselineFecaCost * 0.014, after: calculations.afterFecaCost * 0.014, savings: calculations.fecaSavings * 0.014 },
+                      { label: 'Substance Use (SUD)', before: 0, after: 0, savings: 0 }
                     ].map((item, i) => (
-                      <div key={i} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: i < 3 ? '1px solid #ffe0e0' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '16px', color: '#666', fontWeight: '500' }}>{item.label}</span>
-                        <span style={{ fontSize: '17px', fontWeight: 'bold', color: '#333' }}>
-                          ${(item.savings / 1000000).toFixed(2)}M
-                        </span>
+                      <div key={i} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none' }}>
+                        <div style={{ fontSize: '15px', fontWeight: '600', color: '#333', marginBottom: '6px' }}>{item.label}</div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#666' }}>
+                          <span>Before: ${(item.before / 1000000).toFixed(2)}M</span>
+                          <span>After: ${(item.after / 1000000).toFixed(2)}M</span>
+                          <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${(item.savings / 1000000).toFixed(2)}M</span>
+                        </div>
                       </div>
                     ))}
+                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '2px solid #e5e7eb' }}>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '6px' }}>Total</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
+                        <span style={{ color: '#666' }}>Before: ${(calculations.baselineFecaCost / 1000000).toFixed(2)}M</span>
+                        <span style={{ color: '#666' }}>After: ${(calculations.afterFecaCost / 1000000).toFixed(2)}M</span>
+                        <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${(calculations.fecaSavings / 1000000).toFixed(2)}M</span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -434,46 +456,68 @@ const [factorConfig, setFactorConfig] = useState({
               <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
-                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#0066cc', margin: '0 0 6px 0' }}>Off-Claim Economic Costs</h3>
-                    <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Productivity loss, absenteeism, turnover</p>
+                    <h3 style={{ fontSize: '21px', fontWeight: 'bold', color: '#8B4513', margin: '0 0 6px 0' }}>Off-Claim Economic Costs</h3>
+                    <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Productivity loss, absenteeism, and turnover</p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '14px', color: '#00aa88', marginBottom: '4px', fontWeight: '600' }}>
-                      Savings ${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(2)}M (30%)
+                    <div style={{ padding: '8px 16px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #d97706' }}>
+                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}>Savings </span>
+                      <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#d97706' }}>${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(2)}M</span>
+                      <span style={{ fontSize: '13px', color: '#92400e', fontWeight: '600' }}> (4%)</span>
                     </div>
-                    <button onClick={() => setShowOffClaimBreakdown(!showOffClaimBreakdown)} style={{ padding: '8px 18px', borderRadius: '6px', border: '1px solid #0066cc', background: 'white', color: '#0066cc', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>
-                      {showOffClaimBreakdown ? 'Hide' : 'Show'} Breakdown
-                    </button>
                   </div>
                 </div>
 
-                <div style={{ background: '#f0f7ff', borderRadius: '10px', padding: '16px', marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <span style={{ fontSize: '15px', color: '#666' }}>Before:</span>
-                    <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#999' }}>${(calculations.baselineOffClaim / 1000000).toFixed(2)}M</span>
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '14px', color: '#666' }}>Before: ${(calculations.baselineOffClaim / 1000000).toFixed(2)}M</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: '#888' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ width: '16px', height: '16px', background: '#fbbf24', borderRadius: '3px' }}></div>
+                        <span>Before</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ width: '16px', height: '16px', background: '#f97316', borderRadius: '3px' }}></div>
+                        <span>After</span>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '14px', color: '#666' }}>After: ${(calculations.afterOffClaim / 1000000).toFixed(2)}M</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '15px', color: '#666' }}>After:</span>
-                    <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#0066cc' }}>${(calculations.afterOffClaim / 1000000).toFixed(2)}M</span>
+                  <div style={{ height: '32px', background: '#fbbf24', borderRadius: '6px', overflow: 'hidden', position: 'relative' }}>
+                    <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(calculations.afterOffClaim / calculations.baselineOffClaim) * 100}%`, background: '#f97316', borderRadius: '6px' }}></div>
                   </div>
                 </div>
+
+                <button onClick={() => setShowOffClaimBreakdown(!showOffClaimBreakdown)} style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #d97706', background: 'white', color: '#d97706', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', marginBottom: '16px' }}>
+                  {showOffClaimBreakdown ? 'Hide' : 'Show'} breakdown
+                </button>
 
                 {showOffClaimBreakdown && (
-                  <div style={{ marginTop: '20px', padding: '20px', background: '#f0f7ff', borderRadius: '10px', borderLeft: '3px solid #0066cc' }}>
-                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '14px', color: '#0066cc' }}>Breakdown by Factor</h4>
+                  <div style={{ marginTop: '16px' }}>
+                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', marginBottom: '16px', color: '#333' }}>Breakdown by Factor</h4>
                     {[
-                      { label: 'PTSD', pct: 0.672, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.672 },
-                      { label: 'Depression', pct: 0.172, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.172 },
-                      { label: 'Anxiety', pct: 0.041, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.041 },
-                      { label: 'Substance Use (SUD)', pct: 0.115, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.115 }
+                      { label: 'PTSD', before: calculations.baselineOffClaim * 0.672, after: calculations.afterOffClaim * 0.672, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.672 },
+                      { label: 'Depression', before: calculations.baselineOffClaim * 0.172, after: calculations.afterOffClaim * 0.172, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.172 },
+                      { label: 'Anxiety', before: calculations.baselineOffClaim * 0.041, after: calculations.afterOffClaim * 0.041, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.041 },
+                      { label: 'Substance Use (SUD)', before: calculations.baselineOffClaim * 0.115, after: calculations.afterOffClaim * 0.115, savings: (calculations.retentionSavings + calculations.readinessEconomicValue) * 0.115 }
                     ].map((item, i) => (
-                      <div key={i} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: i < 3 ? '1px solid #d4e5f7' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '16px', color: '#666', fontWeight: '500' }}>{item.label}</span>
-                        <span style={{ fontSize: '17px', fontWeight: 'bold', color: '#333' }}>
-                          ${(item.savings / 1000000).toFixed(2)}M
-                        </span>
+                      <div key={i} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none' }}>
+                        <div style={{ fontSize: '15px', fontWeight: '600', color: '#333', marginBottom: '6px' }}>{item.label}</div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#666' }}>
+                          <span>Before: ${(item.before / 1000000).toFixed(2)}M</span>
+                          <span>After: ${(item.after / 1000000).toFixed(2)}M</span>
+                          <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${(item.savings / 1000000).toFixed(2)}M</span>
+                        </div>
                       </div>
                     ))}
+                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '2px solid #e5e7eb' }}>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '6px' }}>Total</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
+                        <span style={{ color: '#666' }}>Before: ${(calculations.baselineOffClaim / 1000000).toFixed(2)}M</span>
+                        <span style={{ color: '#666' }}>After: ${(calculations.afterOffClaim / 1000000).toFixed(2)}M</span>
+                        <span style={{ color: '#d97706', fontWeight: 'bold' }}>−${((calculations.retentionSavings + calculations.readinessEconomicValue) / 1000000).toFixed(2)}M</span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
