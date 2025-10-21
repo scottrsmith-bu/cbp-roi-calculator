@@ -380,7 +380,7 @@ const [factorConfig, setFactorConfig] = useState({
                      <div style={{ fontSize: '19px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
                       <Icon size={24} color={metric.color} />
                     </div>
-                    <div style={{ fontSize: '19px', color: '#666', fontWeight: '600' }}>{metric.label}</div>
+                    <div style={{ fontSize: '42px', fontWeight: 'bold', color: metric.color }}>{metric.value}</div>
                   </div>
                 );
               })}
