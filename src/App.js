@@ -43,23 +43,23 @@ const LandingPage = ({ onSelect }) => {
             </p>
           </div>
 
-          <div style={{ marginTop: '20px', padding: '24px', background: '#fef3c7', borderRadius: '12px', border: '2px solid #d97706' }}>
-            <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: '#92400e', marginBottom: '16px' }}>Conservative Model Assumptions</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-              <div>
-                <div style={{ fontSize: '16px', color: '#374151', marginBottom: '8px', fontWeight: '600' }}>Retention Effectiveness</div>
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#d97706', marginBottom: '4px' }}>7%</div>
-                <div style={{ fontSize: '15px', color: '#4b5563', lineHeight: 1.5 }}>Of engaged personnel who would have left but stay (Career 4% + Leadership 3%). Conservative conversion from Air Force +20% commitment intent to actual behavior.</div>
+<div style={{ marginTop: '20px', padding: '28px', background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', borderRadius: '12px', border: '2px solid #0066cc', boxShadow: '0 2px 8px rgba(0,102,204,0.1)' }}>
+            <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: '#0066cc', marginBottom: '20px' }}>Conservative Model Assumptions</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+              <div style={{ padding: '20px', background: 'white', borderRadius: '10px', border: '2px solid #ff9900', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
+                <div style={{ fontSize: '15px', color: '#64748b', marginBottom: '10px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Retention Effectiveness</div>
+                <div style={{ fontSize: '42px', fontWeight: 'bold', color: '#ff9900', marginBottom: '8px', lineHeight: 1 }}>7%</div>
+                <div style={{ fontSize: '15px', color: '#334155', lineHeight: 1.6 }}>Of engaged personnel who would have left but stay (Career 4% + Leadership 3%). Conservative conversion from Air Force +20% commitment intent to actual behavior.</div>
               </div>
-              <div>
-                <div style={{ fontSize: '16px', color: '#374151', marginBottom: '8px', fontWeight: '600' }}>Readiness Enhancement</div>
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#1d4ed8', marginBottom: '4px' }}>37%</div>
-                <div style={{ fontSize: '15px', color: '#4b5563', lineHeight: 1.5 }}>Of engaged personnel who improve job performance (Mission 17% + Resilience 15% + Standards 5%). Based on Air Force +17% mission readiness data.</div>
+              <div style={{ padding: '20px', background: 'white', borderRadius: '10px', border: '2px solid #0066cc', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
+                <div style={{ fontSize: '15px', color: '#64748b', marginBottom: '10px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Readiness Enhancement</div>
+                <div style={{ fontSize: '42px', fontWeight: 'bold', color: '#0066cc', marginBottom: '8px', lineHeight: 1 }}>37%</div>
+                <div style={{ fontSize: '15px', color: '#334155', lineHeight: 1.6 }}>Of engaged personnel who improve job performance (Mission 17% + Resilience 15% + Standards 5%). Based on Air Force +17% mission readiness data.</div>
               </div>
-              <div>
-                <div style={{ fontSize: '16px', color: '#374151', marginBottom: '8px', fontWeight: '600' }}>FECA Claims Prevention</div>
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#dc2626', marginBottom: '4px' }}>22%</div>
-                <div style={{ fontSize: '15px', color: '#4b5563', lineHeight: 1.5 }}>Reduction in mental health workers' comp claims. Based on JAMA 2024 peer-reviewed research (21.6% burnout reduction).</div>
+              <div style={{ padding: '20px', background: 'white', borderRadius: '10px', border: '2px solid #dc2626', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
+                <div style={{ fontSize: '15px', color: '#64748b', marginBottom: '10px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>FECA Claims Prevention</div>
+                <div style={{ fontSize: '42px', fontWeight: 'bold', color: '#dc2626', marginBottom: '8px', lineHeight: 1 }}>22%</div>
+                <div style={{ fontSize: '15px', color: '#334155', lineHeight: 1.6 }}>Reduction in mental health workers' comp claims. Based on JAMA 2024 peer-reviewed research (21.6% burnout reduction).</div>
               </div>
             </div>
           </div>
