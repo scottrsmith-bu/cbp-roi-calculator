@@ -13,6 +13,330 @@ const organizationData = [
   { id: 'sandiego', name: 'San Diego Sector', personnel: 2800, location: 'California', preset: 'Yes', attritionRate: 6.5, replacementCost: 130000, workersCompClaims: 210, category: 'USBP Individual Sector', description: 'Urban operations' },
 ];
 
+const ExecutiveSummary = ({ onContinue }) => {
+  const [showCommercialResults, setShowCommercialResults] = useState(false);
+  
+  return (
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%)', padding: '40px 24px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ background: 'white', borderRadius: '24px', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', overflow: 'hidden', border: '8px solid #0066cc' }}>
+          
+          {/* Header */}
+          <div style={{ background: 'linear-gradient(135deg, #003d82 0%, #0066cc 100%)', padding: '48px', color: 'white' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '24px' }}>
+              <Shield size={64} color="#ffcc00" strokeWidth={2.5} />
+              <div>
+                <h1 style={{ fontSize: '52px', fontWeight: 'bold', margin: '0 0 12px 0', lineHeight: 1.1 }}>BetterUp CBP Leadership Dashboard</h1>
+                <p style={{ fontSize: '24px', color: '#ffcc00', margin: 0, fontWeight: 'bold' }}>FECA Claims & Retention ROI Projections</p>
+              </div>
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: '12px', padding: '20px', borderLeft: '5px solid #ffcc00' }}>
+              <p style={{ fontSize: '20px', lineHeight: 1.7, margin: '0 0 16px 0' }}>
+                <strong style={{ color: '#ffcc00' }}>Evidence-based ROI dashboard</strong> projecting the financial impact of precision resilience development—targeting the mindsets and behaviors that drive DHS/CBP strategic priorities: <strong>Mission Readiness, Officer Safety, Professional Standards, and Career Retention</strong>.
+              </p>
+              <p style={{ fontSize: '18px', color: '#e0f2fe', margin: 0 }}>
+                Built on <strong style={{ color: '#ffcc00' }}>4 years of proven Air Force results</strong> (77K+ sessions, 11K+ participants) and <strong>JAMA 2024 peer-reviewed research</strong> showing 22% reduction in mental health conditions.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ padding: '48px' }}>
+            
+            {/* What This Tool Provides */}
+            <div style={{ background: '#dbeafe', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'start', gap: '20px', marginBottom: '20px' }}>
+                <div style={{ background: '#3b82f6', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: '32px' }}>ℹ️</span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h2 style={{ fontSize: '28px', fontWeight: 'bold', color: '#1e40af', margin: '0 0 16px 0' }}>What This Tool Provides: Projections for Decision Support</h2>
+                  <p style={{ fontSize: '18px', color: '#1e3a8a', margin: '0 0 20px 0', lineHeight: 1.7 }}>
+                    This dashboard generates <strong>financial projections</strong> based on proven Air Force outcomes and peer-reviewed research applied to CBP FECA claim rates, separation data, and training costs from government sources (GAO, DHS OIG, NTEU testimony). These are <strong>evidence-based forecasts</strong>, not guarantees.
+                  </p>
+                  
+                  <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #60a5fa' }}>
+                    <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e40af', marginBottom: '16px' }}>Real Results Come After Implementation:</h3>
+                    <div style={{ display: 'grid', gap: '16px' }}>
+                      {[
+                        { num: 1, title: 'Action Layer', text: "BetterUp's Human Transformation Platform delivers virtual, just-in-time resilience development through human expertise, behavioral assessments, personalized learning journeys, and an AI development partner—improving mindsets and behaviors driving retention and operational readiness" },
+                        { num: 2, title: 'Sensing Layer', text: 'Real-time people analytics dashboard aggregates anonymized data from pre/post assessments, Reflection Points, and engagement patterns at individual, sector, and organizational levels—providing leadership measurable visibility into wellness, resilience, and retention trends' },
+                        { num: 3, title: 'Measured Outcomes', text: 'After program implementation, your sector\'s actual results replace these projections with data from your agents, your teams, your command' }
+                      ].map(item => (
+                        <div key={item.num} style={{ display: 'flex', gap: '16px' }}>
+                          <div style={{ background: '#3b82f6', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '16px', flexShrink: 0 }}>{item.num}</div>
+                          <div>
+                            <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e40af', marginBottom: '4px' }}>{item.title}:</div>
+                            <div style={{ fontSize: '15px', color: '#1e3a8a', lineHeight: 1.6 }}>{item.text}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Why Precision Development */}
+            <div style={{ background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'start', gap: '20px' }}>
+                <div style={{ background: '#475569', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: '32px' }}>⚡</span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h2 style={{ fontSize: '28px', fontWeight: 'bold', color: '#1e293b', marginBottom: '20px' }}>Why Precision Development vs. Traditional Training?</h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #ef4444' }}>
+                      <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#991b1b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontSize: '28px' }}>📚</span>
+                        Traditional Training Approach
+                      </h3>
+                      <ul style={{ fontSize: '16px', color: '#7f1d1d', margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
+                        <li><strong>Event-based:</strong> Annual refreshers, mandatory courses</li>
+                        <li><strong>Knowledge transfer:</strong> Teaching what to do</li>
+                        <li><strong>Episodic:</strong> One-time interventions</li>
+                        <li><strong>Generic curriculum:</strong> Same for everyone</li>
+                        <li><strong>Output focus:</strong> Completion certificates</li>
+                      </ul>
+                    </div>
+                    <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #10b981' }}>
+                      <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#065f46', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontSize: '28px' }}>🎯</span>
+                        BetterUp Human Transformation Platform
+                      </h3>
+                      <ul style={{ fontSize: '16px', color: '#064e3b', margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
+                        <li><strong>Virtual delivery:</strong> Human expertise + AI partner</li>
+                        <li><strong>Just-in-time support:</strong> During critical moments</li>
+                        <li><strong>AI role-play:</strong> Use-of-force scenarios, career decisions</li>
+                        <li><strong>Personalized learning:</strong> Individual development paths</li>
+                        <li><strong>Measured outcomes:</strong> Assessments & Reflection Points</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div style={{ background: '#ecfdf5', borderRadius: '12px', padding: '24px', marginTop: '24px', border: '2px solid #10b981' }}>
+                    <p style={{ fontSize: '16px', color: '#065f46', margin: 0, lineHeight: 1.7 }}>
+                      <strong style={{ color: '#047857' }}>The Key Difference:</strong> Traditional training teaches <em>what</em> to do. BetterUp's Human Transformation Platform develops the underlying <strong>mindsets and behaviors</strong> (Resilience, Decision-Making, Emotional Regulation, Stress Management) that drive performance across all situations—<strong>delivered virtually with human expertise and AI support</strong>. Unlike mandatory training that produces completion certificates, BetterUp produces <strong>measurable outcomes</strong> through anonymized assessment data and Reflection Points feeding your People Analytics dashboard.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Development Partner */}
+            <div style={{ background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+                <div style={{ background: '#6366f1', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '32px' }}>🤖</span>
+                </div>
+                <h2 style={{ fontSize: '28px', fontWeight: 'bold', color: '#4338ca', margin: 0 }}>AI Development Partner: Always-Available Support</h2>
+              </div>
+              <p style={{ fontSize: '18px', color: '#4338ca', marginBottom: '24px', lineHeight: 1.6 }}>
+                BetterUp's AI development partner provides agents and officers with 24/7 access to resilience support—critical when facing high-stakes situations:
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                {[
+                  { icon: '🎭', title: 'Role-Play & Rehearsal', text: 'Practice use-of-force scenarios, difficult apprehensions, public interactions before real encounters' },
+                  { icon: '⚡', title: 'Critical Incident Support', text: 'Immediate decompression after traumatic events, stress management during high-tempo operations' },
+                  { icon: '🎯', title: 'Career Decision Support', text: 'Explore career paths, specialty transitions, retirement planning at critical decision points' },
+                  { icon: '📊', title: 'Real-Time Feedback', text: 'Immediate insights on communication strategies, de-escalation techniques, decision-making patterns' }
+                ].map((item, i) => (
+                  <div key={i} style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #818cf8' }}>
+                    <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4338ca', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '24px' }}>{item.icon}</span>
+                      {item.title}
+                    </div>
+                    <p style={{ fontSize: '15px', color: '#4f46e5', margin: 0, lineHeight: 1.6 }}>{item.text}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: '#c7d2fe', borderRadius: '12px', padding: '20px', marginTop: '24px', border: '2px solid #818cf8' }}>
+                <p style={{ fontSize: '16px', color: '#3730a3', margin: 0, lineHeight: 1.6 }}>
+                  <strong>Virtual + Human Expertise:</strong> The AI development partner complements (not replaces) human expertise—agents and officers get immediate support 24/7, with human experts available for deeper development work and complex challenges.
+                </p>
+              </div>
+            </div>
+
+            {/* Air Force Results */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1e293b', textAlign: 'center', marginBottom: '24px' }}>Air Force Proven Results (2021-2025)</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px' }}>
+                {[
+                  { label: 'DAF Members', value: '11,215' },
+                  { label: 'Total Sessions', value: '77,333' },
+                  { label: 'Hours Delivered', value: '54,377' },
+                  { label: 'Satisfaction', value: '79%' }
+                ].map((stat, i) => (
+                  <div key={i} style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(59,130,246,0.3)' }}>
+                    <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)', marginBottom: '8px' }}>{stat.label}</div>
+                    <div style={{ fontSize: '36px', fontWeight: 'bold', color: 'white' }}>{stat.value}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
+                {[
+                  { label: '+17% Mission Readiness', color: '#3b82f6' },
+                  { label: '+6% Career Commitment', color: '#3b82f6' },
+                  { label: '+15% Resilience', color: '#3b82f6' }
+                ].map((result, i) => (
+                  <div key={i} style={{ background: '#dbeafe', border: '2px solid #3b82f6', borderRadius: '10px', padding: '20px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#1e3a8a' }}>{result.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <button 
+                  onClick={() => setShowCommercialResults(!showCommercialResults)}
+                  style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)', color: 'white', border: 'none', padding: '16px 32px', borderRadius: '10px', fontSize: '17px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124,58,237,0.4)' }}
+                >
+                  {showCommercialResults ? '− Hide' : '+ Show'} Commercial Proven Results
+                </button>
+              </div>
+              
+              {showCommercialResults && (
+                <div style={{ marginTop: '24px', background: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '3px solid #7c3aed', borderRadius: '16px', padding: '32px' }}>
+                  <h3 style={{ fontSize: '26px', fontWeight: 'bold', color: '#6b21a8', textAlign: 'center', marginBottom: '16px' }}>Enterprise & Federal Proven Results</h3>
+                  <p style={{ fontSize: '15px', color: '#7e22ce', textAlign: 'center', fontStyle: 'italic', marginBottom: '24px' }}>Aggregate outcomes across Fortune 500 enterprises and federal agencies (client-confidential)</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                    {[
+                      { value: '+18%', label: 'Leadership Capability', sub: 'Avg across enterprise clients' },
+                      { value: '+22%', label: 'Manager Effectiveness', sub: 'Measured via 360° assessments' },
+                      { value: '85%', label: 'Client Satisfaction', sub: 'Commercial & government' }
+                    ].map((metric, i) => (
+                      <div key={i} style={{ background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center', border: '2px solid #a78bfa', boxShadow: '0 2px 8px rgba(124,58,237,0.2)' }}>
+                        <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '8px' }}>{metric.value}</div>
+                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#7e22ce', marginBottom: '4px' }}>{metric.label}</div>
+                        <div style={{ fontSize: '13px', color: '#9333ea' }}>{metric.sub}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ background: '#c4b5fd', borderRadius: '10px', padding: '16px', marginTop: '24px', border: '2px solid #7c3aed' }}>
+                    <p style={{ fontSize: '14px', color: '#581c87', textAlign: 'center', margin: 0 }}>
+                      <strong>Note:</strong> Specific client names and detailed metrics available upon request with proper authorization. These aggregate results demonstrate proven impact across multiple sectors including defense, technology, financial services, and federal agencies.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Dual-Pathway Model */}
+            <div style={{ background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px' }}>How the Model Works: Dual-Pathway Impact</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                <div style={{ background: 'white', borderRadius: '12px', padding: '28px', border: '2px solid #78716c' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                    <div style={{ background: '#dc2626', borderRadius: '50%', width: '52px', height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '28px', fontWeight: 'bold' }}>1</div>
+                    <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: '#1c1917', margin: 0 }}>FECA Claims Reduction</h3>
+                  </div>
+                  <p style={{ fontSize: '16px', color: '#44403c', marginBottom: '16px', lineHeight: 1.6 }}>
+                    BetterUp helps agents and officers build resilience to prevent mental health claims (PTSD, depression, anxiety, SUD) that drive FECA costs and operational degradation.
+                  </p>
+                  <div style={{ background: '#fee2e2', borderRadius: '10px', padding: '16px' }}>
+                    <strong style={{ fontSize: '15px', color: '#7f1d1d' }}>Value:</strong>
+                    <div style={{ fontSize: '14px', color: '#991b1b', marginTop: '4px', lineHeight: 1.6 }}>22% reduction in mental health claims = lower medical costs, reduced lost time, fewer disability payments</div>
+                    <div style={{ fontSize: '12px', color: '#7f1d1d', marginTop: '8px', fontStyle: 'italic' }}>Source: JAMA 2024 peer-reviewed research (21.6% burnout reduction)</div>
+                  </div>
+                </div>
+                <div style={{ background: 'white', borderRadius: '12px', padding: '28px', border: '2px solid #78716c' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                    <div style={{ background: '#f59e0b', borderRadius: '50%', width: '52px', height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '28px', fontWeight: 'bold' }}>2</div>
+                    <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: '#1c1917', margin: 0 }}>Retention Economics</h3>
+                  </div>
+                  <p style={{ fontSize: '16px', color: '#44403c', marginBottom: '16px', lineHeight: 1.6 }}>
+                    BetterUp helps agents and officers at critical decision points (3-5 years, 10-15 years, pre-2028 retirement) choose to stay through career clarity, purpose development, and resilience building.
+                  </p>
+                  <div style={{ background: '#fed7aa', borderRadius: '10px', padding: '16px' }}>
+                    <strong style={{ fontSize: '15px', color: '#78350f' }}>Value:</strong>
+                    <div style={{ fontSize: '14px', color: '#92400e', marginTop: '4px', lineHeight: 1.6 }}>Each prevented separation avoids $87K-$130K in recruiting, FLETC training, field training, and lost productivity</div>
+                    <div style={{ fontSize: '12px', color: '#78350f', marginTop: '8px', fontStyle: 'italic' }}>Source: GAO-24-107029, DHS OIG reports on CBP workforce challenges</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Performance Drivers Explanation */}
+            <div style={{ background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+                <div style={{ background: '#3b82f6', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '32px' }}>📊</span>
+                </div>
+                <h2 style={{ fontSize: '28px', fontWeight: 'bold', color: '#1e3a8a', margin: 0 }}>How Performance Drivers Work</h2>
+              </div>
+              <p style={{ fontSize: '18px', color: '#1e40af', marginBottom: '24px', lineHeight: 1.6 }}>
+                Performance Driver sliders let you model <strong>how much you prioritize each CBP strategic objective</strong>. Moving these sliders simulates allocating more or less development resources to each area.
+              </p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+                <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #60a5fa' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e40af', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontSize: '28px' }}>🎯</span>
+                    What the Sliders Mean
+                  </h3>
+                  <ul style={{ fontSize: '16px', color: '#1e3a8a', margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
+                    <li><strong>High value (15-20%):</strong> Maximum focus—dedicated learning paths, frequent development sessions, AI-assisted practice</li>
+                    <li><strong>Medium value (8-14%):</strong> Balanced investment in this area</li>
+                    <li><strong>Low value (0-7%):</strong> Minimal focus—resources directed elsewhere</li>
+                  </ul>
+                </div>
+                
+                <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #60a5fa' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e40af', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontSize: '28px' }}>⚡</span>
+                    How They Affect ROI
+                  </h3>
+                  <ul style={{ fontSize: '16px', color: '#1e3a8a', margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
+                    <li><strong>Mission Readiness, Resilience, Standards</strong> → Drive operational effectiveness and FECA claim reduction</li>
+                    <li><strong>Career Commitment, Leadership</strong> → Drive retention and prevent costly turnover</li>
+                    <li>Higher slider values = Bigger behavioral improvements = Greater financial impact</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style={{ background: '#bfdbfe', borderRadius: '12px', padding: '24px', border: '2px solid #3b82f6' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e3a8a', marginBottom: '16px' }}>Example Scenario:</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <div style={{ background: 'white', borderRadius: '10px', padding: '20px', border: '2px solid #60a5fa' }}>
+                    <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px' }}>❌ Generic Approach</div>
+                    <div style={{ fontSize: '15px', color: '#1e3a8a', marginBottom: '12px', lineHeight: 1.6 }}>All sliders at 10%—spreading resources thin across all priorities</div>
+                    <div style={{ fontSize: '14px', color: '#3b82f6' }}><strong>Result:</strong> Moderate gains, no exceptional outcomes</div>
+                  </div>
+                  <div style={{ background: 'white', borderRadius: '10px', padding: '20px', border: '2px solid #60a5fa' }}>
+                    <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px' }}>✅ Focused Approach</div>
+                    <div style={{ fontSize: '15px', color: '#1e3a8a', marginBottom: '12px', lineHeight: 1.6 }}>Resilience at 18%, Career Commitment at 16%—targeting FECA crisis and 2028 retirement cliff</div>
+                    <div style={{ fontSize: '14px', color: '#10b981' }}><strong>Result:</strong> Maximum impact on mental health claims and retention where it matters most</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ background: '#fed7aa', borderRadius: '12px', padding: '20px', marginTop: '24px', border: '2px solid #f59e0b' }}>
+                <p style={{ fontSize: '16px', color: '#78350f', margin: 0, lineHeight: 1.6 }}>
+                  <strong>💡 Leadership Decision:</strong> Adjust these sliders to match your sector's priorities. If FECA mental health claims are your crisis, max out Resilience. If 2028 retirement cliff threatens operations, prioritize Career Commitment and Leadership. The model shows the financial impact of those strategic choices.
+                </p>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '16px', padding: '40px', textAlign: 'center' }}>
+              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>Ready to See Your Sector's Projected Impact?</h2>
+              <p style={{ fontSize: '20px', color: '#cbd5e1', marginBottom: '32px', lineHeight: 1.6 }}>
+                Select your CBP component to model ROI with adjustable parameters specific to your personnel, FECA claim patterns, and retention challenges
+              </p>
+              <button 
+                onClick={onContinue}
+                style={{ background: '#ffcc00', color: '#000', border: 'none', padding: '20px 48px', borderRadius: '12px', fontSize: '22px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 8px 24px rgba(255,204,0,0.5)', transition: 'transform 0.2s' }}
+                onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+                onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+              >
+                Select Your Sector →
+              </button>
+              <p style={{ fontSize: '14px', color: '#94a3b8', marginTop: '16px' }}>All data sources documented | Every assumption adjustable | Transparent methodology</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const LandingPage = ({ onSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('CBP-Wide');
@@ -136,7 +460,7 @@ const LandingPage = ({ onSelect }) => {
     </div>
   );
 };
-const CBPROICalculator = ({ workforce }) => {
+const CBPROICalculator = ({ workforce, onBack }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [seats, setSeats] = useState(Math.round(workforce.personnel * 0.15));
   const [engagementRate, setEngagementRate] = useState(65);
@@ -146,6 +470,10 @@ const CBPROICalculator = ({ workforce }) => {
   const [showOffClaimBreakdown, setShowOffClaimBreakdown] = useState(false);
   const [showFactorBreakdown, setShowFactorBreakdown] = useState(false);
   const [expandedFactor, setExpandedFactor] = useState(null);
+  
+  // NEW: Manual Override State
+  const [manualRetentionOverride, setManualRetentionOverride] = useState(false);
+  const [manualRetentionValue, setManualRetentionValue] = useState(7);
   
   const [drivers, setDrivers] = useState({
     missionReadiness: 17,
@@ -181,46 +509,62 @@ const CBPROICalculator = ({ workforce }) => {
     setFactorConfig(prev => ({ ...prev, [factorKey]: defaults[factorKey] }));
   };
 
- const retentionEffectiveness = drivers.careerCommitment + drivers.leadership;
-const readinessEffectiveness = drivers.missionReadiness + drivers.resilience + drivers.professionalStandards;
+  // Effectiveness calculation with manual override
+  const retentionEffectiveness = useMemo(() => {
+    if (manualRetentionOverride) {
+      return manualRetentionValue;
+    }
+    return drivers.careerCommitment + drivers.leadership;
+  }, [drivers.careerCommitment, drivers.leadership, manualRetentionOverride, manualRetentionValue]);
+  
+  const readinessEffectiveness = drivers.missionReadiness + drivers.resilience + drivers.professionalStandards;
 
-const calculations = useMemo(() => {
-  const engaged = Math.round(seats * (engagementRate / 100));
-  const separationsPrevented = Math.round(engaged * (retentionEffectiveness / 100));
-  const retentionSavings = separationsPrevented * workforce.replacementCost;
-  
-  const avgClaimCost = 65000;
-  const totalClaimsRate = workforce.workersCompClaims / workforce.personnel;
-  const mentalHealthClaimsPct = 0.35;
-  const mentalHealthClaimsRate = totalClaimsRate * mentalHealthClaimsPct;
-  const expectedMentalHealthClaims = seats * mentalHealthClaimsRate;
-  const claimsPrevented = Math.round(expectedMentalHealthClaims * 0.22);
-  const fecaSavings = claimsPrevented * avgClaimCost;
-  
-  const readinessImproved = Math.round(engaged * (readinessEffectiveness / 100));
-  const readinessEconomicValue = readinessImproved * 15000;
-  
-  const totalAnnualSavings = retentionSavings + fecaSavings + readinessEconomicValue;
-  const totalCost = seats * costPerSeat;
-  const netSavings = totalAnnualSavings - totalCost;
-  const roi = Math.round((netSavings / totalCost) * 100);
-  const breakEvenMonths = (totalCost / totalAnnualSavings) * 12;
-  
-  const baselineFecaCost = (claimsPrevented * avgClaimCost) / 0.22;
-  const afterFecaCost = baselineFecaCost - fecaSavings;
-  const baselineOffClaim = (retentionSavings + readinessEconomicValue) / 0.3;
-  const afterOffClaim = baselineOffClaim - (retentionSavings + readinessEconomicValue);
-  
-  return { 
-    engaged, separationsPrevented, retentionSavings, claimsPrevented, fecaSavings, 
-    readinessImproved, readinessEconomicValue, totalAnnualSavings, totalCost, 
-    netSavings, roi, breakEvenMonths,
-    baselineFecaCost, afterFecaCost, baselineOffClaim, afterOffClaim
-  };
-}, [seats, engagementRate, workforce, retentionEffectiveness, readinessEffectiveness, costPerSeat]);
+  const calculations = useMemo(() => {
+    const engaged = Math.round(seats * (engagementRate / 100));
+    const separationsPrevented = Math.round(engaged * (retentionEffectiveness / 100));
+    const retentionSavings = separationsPrevented * workforce.replacementCost;
+    
+    const avgClaimCost = 65000;
+    const totalClaimsRate = workforce.workersCompClaims / workforce.personnel;
+    const mentalHealthClaimsPct = 0.35;
+    const mentalHealthClaimsRate = totalClaimsRate * mentalHealthClaimsPct;
+    const expectedMentalHealthClaims = seats * mentalHealthClaimsRate;
+    const claimsPrevented = Math.round(expectedMentalHealthClaims * 0.22);
+    const fecaSavings = claimsPrevented * avgClaimCost;
+    
+    const readinessImproved = Math.round(engaged * (readinessEffectiveness / 100));
+    const readinessEconomicValue = readinessImproved * 15000;
+    
+    const totalAnnualSavings = retentionSavings + fecaSavings + readinessEconomicValue;
+    const totalCost = seats * costPerSeat;
+    const netSavings = totalAnnualSavings - totalCost;
+    const roi = Math.round((netSavings / totalCost) * 100);
+    const breakEvenMonths = (totalCost / totalAnnualSavings) * 12;
+    
+    const baselineFecaCost = (claimsPrevented * avgClaimCost) / 0.22;
+    const afterFecaCost = baselineFecaCost - fecaSavings;
+    const baselineOffClaim = (retentionSavings + readinessEconomicValue) / 0.3;
+    const afterOffClaim = baselineOffClaim - (retentionSavings + readinessEconomicValue);
+    
+    return { 
+      engaged, separationsPrevented, retentionSavings, claimsPrevented, fecaSavings, 
+      readinessImproved, readinessEconomicValue, totalAnnualSavings, totalCost, 
+      netSavings, roi, breakEvenMonths,
+      baselineFecaCost, afterFecaCost, baselineOffClaim, afterOffClaim
+    };
+  }, [seats, engagementRate, workforce, retentionEffectiveness, readinessEffectiveness, costPerSeat]);
+
   return (
     <div style={{ minHeight: '100vh', background: '#f5f7fa', padding: '16px' }}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
+        
+        {/* Back Button */}
+        <button 
+          onClick={onBack} 
+          style={{ marginBottom: '16px', color: '#0066cc', background: 'transparent', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+        >
+          ← Back to Sector Selection
+        </button>
         
         <div style={{ background: '#0066cc', borderRadius: '16px', padding: '24px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -230,9 +574,6 @@ const calculations = useMemo(() => {
               <p style={{ color: 'white', margin: '4px 0 0 0', fontSize: '15px' }}>{workforce.personnel.toLocaleString()} Personnel</p>
             </div>
           </div>
-          <button onClick={() => window.location.reload()} style={{ padding: '12px 24px', borderRadius: '8px', border: '2px solid white', background: 'transparent', color: 'white', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px' }}>
-            Change Organization
-          </button>
         </div>
 
         <div style={{ background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)', borderRadius: '20px', padding: '32px', marginBottom: '32px', border: '3px solid #ffcc00', boxShadow: '0 8px 30px rgba(0,102,204,0.3)' }}>
@@ -273,7 +614,7 @@ const calculations = useMemo(() => {
         </div>
 
         <div style={{ background: 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)', borderRadius: '16px', padding: '32px', marginBottom: '24px', border: '1px solid #4a5568' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <h2 style={{ fontSize: '34px', fontWeight: 'bold', color: 'white', margin: '0 0 8px 0' }}>BetterUp Seats: {seats.toLocaleString()}</h2>
               <p style={{ color: '#cbd5e0', margin: 0, fontSize: '18px' }}>Population: {workforce.personnel.toLocaleString()}</p>
@@ -302,7 +643,7 @@ const calculations = useMemo(() => {
                 Edit
               </button>
             </div>
-            <p style={{ color: '#cbd5e0', fontSize: '17px', margin: '0 0 8px 0' }}>Controls how many personnel actively use BetterUp coaching</p>
+            <p style={{ color: '#cbd5e0', fontSize: '17px', margin: '0 0 8px 0' }}>Controls how many personnel actively use BetterUp development</p>
             <p style={{ color: '#a0aec0', fontSize: '16px', margin: 0 }}>Example: {seats.toLocaleString()} × {engagementRate}% = {calculations.engaged.toLocaleString()} engaged</p>
           </div>
 
@@ -311,12 +652,19 @@ const calculations = useMemo(() => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
               <div>
                 <div style={{ fontSize: '18px', color: '#cbd5e0', marginBottom: '6px', fontWeight: '600' }}>Engagement Rate ({engagementRate}%)</div>
-                <div style={{ fontSize: '16px', color: '#a0aec0', lineHeight: 1.5 }}>Controls <strong style={{ color: 'white' }}>how many</strong> personnel use coaching</div>
+                <div style={{ fontSize: '16px', color: '#a0aec0', lineHeight: 1.5 }}>Controls <strong style={{ color: 'white' }}>how many</strong> personnel use development</div>
               </div>
               <div>
                 <div style={{ fontSize: '18px', color: '#cbd5e0', marginBottom: '6px', fontWeight: '600' }}>Readiness Rate ({readinessEffectiveness}%)</div>
                 <div style={{ fontSize: '16px', color: '#a0aec0', lineHeight: 1.5 }}>Controls <strong style={{ color: 'white' }}>how much</strong> performance improves</div>
                 <div style={{ fontSize: '15px', color: '#718096', marginTop: '4px' }}>Auto-calculated from Performance Drivers</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '18px', color: '#cbd5e0', marginBottom: '6px', fontWeight: '600' }}>Retention Effectiveness ({retentionEffectiveness}%)</div>
+                <div style={{ fontSize: '16px', color: '#a0aec0', lineHeight: 1.5 }}>Prevented separations rate</div>
+                <div style={{ fontSize: '15px', color: manualRetentionOverride ? '#fbbf24' : '#718096', marginTop: '4px' }}>
+                  {manualRetentionOverride ? '🔓 Manual Override Active' : 'Auto-calculated from Performance Drivers'}
+                </div>
               </div>
             </div>
           </div>
@@ -466,6 +814,7 @@ const calculations = useMemo(() => {
             </div>
           </div>
         )}
+
         {activeTab === 'details' && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <h2 style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '20px', color: '#0066cc' }}>Model Assumptions & Methodology</h2>
@@ -473,7 +822,7 @@ const calculations = useMemo(() => {
             <div style={{ padding: '20px', background: '#e6f2ff', borderRadius: '12px', marginBottom: '24px', border: '2px solid #0066cc' }}>
               <h3 style={{ fontSize: '19px', fontWeight: 'bold', color: '#0066cc', marginBottom: '12px' }}>Conservative Methodology</h3>
               <p style={{ fontSize: '16px', color: '#333', margin: 0, lineHeight: 1.6 }}>
-                <strong>Retention (7%):</strong> Conservative conversion from Air Force +20% commitment intent to actual behavioral retention (4% Career + 3% Leadership). Prevents approximately {((calculations.separationsPrevented / (workforce.personnel * workforce.attritionRate / 100)) * 100).toFixed(1)}% of total organizational attrition.
+                <strong>Retention ({retentionEffectiveness}%):</strong> Conservative conversion from Air Force +20% commitment intent to actual behavioral retention (4% Career + 3% Leadership). Prevents approximately {((calculations.separationsPrevented / (workforce.personnel * workforce.attritionRate / 100)) * 100).toFixed(1)}% of total organizational attrition.
               </p>
             </div>
 
@@ -502,7 +851,7 @@ const calculations = useMemo(() => {
                 },
                 {
                   num: 3,
-                  title: 'Coaching Effectiveness',
+                  title: 'Development Effectiveness',
                   color: '#00cc66',
                   content: `Retention: ${retentionEffectiveness}% | Readiness: ${readinessEffectiveness}%. Air Force: +20% commitment, +17% readiness.`,
                   links: [{ url: 'https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2816987', label: 'JAMA 2024' }]
@@ -534,9 +883,104 @@ const calculations = useMemo(() => {
                 </div>
               ))}
             </div>
+
+            {/* Performance Driver Explanation in Model Details */}
+            <div style={{ background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px', marginTop: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+                <div style={{ background: '#6366f1', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '32px' }}>📊</span>
+                </div>
+                <h2 style={{ fontSize: '28px', fontWeight: 'bold', color: '#4338ca', margin: 0 }}>Understanding Performance Drivers & Effectiveness Rates</h2>
+              </div>
+              
+              <div style={{ display: 'grid', gap: '24px' }}>
+                <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #818cf8' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#4338ca', marginBottom: '16px' }}>How Performance Drivers Work:</h3>
+                  <p style={{ fontSize: '16px', color: '#4f46e5', marginBottom: '20px', lineHeight: 1.6 }}>
+                    Performance Driver sliders model <strong>how much you prioritize/invest in each CBP strategic objective</strong>. Moving these sliders simulates allocating development resources (learning journeys, development focus, AI partner usage) to different behavioral foundations.
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                    {[
+                      { label: 'High Priority (15-20%)', desc: 'Maximum focus—dedicated learning paths, frequent sessions, AI-assisted practice' },
+                      { label: 'Medium Priority (8-14%)', desc: 'Balanced investment—regular development activities' },
+                      { label: 'Low Priority (0-7%)', desc: 'Minimal focus—resources directed to higher priorities' }
+                    ].map((level, i) => (
+                      <div key={i} style={{ background: '#f5f3ff', borderRadius: '8px', padding: '16px', border: '1px solid #c4b5fd' }}>
+                        <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#5b21b6', marginBottom: '8px' }}>{level.label}</div>
+                        <div style={{ fontSize: '13px', color: '#6b21a8', lineHeight: 1.5 }}>{level.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #818cf8' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#4338ca', marginBottom: '16px' }}>The Impact Chain:</h3>
+                  <div style={{ display: 'grid', gap: '20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ background: '#3b82f6', color: 'white', borderRadius: '8px', padding: '12px 16px', textAlign: 'center', fontSize: '14px', fontWeight: 'bold', minWidth: '140px' }}>Mission<br/>Resilience<br/>Standards</div>
+                      <div style={{ fontSize: '24px', color: '#4338ca' }}>→</div>
+                      <div style={{ flex: 1, background: '#dbeafe', border: '2px solid #60a5fa', borderRadius: '8px', padding: '16px' }}>
+                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e40af' }}>Drive Readiness Rate ({readinessEffectiveness}%)</div>
+                        <div style={{ fontSize: '13px', color: '#3b82f6', marginTop: '4px' }}>Base + driver contributions = operational performance improvement</div>
+                      </div>
+                      <div style={{ fontSize: '24px', color: '#4338ca' }}>→</div>
+                      <div style={{ background: '#10b981', color: 'white', borderRadius: '8px', padding: '12px 16px', textAlign: 'center', fontSize: '14px', fontWeight: 'bold', minWidth: '140px' }}>FECA<br/>Claims<br/>Reduction</div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ background: '#a855f7', color: 'white', borderRadius: '8px', padding: '12px 16px', textAlign: 'center', fontSize: '14px', fontWeight: 'bold', minWidth: '140px' }}>Career<br/>Commitment<br/>Leadership</div>
+                      <div style={{ fontSize: '24px', color: '#4338ca' }}>→</div>
+                      <div style={{ flex: 1, background: '#f3e8ff', border: '2px solid #c084fc', borderRadius: '8px', padding: '16px' }}>
+                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#7e22ce' }}>Drive Retention Effectiveness ({retentionEffectiveness}%)</div>
+                        <div style={{ fontSize: '13px', color: '#a855f7', marginTop: '4px' }}>Base + driver contributions = separations prevented</div>
+                      </div>
+                      <div style={{ fontSize: '24px', color: '#4338ca' }}>→</div>
+                      <div style={{ background: '#10b981', color: 'white', borderRadius: '8px', padding: '12px 16px', textAlign: 'center', fontSize: '14px', fontWeight: 'bold', minWidth: '140px' }}>Retention<br/>Savings</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ background: '#fed7aa', borderRadius: '12px', padding: '24px', border: '2px solid #f59e0b' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#78350f', marginBottom: '16px' }}>💡 Strategic Use Case Example:</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#92400e', marginBottom: '12px' }}>Scenario: FECA Mental Health Crisis</div>
+                      <div style={{ fontSize: '15px', color: '#78350f', marginBottom: '16px', lineHeight: 1.6 }}>Sector Chief says: "We're seeing alarming rates of PTSD claims and suicides—mental health is our #1 priority"</div>
+                      <div style={{ background: 'white', borderRadius: '8px', padding: '16px', border: '1px solid #f59e0b' }}>
+                        <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px' }}>Recommended Slider Settings:</div>
+                        <ul style={{ fontSize: '13px', color: '#78350f', margin: 0, paddingLeft: '20px', lineHeight: 1.7 }}>
+                          <li>Resilience: <strong>18%</strong> (max focus)</li>
+                          <li>Mission Readiness: <strong>15%</strong> (high)</li>
+                          <li>Career Commitment: <strong>10%</strong> (moderate)</li>
+                          <li>Leadership: <strong>8%</strong> (moderate)</li>
+                        </ul>
+                        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #fbbf24', fontSize: '13px', color: '#059669', fontWeight: 'bold' }}>
+                          Result: Maximum FECA claim reduction, improved operational resilience
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#92400e', marginBottom: '12px' }}>Scenario: 2028 Retirement Cliff</div>
+                      <div style={{ fontSize: '15px', color: '#78350f', marginBottom: '16px', lineHeight: 1.6 }}>Leadership says: "2,200 retirements in 2028 will devastate operations—retention is critical"</div>
+                      <div style={{ background: 'white', borderRadius: '8px', padding: '16px', border: '1px solid #f59e0b' }}>
+                        <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px' }}>Recommended Slider Settings:</div>
+                        <ul style={{ fontSize: '13px', color: '#78350f', margin: 0, paddingLeft: '20px', lineHeight: 1.7 }}>
+                          <li>Career Commitment: <strong>16%</strong> (max focus)</li>
+                          <li>Leadership: <strong>15%</strong> (high)</li>
+                          <li>Resilience: <strong>12%</strong> (moderate)</li>
+                          <li>Mission Readiness: <strong>10%</strong> (moderate)</li>
+                        </ul>
+                        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #fbbf24', fontSize: '13px', color: '#059669', fontWeight: 'bold' }}>
+                          Result: Retention effectiveness jumps to 31%, maximizing prevented separations
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
-
         {activeTab === 'drivers' && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '20px' }}>
@@ -553,6 +997,49 @@ const calculations = useMemo(() => {
                 </div>
                 <div style={{ fontSize: '16px', color: '#333' }}>
                   Readiness: <strong style={{ color: '#0066cc', fontSize: '22px' }}>{readinessEffectiveness}%</strong>
+                </div>
+                
+                {/* Manual Override Toggle */}
+                <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #cbd5e1' }}>
+                  <button
+                    onClick={() => {
+                      setManualRetentionOverride(!manualRetentionOverride);
+                      if (!manualRetentionOverride) {
+                        setManualRetentionValue(retentionEffectiveness);
+                      }
+                    }}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      background: manualRetentionOverride ? '#f59e0b' : '#e5e7eb',
+                      color: manualRetentionOverride ? 'white' : '#374151',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: 'bold',
+                      width: '100%'
+                    }}
+                  >
+                    {manualRetentionOverride ? '🔓 Manual Override ON' : '🔒 Auto-Calculate Retention'}
+                  </button>
+                  {manualRetentionOverride && (
+                    <div style={{ marginTop: '12px' }}>
+                      <label style={{ display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#78350f', marginBottom: '8px' }}>
+                        Manual Retention Rate: {manualRetentionValue}%
+                      </label>
+                      <input
+                        type="range"
+                        min="3"
+                        max="25"
+                        value={manualRetentionValue}
+                        onChange={(e) => setManualRetentionValue(parseInt(e.target.value))}
+                        style={{ width: '100%', height: '6px', accentColor: '#f59e0b' }}
+                      />
+                      <p style={{ fontSize: '12px', color: '#92400e', marginTop: '6px', fontStyle: 'italic' }}>
+                        ⚠️ Override active - test different effectiveness scenarios
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -595,6 +1082,7 @@ const calculations = useMemo(() => {
             </div>
           </div>
         )}
+
         {activeTab === 'factors' && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <div style={{ marginBottom: '28px' }}>
@@ -980,8 +1468,10 @@ const calculations = useMemo(() => {
                 <strong>Try asking:</strong>
                 <ul style={{ margin: '10px 0 0 0', paddingLeft: '22px', lineHeight: 1.8 }}>
                   <li>How is ROI calculated?</li>
-                  <li>Why is retention 7%?</li>
+                  <li>Why is retention {retentionEffectiveness}%?</li>
                   <li>Explain FECA methodology</li>
+                  <li>What are Performance Drivers?</li>
+                  <li>How do I use manual override?</li>
                 </ul>
               </div>
             </div>
@@ -993,9 +1483,19 @@ const calculations = useMemo(() => {
 };
 
 const App = () => {
+  const [showExecutiveSummary, setShowExecutiveSummary] = useState(true);
+  const [showLanding, setShowLanding] = useState(false);
   const [selectedWorkforce, setSelectedWorkforce] = useState(null);
-  if (!selectedWorkforce) return <LandingPage onSelect={setSelectedWorkforce} />;
-  return <CBPROICalculator workforce={selectedWorkforce} />;
+  
+  if (showExecutiveSummary) {
+    return <ExecutiveSummary onContinue={() => { setShowExecutiveSummary(false); setShowLanding(true); }} />;
+  }
+  
+  if (showLanding || !selectedWorkforce) {
+    return <LandingPage onSelect={(org) => { setSelectedWorkforce(org); setShowLanding(false); }} />;
+  }
+  
+  return <CBPROICalculator workforce={selectedWorkforce} onBack={() => setShowLanding(true)} />;
 };
 
 export default App;
