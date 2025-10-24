@@ -356,7 +356,7 @@ const LandingPage = ({ onSelect, onBackToExecSummary }) => {
             <Shield size={48} color="#0066cc" />
             <div>
               <h1 style={{ fontSize: '36px', fontWeight: 'bold', color: '#003366', margin: 0 }}>U.S. Customs and Border Protection</h1>
-              <p style={{ fontSize: '22px', color: '#0066cc', margin: '8px 0 0 0', fontWeight: 'bold' }}>BetterUp Resiliency & Retention ROI Calculator</p>
+              <p style={{ fontSize: '22px', color: '#0066cc', margin: '8px 0 0 0', fontWeight: 'bold' }}>BetterUp FECA Claims & Retention ROI Calculator</p>
               <p style={{ fontSize: '16px', color: '#cc3333', margin: '4px 0 0 0', fontWeight: '600' }}>Multi-Factor Risk Reduction Model</p>
             </div>
           </div>
