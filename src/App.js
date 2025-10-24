@@ -21,7 +21,6 @@ const ExecutiveSummary = ({ onContinue }) => {
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ background: 'white', borderRadius: '24px', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', overflow: 'hidden', border: '8px solid #0066cc' }}>
           
-          {/* Header */}
           <div style={{ background: 'linear-gradient(135deg, #003d82 0%, #0066cc 100%)', padding: '48px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '24px' }}>
               <Shield size={64} color="#ffcc00" strokeWidth={2.5} />
@@ -42,7 +41,6 @@ const ExecutiveSummary = ({ onContinue }) => {
 
           <div style={{ padding: '48px' }}>
             
-            {/* What This Tool Provides */}
             <div style={{ background: '#dbeafe', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
               <div style={{ display: 'flex', alignItems: 'start', gap: '20px', marginBottom: '20px' }}>
                 <div style={{ background: '#3b82f6', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -76,7 +74,6 @@ const ExecutiveSummary = ({ onContinue }) => {
               </div>
             </div>
 
-            {/* Why Precision Development */}
             <div style={{ background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
               <div style={{ display: 'flex', alignItems: 'start', gap: '20px' }}>
                 <div style={{ background: '#475569', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -121,7 +118,6 @@ const ExecutiveSummary = ({ onContinue }) => {
               </div>
             </div>
 
-            {/* AI Development Partner */}
             <div style={{ background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
                 <div style={{ background: '#6366f1', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -155,7 +151,6 @@ const ExecutiveSummary = ({ onContinue }) => {
               </div>
             </div>
 
-            {/* Air Force Results */}
             <div style={{ marginBottom: '32px' }}>
               <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1e293b', textAlign: 'center', marginBottom: '24px' }}>Air Force Proven Results (2021-2025)</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px' }}>
@@ -173,9 +168,9 @@ const ExecutiveSummary = ({ onContinue }) => {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
                 {[
-                  { label: '+17% Mission Readiness', color: '#3b82f6' },
-                  { label: '+6% Career Commitment', color: '#3b82f6' },
-                  { label: '+15% Resilience', color: '#3b82f6' }
+                  { label: '+17% Mission Readiness' },
+                  { label: '+6% Career Commitment' },
+                  { label: '+15% Resilience' }
                 ].map((result, i) => (
                   <div key={i} style={{ background: '#dbeafe', border: '2px solid #3b82f6', borderRadius: '10px', padding: '20px', textAlign: 'center' }}>
                     <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#1e3a8a' }}>{result.label}</div>
@@ -217,7 +212,6 @@ const ExecutiveSummary = ({ onContinue }) => {
               )}
             </div>
 
-            {/* Dual-Pathway Model */}
             <div style={{ background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
               <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px' }}>How the Model Works: Dual-Pathway Impact</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
@@ -252,7 +246,6 @@ const ExecutiveSummary = ({ onContinue }) => {
               </div>
             </div>
 
-            {/* Performance Drivers Explanation */}
             <div style={{ background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px', marginBottom: '32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
                 <div style={{ background: '#3b82f6', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -313,7 +306,6 @@ const ExecutiveSummary = ({ onContinue }) => {
               </div>
             </div>
 
-            {/* CTA */}
             <div style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '16px', padding: '40px', textAlign: 'center' }}>
               <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>Ready to See Your Sector's Projected Impact?</h2>
               <p style={{ fontSize: '20px', color: '#cbd5e1', marginBottom: '32px', lineHeight: 1.6 }}>
@@ -336,8 +328,7 @@ const ExecutiveSummary = ({ onContinue }) => {
     </div>
   );
 };
-
-const LandingPage = ({ onSelect }) => {
+const LandingPage = ({ onSelect, onBackToExecSummary }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('CBP-Wide');
   const categories = ['CBP-Wide', 'CBP Component', 'USBP Regional Grouping', 'USBP Individual Sector'];
@@ -350,7 +341,16 @@ const LandingPage = ({ onSelect }) => {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a2f5c 0%, #004d7a 100%)', padding: '24px' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        
+        {/* BACK BUTTON ADDED HERE */}
+        <button 
+          onClick={onBackToExecSummary} 
+          style={{ marginBottom: '16px', color: 'white', background: 'transparent', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+        >
+          ← Back to Executive Summary
+        </button>
+        
         <div style={{ background: 'white', borderRadius: '16px', padding: '32px', marginBottom: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
             <Shield size={48} color="#0066cc" />
@@ -471,7 +471,6 @@ const CBPROICalculator = ({ workforce, onBack }) => {
   const [showFactorBreakdown, setShowFactorBreakdown] = useState(false);
   const [expandedFactor, setExpandedFactor] = useState(null);
   
-  // NEW: Manual Override State
   const [manualRetentionOverride, setManualRetentionOverride] = useState(false);
   const [manualRetentionValue, setManualRetentionValue] = useState(7);
   
@@ -509,7 +508,6 @@ const CBPROICalculator = ({ workforce, onBack }) => {
     setFactorConfig(prev => ({ ...prev, [factorKey]: defaults[factorKey] }));
   };
 
-  // Effectiveness calculation with manual override
   const retentionEffectiveness = useMemo(() => {
     if (manualRetentionOverride) {
       return manualRetentionValue;
@@ -556,9 +554,8 @@ const CBPROICalculator = ({ workforce, onBack }) => {
 
   return (
     <div style={{ minHeight: '100vh', background: '#f5f7fa', padding: '16px' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         
-        {/* Back Button */}
         <button 
           onClick={onBack} 
           style={{ marginBottom: '16px', color: '#0066cc', background: 'transparent', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
@@ -704,6 +701,7 @@ const CBPROICalculator = ({ workforce, onBack }) => {
             );
           })}
         </div>
+
         {activeTab === 'dashboard' && (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '24px' }}>
@@ -884,7 +882,6 @@ const CBPROICalculator = ({ workforce, onBack }) => {
               ))}
             </div>
 
-            {/* Performance Driver Explanation in Model Details */}
             <div style={{ background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px', marginTop: '32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
                 <div style={{ background: '#6366f1', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -999,7 +996,6 @@ const CBPROICalculator = ({ workforce, onBack }) => {
                   Readiness: <strong style={{ color: '#0066cc', fontSize: '22px' }}>{readinessEffectiveness}%</strong>
                 </div>
                 
-                {/* Manual Override Toggle */}
                 <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #cbd5e1' }}>
                   <button
                     onClick={() => {
@@ -1492,7 +1488,10 @@ const App = () => {
   }
   
   if (showLanding || !selectedWorkforce) {
-    return <LandingPage onSelect={(org) => { setSelectedWorkforce(org); setShowLanding(false); }} />;
+    return <LandingPage 
+      onSelect={(org) => { setSelectedWorkforce(org); setShowLanding(false); }} 
+      onBackToExecSummary={() => { setShowLanding(false); setShowExecutiveSummary(true); }}
+    />;
   }
   
   return <CBPROICalculator workforce={selectedWorkforce} onBack={() => setShowLanding(true)} />;
