@@ -18,7 +18,7 @@ const ExecutiveSummary = ({ onContinue }) => {
   
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%)', padding: '40px 24px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ background: 'white', borderRadius: '24px', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', overflow: 'hidden', border: '8px solid #0066cc' }}>
           
           {/* Header */}
@@ -350,7 +350,7 @@ const LandingPage = ({ onSelect }) => {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a2f5c 0%, #004d7a 100%)', padding: '24px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ background: 'white', borderRadius: '16px', padding: '32px', marginBottom: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
             <Shield size={48} color="#0066cc" />
@@ -556,7 +556,7 @@ const CBPROICalculator = ({ workforce, onBack }) => {
 
   return (
     <div style={{ minHeight: '100vh', background: '#f5f7fa', padding: '16px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         
         {/* Back Button */}
         <button 
