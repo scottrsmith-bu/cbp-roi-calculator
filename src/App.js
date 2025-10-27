@@ -10,17 +10,48 @@ function MethodologyImpactSection() {
     marginTop: '16px'
   };
 
-  const pill = (bg, color) => ({
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '6px 10px',
-    borderRadius: '999px',
-    fontSize: '12px',
-    fontWeight: 700,
-    background: bg,
-    color
-  });
+const pill = (bg, color) => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 8,
+  padding: '6px 10px',
+  borderRadius: 999,
+  fontSize: 12,
+  fontWeight: 700,
+  background: bg,
+  color,
+});
+
+    // helper: labeled callout with leader line
+const Callout = ({ x, y, text, color = '#111827', bg = 'white', lineTo }) => (
+  <g>
+    {lineTo && (
+      <line
+        x1={x}
+        y1={y}
+        x2={lineTo.x}
+        y2={lineTo.y}
+        stroke={color}
+        strokeOpacity="0.5"
+        strokeWidth="1.5"
+      />
+    )}
+    <rect
+      x={x - 6}
+      y={y - 18}
+      rx="6"
+      ry="6"
+      width={Math.max(120, text.length * 6.4 + 14)}
+      height="28"
+      fill={bg}
+      stroke={color}
+      strokeOpacity="0.25"
+    />
+    <text x={x + 8} y={y + 2} fill={color} fontSize="12" fontWeight="700">
+      {text}
+    </text>
+  </g>
+);
 
   return (
     <div style={card}>
@@ -41,35 +72,62 @@ function MethodologyImpactSection() {
           <div style={{fontSize: 12, color: '#6b7280'}}>Higher area under the curve = retained capability</div>
         </div>
 
-        <svg viewBox="0 0 680 260" style={{width: '100%', height: '220px', display: 'block'}}>
-          {/* axes */}
-          <line x1="48" y1="12" x2="48" y2="220" stroke="#cbd5e1" strokeWidth="2"/>
-          <line x1="48" y1="220" x2="660" y2="220" stroke="#cbd5e1" strokeWidth="2"/>
-          <text x="6" y="20" fill="#475569" fontSize="11" fontWeight="700">Skill / Recall</text>
-          <text x="610" y="248" fill="#475569" fontSize="11" fontWeight="700">Time</text>
+        <svg viewBox="0 0 760 300" style={{ width: '100%', height: 260, display: 'block' }}>
+  {/* axes */}
+  <line x1="60" y1="24" x2="60" y2="250" stroke="#cbd5e1" strokeWidth="2" />
+  <line x1="60" y1="250" x2="730" y2="250" stroke="#cbd5e1" strokeWidth="2" />
+  <text x="14" y="34" fill="#475569" fontSize="11" fontWeight="700">Skill / Recall</text>
+  <text x="690" y="292" fill="#475569" fontSize="11" fontWeight="700">Time</text>
 
-          {/* red forgetting curve */}
-          <path d="M 48 40 C 160 45, 230 80, 300 120 C 360 155, 440 190, 660 210" fill="none" stroke="#ef4444" strokeWidth="4"/>
-          <circle cx="120" cy="48" r="4" fill="#ef4444"/>
-          <text x="130" y="56" fontSize="11" fill="#991b1b" fontWeight="700">Peak right after event</text>
-          <circle cx="360" cy="155" r="4" fill="#ef4444"/>
-          <text x="370" y="163" fontSize="11" fill="#991b1b">~70% forgotten in 24h</text>
-          <circle cx="520" cy="195" r="4" fill="#ef4444"/>
-          <text x="530" y="203" fontSize="11" fill="#991b1b">~90% within a month</text>
+  {/* subtle grid */}
+  {[140, 220, 300, 380, 460, 540, 620, 700].map((x, i) => (
+    <line key={i} x1={x} y1="250" x2={x} y2="246" stroke="#cbd5e1" />
+  ))}
+  {[90, 130, 170, 210].map((y, i) => (
+    <line key={i} x1="60" y1={y} x2="730" y2={y} stroke="#e5e7eb" />
+  ))}
 
-          {/* blue continuous growth */}
-          <path d="M 48 200 C 110 185, 150 170, 200 150 C 260 125, 320 110, 380 96 C 440 86, 520 78, 660 70" fill="none" stroke="#3b82f6" strokeWidth="4"/>
-          {/* spaced reinforcement ticks */}
-          {[110, 200, 290, 380, 470, 560].map((x, i) => (
-            <g key={i}>
-              <line x1={x} y1="220" x2={x} y2="210" stroke="#93c5fd" strokeWidth="2"/>
-              <circle cx={x} cy={100 - (i*2)} r="3.5" fill="#60a5fa" />
-            </g>
-          ))}
-          <text x="420" y="84" fontSize="11" fill="#1e3a8a" fontWeight="700">
-            Continuous, personalized reinforcement
-          </text>
-        </svg>
+  {/* RED: forgetting curve */}
+  <path
+    d="
+      M 60 60
+      C 180 56, 250 80, 320 120
+      C 380 154, 450 190, 730 230
+    "
+    fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round"
+  />
+
+  {/* BLUE: oscillating + rising curve */}
+  <path
+    d="
+      M 60 230
+      C 110 200, 150 190, 190 170
+      C 210 160, 230 150, 250 160
+      C 270 175, 300 150, 330 135
+      C 350 125, 370 120, 390 130
+      C 410 142, 440 128, 470 118
+      C 490 112, 510 110, 530 120
+      C 550 130, 585 118, 620 108
+      C 640 102, 660 98, 730 92
+    "
+    fill="none" stroke="#2563eb" strokeWidth="4.5" strokeLinecap="round"
+  />
+
+  {/* reinforcement dots */}
+  {[190, 250, 330, 390, 470, 530, 620].map((x, i) => (
+    <g key={i}>
+      <line x1={x} y1="250" x2={x} y2="242" stroke="#93c5fd" strokeWidth="2" />
+      <circle cx={x} cy={140 - i * 3 + 18} r="4" fill="#60a5fa" />
+    </g>
+  ))}
+
+  {/* CALLOUTS (kept off-path) */}
+  <Callout x={180} y={60}  text="Peak right after event"        color="#991b1b" bg="#fff5f5" lineTo={{ x: 150, y: 66 }} />
+  <Callout x={410} y={168} text="~70% forgotten in 24h"        color="#991b1b" bg="#fff5f5" lineTo={{ x: 365, y: 150 }} />
+  <Callout x={640} y={228} text="~90% within a month"          color="#991b1b" bg="#fff5f5" lineTo={{ x: 600, y: 212 }} />
+  <Callout x={520} y={84}  text="Continuous, personalized reinforcement" color="#1e3a8a" bg="#eef2ff" lineTo={{ x: 560, y: 110 }} />
+</svg>
+
 
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 8}}>
           <div style={{background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 8, padding: 12}}>
