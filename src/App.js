@@ -261,7 +261,7 @@ function CBPROICalculator() {
 
   const filteredOrganizations = useMemo(() => {
     let filtered = organizations;
-    if (searchTerm) filtered = filtered.filter(org => org.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (searchTerm) filtered = filtered.filter(org => org.name.toLowerCase().includes(searchTerm.toLowerCase())};
     // filterType and sortBy are fixed to keep parity with original UX
     return filtered.sort((a, b) => sortBy === 'name' ? a.name.localeCompare(b.name) : b.personnel - a.personnel);
   }, [searchTerm, sortBy]);
@@ -412,14 +412,64 @@ function CBPROICalculator() {
                       </ul>
                     </div>
                   </div>
-                  <div style={{background: '#ecfdf5', borderRadius: '12px', padding: '20px', marginTop: '24px', border: '2px solid #10b981'}}>
-                    <p style={{fontSize: '14px', color: '#065f46', margin: 0, lineHeight: 1.7}}>
-                      <strong style={{color: '#047857'}}>The Key Difference:</strong> Traditional training teaches <em>what</em> to do. BetterUp develops the underlying <strong>mindsets and behaviors</strong> (Resilience, Decision-Making, Emotional Regulation, Stress Management) that drive performance across all situations—delivered virtually with human expertise and AI support.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+                  {/* Clarifier: BetterUp complements CBP training */}
+<div
+  style={{
+    background: '#f0fdf4',
+    border: '2px solid #10b981',
+    borderRadius: '12px',
+    padding: '16px',
+    marginTop: '16px',
+  }}
+>
+  <p style={{ fontSize: '14px', color: '#065f46', margin: 0, lineHeight: 1.6 }}>
+    <em>
+      BetterUp complements CBP’s required and skills training—it doesn’t replace it.
+      We extend learning into daily practice so knowledge turns into durable behavior change.
+    </em>
+  </p>
+</div>
+
+{/* Updated Key Difference copy */}
+<div
+  style={{
+    background: '#ecfdf5',
+    borderRadius: '12px',
+    padding: '20px',
+    marginTop: '20px',
+    border: '2px solid #10b981',
+  }}
+>
+  <p style={{ fontSize: '14px', color: '#065f46', margin: 0, lineHeight: 1.7 }}>
+    <strong style={{ color: '#047857' }}>The Key Difference:</strong> Traditional training teaches{' '}
+    <em>what</em> to do. BetterUp’s Human Transformation Platform develops the underlying{' '}
+    <strong>mindsets and behaviors</strong> (Focus, Resilience, Decision-Making, Emotional
+    Regulation) that drive performance across all situations—delivered virtually with human
+    expertise and AI support. Unlike mandatory training that produces completion certificates,
+    BetterUp produces <strong>measurable outcomes</strong> through anonymized assessment data and
+    Reflection Points feeding your People Analytics dashboard.
+  </p>
+</div>
+
+{/* Optional “How they work together” finisher */}
+<div
+  style={{
+    background: '#fefce8',
+    border: '1px solid #facc15',
+    borderRadius: '12px',
+    padding: '16px',
+    marginTop: '16px',
+  }}
+>
+  <p style={{ fontSize: '13px', color: '#854d0e', margin: 0, lineHeight: 1.6 }}>
+    Together, <strong>training builds knowledge</strong>; BetterUp converts that knowledge into{' '}
+    <strong>everyday behaviors</strong>—preserving institutional expertise and improving readiness,
+    safety, and retention.
+  </p>
+</div>
+</div>  {/* closes the flex:1 content column */}
+</div>  {/* closes the row (icon + content) */}
 
             {/* NEW: Visual red vs blue methodology section */}
             <MethodologyImpactSection />
