@@ -283,58 +283,6 @@ function CBPROICalculator() {
               </div>
             </div>
 
-            <div>
-              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Air Force Proven Results (2021-2025)</h2>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px'}}>
-                {[
-                  {label: 'DAF Members', value: '11,215'},
-                  {label: 'Total Sessions', value: '77,333'},
-                  {label: 'Hours Delivered', value: '54,377'},
-                  {label: 'Satisfaction', value: '79%'}
-                ].map((stat, i) => (
-                  <div key={i} style={{background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(59,130,246,0.3)'}}>
-                    <div style={{fontSize: '13px', color: 'rgba(255,255,255,0.9)', marginBottom: '8px'}}>{stat.label}</div>
-                    <div style={{fontSize: '36px', fontWeight: 'bold', color: 'white'}}>{stat.value}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px'}}>
-                {['+17% Mission Readiness', '+6% Career Commitment', '+15% Resilience'].map((result, i) => (
-                  <div key={i} style={{background: '#dbeafe', border: '2px solid #3b82f6', borderRadius: '10px', padding: '20px', textAlign: 'center'}}>
-                    <div style={{fontSize: '24px', fontWeight: 'bold', color: '#1e3a8a'}}>{result}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{textAlign: 'center'}}>
-                <button 
-                  onClick={() => setShowCommercialResults(!showCommercialResults)}
-                  style={{background: 'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)', color: 'white', border: 'none', padding: '14px 28px', borderRadius: '10px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124,58,237,0.4)'}}
-                >
-                  {showCommercialResults ? '− Hide' : '+ Show'} Commercial Results
-                </button>
-              </div>
-              
-              {showCommercialResults && (
-                <div style={{marginTop: '24px', background: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '3px solid #7c3aed', borderRadius: '16px', padding: '32px'}}>
-                  <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#6b21a8', textAlign: 'center', marginBottom: '16px'}}>Enterprise & Federal Proven Results</h3>
-                  <p style={{fontSize: '14px', color: '#7e22ce', textAlign: 'center', fontStyle: 'italic', marginBottom: '20px'}}>Aggregate outcomes (client-confidential)</p>
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
-                    {[
-                      {value: '+18%', label: 'Leadership Capability', sub: 'Avg enterprise clients'},
-                      {value: '+22%', label: 'Manager Effectiveness', sub: '360° assessments'},
-                      {value: '85%', label: 'Client Satisfaction', sub: 'Commercial & government'}
-                    ].map((metric, i) => (
-                      <div key={i} style={{background: 'white', borderRadius: '12px', padding: '20px', textAlign: 'center', border: '2px solid #a78bfa', boxShadow: '0 2px 8px rgba(124,58,237,0.2)'}}>
-                        <div style={{fontSize: '32px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '8px'}}>{metric.value}</div>
-                        <div style={{fontSize: '14px', fontWeight: 'bold', color: '#7e22ce', marginBottom: '4px'}}>{metric.label}</div>
-                        <div style={{fontSize: '12px', color: '#9333ea'}}>{metric.sub}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
             <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px'}}>How the Model Works: Dual-Pathway Impact</h2>
               <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px'}}>
