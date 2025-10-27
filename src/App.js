@@ -1,5 +1,114 @@
 import React, { useState, useMemo } from 'react';
-import { Shield, Calculator, MessageCircle, X, ChevronDown, Settings, Info } from 'lucide-react';
+import { Shield, Calculator, MessageCircle, X, Settings } from 'lucide-react';
+
+function MethodologyImpactSection() {
+  const card = {
+    background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)',
+    border: '4px solid #64748b',
+    borderRadius: '16px',
+    padding: '28px',
+    marginTop: '16px'
+  };
+
+  const pill = (bg, color) => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '6px 10px',
+    borderRadius: '999px',
+    fontSize: '12px',
+    fontWeight: 700,
+    background: bg,
+    color
+  });
+
+  return (
+    <div style={card}>
+      <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+        <div style={{width: 48, height: 48, background: '#475569', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22}}>📈</div>
+        <h2 style={{fontSize: 22, fontWeight: '800', color: '#111827', margin: 0}}>
+          Methodology Impact: Why episodic training loses—and continuous development wins
+        </h2>
+      </div>
+
+      {/* Chart Card */}
+      <div style={{background: 'white', border: '2px solid #e5e7eb', borderRadius: 12, padding: 16}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8}}>
+          <div style={{display: 'flex', gap: 8, flexWrap: 'wrap'}}>
+            <span style={pill('#fee2e2', '#991b1b')}>🔴 Episodic training (red line)</span>
+            <span style={pill('#dbeafe', '#1e40af')}>🔵 Continuous development (blue line)</span>
+          </div>
+          <div style={{fontSize: 12, color: '#6b7280'}}>Higher area under the curve = retained capability</div>
+        </div>
+
+        <svg viewBox="0 0 680 260" style={{width: '100%', height: '220px', display: 'block'}}>
+          {/* axes */}
+          <line x1="48" y1="12" x2="48" y2="220" stroke="#cbd5e1" strokeWidth="2"/>
+          <line x1="48" y1="220" x2="660" y2="220" stroke="#cbd5e1" strokeWidth="2"/>
+          <text x="6" y="20" fill="#475569" fontSize="11" fontWeight="700">Skill / Recall</text>
+          <text x="610" y="248" fill="#475569" fontSize="11" fontWeight="700">Time</text>
+
+          {/* red forgetting curve */}
+          <path d="M 48 40 C 160 45, 230 80, 300 120 C 360 155, 440 190, 660 210" fill="none" stroke="#ef4444" strokeWidth="4"/>
+          <circle cx="120" cy="48" r="4" fill="#ef4444"/>
+          <text x="130" y="56" fontSize="11" fill="#991b1b" fontWeight="700">Peak right after event</text>
+          <circle cx="360" cy="155" r="4" fill="#ef4444"/>
+          <text x="370" y="163" fontSize="11" fill="#991b1b">~70% forgotten in 24h</text>
+          <circle cx="520" cy="195" r="4" fill="#ef4444"/>
+          <text x="530" y="203" fontSize="11" fill="#991b1b">~90% within a month</text>
+
+          {/* blue continuous growth */}
+          <path d="M 48 200 C 110 185, 150 170, 200 150 C 260 125, 320 110, 380 96 C 440 86, 520 78, 660 70" fill="none" stroke="#3b82f6" strokeWidth="4"/>
+          {/* spaced reinforcement ticks */}
+          {[110, 200, 290, 380, 470, 560].map((x, i) => (
+            <g key={i}>
+              <line x1={x} y1="220" x2={x} y2="210" stroke="#93c5fd" strokeWidth="2"/>
+              <circle cx={x} cy={100 - (i*2)} r="3.5" fill="#60a5fa" />
+            </g>
+          ))}
+          <text x="420" y="84" fontSize="11" fill="#1e3a8a" fontWeight="700">
+            Continuous, personalized reinforcement
+          </text>
+        </svg>
+
+        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 8}}>
+          <div style={{background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 8, padding: 12}}>
+            <div style={{fontSize: 13, color: '#9a3412', fontWeight: 700, marginBottom: 6}}>The Red Line: Why retention stalls</div>
+            <ul style={{margin: 0, paddingLeft: 16, color: '#7c2d12', fontSize: 13, lineHeight: 1.6}}>
+              <li>Event spikes learning → rapid decay (forgetting curve)</li>
+              <li>Episodic workshops don’t rewire habits</li>
+              <li>Leaders default to command-and-control under stress without reinforcement</li>
+            </ul>
+          </div>
+          <div style={{background: '#ecfeff', border: '1px solid #67e8f9', borderRadius: 8, padding: 12}}>
+            <div style={{fontSize: 13, color: '#155e75', fontWeight: 700, marginBottom: 6}}>The Blue Line: Why DAF moved retention +6%</div>
+            <ul style={{margin: 0, paddingLeft: 16, color: '#0e7490', fontSize: 13, lineHeight: 1.6}}>
+              <li>Continuous, personalized practice + coaching compounds capability</li>
+              <li>Just-in-time support during critical incidents & career choke points</li>
+              <li>Transforms one-off training into ongoing learning journeys</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style={{marginTop: 12, fontSize: 12, color: '#475569'}}>
+          <strong>Leadership takeaway:</strong> preserve institutional knowledge through continuous development now—don’t wait until 2028 exits make it irrecoverable.
+        </div>
+      </div>
+
+      <div style={{marginTop: 16, background: '#fffbeb', border: '1px solid #fbbf24', borderRadius: 12, padding: 16}}>
+        <p style={{margin: 0, fontSize: 14, color: '#92400e', lineHeight: 1.6}}>
+          The red line explains the current retention gap: episodic CBP training peaks and fades, so experience isn’t
+          transferred. The blue line shows what changes outcomes: continuous leadership development and well-being support
+          that compounds over time—turning training events into sustained behavior change with AI-supported coaching.
+        </p>
+      </div>
+
+      <div style={{marginTop: 10, fontSize: 11, color: '#64748b'}}>
+        <strong>Sources (high level):</strong> Ebbinghaus forgetting curve; spaced repetition research; BetterUp outcomes incl. DAF (+6% retention); peer-reviewed burnout reduction (JAMA 2024).
+      </div>
+    </div>
+  );
+}
 
 function CBPROICalculator() {
   const [showExecutiveSummary, setShowExecutiveSummary] = useState(true);
@@ -7,24 +116,24 @@ function CBPROICalculator() {
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const [showCommercialResults, setShowCommercialResults] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('all');
-  const [sortBy, setSortBy] = useState('name');
-  
+  const [filterType] = useState('all');
+  const [sortBy] = useState('name');
+
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showImpact, setShowImpact] = useState(false);
   const [showAssistant, setShowAssistant] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
-  
+
   const [missionReadinessImprovement, setMissionReadinessImprovement] = useState(17);
   const [resilienceImprovement, setResilienceImprovement] = useState(15);
   const [careerCommitmentImprovement, setCareerCommitmentImprovement] = useState(13);
   const [leadershipImprovement, setLeadershipImprovement] = useState(12);
   const [standardsImprovement, setStandardsImprovement] = useState(10);
-  
+
   const [manualRetentionOverride, setManualRetentionOverride] = useState(false);
   const [manualRetentionValue, setManualRetentionValue] = useState(7);
-  
+
   const [totalPersonnel, setTotalPersonnel] = useState(25879);
   const [targetPopulation, setTargetPopulation] = useState(5000);
   const [seats, setSeats] = useState(5000);
@@ -75,7 +184,7 @@ function CBPROICalculator() {
     const programCost = seats * costPerSeat;
     const netSavings = totalSavings - programCost;
     const roi = programCost > 0 ? ((netSavings / programCost) * 100).toFixed(0) : 0;
-    
+
     return {engaged, expectedSeparations, preventedSeparations, retentionSavings, claimsPrevented, workersCompSavings, readinessImproved, readinessSavings, totalSavings, programCost, netSavings, roi};
   }, [seats, costPerSeat, engagementRate, retentionEffectiveness, targetPopulation, selectedOrganization, readinessPercentage]);
 
@@ -85,20 +194,19 @@ function CBPROICalculator() {
   const isOFO = selectedOrganization?.id === 'ofo' || selectedOrganization?.type === 'ofo-field';
 
   const performanceDrivers = [
-    {key: 'mission', priority: "MISSION READINESS", drivers: "Decision-Making • Cognitive Agility • Performance", baseline: 45, growth: 62, improvement: missionReadinessImprovement, setImprovement: setMissionReadinessImprovement},
-    {key: 'resilience', priority: "RESILIENCE & WELLNESS", drivers: "Burnout Prevention • Stress Management • Emotional Regulation", baseline: 47, growth: 62, improvement: resilienceImprovement, setImprovement: setResilienceImprovement, affectsWorkersComp: true},
-    {key: 'career', priority: "CAREER COMMITMENT", drivers: "Purpose • Career Development • Work-Life Integration", baseline: 48, growth: 54, improvement: careerCommitmentImprovement, setImprovement: setCareerCommitmentImprovement},
-    {key: 'leadership', priority: "LEADERSHIP", drivers: "Communication • Strategic Thinking • Empowerment", baseline: 50, growth: 56, improvement: leadershipImprovement, setImprovement: setLeadershipImprovement},
-    {key: 'standards', priority: "PROFESSIONAL STANDARDS", drivers: "Ethics • Judgment • Professional Demeanor", baseline: 49, growth: 59, improvement: standardsImprovement, setImprovement: setStandardsImprovement}
+    {key: 'mission', priority: 'MISSION READINESS', drivers: 'Decision-Making • Cognitive Agility • Performance', baseline: 45, growth: 62, improvement: missionReadinessImprovement, setImprovement: setMissionReadinessImprovement},
+    {key: 'resilience', priority: 'RESILIENCE & WELLNESS', drivers: 'Burnout Prevention • Stress Management • Emotional Regulation', baseline: 47, growth: 62, improvement: resilienceImprovement, setImprovement: setResilienceImprovement, affectsWorkersComp: true},
+    {key: 'career', priority: 'CAREER COMMITMENT', drivers: 'Purpose • Career Development • Work-Life Integration', baseline: 48, growth: 54, improvement: careerCommitmentImprovement, setImprovement: setCareerCommitmentImprovement},
+    {key: 'leadership', priority: 'LEADERSHIP', drivers: 'Communication • Strategic Thinking • Empowerment', baseline: 50, growth: 56, improvement: leadershipImprovement, setImprovement: setLeadershipImprovement},
+    {key: 'standards', priority: 'PROFESSIONAL STANDARDS', drivers: 'Ethics • Judgment • Professional Demeanor', baseline: 49, growth: 59, improvement: standardsImprovement, setImprovement: setStandardsImprovement}
   ];
 
   const filteredOrganizations = useMemo(() => {
     let filtered = organizations;
     if (searchTerm) filtered = filtered.filter(org => org.name.toLowerCase().includes(searchTerm.toLowerCase()));
-    if (filterType !== 'all' && filterType !== 'preset') filtered = filtered.filter(org => org.type === filterType);
-    if (filterType === 'preset') filtered = filtered.filter(org => org.preset === 'yes');
+    // filterType and sortBy are fixed to keep parity with original UX
     return filtered.sort((a, b) => sortBy === 'name' ? a.name.localeCompare(b.name) : b.personnel - a.personnel);
-  }, [searchTerm, filterType, sortBy]);
+  }, [searchTerm, sortBy]);
 
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
@@ -110,7 +218,7 @@ function CBPROICalculator() {
     return (
       <div style={{width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '32px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
         <div style={{background: 'white', borderRadius: '16px', boxShadow: '0 8px 40px rgba(0,0,0,0.15)', overflow: 'hidden', borderTop: '8px solid #0066cc'}}>
-          
+
           <div style={{background: 'linear-gradient(135deg, #003d82 0%, #0066cc 100%)', padding: '48px', color: 'white'}}>
             <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'}}>
               <Shield size={64} color="#ffcc00" strokeWidth={2.5} />
@@ -130,7 +238,7 @@ function CBPROICalculator() {
           </div>
 
           <div style={{padding: '48px', display: 'flex', flexDirection: 'column', gap: '32px'}}>
-            
+
             <div>
               <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Air Force Proven Results (2021-2025)</h2>
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px'}}>
@@ -161,7 +269,7 @@ function CBPROICalculator() {
                   {showCommercialResults ? '− Hide' : '+ Show'} Commercial Results
                 </button>
               </div>
-              
+
               {showCommercialResults && (
                 <div style={{marginTop: '24px', background: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '3px solid #7c3aed', borderRadius: '16px', padding: '32px'}}>
                   <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#6b21a8', textAlign: 'center', marginBottom: '16px'}}>Enterprise & Federal Proven Results</h3>
@@ -182,7 +290,7 @@ function CBPROICalculator() {
                 </div>
               )}
             </div>
-            
+
             <div style={{background: '#dbeafe', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'start', gap: '16px', marginBottom: '16px'}}>
                 <div style={{width: '48px', height: '48px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0}}>ℹ️</div>
@@ -212,6 +320,7 @@ function CBPROICalculator() {
               </div>
             </div>
 
+            {/* Why Precision Development vs. Traditional Training? */}
             <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'start', gap: '16px'}}>
                 <div style={{width: '48px', height: '48px', background: '#475569', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0}}>⚡</div>
@@ -254,34 +363,8 @@ function CBPROICalculator() {
               </div>
             </div>
 
-            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>🤖</div>
-                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#4338ca', margin: 0}}>AI Development Partner: Always-Available Support</h2>
-              </div>
-              <p style={{fontSize: '16px', color: '#4338ca', marginBottom: '20px'}}>24/7 access to resilience support—critical when facing high-stakes law enforcement situations:</p>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px'}}>
-                {[
-                  {icon: '🎭', title: 'Role-Play & Rehearsal', text: 'Practice use-of-force scenarios, difficult apprehensions, public interactions before real encounters'},
-                  {icon: '⚡', title: 'Critical Incident Support', text: 'Immediate decompression after traumatic events, stress management during surge operations'},
-                  {icon: '🎯', title: 'Career Decision Support', text: 'Explore specialty transitions, leadership opportunities, retirement planning at critical decision points'},
-                  {icon: '📊', title: 'Real-Time Feedback', text: 'Immediate insights on de-escalation techniques, communication strategies, decision-making patterns'}
-                ].map((item, i) => (
-                  <div key={i} style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
-                    <div style={{fontSize: '14px', fontWeight: 'bold', color: '#4338ca', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                      <span style={{fontSize: '20px'}}>{item.icon}</span>
-                      {item.title}
-                    </div>
-                    <p style={{fontSize: '13px', color: '#4f46e5', margin: 0, lineHeight: 1.6}}>{item.text}</p>
-                  </div>
-                ))}
-              </div>
-              <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '20px', border: '2px solid #818cf8'}}>
-                <p style={{fontSize: '14px', color: '#3730a3', margin: 0}}>
-                  <strong>Virtual + Human Expertise:</strong> AI partner complements (not replaces) human expertise—agents and officers get immediate support 24/7, with human experts available for deeper development work.
-                </p>
-              </div>
-            </div>
+            {/* NEW: Visual red vs blue methodology section */}
+            <MethodologyImpactSection />
 
             <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px'}}>How the Model Works: Dual-Pathway Impact</h2>
@@ -306,11 +389,11 @@ function CBPROICalculator() {
                     <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Retention Economics</h3>
                   </div>
                   <p style={{fontSize: '15px', color: '#44403c', marginBottom: '16px', lineHeight: 1.6}}>
-                    Helps at critical decision points (3-5 yrs, 10-15 yrs, pre-2028 retirement) through career clarity, purpose development, resilience building.
+                    Helps at critical decision points (3–5 yrs, 10–15 yrs, pre-2028 retirement) through career clarity, purpose development, resilience building.
                   </p>
                   <div style={{background: '#fed7aa', borderRadius: '10px', padding: '16px'}}>
                     <strong style={{fontSize: '14px', color: '#78350f'}}>Value:</strong>
-                    <div style={{fontSize: '13px', color: '#92400e', marginTop: '4px'}}>Each prevented separation avoids $87K-$130K in recruiting, FLETC training, lost productivity</div>
+                    <div style={{fontSize: '13px', color: '#92400e', marginTop: '4px'}}>Each prevented separation avoids $87K–$130K in recruiting, FLETC training, lost productivity</div>
                     <div style={{fontSize: '11px', color: '#78350f', marginTop: '8px', fontStyle: 'italic'}}>Source: GAO-24-107029</div>
                   </div>
                 </div>
@@ -329,9 +412,9 @@ function CBPROICalculator() {
                 <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #60a5fa'}}>
                   <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>🎯 What Sliders Mean</h3>
                   <ul style={{fontSize: '14px', color: '#1e3a8a', margin: 0, paddingLeft: '20px', lineHeight: 1.8}}>
-                    <li><strong>High (20-30%):</strong> Max focus—dedicated learning, frequent coaching, AI practice</li>
-                    <li><strong>Medium (10-19%):</strong> Balanced investment</li>
-                    <li><strong>Low (0-9%):</strong> Minimal—resources elsewhere</li>
+                    <li><strong>High (20–30%):</strong> Max focus—dedicated learning, frequent coaching, AI practice</li>
+                    <li><strong>Medium (10–19%):</strong> Balanced investment</li>
+                    <li><strong>Low (0–9%):</strong> Minimal—resources elsewhere</li>
                   </ul>
                 </div>
                 <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #60a5fa'}}>
@@ -350,55 +433,6 @@ function CBPROICalculator() {
               </div>
             </div>
 
-            <div style={{background: 'white', border: '4px solid #003d82', borderRadius: '16px', padding: '32px'}}>
-              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px'}}>What You Can Do With This Dashboard</h2>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px'}}>
-                <div style={{textAlign: 'center'}}>
-                  <div style={{width: '64px', height: '64px', background: '#0066cc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '28px'}}>📊</div>
-                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>Model Your Component</h3>
-                  <p style={{fontSize: '13px', color: '#64748b'}}>Select your sector/field office and see projected ROI</p>
-                </div>
-                <div style={{textAlign: 'center'}}>
-                  <div style={{width: '64px', height: '64px', background: '#0066cc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '28px'}}>⚙️</div>
-                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>Adjust Assumptions</h3>
-                  <p style={{fontSize: '13px', color: '#64748b'}}>Change rates and priorities to match your context</p>
-                </div>
-                <div style={{textAlign: 'center'}}>
-                  <div style={{width: '64px', height: '64px', background: '#0066cc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '28px'}}>🎯</div>
-                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>Scenario Planning</h3>
-                  <p style={{fontSize: '13px', color: '#64748b'}}>Test conservative/moderate/aggressive assumptions</p>
-                </div>
-              </div>
-            </div>
-
-            <div style={{background: '#fffbeb', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'start', gap: '16px'}}>
-                <div style={{width: '48px', height: '48px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '28px', fontWeight: 'bold', flexShrink: 0}}>!</div>
-                <div>
-                  <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', marginBottom: '16px'}}>Understanding Projections vs. Actual Results</h2>
-                  <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-                    <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #fbbf24'}}>
-                      <h3 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '8px', color: '#92400e'}}>This Dashboard Shows: <span style={{color: '#d97706'}}>Projections</span></h3>
-                      <p style={{fontSize: '14px', color: '#78350f', margin: 0, lineHeight: 1.6}}>
-                        Financial forecasts applying proven Air Force outcomes to CBP's publicly available attrition rates and government-sourced training costs. All assumptions adjustable and transparent.
-                      </p>
-                    </div>
-                    <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #fbbf24'}}>
-                      <h3 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '8px', color: '#92400e'}}>After Implementation: <span style={{color: '#059669'}}>Measured Results</span></h3>
-                      <p style={{fontSize: '14px', marginBottom: '12px', color: '#78350f'}}>
-                        BetterUp operates as <strong>action layer</strong> (creating behavioral change) and <strong>sensing layer</strong> (providing real-time visibility):
-                      </p>
-                      <ul style={{fontSize: '13px', color: '#78350f', lineHeight: 1.7, paddingLeft: '20px', margin: 0}}>
-                        <li><strong>Individual:</strong> Assessments track resilience, decision-making, stress management growth</li>
-                        <li><strong>Sector/Field Office:</strong> Anonymized data shows team cohesion and morale</li>
-                        <li><strong>Organizational:</strong> CBP dashboard reports wellness/retention in real-time</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div>
               <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Performance Drivers Aligned to CBP Strategic Priorities</h2>
               <p style={{textAlign: 'center', color: '#64748b', marginBottom: '20px', fontSize: '15px'}}>BetterUp targets the behavioral foundations that drive DHS and CBP mission success</p>
@@ -410,7 +444,7 @@ function CBPROICalculator() {
                   {title: 'LEADERSHIP', sub: 'Communication, Strategic Thinking, Supervisory Effectiveness'},
                   {title: 'STANDARDS', sub: 'Ethical Decision-Making, Professional Demeanor, Sound Judgment'}
                 ].map((priority, i) => (
-                  <div key={i} style={{background: '#dbeafe', rounded: '12px', padding: '16px', border: '2px solid #60a5fa', borderRadius: '12px', textAlign: 'center'}}>
+                  <div key={i} style={{background: '#dbeafe', padding: '16px', border: '2px solid #60a5fa', borderRadius: '12px', textAlign: 'center'}}>
                     <div style={{fontSize: '13px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>{priority.title}</div>
                     <div style={{fontSize: '11px', color: '#64748b'}}>{priority.sub}</div>
                   </div>
@@ -665,7 +699,7 @@ function CBPROICalculator() {
                       <button onClick={() => {setEngagementRate(75); setMissionReadinessImprovement(25); setResilienceImprovement(23); setCareerCommitmentImprovement(20); setLeadershipImprovement(18); setStandardsImprovement(15);}} style={{flex: 1, padding: '10px', background: '#003d82', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '500', cursor: 'pointer'}}>Aggressive</button>
                     </div>
                   </div>
-                  
+
                   <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
                       <label style={{fontSize: '14px', fontWeight: '600'}}>Retention Effectiveness: {retentionEffectiveness}%</label>
@@ -714,7 +748,8 @@ function CBPROICalculator() {
               <div style={{fontSize: '12px', color: '#64748b'}}>
                 • GAO-24-107029: CBP Recruitment & Retention<br/>
                 • JAMA 2024: 21.6% burnout reduction<br/>
-                • NTEU Testimony: Workforce challenges
+                • Ebbinghaus forgetting curve & spaced repetition research (learning decay & recall)<br/>
+                • BetterUp DAF outcomes (2021–2025): +6% retention, +15% resilience, +17% readiness
               </div>
             </div>
           </div>
@@ -767,7 +802,7 @@ function CBPROICalculator() {
               type="text" 
               value={chatInput} 
               onChange={(e) => setChatInput(e.target.value)} 
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()} 
+              onKeyDown={(e) => { if (e.key === 'Enter') handleSendMessage(); }}
               placeholder="Ask about the model..." 
               style={{flex: 1, padding: '8px 12px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px'}}
             />
