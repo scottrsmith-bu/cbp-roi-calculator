@@ -110,22 +110,330 @@ function CBPROICalculator() {
     return (
       <div style={{width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '32px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
         <div style={{background: 'white', borderRadius: '16px', boxShadow: '0 8px 40px rgba(0,0,0,0.15)', overflow: 'hidden', borderTop: '8px solid #0066cc'}}>
+          
           <div style={{background: 'linear-gradient(135deg, #003d82 0%, #0066cc 100%)', padding: '48px', color: 'white'}}>
             <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'}}>
               <Shield size={64} color="#ffcc00" strokeWidth={2.5} />
               <div>
-                <h1 style={{fontSize: '52px', fontWeight: 'bold', margin: '0 0 12px 0'}}>BetterUp CBP Leadership Dashboard</h1>
-                <p style={{fontSize: '24px', color: '#ffcc00', margin: 0}}>Workers' Comp & Retention ROI</p>
+                <h1 style={{fontSize: '52px', fontWeight: 'bold', margin: '0 0 12px 0', lineHeight: 1.1}}>BetterUp CBP Leadership Dashboard</h1>
+                <p style={{fontSize: '24px', color: '#ffcc00', margin: 0, fontWeight: 'bold'}}>Workers' Comp & Retention ROI Projections</p>
               </div>
             </div>
+            <div style={{background: 'rgba(255,255,255,0.15)', borderRadius: '12px', padding: '20px', borderLeft: '5px solid #ffcc00'}}>
+              <p style={{fontSize: '18px', lineHeight: 1.7, margin: '0 0 12px 0'}}>
+                <strong style={{color: '#ffcc00'}}>Evidence-based ROI dashboard</strong> projecting the financial impact of precision resilience development—targeting the mindsets and behaviors that drive DHS/CBP strategic priorities: <strong>Mission Readiness, Officer Safety, Professional Standards, and Career Retention</strong>.
+              </p>
+              <p style={{fontSize: '16px', color: '#e0f2fe', margin: 0}}>
+                Built on <strong style={{color: '#ffcc00'}}>4 years of proven Air Force results</strong> (77K+ sessions, 11K+ participants) and <strong>JAMA 2024 peer-reviewed research</strong> showing 22% reduction in mental health conditions.
+              </p>
+            </div>
           </div>
-          <div style={{padding: '48px', textAlign: 'center'}}>
-            <button 
-              onClick={() => {setShowExecutiveSummary(false); setShowLanding(true);}} 
-              style={{background: '#ffcc00', color: '#003d82', border: 'none', padding: '16px 48px', borderRadius: '12px', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 12px rgba(255,204,0,0.4)'}}
-            >
-              Select Your Component →
-            </button>
+
+          <div style={{padding: '48px', display: 'flex', flexDirection: 'column', gap: '32px'}}>
+            
+            <div style={{background: '#dbeafe', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'start', gap: '16px', marginBottom: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0}}>ℹ️</div>
+                <div style={{flex: 1}}>
+                  <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#1e40af', margin: '0 0 12px 0'}}>What This Tool Provides: Projections for Decision Support</h2>
+                  <p style={{fontSize: '16px', color: '#1e3a8a', margin: '0 0 16px 0', lineHeight: 1.6}}>
+                    This dashboard generates <strong>financial projections</strong> based on proven Air Force outcomes and peer-reviewed research applied to CBP workers' comp claim rates, separation data, and training costs from government sources (GAO, DHS OIG, NTEU testimony). These are <strong>evidence-based forecasts</strong>, not guarantees.
+                  </p>
+                  <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #60a5fa'}}>
+                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Real Results Come After Implementation:</h3>
+                    <div style={{display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#1e3a8a'}}>
+                      <div style={{display: 'flex', gap: '12px'}}>
+                        <div style={{width: '24px', height: '24px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '12px', flexShrink: 0}}>1</div>
+                        <div><strong>Action Layer:</strong> BetterUp's Human Transformation Platform delivers virtual, just-in-time resilience development through human expertise, behavioral assessments, personalized learning journeys, and an AI development partner—improving mindsets and behaviors driving retention and operational readiness</div>
+                      </div>
+                      <div style={{display: 'flex', gap: '12px'}}>
+                        <div style={{width: '24px', height: '24px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '12px', flexShrink: 0}}>2</div>
+                        <div><strong>Sensing Layer:</strong> Real-time people analytics dashboard aggregates anonymized data from pre/post assessments, Reflection Points, and engagement patterns—providing leadership measurable visibility into wellness, resilience, and retention trends</div>
+                      </div>
+                      <div style={{display: 'flex', gap: '12px'}}>
+                        <div style={{width: '24px', height: '24px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '12px', flexShrink: 0}}>3</div>
+                        <div><strong>Measured Outcomes:</strong> After implementation, your actual results replace these projections with data from your agents, officers, and command</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'start', gap: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#475569', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0}}>⚡</div>
+                <div style={{flex: 1}}>
+                  <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#1e293b', marginBottom: '16px'}}>Why Precision Development vs. Traditional Training?</h2>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px'}}>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #ef4444'}}>
+                      <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#991b1b', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                        <span style={{fontSize: '24px'}}>📚</span>
+                        Traditional Training
+                      </h3>
+                      <ul style={{fontSize: '14px', color: '#7f1d1d', margin: 0, paddingLeft: '20px', lineHeight: 1.8}}>
+                        <li><strong>Event-based:</strong> Annual refreshers, mandatory courses, EAP programs</li>
+                        <li><strong>Knowledge transfer:</strong> Teaching what to do</li>
+                        <li><strong>Episodic:</strong> One-time interventions</li>
+                        <li><strong>Generic curriculum:</strong> Same for everyone</li>
+                        <li><strong>Output focus:</strong> Completion certificates</li>
+                      </ul>
+                    </div>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #10b981'}}>
+                      <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                        <span style={{fontSize: '24px'}}>🎯</span>
+                        BetterUp Platform
+                      </h3>
+                      <ul style={{fontSize: '14px', color: '#064e3b', margin: 0, paddingLeft: '20px', lineHeight: 1.8}}>
+                        <li><strong>Virtual delivery:</strong> Human expertise + AI partner</li>
+                        <li><strong>Just-in-time:</strong> During critical moments</li>
+                        <li><strong>AI role-play:</strong> Use-of-force scenarios, career decisions</li>
+                        <li><strong>Personalized:</strong> Individual development paths</li>
+                        <li><strong>Measured outcomes:</strong> Assessments & Reflection Points</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div style={{background: '#ecfdf5', borderRadius: '12px', padding: '20px', marginTop: '24px', border: '2px solid #10b981'}}>
+                    <p style={{fontSize: '14px', color: '#065f46', margin: 0, lineHeight: 1.7}}>
+                      <strong style={{color: '#047857'}}>The Key Difference:</strong> Traditional training teaches <em>what</em> to do. BetterUp develops the underlying <strong>mindsets and behaviors</strong> (Resilience, Decision-Making, Emotional Regulation, Stress Management) that drive performance across all situations—delivered virtually with human expertise and AI support.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>🤖</div>
+                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#4338ca', margin: 0}}>AI Development Partner: Always-Available Support</h2>
+              </div>
+              <p style={{fontSize: '16px', color: '#4338ca', marginBottom: '20px'}}>24/7 access to resilience support—critical when facing high-stakes law enforcement situations:</p>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px'}}>
+                {[
+                  {icon: '🎭', title: 'Role-Play & Rehearsal', text: 'Practice use-of-force scenarios, difficult apprehensions, public interactions before real encounters'},
+                  {icon: '⚡', title: 'Critical Incident Support', text: 'Immediate decompression after traumatic events, stress management during surge operations'},
+                  {icon: '🎯', title: 'Career Decision Support', text: 'Explore specialty transitions, leadership opportunities, retirement planning at critical decision points'},
+                  {icon: '📊', title: 'Real-Time Feedback', text: 'Immediate insights on de-escalation techniques, communication strategies, decision-making patterns'}
+                ].map((item, i) => (
+                  <div key={i} style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
+                    <div style={{fontSize: '14px', fontWeight: 'bold', color: '#4338ca', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                      <span style={{fontSize: '20px'}}>{item.icon}</span>
+                      {item.title}
+                    </div>
+                    <p style={{fontSize: '13px', color: '#4f46e5', margin: 0, lineHeight: 1.6}}>{item.text}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '20px', border: '2px solid #818cf8'}}>
+                <p style={{fontSize: '14px', color: '#3730a3', margin: 0}}>
+                  <strong>Virtual + Human Expertise:</strong> AI partner complements (not replaces) human expertise—agents and officers get immediate support 24/7, with human experts available for deeper development work.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Air Force Proven Results (2021-2025)</h2>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px'}}>
+                {[
+                  {label: 'DAF Members', value: '11,215'},
+                  {label: 'Total Sessions', value: '77,333'},
+                  {label: 'Hours Delivered', value: '54,377'},
+                  {label: 'Satisfaction', value: '79%'}
+                ].map((stat, i) => (
+                  <div key={i} style={{background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(59,130,246,0.3)'}}>
+                    <div style={{fontSize: '13px', color: 'rgba(255,255,255,0.9)', marginBottom: '8px'}}>{stat.label}</div>
+                    <div style={{fontSize: '36px', fontWeight: 'bold', color: 'white'}}>{stat.value}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px'}}>
+                {['+17% Mission Readiness', '+6% Career Commitment', '+15% Resilience'].map((result, i) => (
+                  <div key={i} style={{background: '#dbeafe', border: '2px solid #3b82f6', borderRadius: '10px', padding: '20px', textAlign: 'center'}}>
+                    <div style={{fontSize: '24px', fontWeight: 'bold', color: '#1e3a8a'}}>{result}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{textAlign: 'center'}}>
+                <button 
+                  onClick={() => setShowCommercialResults(!showCommercialResults)}
+                  style={{background: 'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)', color: 'white', border: 'none', padding: '14px 28px', borderRadius: '10px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124,58,237,0.4)'}}
+                >
+                  {showCommercialResults ? '− Hide' : '+ Show'} Commercial Results
+                </button>
+              </div>
+              
+              {showCommercialResults && (
+                <div style={{marginTop: '24px', background: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '3px solid #7c3aed', borderRadius: '16px', padding: '32px'}}>
+                  <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#6b21a8', textAlign: 'center', marginBottom: '16px'}}>Enterprise & Federal Proven Results</h3>
+                  <p style={{fontSize: '14px', color: '#7e22ce', textAlign: 'center', fontStyle: 'italic', marginBottom: '20px'}}>Aggregate outcomes (client-confidential)</p>
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
+                    {[
+                      {value: '+18%', label: 'Leadership Capability', sub: 'Avg enterprise clients'},
+                      {value: '+22%', label: 'Manager Effectiveness', sub: '360° assessments'},
+                      {value: '85%', label: 'Client Satisfaction', sub: 'Commercial & government'}
+                    ].map((metric, i) => (
+                      <div key={i} style={{background: 'white', borderRadius: '12px', padding: '20px', textAlign: 'center', border: '2px solid #a78bfa', boxShadow: '0 2px 8px rgba(124,58,237,0.2)'}}>
+                        <div style={{fontSize: '32px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '8px'}}>{metric.value}</div>
+                        <div style={{fontSize: '14px', fontWeight: 'bold', color: '#7e22ce', marginBottom: '4px'}}>{metric.label}</div>
+                        <div style={{fontSize: '12px', color: '#9333ea'}}>{metric.sub}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px'}}>How the Model Works: Dual-Pathway Impact</h2>
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px'}}>
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '48px', height: '48px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>1</div>
+                    <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Workers' Comp Reduction</h3>
+                  </div>
+                  <p style={{fontSize: '15px', color: '#44403c', marginBottom: '16px', lineHeight: 1.6}}>
+                    BetterUp helps build resilience to prevent mental health claims (PTSD, depression, anxiety, SUD) that drive costs and operational degradation.
+                  </p>
+                  <div style={{background: '#fee2e2', borderRadius: '10px', padding: '16px'}}>
+                    <strong style={{fontSize: '14px', color: '#7f1d1d'}}>Value:</strong>
+                    <div style={{fontSize: '13px', color: '#991b1b', marginTop: '4px'}}>22% reduction = lower medical costs, reduced lost time, fewer disability payments</div>
+                    <div style={{fontSize: '11px', color: '#7f1d1d', marginTop: '8px', fontStyle: 'italic'}}>Source: JAMA 2024</div>
+                  </div>
+                </div>
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '48px', height: '48px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>2</div>
+                    <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Retention Economics</h3>
+                  </div>
+                  <p style={{fontSize: '15px', color: '#44403c', marginBottom: '16px', lineHeight: 1.6}}>
+                    Helps at critical decision points (3-5 yrs, 10-15 yrs, pre-2028 retirement) through career clarity, purpose development, resilience building.
+                  </p>
+                  <div style={{background: '#fed7aa', borderRadius: '10px', padding: '16px'}}>
+                    <strong style={{fontSize: '14px', color: '#78350f'}}>Value:</strong>
+                    <div style={{fontSize: '13px', color: '#92400e', marginTop: '4px'}}>Each prevented separation avoids $87K-$130K in recruiting, FLETC training, lost productivity</div>
+                    <div style={{fontSize: '11px', color: '#78350f', marginTop: '8px', fontStyle: 'italic'}}>Source: GAO-24-107029</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>📊</div>
+                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#1e3a8a', margin: 0}}>How Performance Drivers Work</h2>
+              </div>
+              <p style={{fontSize: '16px', color: '#1e40af', marginBottom: '20px'}}>
+                Performance Driver sliders model <strong>how much you prioritize each CBP strategic objective</strong>.
+              </p>
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px'}}>
+                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #60a5fa'}}>
+                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>🎯 What Sliders Mean</h3>
+                  <ul style={{fontSize: '14px', color: '#1e3a8a', margin: 0, paddingLeft: '20px', lineHeight: 1.8}}>
+                    <li><strong>High (20-30%):</strong> Max focus—dedicated learning, frequent coaching, AI practice</li>
+                    <li><strong>Medium (10-19%):</strong> Balanced investment</li>
+                    <li><strong>Low (0-9%):</strong> Minimal—resources elsewhere</li>
+                  </ul>
+                </div>
+                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #60a5fa'}}>
+                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>⚡ How They Affect ROI</h3>
+                  <ul style={{fontSize: '14px', color: '#1e3a8a', margin: 0, paddingLeft: '20px', lineHeight: 1.8}}>
+                    <li><strong>Mission, Resilience, Standards</strong> → Drive effectiveness & claim reduction</li>
+                    <li><strong>Career, Leadership</strong> → Drive retention & prevent turnover</li>
+                    <li>Higher values = Bigger improvements = Greater impact</li>
+                  </ul>
+                </div>
+              </div>
+              <div style={{background: '#fed7aa', borderRadius: '12px', padding: '16px', border: '2px solid #f59e0b'}}>
+                <p style={{fontSize: '14px', color: '#78350f', margin: 0}}>
+                  <strong>💡 Leadership Decision:</strong> Adjust sliders to match priorities. Workers' comp crisis? Max out Resilience. 2028 retirement cliff? Prioritize Career Commitment and Leadership.
+                </p>
+              </div>
+            </div>
+
+            <div style={{background: 'white', border: '4px solid #003d82', borderRadius: '16px', padding: '32px'}}>
+              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px'}}>What You Can Do With This Dashboard</h2>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px'}}>
+                <div style={{textAlign: 'center'}}>
+                  <div style={{width: '64px', height: '64px', background: '#0066cc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '28px'}}>📊</div>
+                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>Model Your Component</h3>
+                  <p style={{fontSize: '13px', color: '#64748b'}}>Select your sector/field office and see projected ROI</p>
+                </div>
+                <div style={{textAlign: 'center'}}>
+                  <div style={{width: '64px', height: '64px', background: '#0066cc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '28px'}}>⚙️</div>
+                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>Adjust Assumptions</h3>
+                  <p style={{fontSize: '13px', color: '#64748b'}}>Change rates and priorities to match your context</p>
+                </div>
+                <div style={{textAlign: 'center'}}>
+                  <div style={{width: '64px', height: '64px', background: '#0066cc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '28px'}}>🎯</div>
+                  <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>Scenario Planning</h3>
+                  <p style={{fontSize: '13px', color: '#64748b'}}>Test conservative/moderate/aggressive assumptions</p>
+                </div>
+              </div>
+            </div>
+
+            <div style={{background: '#fffbeb', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'start', gap: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '28px', fontWeight: 'bold', flexShrink: 0}}>!</div>
+                <div>
+                  <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', marginBottom: '16px'}}>Understanding Projections vs. Actual Results</h2>
+                  <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #fbbf24'}}>
+                      <h3 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '8px', color: '#92400e'}}>This Dashboard Shows: <span style={{color: '#d97706'}}>Projections</span></h3>
+                      <p style={{fontSize: '14px', color: '#78350f', margin: 0, lineHeight: 1.6}}>
+                        Financial forecasts applying proven Air Force outcomes to CBP's publicly available attrition rates and government-sourced training costs. All assumptions adjustable and transparent.
+                      </p>
+                    </div>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #fbbf24'}}>
+                      <h3 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '8px', color: '#92400e'}}>After Implementation: <span style={{color: '#059669'}}>Measured Results</span></h3>
+                      <p style={{fontSize: '14px', marginBottom: '12px', color: '#78350f'}}>
+                        BetterUp operates as <strong>action layer</strong> (creating behavioral change) and <strong>sensing layer</strong> (providing real-time visibility):
+                      </p>
+                      <ul style={{fontSize: '13px', color: '#78350f', lineHeight: 1.7, paddingLeft: '20px', margin: 0}}>
+                        <li><strong>Individual:</strong> Assessments track resilience, decision-making, stress management growth</li>
+                        <li><strong>Sector/Field Office:</strong> Anonymized data shows team cohesion and morale</li>
+                        <li><strong>Organizational:</strong> CBP dashboard reports wellness/retention in real-time</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Performance Drivers Aligned to CBP Strategic Priorities</h2>
+              <p style={{textAlign: 'center', color: '#64748b', marginBottom: '20px', fontSize: '15px'}}>BetterUp targets the behavioral foundations that drive DHS and CBP mission success</p>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px'}}>
+                {[
+                  {title: 'MISSION READINESS', sub: 'Rapid Decision-Making, Cognitive Agility, Sustained Performance'},
+                  {title: 'RESILIENCE', sub: 'Burnout Prevention, Stress Management, Emotional Regulation'},
+                  {title: 'CAREER COMMITMENT', sub: 'Purpose & Meaning, Career Development, Work-Life Integration'},
+                  {title: 'LEADERSHIP', sub: 'Communication, Strategic Thinking, Supervisory Effectiveness'},
+                  {title: 'STANDARDS', sub: 'Ethical Decision-Making, Professional Demeanor, Sound Judgment'}
+                ].map((priority, i) => (
+                  <div key={i} style={{background: '#dbeafe', rounded: '12px', padding: '16px', border: '2px solid #60a5fa', borderRadius: '12px', textAlign: 'center'}}>
+                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>{priority.title}</div>
+                    <div style={{fontSize: '11px', color: '#64748b'}}>{priority.sub}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '16px', padding: '40px', textAlign: 'center'}}>
+              <h2 style={{fontSize: '32px', fontWeight: 'bold', color: 'white', marginBottom: '16px'}}>Ready to See Your Component's Projected Impact?</h2>
+              <p style={{fontSize: '18px', color: '#cbd5e1', marginBottom: '32px'}}>
+                Select your CBP component, sector, or field office to model ROI with adjustable parameters
+              </p>
+              <button 
+                onClick={() => {setShowExecutiveSummary(false); setShowLanding(true);}}
+                style={{background: '#ffcc00', color: '#003d82', border: 'none', padding: '16px 48px', borderRadius: '12px', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 8px 24px rgba(255,204,0,0.5)'}}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                Select Your Component →
+              </button>
+              <p style={{fontSize: '13px', color: '#94a3b8', marginTop: '16px'}}>All data sources documented | Every assumption adjustable | Transparent methodology</p>
+            </div>
+
           </div>
         </div>
       </div>
