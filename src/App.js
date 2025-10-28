@@ -1212,15 +1212,15 @@ const CBPDashboard = () => {
             <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '20px'}}>
               <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#003d82'}}>Data Sources</h4>
               <div style={{fontSize: '12px', color: '#64748b', lineHeight: 1.8}}>
-                • <strong>GAO-24-107029:</strong> CBP Recruitment & Retention challenges, replacement costs<br/>
-                • <strong>JAMA 2024:</strong> 21.6% reduction in burnout & mental health conditions<br/>
-                • <strong>DHS OIG Reports:</strong> Workers' comp claim data, discipline case volumes<br/>
-                • <strong>CuraLinc EAP 2022:</strong> 67% alcohol misuse severity reduction, 78% at-risk elimination<br/>
-                • <strong>HeartMath Police Study:</strong> 40% stress reduction, improved decision-making<br/>
-                • <strong>Ebbinghaus forgetting curve:</strong> Learning decay & spaced repetition research<br/>
-                • <strong>BetterUp DAF outcomes (2021–2025):</strong> +6% retention, +15% resilience, +17% mission readiness<br/>
-                • <strong>DHS OIG & NTEU testimony:</strong> CBP workforce challenges, operational tempo<br/>
-                • <strong>Air Force Weapons School:</strong> Mastery framework for high-performance development<br/>
+                • <strong><a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>GAO-24-107029</a>:</strong> CBP Recruitment & Retention challenges, replacement costs<br/>
+                • <strong><a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>JAMA 2024</a>:</strong> 21.6% reduction in burnout & mental health conditions<br/>
+                • <strong><a href="https://www.oig.dhs.gov/sites/default/files/assets/2019-06/OIG-19-48-Jun19.pdf" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>DHS OIG Reports</a>:</strong> Discipline case volumes and misconduct oversight<br/>
+                • <strong><a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>CuraLinc EAP 2022</a>:</strong> 67% alcohol misuse severity reduction, 78% at-risk elimination<br/>
+                • <strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4010956/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>HeartMath Police Study</a>:</strong> 40% stress reduction, improved decision-making<br/>
+                • <strong><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0120644" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Ebbinghaus forgetting curve</a>:</strong> Learning decay & spaced repetition research<br/>
+                • <strong><a href="https://www.betterup.com/customers/united-states-airforce" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>BetterUp DAF outcomes</a> (2021–2025):</strong> +7% career commitment, +15% unit readiness, +13% individual readiness<br/>
+                • <strong><a href="https://www.nteu.org/legislative-action/congressional-testimony/fy-2025-budget-request-cbp" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>NTEU testimony</a>:</strong> CBP workforce challenges, operational tempo (April 2024)<br/>
+                • <strong><a href="https://www.nellis.af.mil/About/Fact-Sheets/Display/Article/284156/united-states-air-force-weapons-school/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Air Force Weapons School</a>:</strong> Mastery framework for high-performance development<br/>
                 • <strong>BetterUp volume pricing:</strong> Enterprise contract rates (Deal Desk for 1000+ seats)
               </div>
             </div>
