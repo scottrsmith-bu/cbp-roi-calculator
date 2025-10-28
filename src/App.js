@@ -898,7 +898,7 @@ const CBPDashboard = () => {
                     <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#713f12', margin: 0}}>Leadership Culture Transformation Impact</h3>
                   </div>
                   <p style={{fontSize: '14px', color: '#854d0e', marginBottom: '16px', lineHeight: 1.6}}>
-                    <strong>{fmtNum(leadSeats)} Lead seats</strong> deployed to transform command climate and fix toxic leadership patterns identified by DWP consultants. Lead's unlimited 1:1 coaching develops supervisory effectiveness, trust-building, and communication skills.
+                    <strong>{fmtNum(leadSeats)} Lead seats</strong> deployed to develop command climate and address supervisory effectiveness gaps. Lead's unlimited 1:1 coaching builds trust, communication skills, and transformational leadership capabilities—moving from command-and-control to developmental leadership.
                   </p>
                   <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
                     <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
@@ -914,7 +914,7 @@ const CBPDashboard = () => {
                   </div>
                   <div style={{background: '#fffbeb', borderRadius: '8px', padding: '12px', marginTop: '12px', border: '1px solid #fbbf24'}}>
                     <p style={{fontSize: '12px', color: '#78350f', margin: 0}}>
-                      <strong>Why This Matters:</strong> DWP consultants identified toxic leadership as primary retention driver. Lead coaching transforms command-and-control supervisors into supportive leaders, directly addressing root cause of separations.
+                      <strong>Why This Matters:</strong> Federal Employee Viewpoint Survey data and GAO reports consistently identify leadership quality as a primary driver of federal law enforcement retention. Lead coaching transforms supervisory approaches, directly addressing the root cause of voluntary separations by creating psychologically safe environments where officers feel supported rather than micromanaged.
                     </p>
                   </div>
                 </div>
