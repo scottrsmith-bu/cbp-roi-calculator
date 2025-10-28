@@ -24,30 +24,10 @@ function MethodologyImpactSection() {
   const Callout = ({ x, y, text, color = '#111827', bg = 'white', lineTo }) => (
     <g>
       {lineTo && (
-        <line
-          x1={x}
-          y1={y}
-          x2={lineTo.x}
-          y2={lineTo.y}
-          stroke={color}
-          strokeOpacity="0.5"
-          strokeWidth="1.5"
-        />
+        <line x1={x} y1={y} x2={lineTo.x} y2={lineTo.y} stroke={color} strokeOpacity="0.5" strokeWidth="1.5" />
       )}
-      <rect
-        x={x - 6}
-        y={y - 18}
-        rx="6"
-        ry="6"
-        width={Math.max(120, text.length * 6.4 + 14)}
-        height="28"
-        fill={bg}
-        stroke={color}
-        strokeOpacity="0.25"
-      />
-      <text x={x + 8} y={y + 2} fill={color} fontSize="12" fontWeight="700">
-        {text}
-      </text>
+      <rect x={x - 6} y={y - 18} rx="6" ry="6" width={Math.max(120, text.length * 6.4 + 14)} height="28" fill={bg} stroke={color} strokeOpacity="0.25" />
+      <text x={x + 8} y={y + 2} fill={color} fontSize="12" fontWeight="700">{text}</text>
     </g>
   );
 
@@ -82,15 +62,8 @@ function MethodologyImpactSection() {
             <line key={i} x1="60" y1={y} x2="730" y2={y} stroke="#e5e7eb" />
           ))}
 
-          <path
-            d="M 60 60 C 180 56, 250 80, 320 120 C 380 154, 450 190, 730 230"
-            fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round"
-          />
-
-          <path
-            d="M 60 230 C 110 200, 150 190, 190 170 C 210 160, 230 150, 250 160 C 270 175, 300 150, 330 135 C 350 125, 370 120, 390 130 C 410 142, 440 128, 470 118 C 490 112, 510 110, 530 120 C 550 130, 585 118, 620 108 C 640 102, 660 98, 730 92"
-            fill="none" stroke="#2563eb" strokeWidth="4.5" strokeLinecap="round"
-          />
+          <path d="M 60 60 C 180 56, 250 80, 320 120 C 380 154, 450 190, 730 230" fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round" />
+          <path d="M 60 230 C 110 200, 150 190, 190 170 C 210 160, 230 150, 250 160 C 270 175, 300 150, 330 135 C 350 125, 370 120, 390 130 C 410 142, 440 128, 470 118 C 490 112, 510 110, 530 120 C 550 130, 585 118, 620 108 C 640 102, 660 98, 730 92" fill="none" stroke="#2563eb" strokeWidth="4.5" strokeLinecap="round" />
 
           {[190, 250, 330, 390, 470, 530, 620].map((x, i) => (
             <g key={i}>
@@ -240,7 +213,7 @@ function CBPROICalculator() {
     if (!chatInput.trim()) return;
     setChatMessages([...chatMessages, {type: 'user', text: chatInput}, {type: 'assistant', text: `Based on ${selectedOrganization?.name || 'CBP'}: ${chatInput}`}]);
     setChatInput('');
-  }
+  };
   if (showExecutiveSummary) {
     return (
       <div style={{width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '32px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
@@ -348,6 +321,147 @@ function CBPROICalculator() {
             </div>
 
             <MethodologyImpactSection />
+
+            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>🎯</div>
+                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#4338ca', margin: 0}}>How BetterUp Builds Mastery at CBP</h2>
+              </div>
+              
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
+                {[
+                  {num: '1', title: 'REFLECT', desc: 'WPM assessment identifies strengths & gaps', icon: '🪞', color: '#6366f1'},
+                  {num: '2', title: 'LEARN', desc: 'Personalized journeys + curated resources', icon: '📚', color: '#8b5cf6'},
+                  {num: '3', title: 'PRACTICE', desc: 'AI role-play + coaching rehearsal', icon: '🎭', color: '#a78bfa'},
+                  {num: '4', title: 'COMMIT', desc: 'Action plans at critical moments', icon: '✅', color: '#c4b5fd'},
+                  {num: '5', title: 'MEASURE', desc: 'Pre-post growth assessments', icon: '📊', color: '#ddd6fe'}
+                ].map((step, i) => (
+                  <div key={i} style={{background: 'white', borderRadius: '12px', padding: '16px', border: `2px solid ${step.color}`, textAlign: 'center'}}>
+                    <div style={{fontSize: '28px', marginBottom: '8px'}}>{step.icon}</div>
+                    <div style={{fontSize: '11px', fontWeight: 'bold', color: '#1e293b', marginBottom: '6px'}}>{step.num}. {step.title}</div>
+                    <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>{step.desc}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
+                <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#4338ca', marginBottom: '12px'}}>Applied to CBP Operational Challenges:</h3>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Use-of-Force Decisions:</strong> Practice high-pressure scenarios through AI role-play before real encounters
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies for volatile public interactions
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Post-Incident Recovery:</strong> Just-in-time stress management after traumatic events
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at critical 3-5yr, 10-15yr, pre-2028 retirement points
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '16px', border: '2px solid #818cf8'}}>
+                <p style={{fontSize: '13px', color: '#3730a3', margin: 0, lineHeight: 1.6}}>
+                  <strong style={{color: '#4338ca'}}>From Air Force Weapons School:</strong> This mastery framework helped elite pilots strengthen decision-making under pressure, cognitive agility, and stress regulation—the same skills CBP officers and agents need for high-stakes law enforcement.
+                </p>
+              </div>
+            </div>
+
+            <div style={{background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', border: '4px solid #10b981', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <div style={{width: '48px', height: '48px', background: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>🚀</div>
+                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Proposed Implementation: Phased Rollout Strategy</h2>
+              </div>
+              
+              <p style={{fontSize: '15px', color: '#047857', marginBottom: '20px', lineHeight: 1.6}}>
+                Based on Air Force Weapons School deployment experience—start with high-impact pilot, validate results, then scale across CBP enterprise:
+              </p>
+
+              <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+                    <div style={{width: '40px', height: '40px', background: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>1</div>
+                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 1: Pilot (3-6 months)</h3>
+                  </div>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
+                    <div>
+                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
+                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                        <li>Border Patrol Academy (new agents)</li>
+                        <li>Single OFO field office (e.g., Tucson, NY)</li>
+                        <li>~500-1,000 seats</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
+                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                        <li>Validate ROI model with actual data</li>
+                        <li>Establish baseline metrics</li>
+                        <li>Build champion network</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+                    <div style={{width: '40px', height: '40px', background: '#059669', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>2</div>
+                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 2: Targeted Expansion (6-12 months)</h3>
+                  </div>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
+                    <div>
+                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
+                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                        <li>OFO field offices facing 2028 retirement</li>
+                        <li>High-tempo USBP sectors</li>
+                        <li>~5,000-10,000 seats</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
+                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                        <li>Demonstrate retention impact pre-2028</li>
+                        <li>Reduce workers' comp claims</li>
+                        <li>Scale proven pilot model</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+                    <div style={{width: '40px', height: '40px', background: '#047857', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>3</div>
+                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 3: Enterprise (12+ months)</h3>
+                  </div>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
+                    <div>
+                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
+                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                        <li>All CBP components nationwide</li>
+                        <li>OFO, USBP, AMO, OT, OPR</li>
+                        <li>20,000+ seats enterprise-wide</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
+                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                        <li>Full integration with CBPX programs</li>
+                        <li>Maximum institutional knowledge preservation</li>
+                        <li>Enterprise-wide resilience infrastructure</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: '#d1fae5', borderRadius: '10px', padding: '16px', marginTop: '16px', border: '2px solid #34d399'}}>
+                <p style={{fontSize: '13px', color: '#065f46', margin: 0, lineHeight: 1.6}}>
+                  <strong>Air Force Precedent:</strong> DAF started with pilot programs before expanding enterprise-wide. Weapons School demonstrated mastery framework with elite students before broader rollout. Same phased approach de-risks CBP investment while building internal champions.
+                </p>
+              </div>
+            </div>
 
             <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px'}}>How the Model Works: Dual-Pathway Impact</h2>
@@ -685,22 +799,77 @@ function CBPROICalculator() {
 
       {activeTab === 'details' && (
         <div style={{background: 'white', borderRadius: '12px', padding: '24px'}}>
-          <h2 style={{fontSize: '24px', fontWeight: 'bold', marginBottom: '16px'}}>Model Assumptions</h2>
-          <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-            <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
-              <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '8px'}}>Attrition Rates</h4>
-              <div style={{fontSize: '14px', marginBottom: '4px'}}>OFO: 3.5% annually | USBP: 7.2% annually</div>
-              {isOFO && <div style={{fontSize: '14px', color: '#dc2626', fontWeight: 'bold', marginTop: '8px'}}>⚠️ 2028: 2,220 officers retiring (400% increase)</div>}
-            </div>
-            <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
-              <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '8px'}}>Sources</h4>
-              <div style={{fontSize: '12px', color: '#64748b'}}>
-                • GAO-24-107029: CBP Recruitment & Retention<br/>
-                • JAMA 2024: 21.6% burnout reduction<br/>
-                • Ebbinghaus forgetting curve & spaced repetition research<br/>
-                • BetterUp DAF outcomes (2021–2025): +6% retention, +15% resilience, +17% readiness
+          <h2 style={{fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#003d82'}}>Model Details & Measurement Strategy</h2>
+          
+          <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+            
+            <div style={{border: '3px solid #0066cc', borderRadius: '12px', padding: '24px', background: '#eff6ff'}}>
+              <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#003d82'}}>📊 Proposed Metrics for CBP Implementation</h3>
+              
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px'}}>
+                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
+                  <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Individual Level</h4>
+                  <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
+                    <li><strong>Whole Person Model 3.0:</strong> Pre-post assessments</li>
+                    <li><strong>Decision-Making:</strong> Problem solving, strategic thinking</li>
+                    <li><strong>Stress Management:</strong> Emotional regulation, recovery</li>
+                    <li><strong>Resilience:</strong> Optimism, self-compassion</li>
+                    <li><strong>Career Commitment:</strong> Purpose clarity, growth mindset</li>
+                  </ul>
+                </div>
+                
+                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
+                  <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Sector/Field Office Level</h4>
+                  <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
+                    <li><strong>Team Cohesion:</strong> Anonymized unit trends</li>
+                    <li><strong>Leadership Climate:</strong> Communication, trust patterns</li>
+                    <li><strong>Morale Indicators:</strong> Engagement, satisfaction</li>
+                    <li><strong>Reflection Points:</strong> Real-time wellness check-ins</li>
+                  </ul>
+                </div>
+                
+                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
+                  <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Organizational Level</h4>
+                  <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
+                    <li><strong>Retention Rates:</strong> Compared to baseline projections</li>
+                    <li><strong>Workers' Comp Claims:</strong> Mental health claim trends</li>
+                    <li><strong>Readiness Metrics:</strong> Performance capacity trends</li>
+                    <li><strong>ROI Tracking:</strong> Actual vs. projected savings</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style={{background: '#dbeafe', borderRadius: '10px', padding: '16px', marginTop: '12px', border: '2px solid #3b82f6'}}>
+                <p style={{fontSize: '13px', color: '#1e40af', margin: 0}}>
+                  <strong>From Air Force Experience:</strong> BetterUp provides real-time People Analytics Dashboard showing engagement, satisfaction, and behavioral growth—replacing projections with actual measured outcomes from your personnel.
+                </p>
               </div>
             </div>
+
+            <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '20px'}}>
+              <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#003d82'}}>Model Assumptions</h4>
+              <div style={{fontSize: '14px', color: '#475569', lineHeight: 1.8}}>
+                <div style={{marginBottom: '8px'}}><strong>Attrition Rates:</strong> OFO 3.5% annually | USBP 7.2% annually</div>
+                {isOFO && <div style={{fontSize: '14px', color: '#dc2626', fontWeight: 'bold', marginBottom: '8px'}}>⚠️ 2028 OFO: 2,220 officers retiring (400% increase over normal ~500/year)</div>}
+                <div style={{marginBottom: '8px'}}><strong>Replacement Cost:</strong> OFO $87,300 | USBP $125,000 per separation</div>
+                <div style={{marginBottom: '8px'}}><strong>Workers' Comp:</strong> $65,000 avg mental health claim cost</div>
+                <div style={{marginBottom: '8px'}}><strong>Prevention Rate:</strong> 22% burnout/mental health claim reduction (JAMA 2024)</div>
+                <div><strong>Engagement:</strong> {engagementRate}% of seats actively using platform (adjustable)</div>
+              </div>
+            </div>
+
+            <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '20px'}}>
+              <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#003d82'}}>Data Sources</h4>
+              <div style={{fontSize: '12px', color: '#64748b', lineHeight: 1.8}}>
+                • <strong>GAO-24-107029:</strong> CBP Recruitment & Retention challenges, replacement costs<br/>
+                • <strong>JAMA 2024:</strong> 21.6% reduction in burnout & mental health conditions<br/>
+                • <strong>Ebbinghaus forgetting curve:</strong> Learning decay & spaced repetition research<br/>
+                • <strong>BetterUp DAF outcomes (2021–2025):</strong> +6% retention, +15% resilience, +17% mission readiness<br/>
+                • <strong>DHS OIG & NTEU testimony:</strong> CBP workforce challenges, operational tempo<br/>
+                • <strong>Air Force Weapons School:</strong> Mastery framework for high-performance development
+              </div>
+            </div>
+
           </div>
         </div>
       )}
