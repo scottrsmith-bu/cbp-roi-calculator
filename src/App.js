@@ -132,14 +132,16 @@ function CBPROICalculator() {
   const [careerCommitmentImprovement, setCareerCommitmentImprovement] = useState(13);
   const [leadershipImprovement, setLeadershipImprovement] = useState(12);
   const [standardsImprovement, setStandardsImprovement] = useState(10);
+  const [leadershipCultureImprovement, setLeadershipCultureImprovement] = useState(0);
   
   const [manualRetentionOverride, setManualRetentionOverride] = useState(false);
   const [manualRetentionValue, setManualRetentionValue] = useState(7);
   
   const [totalPersonnel, setTotalPersonnel] = useState(25879);
   const [targetPopulation, setTargetPopulation] = useState(5000);
-  const [seats, setSeats] = useState(5000);
-  const [costPerSeat, setCostPerSeat] = useState(150);
+  const [leadSeats, setLeadSeats] = useState(250);
+  const [readySeats, setReadySeats] = useState(4750);
+  const [use6MonthLead, setUse6MonthLead] = useState(false);
   const [engagementRate, setEngagementRate] = useState(65);
 
   const organizations = [
@@ -154,16 +156,93 @@ function CBPROICalculator() {
   const selectOrganization = (org) => {
     setSelectedOrganization(org);
     setTotalPersonnel(org.personnel);
-    setTargetPopulation(Math.round(org.personnel * 0.2));
-    setSeats(Math.round(org.personnel * 0.2));
+    const defaultSeats = Math.round(org.personnel * 0.20);
+    setTargetPopulation(defaultSeats);
+    setLeadSeats(Math.round(defaultSeats * 0.05));
+    setReadySeats(Math.round(defaultSeats * 0.95));
     setShowLanding(false);
     setShowExecutiveSummary(false);
   };
 
+  const getLeadPrice = (seats) => {
+    if (use6MonthLead) {
+      if (seats >= 1000) return 3471;
+      if (seats >= 500) return 3549;
+      if (seats >= 300) return 3627;
+      if (seats >= 200) return 3705;
+      if (seats >= 100) return 3783;
+      if (seats >= 50) return 3822;
+      return 3900;
+    } else {
+      if (seats >= 1000) return 5785;
+      if (seats >= 500) return 5915;
+      if (seats >= 300) return 6045;
+      if (seats >= 200) return 6175;
+      if (seats >= 100) return 6305;
+      if (seats >= 50) return 6370;
+      return 6500;
+    }
+  };
+
+  const applyCOA = (coaNumber) => {
+    const org = selectedOrganization || organizations[1];
+    let coveragePct, leadPct;
+    
+    if (org.personnel < 5000) {
+      if (coaNumber === 1) { coveragePct = 0.20; leadPct = 0.05; }
+      else if (coaNumber === 2) { coveragePct = 0.40; leadPct = 0.10; }
+      else { coveragePct = 0.60; leadPct = 0.15; }
+    } else if (org.personnel < 30000) {
+      if (coaNumber === 1) { coveragePct = 0.15; leadPct = 0.05; }
+      else if (coaNumber === 2) { coveragePct = 0.25; leadPct = 0.10; }
+      else { coveragePct = 0.40; leadPct = 0.15; }
+    } else {
+      if (coaNumber === 1) { coveragePct = 0.10; leadPct = 0.05; }
+      else if (coaNumber === 2) { coveragePct = 0.20; leadPct = 0.10; }
+      else { coveragePct = 0.33; leadPct = 0.15; }
+    }
+    
+    const total = Math.round(org.personnel * coveragePct);
+    const lead = Math.round(total * leadPct);
+    const ready = total - lead;
+    
+    setTargetPopulation(total);
+    setLeadSeats(lead);
+    setReadySeats(ready);
+    
+    if (coaNumber === 1) {
+      setEngagementRate(55);
+      setMissionReadinessImprovement(12);
+      setResilienceImprovement(10);
+      setCareerCommitmentImprovement(8);
+      setLeadershipImprovement(7);
+      setStandardsImprovement(6);
+      setLeadershipCultureImprovement(lead > 0 ? 8 : 0);
+    } else if (coaNumber === 2) {
+      setEngagementRate(65);
+      setMissionReadinessImprovement(17);
+      setResilienceImprovement(15);
+      setCareerCommitmentImprovement(13);
+      setLeadershipImprovement(12);
+      setStandardsImprovement(10);
+      setLeadershipCultureImprovement(lead > 0 ? 15 : 0);
+    } else {
+      setEngagementRate(75);
+      setMissionReadinessImprovement(25);
+      setResilienceImprovement(23);
+      setCareerCommitmentImprovement(20);
+      setLeadershipImprovement(18);
+      setStandardsImprovement(15);
+      setLeadershipCultureImprovement(lead > 0 ? 22 : 0);
+    }
+  };
+
   const retentionEffectiveness = useMemo(() => {
     if (manualRetentionOverride) return manualRetentionValue;
-    return Math.round(3 + (careerCommitmentImprovement / 100) * 20 + (leadershipImprovement / 100) * 15);
-  }, [careerCommitmentImprovement, leadershipImprovement, manualRetentionOverride, manualRetentionValue]);
+    const baseRetention = 3 + (careerCommitmentImprovement / 100) * 20 + (leadershipImprovement / 100) * 15;
+    const leadershipBoost = (leadershipCultureImprovement / 100) * 12;
+    return Math.round(baseRetention + leadershipBoost);
+  }, [careerCommitmentImprovement, leadershipImprovement, leadershipCultureImprovement, manualRetentionOverride, manualRetentionValue]);
 
   const readinessPercentage = useMemo(() => {
     return Math.round(12 + (missionReadinessImprovement / 100) * 30 + (resilienceImprovement / 100) * 25 + (standardsImprovement / 100) * 15);
@@ -171,24 +250,43 @@ function CBPROICalculator() {
 
   const calculations = useMemo(() => {
     const org = selectedOrganization || organizations[0];
-    const engaged = Math.round((targetPopulation * engagementRate) / 100);
-    const expectedSeparations = Math.round(targetPopulation * (org.attritionRate / 100));
+    const totalSeats = leadSeats + readySeats;
+    const engaged = Math.round((totalSeats * engagementRate) / 100);
+    const expectedSeparations = Math.round(totalSeats * (org.attritionRate / 100));
     const preventedSeparations = Math.round((engaged * retentionEffectiveness) / 100);
     const retentionSavings = preventedSeparations * org.replacementCost;
+    
     const avgClaimCost = 65000;
     const totalClaimsRate = org.workersCompClaims / org.personnel;
     const mentalHealthClaimsRate = totalClaimsRate * 0.35;
-    const claimsPrevented = Math.round(targetPopulation * mentalHealthClaimsRate * 0.22);
+    const baseClaimReduction = 0.22;
+    const leadershipClaimBoost = (leadershipCultureImprovement / 100) * 0.18;
+    const totalClaimReduction = baseClaimReduction + leadershipClaimBoost;
+    const claimsPrevented = Math.round(totalSeats * mentalHealthClaimsRate * totalClaimReduction);
     const workersCompSavings = claimsPrevented * avgClaimCost;
+    
     const readinessImproved = Math.round(engaged * (readinessPercentage / 100));
     const readinessSavings = readinessImproved * 15000;
     const totalSavings = retentionSavings + workersCompSavings + readinessSavings;
-    const programCost = seats * costPerSeat;
+    
+    const leadPrice = getLeadPrice(leadSeats);
+    const leadCost = leadSeats * leadPrice;
+    const readyCost = readySeats * 150;
+    const programCost = leadCost + readyCost;
+    
     const netSavings = totalSavings - programCost;
     const roi = programCost > 0 ? ((netSavings / programCost) * 100).toFixed(0) : 0;
     
-    return {engaged, expectedSeparations, preventedSeparations, retentionSavings, claimsPrevented, workersCompSavings, readinessImproved, readinessSavings, totalSavings, programCost, netSavings, roi};
-  }, [seats, costPerSeat, engagementRate, retentionEffectiveness, targetPopulation, selectedOrganization, readinessPercentage, organizations]);
+    const leadershipRetentionContribution = leadSeats > 0 ? Math.round(preventedSeparations * 0.40) : 0;
+    const leadershipClaimContribution = leadSeats > 0 ? Math.round(claimsPrevented * (leadershipClaimBoost / totalClaimReduction)) : 0;
+    
+    return {
+      engaged, expectedSeparations, preventedSeparations, retentionSavings, 
+      claimsPrevented, workersCompSavings, readinessImproved, readinessSavings, 
+      totalSavings, leadCost, readyCost, programCost, netSavings, roi,
+      leadPrice, leadershipRetentionContribution, leadershipClaimContribution
+    };
+  }, [leadSeats, readySeats, engagementRate, retentionEffectiveness, targetPopulation, selectedOrganization, readinessPercentage, organizations, use6MonthLead, leadershipCultureImprovement]);
 
   const fmt = (v) => new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', minimumFractionDigits: 0}).format(v);
   const fmtNum = (v) => new Intl.NumberFormat('en-US').format(v);
@@ -200,7 +298,8 @@ function CBPROICalculator() {
     {key: 'resilience', priority: "RESILIENCE & WELLNESS", drivers: "Burnout Prevention • Stress Management • Emotional Regulation", baseline: 47, growth: 62, improvement: resilienceImprovement, setImprovement: setResilienceImprovement, affectsWorkersComp: true},
     {key: 'career', priority: "CAREER COMMITMENT", drivers: "Purpose • Career Development • Work-Life Integration", baseline: 48, growth: 54, improvement: careerCommitmentImprovement, setImprovement: setCareerCommitmentImprovement},
     {key: 'leadership', priority: "LEADERSHIP", drivers: "Communication • Strategic Thinking • Empowerment", baseline: 50, growth: 56, improvement: leadershipImprovement, setImprovement: setLeadershipImprovement},
-    {key: 'standards', priority: "PROFESSIONAL STANDARDS", drivers: "Ethics • Judgment • Professional Demeanor", baseline: 49, growth: 59, improvement: standardsImprovement, setImprovement: setStandardsImprovement}
+    {key: 'standards', priority: "PROFESSIONAL STANDARDS", drivers: "Ethics • Judgment • Professional Demeanor", baseline: 49, growth: 59, improvement: standardsImprovement, setImprovement: setStandardsImprovement},
+    ...(leadSeats > 0 ? [{key: 'culture', priority: "LEADERSHIP CULTURE", drivers: "Supervisory Effectiveness • Trust Building • Command Climate", baseline: 42, growth: 58, improvement: leadershipCultureImprovement, setImprovement: setLeadershipCultureImprovement, requiresLead: true}] : [])
   ];
 
   const filteredOrganizations = useMemo(() => {
@@ -214,7 +313,7 @@ function CBPROICalculator() {
     setChatMessages([...chatMessages, {type: 'user', text: chatInput}, {type: 'assistant', text: `Based on ${selectedOrganization?.name || 'CBP'}: ${chatInput}`}]);
     setChatInput('');
   };
-  if (showExecutiveSummary) {
+if (showExecutiveSummary) {
     return (
       <div style={{width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '32px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
         <div style={{background: 'white', borderRadius: '16px', boxShadow: '0 8px 40px rgba(0,0,0,0.15)', overflow: 'hidden', borderTop: '8px solid #0066cc'}}>
@@ -604,9 +703,9 @@ function CBPROICalculator() {
           <div style={{background: '#003d82', color: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)'}}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start'}}>
               <div>
-                <div style={{fontSize: '24px', fontWeight: 'bold', marginBottom: '8px'}}>BetterUp Seats: {fmtNum(seats)}</div>
-                <div style={{fontSize: '14px'}}>Engagement rate: {engagementRate}%</div>
-                <div style={{fontSize: '14px', opacity: 0.9, marginTop: '4px'}}>Total Population: {fmtNum(totalPersonnel)}</div>
+                <div style={{fontSize: '24px', fontWeight: 'bold', marginBottom: '8px'}}>Total Seats: {fmtNum(leadSeats + readySeats)}</div>
+                <div style={{fontSize: '14px'}}>Lead: {fmtNum(leadSeats)} • Ready: {fmtNum(readySeats)}</div>
+                <div style={{fontSize: '14px', opacity: 0.9, marginTop: '4px'}}>Engagement: {engagementRate}% | Population: {fmtNum(totalPersonnel)}</div>
               </div>
               <button onClick={() => setShowImpact(!showImpact)} style={{background: '#ffcc00', color: '#003d82', border: 'none', padding: '12px 32px', borderRadius: '8px', fontSize: '18px', fontWeight: 'bold', cursor: 'pointer'}}>
                 {showImpact ? 'Hide Impact' : 'Show Impact →'}
@@ -652,6 +751,65 @@ function CBPROICalculator() {
                 </div>
               )}
 
+              <div style={{background: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)', border: '3px solid #a855f7', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(168,85,247,0.2)'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                  <div style={{width: '40px', height: '40px', background: '#a855f7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>💼</div>
+                  <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#6b21a8', margin: 0}}>Product Mix & Investment</h3>
+                </div>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px'}}>
+                  <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
+                    <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>BetterUp Lead</div>
+                    <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(leadSeats)}</div>
+                    <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>Critical talent • Leadership</div>
+                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.leadCost)}</div>
+                    <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>@ {fmt(calculations.leadPrice)}/seat</div>
+                  </div>
+                  <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
+                    <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>BetterUp Ready</div>
+                    <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(readySeats)}</div>
+                    <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>All personnel • Resilience</div>
+                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.readyCost)}</div>
+                    <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>@ $150/seat</div>
+                  </div>
+                  <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
+                    <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>Total Program</div>
+                    <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(leadSeats + readySeats)}</div>
+                    <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>Combined investment</div>
+                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.programCost)}</div>
+                    <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>Annual cost</div>
+                  </div>
+                </div>
+              </div>
+
+              {leadSeats > 0 && (
+                <div style={{background: 'linear-gradient(135deg, #fefce8 0%, #fef3c7 100%)', border: '3px solid #eab308', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(234,179,8,0.2)'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '40px', height: '40px', background: '#eab308', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>👥</div>
+                    <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#713f12', margin: 0}}>Leadership Culture Transformation Impact</h3>
+                  </div>
+                  <p style={{fontSize: '14px', color: '#854d0e', marginBottom: '16px', lineHeight: 1.6}}>
+                    <strong>{fmtNum(leadSeats)} Lead seats</strong> deployed to transform command climate and fix toxic leadership patterns identified by DWP consultants. Lead's unlimited 1:1 coaching develops supervisory effectiveness, trust-building, and communication skills.
+                  </p>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
+                    <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
+                      <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Retention Contribution</div>
+                      <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipRetentionContribution)}</div>
+                      <div style={{fontSize: '12px', color: '#854d0e'}}>separations prevented by better leadership (~40% of total retention gains)</div>
+                    </div>
+                    <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
+                      <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Workers' Comp Contribution</div>
+                      <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipClaimContribution)}</div>
+                      <div style={{fontSize: '12px', color: '#854d0e'}}>claims prevented through psychological safety (~{Math.round((calculations.leadershipClaimContribution / calculations.claimsPrevented) * 100)}% of total)</div>
+                    </div>
+                  </div>
+                  <div style={{background: '#fffbeb', borderRadius: '8px', padding: '12px', marginTop: '12px', border: '1px solid #fbbf24'}}>
+                    <p style={{fontSize: '12px', color: '#78350f', margin: 0}}>
+                      <strong>Why This Matters:</strong> DWP consultants identified toxic leadership as primary retention driver. Lead coaching transforms command-and-control supervisors into supportive leaders, directly addressing root cause of separations.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px'}}>
                 <div style={{background: 'white', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)'}}>
                   <div style={{background: '#003d82', color: 'white', padding: '16px', borderRadius: '8px', marginBottom: '16px'}}>
@@ -666,6 +824,7 @@ function CBPROICalculator() {
                     <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Expected separations:</span><span style={{fontWeight: '600'}}>{fmtNum(calculations.expectedSeparations)}</span></div>
                     <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Prevented:</span><span style={{fontWeight: '600', color: '#003d82'}}>{fmtNum(calculations.preventedSeparations)}</span></div>
                     <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Effectiveness:</span><span style={{fontWeight: '600', color: '#0066cc'}}>{retentionEffectiveness}%</span></div>
+                    {leadSeats > 0 && <div style={{fontSize: '11px', color: '#eab308', fontWeight: '600', marginTop: '8px'}}>💼 +{Math.round((calculations.leadershipRetentionContribution / calculations.preventedSeparations) * 100)}% from Lead culture impact</div>}
                   </div>
                 </div>
 
@@ -681,8 +840,8 @@ function CBPROICalculator() {
                   <div style={{background: 'white', border: '2px solid #cbd5e1', borderRadius: '8px', padding: '12px', fontSize: '14px'}}>
                     <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Claims prevented:</span><span style={{fontWeight: '600'}}>{fmtNum(calculations.claimsPrevented)}</span></div>
                     <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Avg claim cost:</span><span style={{fontWeight: '600'}}>$65,000</span></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}><span style={{color: '#64748b'}}>Prevention rate:</span><span style={{fontWeight: '600', color: '#0066cc'}}>22%</span></div>
-                    <div style={{fontSize: '11px', color: '#64748b', marginTop: '8px', fontStyle: 'italic'}}>JAMA 2024: 21.6% burnout reduction</div>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}><span style={{color: '#64748b'}}>Base prevention:</span><span style={{fontWeight: '600', color: '#0066cc'}}>22%</span></div>
+                    {leadSeats > 0 && <div style={{fontSize: '11px', color: '#eab308', fontWeight: '600', marginTop: '8px'}}>💼 +{Math.round((calculations.leadershipClaimContribution / calculations.claimsPrevented) * 100)}% from Lead psych safety</div>}
                   </div>
                 </div>
               </div>
@@ -691,17 +850,18 @@ function CBPROICalculator() {
                 <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '16px'}}>Performance Drivers</h3>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
                   {performanceDrivers.map(d => (
-                    <div key={d.key} style={{border: '2px solid #dbeafe', borderRadius: '12px', padding: '20px', background: '#eff6ff'}}>
+                    <div key={d.key} style={{border: '2px solid #dbeafe', borderRadius: '12px', padding: '20px', background: d.requiresLead ? '#fef3c7' : '#eff6ff'}}>
                       <div style={{marginBottom: '12px'}}>
                         <h4 style={{fontSize: '14px', fontWeight: 'bold', marginBottom: '4px', color: '#003d82'}}>{d.priority}</h4>
                         <p style={{fontSize: '12px', color: '#64748b', marginBottom: '4px'}}>{d.drivers}</p>
                         {d.affectsWorkersComp && <p style={{fontSize: '11px', color: '#dc2626', fontWeight: '600'}}>🎯 Directly reduces workers' comp claims</p>}
+                        {d.requiresLead && <p style={{fontSize: '11px', color: '#eab308', fontWeight: '600'}}>💼 Requires Lead deployment • Impacts retention + claims</p>}
                       </div>
                       <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
-                        <div style={{width: '48px', height: '48px', background: '#1e40af', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', boxShadow: '0 2px 8px rgba(30,64,175,0.3)'}}>{d.baseline}</div>
+                        <div style={{width: '48px', height: '48px', background: d.requiresLead ? '#eab308' : '#1e40af', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', boxShadow: '0 2px 8px rgba(30,64,175,0.3)'}}>{d.baseline}</div>
                         <div style={{flex: 1, height: '40px', position: 'relative'}}>
                           <div style={{position: 'absolute', width: '100%', height: '40px', background: '#93c5fd', borderRadius: '20px'}}></div>
-                          <div style={{position: 'absolute', height: '40px', background: '#1e40af', borderRadius: '20px', width: `${(d.growth / 70) * 100}%`}}></div>
+                          <div style={{position: 'absolute', height: '40px', background: d.requiresLead ? '#eab308' : '#1e40af', borderRadius: '20px', width: `${(d.growth / 70) * 100}%`}}></div>
                         </div>
                         <div style={{fontSize: '32px', fontWeight: 'bold', color: '#003d82'}}>+{d.improvement}%</div>
                       </div>
@@ -713,7 +873,7 @@ function CBPROICalculator() {
                           max="30" 
                           value={d.improvement} 
                           onChange={(e) => d.setImprovement(Number(e.target.value))} 
-                          style={{width: '100%', height: '8px', accentColor: '#0066cc'}}
+                          style={{width: '100%', height: '8px', accentColor: d.requiresLead ? '#eab308' : '#0066cc'}}
                         />
                         <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b', marginTop: '4px'}}>
                           <span>0% (Low)</span>
@@ -729,22 +889,41 @@ function CBPROICalculator() {
               <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
                 <div style={{background: '#003d82', color: 'white', borderRadius: '8px', padding: '16px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px'}}>
                   <Calculator size={20} color="#ffcc00" />
-                  <h3 style={{fontSize: '18px', fontWeight: 'bold', margin: 0}}>Global Parameters</h3>
+                  <h3 style={{fontSize: '18px', fontWeight: 'bold', margin: 0}}>Course of Action (COA) Selection</h3>
                 </div>
-                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px'}}>
+                <p style={{fontSize: '13px', color: '#64748b', marginBottom: '16px'}}>Select a COA to auto-configure seat mix, engagement assumptions, and performance priorities:</p>
+                <div style={{display: 'flex', gap: '12px', marginBottom: '20px'}}>
+                  <button onClick={() => applyCOA(1)} style={{flex: 1, padding: '16px', background: '#d1d5db', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px'}}>
+                    <div style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '4px'}}>COA 1</div>
+                    <div style={{fontSize: '11px', color: '#64748b'}}>Conservative • Prove Value</div>
+                  </button>
+                  <button onClick={() => applyCOA(2)} style={{flex: 1, padding: '16px', background: '#6b7280', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px'}}>
+                    <div style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '4px'}}>COA 2</div>
+                    <div style={{fontSize: '11px', opacity: 0.9}}>Moderate • Balanced</div>
+                  </button>
+                  <button onClick={() => applyCOA(3)} style={{flex: 1, padding: '16px', background: '#003d82', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px'}}>
+                    <div style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '4px'}}>COA 3</div>
+                    <div style={{fontSize: '11px', opacity: 0.9}}>Aggressive • Max Impact</div>
+                  </button>
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px'}}>
                   <div>
-                    <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Seats: {fmtNum(seats)}</label>
-                    <input type="range" min="1000" max="30000" step="100" value={seats} onChange={(e) => {setSeats(Number(e.target.value)); setTargetPopulation(Number(e.target.value));}} style={{width: '100%', height: '8px', accentColor: '#0066cc'}}/>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Lead Seats: {fmtNum(leadSeats)}</label>
+                    <input type="range" min="0" max="5000" step="50" value={leadSeats} onChange={(e) => {const newLead = Number(e.target.value); setLeadSeats(newLead); setReadySeats(Math.max(0, (leadSeats + readySeats) - newLead)); if (newLead === 0) setLeadershipCultureImprovement(0);}} style={{width: '100%', height: '8px', accentColor: '#a855f7'}}/>
+                    <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>Critical talent • ${fmt(calculations.leadPrice)}/seat</div>
                   </div>
                   <div>
-                    <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Cost/Seat: ${costPerSeat}</label>
-                    <input type="range" min="100" max="300" step="10" value={costPerSeat} onChange={(e) => setCostPerSeat(Number(e.target.value))} style={{width: '100%', height: '8px', accentColor: '#0066cc'}}/>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Ready Seats: {fmtNum(readySeats)}</label>
+                    <input type="range" min="1000" max="30000" step="100" value={readySeats} onChange={(e) => setReadySeats(Number(e.target.value))} style={{width: '100%', height: '8px', accentColor: '#0066cc'}}/>
+                    <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>All personnel • $150/seat</div>
                   </div>
-                  <div>
-                    <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Engagement: {engagementRate}%</label>
-                    <input type="range" min="40" max="90" value={engagementRate} onChange={(e) => setEngagementRate(Number(e.target.value))} style={{width: '100%', height: '8px', accentColor: '#0066cc'}}/>
-                    <div style={{fontSize: '12px', color: '#64748b', marginTop: '4px'}}>{fmtNum(calculations.engaged)} engaged</div>
-                  </div>
+                </div>
+
+                <div style={{marginTop: '12px'}}>
+                  <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Engagement: {engagementRate}%</label>
+                  <input type="range" min="40" max="90" value={engagementRate} onChange={(e) => setEngagementRate(Number(e.target.value))} style={{width: '100%', height: '8px', accentColor: '#0066cc'}}/>
+                  <div style={{fontSize: '12px', color: '#64748b', marginTop: '4px'}}>{fmtNum(calculations.engaged)} engaged personnel</div>
                 </div>
               </div>
 
@@ -754,15 +933,22 @@ function CBPROICalculator() {
                   <h4 style={{fontSize: '16px', fontWeight: '600', margin: 0}}>Advanced Settings</h4>
                 </div>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-                  <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
-                    <h5 style={{fontSize: '14px', fontWeight: '600', marginBottom: '12px'}}>Scenario Planning</h5>
-                    <div style={{display: 'flex', gap: '8px'}}>
-                      <button onClick={() => {setEngagementRate(55); setMissionReadinessImprovement(12); setResilienceImprovement(10); setCareerCommitmentImprovement(8); setLeadershipImprovement(7); setStandardsImprovement(6);}} style={{flex: 1, padding: '10px', background: '#d1d5db', border: 'none', borderRadius: '6px', fontWeight: '500', cursor: 'pointer'}}>Conservative</button>
-                      <button onClick={() => {setEngagementRate(65); setMissionReadinessImprovement(17); setResilienceImprovement(15); setCareerCommitmentImprovement(13); setLeadershipImprovement(12); setStandardsImprovement(10);}} style={{flex: 1, padding: '10px', background: '#6b7280', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '500', cursor: 'pointer'}}>Moderate</button>
-                      <button onClick={() => {setEngagementRate(75); setMissionReadinessImprovement(25); setResilienceImprovement(23); setCareerCommitmentImprovement(20); setLeadershipImprovement(18); setStandardsImprovement(15);}} style={{flex: 1, padding: '10px', background: '#003d82', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '500', cursor: 'pointer'}}>Aggressive</button>
-                    </div>
-                  </div>
                   
+                  <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
+                      <label style={{fontSize: '14px', fontWeight: '600'}}>Lead Duration: {use6MonthLead ? '6 months' : '12 months'}</label>
+                      <button
+                        onClick={() => setUse6MonthLead(!use6MonthLead)}
+                        style={{padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', border: 'none', cursor: 'pointer', background: use6MonthLead ? '#a855f7' : '#e5e7eb', color: use6MonthLead ? 'white' : '#374151'}}
+                      >
+                        {use6MonthLead ? '6-Month' : '12-Month'}
+                      </button>
+                    </div>
+                    <p style={{fontSize: '11px', color: '#64748b', background: '#f9fafb', padding: '8px', borderRadius: '4px'}}>
+                      {use6MonthLead ? '6-month recommended for pilots & transitions. Current price: ' + fmt(calculations.leadPrice) : '12-month recommended for leadership transformation. Current price: ' + fmt(calculations.leadPrice)}
+                    </p>
+                  </div>
+
                   <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
                       <label style={{fontSize: '14px', fontWeight: '600'}}>Retention Effectiveness: {retentionEffectiveness}%</label>
@@ -779,7 +965,7 @@ function CBPROICalculator() {
                     <input 
                       type="range" 
                       min="3" 
-                      max="25" 
+                      max="35" 
                       value={manualRetentionOverride ? manualRetentionValue : retentionEffectiveness}
                       onChange={(e) => {if (manualRetentionOverride) setManualRetentionValue(Number(e.target.value));}}
                       style={{width: '100%', height: '8px', accentColor: '#0066cc', cursor: manualRetentionOverride ? 'pointer' : 'not-allowed', opacity: manualRetentionOverride ? 1 : 0.5}}
@@ -787,7 +973,7 @@ function CBPROICalculator() {
                     {manualRetentionOverride ? (
                       <p style={{fontSize: '11px', color: '#92400e', marginTop: '8px', fontWeight: '500', background: '#fffbeb', padding: '8px', borderRadius: '4px', border: '1px solid #fbbf24'}}>⚠️ Manual override active - drag slider to test rates</p>
                     ) : (
-                      <p style={{fontSize: '11px', color: '#1e40af', marginTop: '8px', fontWeight: '500', background: '#eff6ff', padding: '8px', borderRadius: '4px', border: '1px solid #60a5fa'}}>⚡ Auto-calculated from Career Commitment + Leadership</p>
+                      <p style={{fontSize: '11px', color: '#1e40af', marginTop: '8px', fontWeight: '500', background: '#eff6ff', padding: '8px', borderRadius: '4px', border: '1px solid #60a5fa'}}>⚡ Auto-calculated from Career + Leadership + Culture ({leadSeats > 0 ? 'with Lead boost' : 'Ready only'})</p>
                     )}
                   </div>
                 </div>
@@ -853,8 +1039,9 @@ function CBPROICalculator() {
                 {isOFO && <div style={{fontSize: '14px', color: '#dc2626', fontWeight: 'bold', marginBottom: '8px'}}>⚠️ 2028 OFO: 2,220 officers retiring (400% increase over normal ~500/year)</div>}
                 <div style={{marginBottom: '8px'}}><strong>Replacement Cost:</strong> OFO $87,300 | USBP $125,000 per separation</div>
                 <div style={{marginBottom: '8px'}}><strong>Workers' Comp:</strong> $65,000 avg mental health claim cost</div>
-                <div style={{marginBottom: '8px'}}><strong>Prevention Rate:</strong> 22% burnout/mental health claim reduction (JAMA 2024)</div>
-                <div><strong>Engagement:</strong> {engagementRate}% of seats actively using platform (adjustable)</div>
+                <div style={{marginBottom: '8px'}}><strong>Base Prevention Rate:</strong> 22% (JAMA 2024) + Leadership boost when Lead deployed</div>
+                <div style={{marginBottom: '8px'}}><strong>Lead Pricing:</strong> Volume-discounted ({use6MonthLead ? '6-month' : '12-month'} term)</div>
+                <div><strong>Ready Pricing:</strong> $150/seat (12 months)</div>
               </div>
             </div>
 
@@ -866,7 +1053,8 @@ function CBPROICalculator() {
                 • <strong>Ebbinghaus forgetting curve:</strong> Learning decay & spaced repetition research<br/>
                 • <strong>BetterUp DAF outcomes (2021–2025):</strong> +6% retention, +15% resilience, +17% mission readiness<br/>
                 • <strong>DHS OIG & NTEU testimony:</strong> CBP workforce challenges, operational tempo<br/>
-                • <strong>Air Force Weapons School:</strong> Mastery framework for high-performance development
+                • <strong>Air Force Weapons School:</strong> Mastery framework for high-performance development<br/>
+                • <strong>BetterUp volume pricing:</strong> Enterprise contract rates (Deal Desk for 1000+ seats)
               </div>
             </div>
 
@@ -896,7 +1084,7 @@ function CBPROICalculator() {
               <div style={{textAlign: 'center', paddingTop: '32px'}}>
                 <p style={{fontWeight: '500', color: '#6b7280', marginBottom: '16px'}}>Ask anything about the model!</p>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
-                  {["How is the net savings calculated?", "Why is OFO facing a retirement crisis in 2028?", "Explain the dual-pathway model", "What are workers' comp claims?", "How do Performance Drivers affect ROI?"].map((q, i) => (
+                  {["How is the net savings calculated?", "Why is OFO facing a retirement crisis in 2028?", "Explain the COA differences", "What's the difference between Lead and Ready?", "How does Leadership Culture affect ROI?"].map((q, i) => (
                     <button key={i} onClick={() => setChatInput(q)} style={{width: '100%', textAlign: 'left', padding: '12px', background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '13px', cursor: 'pointer'}} onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'} onMouseOut={(e) => e.currentTarget.style.background = 'white'}>
                       {q}
                     </button>
