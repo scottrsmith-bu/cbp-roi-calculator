@@ -131,7 +131,7 @@ function MethodologyImpactSection() {
 
       <div style={{ marginTop: 16, background: '#fffbeb', border: '1px solid #fbbf24', borderRadius: 12, padding: 16 }}>
         <p style={{ margin: 0, fontSize: 14, color: '#92400e', lineHeight: 1.6 }}>
-          The red line explains the current retention gap: episodic CBP training peaks and fades, so experience isn't transferred. The blue line shows what changes outcomes: continuous leadership development and well-being support that compounds over time—turning training events into sustained behavior change with AI-supported coaching.
+          CBP faces multiple retention challenges—including the 2028 retirement cliff, high operational tempo, leadership culture gaps, and career development barriers. <strong>The red line shows one contributing factor:</strong> episodic training that peaks and fades, failing to transfer institutional knowledge. <strong>The blue line shows BetterUp's approach:</strong> continuous development through coaching, AI support, and learning journeys that compound over time—helping address retention by building resilience, clarifying career paths, and developing leadership capability at critical decision points.
         </p>
       </div>
 
