@@ -351,7 +351,7 @@ const CBPDashboard = () => {
               <Shield size={64} color="#ffcc00" strokeWidth={2.5} />
               <div>
                 <h1 style={{fontSize: '52px', fontWeight: 'bold', margin: '0 0 12px 0', lineHeight: 1.1}}>BetterUp CBP Leadership Dashboard</h1>
-                <p style={{fontSize: '24px', color: '#ffcc00', margin: 0, fontWeight: 'bold'}}>Workers' Comp & Retention ROI Projections</p>
+                <p style={{fontSize: '24px', color: '#ffcc00', margin: 0, fontWeight: 'bold'}}>Triple-Pathway ROI: Retention, Workers' Comp & Discipline Prevention</p>
               </div>
             </div>
             <div style={{background: 'rgba(255,255,255,0.15)', borderRadius: '12px', padding: '20px', borderLeft: '5px solid #ffcc00'}}>
