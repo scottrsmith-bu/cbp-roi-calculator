@@ -9,10 +9,10 @@ const CBPDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [showImpact, setShowImpact] = useState(false);
   const [showAssistant, setShowAssistant] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const [showAdvancedDrivers, setShowAdvancedDrivers] = useState(false);
   
   const [missionReadinessImprovement, setMissionReadinessImprovement] = useState(17);
   const [resilienceImprovement, setResilienceImprovement] = useState(15);
@@ -33,7 +33,7 @@ const CBPDashboard = () => {
 
   const organizations = [
     {id: 'cbp', name: 'CBP-Wide (All Components)', personnel: 60726, location: 'Nationwide', type: 'cbp-wide', description: 'Entire CBP workforce', attritionRate: 5.5, replacementCost: 150000, workersCompClaims: 8912, avgClaimCost: 41000},
-    {id: 'ofo', name: 'Office of Field Operations (OFO)', personnel: 27992, location: '20 Field Offices', type: 'component', highlight: true, description: 'CBP Officers at ports of entry', attritionRate: 6.3, replacementCost: 150000, workersCompClaims: 4107, avgClaimCost: 41000},
+    {id: 'ofo', name: 'Office of Field Operations (OFO)', personnel: 25879, location: '20 Field Offices & 328 Ports', type: 'component', highlight: true, description: 'CBP Officers at ports of entry', attritionRate: 6.3, replacementCost: 150000, workersCompClaims: 4107, avgClaimCost: 41000},
     {id: 'usbp', name: 'U.S. Border Patrol (USBP)', personnel: 19648, location: '20 Sectors', type: 'component', description: 'Border Patrol Agents', attritionRate: 4.2, replacementCost: 150000, workersCompClaims: 2883, avgClaimCost: 41000},
     {id: 'amt', name: 'Air and Marine Operations (AMO)', personnel: 3156, location: 'Nationwide', type: 'component', description: 'Air and marine interdiction', attritionRate: 5.8, replacementCost: 150000, workersCompClaims: 463, avgClaimCost: 41000},
     {id: 'support', name: 'Support & Mission Staff', personnel: 9930, location: 'Nationwide', type: 'component', description: 'HQ and support personnel', attritionRate: 5.1, replacementCost: 120000, workersCompClaims: 1459, avgClaimCost: 41000},
@@ -219,7 +219,7 @@ const CBPDashboard = () => {
     if (!chatInput.trim()) return;
     const responses = {
       'How is the net savings calculated?': 'Net savings = Total Savings (Retention + Workers Comp + Discipline Prevention) - BetterUp Program Cost. We calculate all three pathways independently and sum them.',
-      'Why is OFO facing a retirement crisis in 2028?': 'Officers hired in 2003-2008 have Law Enforcement 6(c) coverage, making them eligible for retirement at 25 years of service. This creates a massive wave of 2,220 eligible retirees starting in 2028.',
+      'Why is OFO facing a retirement crisis in 2028?': 'Officers hired in 2003-2008 have enhanced CBPO retirement coverage, making them eligible for retirement at 25 years of service. This creates a massive wave of 2,220 eligible retirees starting in 2028.',
       'Explain the COA differences': 'COA 1 (Conservative) = 10-20% coverage, low engagement (55%), prove value. COA 2 (Moderate) = 15-25% coverage, realistic engagement (65%), balanced approach. COA 3 (Aggressive) = 33-40% coverage, high engagement (75%), maximum impact for 2028 crisis.',
       "What's the difference between Lead and Ready?": 'Lead ($5,785-$6,500) = unlimited 1:1 coaching for critical talent/leadership, drives culture transformation. Ready ($150) = AI coach + learning journeys for all personnel, builds resilience at scale.',
       'How does Leadership Culture affect ROI?': 'Leadership Culture (only available with Lead seats) contributes ~40% of retention gains and ~15-20% of workers comp reduction through psychological safety and supervisory effectiveness.'
@@ -315,7 +315,7 @@ const CBPDashboard = () => {
               </ul>
             </div>
             <div style={{ background: '#ecfeff', border: '1px solid #67e8f9', borderRadius: 8, padding: 12 }}>
-              <div style={{ fontSize: 13, color: '#155e75', fontWeight: 700, marginBottom: 6 }}>The Blue Line: Why DAF moved retention +6%</div>
+              <div style={{ fontSize: 13, color: '#155e75', fontWeight: 700, marginBottom: 6 }}>The Blue Line: Why DAF moved retention +7%</div>
               <ul style={{ margin: 0, paddingLeft: 16, color: '#0e7490', fontSize: 13, lineHeight: 1.6 }}>
                 <li>Continuous, personalized practice + coaching compounds capability</li>
                 <li>Just-in-time support during critical incidents & career choke points</li>
@@ -336,7 +336,7 @@ const CBPDashboard = () => {
         </div>
 
         <div style={{ marginTop: 10, fontSize: 11, color: '#64748b' }}>
-          <strong>Sources:</strong> Ebbinghaus forgetting curve; spaced repetition research; BetterUp DAF outcomes (+6% retention); JAMA 2024 peer-reviewed burnout reduction.
+          <strong>Sources:</strong> <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0120644" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Ebbinghaus forgetting curve</a>; spaced repetition research; <a href="https://www.betterup.com/customers/united-states-airforce" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>BetterUp DAF outcomes</a> (+7% retention); <a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>JAMA 2024</a> peer-reviewed burnout reduction.
         </div>
       </div>
     );
@@ -382,7 +382,7 @@ const CBPDashboard = () => {
                 ))}
               </div>
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px'}}>
-                {['+17% Mission Readiness', '+6% Career Commitment', '+15% Resilience'].map((result, i) => (
+                {['+13% Individual Readiness', '+7% Career Commitment', '+15% Unit Readiness'].map((result, i) => (
                   <div key={i} style={{background: '#dbeafe', border: '2px solid #3b82f6', borderRadius: '10px', padding: '20px', textAlign: 'center'}}>
                     <div style={{fontSize: '24px', fontWeight: 'bold', color: '#1e3a8a'}}>{result}</div>
                   </div>
@@ -417,7 +417,73 @@ const CBPDashboard = () => {
                 </div>
               )}
             </div>
-            
+
+            <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px'}}>How the Model Works: Triple-Pathway Impact</h2>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px'}}>
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '48px', height: '48px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>1</div>
+                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Workers' Comp Reduction</h3>
+                  </div>
+                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
+                    BetterUp builds resilience to prevent mental health claims (PTSD, depression, anxiety, SUD).
+                  </p>
+                  <div style={{background: '#fee2e2', borderRadius: '10px', padding: '12px'}}>
+                    <div style={{fontSize: '13px', color: '#991b1b', marginBottom: '4px'}}><strong>22% reduction</strong> in mental health claims</div>
+                    <div style={{fontSize: '11px', color: '#7f1d1d', fontStyle: 'italic'}}>Source: <a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#991b1b', textDecoration: 'underline'}}>JAMA 2024</a></div>
+                  </div>
+                </div>
+
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '48px', height: '48px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>2</div>
+                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Retention Economics</h3>
+                  </div>
+                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
+                    Career clarity and leadership culture at critical decision points (3-5yrs, pre-2028).
+                  </p>
+                  <div style={{background: '#fed7aa', borderRadius: '10px', padding: '12px'}}>
+                    <div style={{fontSize: '13px', color: '#92400e', marginBottom: '4px'}}><strong>$150K saved</strong> per prevented separation</div>
+                    <div style={{fontSize: '11px', color: '#78350f', fontStyle: 'italic'}}>Source: <a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noopener noreferrer" style={{color: '#78350f', textDecoration: 'underline'}}>GAO-24-107029</a></div>
+                  </div>
+                </div>
+
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '48px', height: '48px', background: '#7c3aed', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>3</div>
+                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Discipline Prevention</h3>
+                  </div>
+                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
+                    Early intervention prevents stress-related misconduct and alcohol incidents.
+                  </p>
+                  <div style={{background: '#f3e8ff', borderRadius: '10px', padding: '12px'}}>
+                    <div style={{fontSize: '13px', color: '#6b21a8', marginBottom: '4px'}}><strong>245 cases</strong> prevented annually</div>
+                    <div style={{fontSize: '11px', color: '#7e22ce', fontStyle: 'italic'}}>Source: <a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#7e22ce', textDecoration: 'underline'}}>EAP research</a> + CBP data</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Performance Drivers Aligned to CBP Strategic Priorities</h2>
+              <p style={{textAlign: 'center', color: '#64748b', marginBottom: '20px', fontSize: '15px'}}>BetterUp targets the behavioral foundations that drive DHS and CBP mission success</p>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px'}}>
+                {[
+                  {title: 'MISSION READINESS', sub: 'Rapid Decision-Making, Cognitive Agility, Sustained Performance'},
+                  {title: 'RESILIENCE', sub: 'Burnout Prevention, Stress Management, Emotional Regulation'},
+                  {title: 'CAREER COMMITMENT', sub: 'Purpose & Meaning, Career Development, Work-Life Integration'},
+                  {title: 'LEADERSHIP', sub: 'Communication, Strategic Thinking, Supervisory Effectiveness'},
+                  {title: 'STANDARDS', sub: 'Ethical Decision-Making, Professional Demeanor, Sound Judgment'}
+                ].map((priority, i) => (
+                  <div key={i} style={{background: '#dbeafe', padding: '16px', border: '2px solid #60a5fa', borderRadius: '12px', textAlign: 'center'}}>
+                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>{priority.title}</div>
+                    <div style={{fontSize: '11px', color: '#64748b'}}>{priority.sub}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div style={{background: '#dbeafe', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'start', gap: '16px', marginBottom: '16px'}}>
                 <div style={{width: '48px', height: '48px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0}}>🎯</div>
@@ -590,72 +656,6 @@ const CBPDashboard = () => {
               </div>
             </div>
 
-            <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
-              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px'}}>How the Model Works: Triple-Pathway Impact</h2>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px'}}>
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '48px', height: '48px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>1</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Workers' Comp Reduction</h3>
-                  </div>
-                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
-                    BetterUp builds resilience to prevent mental health claims (PTSD, depression, anxiety, SUD).
-                  </p>
-                  <div style={{background: '#fee2e2', borderRadius: '10px', padding: '12px'}}>
-                    <div style={{fontSize: '13px', color: '#991b1b', marginBottom: '4px'}}><strong>22% reduction</strong> in mental health claims</div>
-                    <div style={{fontSize: '11px', color: '#7f1d1d', fontStyle: 'italic'}}>Source: JAMA 2024</div>
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '48px', height: '48px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>2</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Retention Economics</h3>
-                  </div>
-                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
-                    Career clarity and leadership culture at critical decision points (3-5yrs, pre-2028).
-                  </p>
-                  <div style={{background: '#fed7aa', borderRadius: '10px', padding: '12px'}}>
-                    <div style={{fontSize: '13px', color: '#92400e', marginBottom: '4px'}}><strong>$87K-$150K</strong> saved per prevented separation</div>
-                    <div style={{fontSize: '11px', color: '#78350f', fontStyle: 'italic'}}>Source: GAO-24-107029</div>
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '48px', height: '48px', background: '#7c3aed', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>3</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Discipline Prevention</h3>
-                  </div>
-                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
-                    Early intervention prevents stress-related misconduct and alcohol incidents.
-                  </p>
-                  <div style={{background: '#f3e8ff', borderRadius: '10px', padding: '12px'}}>
-                    <div style={{fontSize: '13px', color: '#6b21a8', marginBottom: '4px'}}><strong>245 cases</strong> prevented annually</div>
-                    <div style={{fontSize: '11px', color: '#7e22ce', fontStyle: 'italic'}}>Source: EAP research + CBP data</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Performance Drivers Aligned to CBP Strategic Priorities</h2>
-              <p style={{textAlign: 'center', color: '#64748b', marginBottom: '20px', fontSize: '15px'}}>BetterUp targets the behavioral foundations that drive DHS and CBP mission success</p>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px'}}>
-                {[
-                  {title: 'MISSION READINESS', sub: 'Rapid Decision-Making, Cognitive Agility, Sustained Performance'},
-                  {title: 'RESILIENCE', sub: 'Burnout Prevention, Stress Management, Emotional Regulation'},
-                  {title: 'CAREER COMMITMENT', sub: 'Purpose & Meaning, Career Development, Work-Life Integration'},
-                  {title: 'LEADERSHIP', sub: 'Communication, Strategic Thinking, Supervisory Effectiveness'},
-                  {title: 'STANDARDS', sub: 'Ethical Decision-Making, Professional Demeanor, Sound Judgment'}
-                ].map((priority, i) => (
-                  <div key={i} style={{background: '#dbeafe', padding: '16px', border: '2px solid #60a5fa', borderRadius: '12px', textAlign: 'center'}}>
-                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>{priority.title}</div>
-                    <div style={{fontSize: '11px', color: '#64748b'}}>{priority.sub}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <div style={{background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '16px', padding: '40px', textAlign: 'center'}}>
               <h2 style={{fontSize: '32px', fontWeight: 'bold', color: 'white', marginBottom: '16px'}}>Ready to See Your Component's Projected Impact?</h2>
               <p style={{fontSize: '18px', color: '#cbd5e1', marginBottom: '32px'}}>
@@ -749,7 +749,6 @@ const CBPDashboard = () => {
       </div>
     );
   }
-
   return (
     <div style={{width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '24px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
       <button onClick={() => setShowLanding(true)} style={{marginBottom: '16px', color: '#0066cc', background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline', fontSize: '14px'}}>
@@ -759,9 +758,9 @@ const CBPDashboard = () => {
       <div style={{background: '#003d82', color: 'white', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', padding: '24px', marginBottom: '24px', borderTop: '4px solid #ffcc00'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px'}}>
           <Shield size={40} color="#ffcc00" />
-          <h1 style={{fontSize: '28px', fontWeight: 'bold', margin: 0}}>{selectedOrganization?.name || 'CBP'} - Workers' Comp & Retention Dashboard</h1>
+          <h1 style={{fontSize: '28px', fontWeight: 'bold', margin: 0}}>{selectedOrganization?.name || 'CBP'} - Triple-Pathway ROI Dashboard</h1>
         </div>
-        <p style={{fontSize: '14px', color: '#cbd5e1', margin: 0}}>{selectedOrganization?.location} ({fmtNum(totalPersonnel)} personnel)</p>
+        <p style={{fontSize: '14px', color: '#cbd5e1', margin: 0}}>{selectedOrganization?.location} ({fmtNum(totalPersonnel)} personnel) • Retention + Workers' Comp + Discipline Prevention</p>
       </div>
 
       <div style={{marginBottom: '16px', display: 'flex', gap: '8px'}}>
@@ -799,181 +798,216 @@ const CBPDashboard = () => {
 
       {activeTab === 'dashboard' && (
         <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-          <div style={{background: '#003d82', color: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)'}}>
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start'}}>
-              <div>
-                <div style={{fontSize: '24px', fontWeight: 'bold', marginBottom: '8px'}}>Total Seats: {fmtNum(leadSeats + readySeats)}</div>
-                <div style={{fontSize: '14px'}}>Lead: {fmtNum(leadSeats)} • Ready: {fmtNum(readySeats)}</div>
-                <div style={{fontSize: '14px', opacity: 0.9, marginTop: '4px'}}>Engagement: {engagementRate}% | Population: {fmtNum(totalPersonnel)}</div>
-              </div>
+          
+          <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '3px solid #0066cc'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+              <Calculator size={24} color="#0066cc" />
+              <h3 style={{fontSize: '20px', fontWeight: 'bold', margin: 0, color: '#003d82'}}>Course of Action (COA) Selection</h3>
+            </div>
+            <p style={{fontSize: '14px', color: '#64748b', marginBottom: '16px'}}>Select a COA to auto-configure seat mix, engagement assumptions, and performance priorities:</p>
+            <div style={{display: 'flex', gap: '12px'}}>
               <button 
-                onClick={() => setShowImpact(!showImpact)} 
-                style={{
-                  background: '#ffcc00', 
-                  color: '#003d82', 
-                  border: 'none', 
-                  padding: '12px 32px', 
-                  borderRadius: '8px', 
-                  fontSize: '18px', 
-                  fontWeight: 'bold', 
-                  cursor: 'pointer'
-                }}
+                onClick={() => applyCOA(1)} 
+                style={{flex: 1, padding: '20px', background: '#d1d5db', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s'}}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
               >
-                {showImpact ? 'Hide Impact' : 'Show Impact →'}
+                <div style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '6px'}}>COA 1</div>
+                <div style={{fontSize: '12px', color: '#64748b'}}>Conservative • Prove Value</div>
+              </button>
+              <button 
+                onClick={() => applyCOA(2)} 
+                style={{flex: 1, padding: '20px', background: '#6b7280', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s'}}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <div style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '6px'}}>COA 2</div>
+                <div style={{fontSize: '12px', opacity: 0.9}}>Moderate • Balanced</div>
+              </button>
+              <button 
+                onClick={() => applyCOA(3)} 
+                style={{flex: 1, padding: '20px', background: '#003d82', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s'}}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <div style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '6px'}}>COA 3</div>
+                <div style={{fontSize: '12px', opacity: 0.9}}>Aggressive • Max Impact</div>
               </button>
             </div>
           </div>
-          {showImpact && (
-            <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-              <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', border: '2px solid #94a3b8', borderRadius: '12px', padding: '24px'}}>
-                <p style={{fontSize: '18px', color: '#334155'}}>
-                  BetterUp saves {selectedOrganization?.name || 'CBP'} <strong style={{color: '#059669', fontSize: '24px'}}>{fmt(calculations.netSavings)}</strong> annually—preventing <strong>{fmtNum(calculations.preventedSeparations)} separations</strong>, <strong>{fmtNum(calculations.claimsPrevented)} mental health claims</strong>, and <strong>{fmtNum(calculations.totalPreventedDiscipline)} discipline incidents</strong>.
+
+          <div style={{background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', border: '3px solid #10b981', borderRadius: '12px', padding: '32px'}}>
+            <div style={{textAlign: 'center', marginBottom: '24px'}}>
+              <h2 style={{fontSize: '32px', fontWeight: 'bold', color: '#065f46', marginBottom: '8px'}}>Projected Annual Impact</h2>
+              <p style={{fontSize: '16px', color: '#047857'}}>
+                BetterUp saves {selectedOrganization?.name || 'CBP'} <strong style={{color: '#059669', fontSize: '20px'}}>{fmt(calculations.netSavings)}</strong> annually
+              </p>
+            </div>
+
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px'}}>
+              <div style={{background: 'white', border: '4px solid #10b981', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 16px rgba(16,185,129,0.2)', textAlign: 'center'}}>
+                <div style={{fontSize: '14px', color: '#047857', marginBottom: '12px', fontWeight: '600'}}>NET ANNUAL SAVINGS</div>
+                <div style={{fontSize: '48px', fontWeight: 'bold', color: '#059669', marginBottom: '8px'}}>{fmt(calculations.netSavings)}</div>
+                <div style={{fontSize: '14px', color: '#047857'}}>After ${fmt(calculations.programCost)} program cost</div>
+                <div style={{fontSize: '16px', fontWeight: 'bold', color: '#10b981', marginTop: '12px'}}>ROI: {calculations.roi}%</div>
+              </div>
+
+              <div style={{background: 'white', border: '3px solid #64748b', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', textAlign: 'center'}}>
+                <div style={{fontSize: '14px', color: '#475569', marginBottom: '12px', fontWeight: '600'}}>TOTAL SEATS</div>
+                <div style={{fontSize: '48px', fontWeight: 'bold', color: '#1e293b', marginBottom: '8px'}}>{fmtNum(leadSeats + readySeats)}</div>
+                <div style={{fontSize: '13px', color: '#64748b'}}>Lead: {fmtNum(leadSeats)} • Ready: {fmtNum(readySeats)}</div>
+                <div style={{fontSize: '13px', color: '#64748b', marginTop: '8px'}}>Engagement: {engagementRate}% ({fmtNum(calculations.engaged)} active)</div>
+              </div>
+
+              <div style={{background: 'white', border: '3px solid #64748b', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', textAlign: 'center'}}>
+                <div style={{fontSize: '14px', color: '#475569', marginBottom: '12px', fontWeight: '600'}}>PERSONNEL IMPACTED</div>
+                <div style={{fontSize: '48px', fontWeight: 'bold', color: '#1e293b', marginBottom: '8px'}}>{fmtNum(calculations.preventedSeparations + calculations.readinessImproved)}</div>
+                <div style={{fontSize: '13px', color: '#64748b'}}>Retention & readiness improvements</div>
+              </div>
+            </div>
+
+            <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #d1fae5'}}>
+              <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', marginBottom: '16px', textAlign: 'center'}}>Three Independent Value Pathways Contributing to Total Above</h3>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
+                
+                <div style={{background: '#fef2f2', border: '2px solid #fca5a5', borderRadius: '10px', padding: '20px'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px'}}>
+                    <div style={{width: '32px', height: '32px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>1</div>
+                    <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#991b1b', margin: 0}}>Workers' Comp</h4>
+                  </div>
+                  <div style={{fontSize: '28px', fontWeight: 'bold', color: '#dc2626', marginBottom: '8px'}}>{fmt(calculations.workersCompSavings)}</div>
+                  <div style={{fontSize: '13px', color: '#7f1d1d', marginBottom: '4px'}}><strong>{fmtNum(calculations.claimsPrevented)} mental health claims</strong> prevented</div>
+                  <div style={{fontSize: '12px', color: '#991b1b'}}>= Healthier workforce, reduced disability costs, fewer lost-time injuries</div>
+                </div>
+
+                <div style={{background: '#fef3c7', border: '2px solid #fcd34d', borderRadius: '10px', padding: '20px'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px'}}>
+                    <div style={{width: '32px', height: '32px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>2</div>
+                    <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#92400e', margin: 0}}>Retention</h4>
+                  </div>
+                  <div style={{fontSize: '28px', fontWeight: 'bold', color: '#f59e0b', marginBottom: '8px'}}>{fmt(calculations.retentionSavings)}</div>
+                  <div style={{fontSize: '13px', color: '#78350f', marginBottom: '4px'}}><strong>{fmtNum(calculations.preventedSeparations)} separations</strong> prevented</div>
+                  <div style={{fontSize: '12px', color: '#92400e'}}>= Institutional knowledge preserved through 2028 crisis, reduced recruiting/training costs</div>
+                  {leadSeats > 0 && <div style={{fontSize: '11px', color: '#eab308', fontWeight: '600', marginTop: '8px'}}>💼 {fmtNum(calculations.leadershipRetentionContribution)} from Lead culture impact</div>}
+                </div>
+
+                <div style={{background: '#f3e8ff', border: '2px solid #d8b4fe', borderRadius: '10px', padding: '20px'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px'}}>
+                    <div style={{width: '32px', height: '32px', background: '#7c3aed', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>3</div>
+                    <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#6b21a8', margin: 0}}>Discipline Prevention</h4>
+                  </div>
+                  <div style={{fontSize: '28px', fontWeight: 'bold', color: '#7c3aed', marginBottom: '8px'}}>{fmt(calculations.disciplineSavings)}</div>
+                  <div style={{fontSize: '13px', color: '#7e22ce', marginBottom: '4px'}}><strong>{fmtNum(calculations.totalPreventedDiscipline)} misconduct cases</strong> prevented</div>
+                  <div style={{fontSize: '12px', color: '#6b21a8'}}>= Reduced OPR investigator workload, fewer career-ending incidents, preserved personnel</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          {isOFO && (
+            <div style={{background: '#fffbeb', border: '4px solid #f59e0b', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(245,158,11,0.2)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+                <div style={{width: '40px', height: '40px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>⚠️</div>
+                <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', margin: 0}}>2028 OFO Retirement Crisis</h3>
+              </div>
+              <p style={{fontSize: '16px', color: '#92400e', margin: 0}}>
+                <strong>2,220 CBP Officers</strong> projected to retire in 2028—a <strong>400% increase</strong> over normal ~500/year. Officers hired after July 6, 2008 received enhanced retirement coverage, creating a concentrated retirement wave.
+              </p>
+            </div>
+          )}
+
+          <div style={{background: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)', border: '3px solid #a855f7', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(168,85,247,0.2)'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+              <div style={{width: '40px', height: '40px', background: '#a855f7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>💼</div>
+              <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#6b21a8', margin: 0}}>Product Mix & Investment</h3>
+            </div>
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px'}}>
+              <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
+                <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>BetterUp Lead</div>
+                <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(leadSeats)}</div>
+                <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>Critical talent • Leadership</div>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.leadCost)}</div>
+                <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>@ {fmt(calculations.leadPrice)}/seat</div>
+              </div>
+              <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
+                <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>BetterUp Ready</div>
+                <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(readySeats)}</div>
+                <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>All personnel • Resilience</div>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.readyCost)}</div>
+                <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>@ $150/seat</div>
+              </div>
+              <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
+                <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>Total Program</div>
+                <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(leadSeats + readySeats)}</div>
+                <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>Combined investment</div>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.programCost)}</div>
+                <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>Annual cost</div>
+              </div>
+            </div>
+          </div>
+
+          {leadSeats > 0 && (
+            <div style={{background: 'linear-gradient(135deg, #fefce8 0%, #fef3c7 100%)', border: '3px solid #eab308', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(234,179,8,0.2)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                <div style={{width: '40px', height: '40px', background: '#eab308', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>👥</div>
+                <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#713f12', margin: 0}}>Leadership Culture Transformation Impact</h3>
+              </div>
+              <p style={{fontSize: '14px', color: '#854d0e', marginBottom: '16px', lineHeight: 1.6}}>
+                <strong>{fmtNum(leadSeats)} Lead seats</strong> deployed to develop command climate and address supervisory effectiveness gaps. Lead's unlimited 1:1 coaching builds trust, communication skills, and transformational leadership capabilities—moving from command-and-control to developmental leadership.
+              </p>
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
+                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
+                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Retention Contribution</div>
+                  <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipRetentionContribution)}</div>
+                  <div style={{fontSize: '12px', color: '#854d0e'}}>separations prevented by better leadership (~40% of total retention gains)</div>
+                </div>
+                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
+                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Workers' Comp Contribution</div>
+                  <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipClaimContribution)}</div>
+                  <div style={{fontSize: '12px', color: '#854d0e'}}>claims prevented through psychological safety (~{Math.round((calculations.leadershipClaimContribution / (calculations.claimsPrevented || 1)) * 100)}% of total)</div>
+                </div>
+              </div>
+              <div style={{background: '#fffbeb', borderRadius: '8px', padding: '12px', marginTop: '12px', border: '1px solid #fbbf24'}}>
+                <p style={{fontSize: '12px', color: '#78350f', margin: 0}}>
+                  <strong>Why This Matters:</strong> Federal Employee Viewpoint Survey data and GAO reports consistently identify leadership quality as a primary driver of federal law enforcement retention. Lead coaching transforms supervisory approaches, directly addressing the root cause of voluntary separations by creating psychologically safe environments where officers feel supported rather than micromanaged.
                 </p>
               </div>
+            </div>
+          )}
 
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
-                <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', border: '3px solid #64748b', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
-                  <div style={{fontSize: '12px', color: '#64748b', marginBottom: '8px', fontWeight: '600'}}>Net savings</div>
-                  <div style={{fontSize: '40px', fontWeight: 'bold', color: '#059669'}}>{fmt(calculations.netSavings)}</div>
-                  <div style={{fontSize: '12px', color: '#64748b', marginTop: '4px'}}>After program cost</div>
-                </div>
-                <div style={{background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', border: '4px solid #0066cc', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0,102,204,0.2)'}}>
-                  <div style={{fontSize: '12px', color: '#1e40af', marginBottom: '8px', fontWeight: '600'}}>ROI multiplier</div>
-                  <div style={{fontSize: '40px', fontWeight: 'bold', color: '#1e3a8a'}}>{(parseFloat(calculations.roi) / 100 + 1).toFixed(1)}×</div>
-                  <div style={{fontSize: '12px', color: '#1e40af', marginTop: '4px'}}>Return +{calculations.roi}%</div>
-                </div>
-                <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', border: '3px solid #64748b', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
-                  <div style={{fontSize: '12px', color: '#64748b', marginBottom: '8px', fontWeight: '600'}}>Personnel impacted</div>
-                  <div style={{fontSize: '40px', fontWeight: 'bold', color: '#475569'}}>{fmtNum(calculations.preventedSeparations + calculations.readinessImproved)}</div>
-                  <div style={{fontSize: '12px', color: '#64748b', marginTop: '4px'}}>Retention & readiness</div>
-                </div>
-              </div>
+          <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
+            <button 
+              onClick={() => setShowAdvancedDrivers(!showAdvancedDrivers)} 
+              style={{
+                width: '100%', 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                background: 'transparent', 
+                border: 'none', 
+                cursor: 'pointer', 
+                padding: '12px 0'
+              }}
+            >
+              <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#003d82', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <Target size={24} color="#0066cc" />
+                Advanced: Customize Performance Assumptions
+              </h3>
+              {showAdvancedDrivers ? <ChevronUp size={24} color="#0066cc" /> : <ChevronDown size={24} color="#0066cc" />}
+            </button>
+            
+            {!showAdvancedDrivers && (
+              <p style={{fontSize: '13px', color: '#64748b', marginTop: '8px'}}>
+                COAs automatically configure these drivers. Expand to manually adjust individual performance assumptions.
+              </p>
+            )}
 
-              {isOFO && (
-                <div style={{background: '#fffbeb', border: '4px solid #f59e0b', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(245,158,11,0.2)'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
-                    <div style={{width: '40px', height: '40px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>⚠️</div>
-                    <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', margin: 0}}>2028 OFO Retirement Crisis</h3>
-                  </div>
-                  <p style={{fontSize: '16px', color: '#92400e', margin: 0}}>
-                    <strong>2,220 CBP Officers</strong> projected to retire in 2028—a <strong>400% increase</strong> over normal ~500/year. Officers hired after July 6, 2008 received enhanced retirement coverage, creating a concentrated retirement wave.
-                  </p>
-                </div>
-              )}
-
-              <div style={{background: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)', border: '3px solid #a855f7', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(168,85,247,0.2)'}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                  <div style={{width: '40px', height: '40px', background: '#a855f7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>💼</div>
-                  <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#6b21a8', margin: 0}}>Product Mix & Investment</h3>
-                </div>
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px'}}>
-                  <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
-                    <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>BetterUp Lead</div>
-                    <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(leadSeats)}</div>
-                    <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>Critical talent • Leadership</div>
-                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.leadCost)}</div>
-                    <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>@ {fmt(calculations.leadPrice)}/seat</div>
-                  </div>
-                  <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
-                    <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>BetterUp Ready</div>
-                    <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(readySeats)}</div>
-                    <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>All personnel • Resilience</div>
-                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.readyCost)}</div>
-                    <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>@ $150/seat</div>
-                  </div>
-                  <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #c084fc'}}>
-                    <div style={{fontSize: '12px', color: '#7e22ce', marginBottom: '8px', fontWeight: '600'}}>Total Program</div>
-                    <div style={{fontSize: '28px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '4px'}}>{fmtNum(leadSeats + readySeats)}</div>
-                    <div style={{fontSize: '11px', color: '#9333ea', marginBottom: '8px'}}>Combined investment</div>
-                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#6b21a8'}}>{fmt(calculations.programCost)}</div>
-                    <div style={{fontSize: '10px', color: '#9333ea', marginTop: '2px'}}>Annual cost</div>
-                  </div>
-                </div>
-              </div>
-
-              {leadSeats > 0 && (
-                <div style={{background: 'linear-gradient(135deg, #fefce8 0%, #fef3c7 100%)', border: '3px solid #eab308', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(234,179,8,0.2)'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '40px', height: '40px', background: '#eab308', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>👥</div>
-                    <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#713f12', margin: 0}}>Leadership Culture Transformation Impact</h3>
-                  </div>
-                  <p style={{fontSize: '14px', color: '#854d0e', marginBottom: '16px', lineHeight: 1.6}}>
-                    <strong>{fmtNum(leadSeats)} Lead seats</strong> deployed to develop command climate and address supervisory effectiveness gaps. Lead's unlimited 1:1 coaching builds trust, communication skills, and transformational leadership capabilities—moving from command-and-control to developmental leadership.
-                  </p>
-                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
-                    <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
-                      <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Retention Contribution</div>
-                      <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipRetentionContribution)}</div>
-                      <div style={{fontSize: '12px', color: '#854d0e'}}>separations prevented by better leadership (~40% of total retention gains)</div>
-                    </div>
-                    <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
-                      <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Workers' Comp Contribution</div>
-                      <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipClaimContribution)}</div>
-                      <div style={{fontSize: '12px', color: '#854d0e'}}>claims prevented through psychological safety (~{Math.round((calculations.leadershipClaimContribution / calculations.claimsPrevented) * 100)}% of total)</div>
-                    </div>
-                  </div>
-                  <div style={{background: '#fffbeb', borderRadius: '8px', padding: '12px', marginTop: '12px', border: '1px solid #fbbf24'}}>
-                    <p style={{fontSize: '12px', color: '#78350f', margin: 0}}>
-                      <strong>Why This Matters:</strong> Federal Employee Viewpoint Survey data and GAO reports consistently identify leadership quality as a primary driver of federal law enforcement retention. Lead coaching transforms supervisory approaches, directly addressing the root cause of voluntary separations by creating psychologically safe environments where officers feel supported rather than micromanaged.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
-                <div style={{background: 'white', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)'}}>
-                  <div style={{background: '#003d82', color: 'white', padding: '16px', borderRadius: '8px', marginBottom: '16px'}}>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', margin: 0}}>Retention Economics</h3>
-                    <p style={{fontSize: '12px', color: '#ffcc00', margin: '4px 0 0 0'}}>Preventing costly separations</p>
-                  </div>
-                  <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '16px'}}>
-                    <span style={{fontSize: '14px'}}>Savings</span>
-                    <span style={{fontSize: '32px', fontWeight: 'bold', color: '#003d82'}}>{fmt(calculations.retentionSavings)}</span>
-                  </div>
-                  <div style={{background: 'white', border: '2px solid #cbd5e1', borderRadius: '8px', padding: '12px', fontSize: '14px'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Expected separations:</span><span style={{fontWeight: '600'}}>{fmtNum(calculations.expectedSeparations)}</span></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Prevented:</span><span style={{fontWeight: '600', color: '#003d82'}}>{fmtNum(calculations.preventedSeparations)}</span></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Effectiveness:</span><span style={{fontWeight: '600', color: '#0066cc'}}>{retentionEffectiveness}%</span></div>
-                    {leadSeats > 0 && <div style={{fontSize: '11px', color: '#eab308', fontWeight: '600', marginTop: '8px'}}>💼 +{Math.round((calculations.leadershipRetentionContribution / calculations.preventedSeparations) * 100)}% from Lead culture impact</div>}
-                  </div>
-                </div>
-
-                <div style={{background: 'white', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)'}}>
-                  <div style={{background: '#003d82', color: 'white', padding: '16px', borderRadius: '8px', marginBottom: '16px'}}>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', margin: 0}}>Workers' Comp Reduction</h3>
-                    <p style={{fontSize: '12px', color: '#ffcc00', margin: '4px 0 0 0'}}>Mental health claims only</p>
-                  </div>
-                  <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '16px'}}>
-                    <span style={{fontSize: '14px'}}>Savings</span>
-                    <span style={{fontSize: '32px', fontWeight: 'bold', color: '#003d82'}}>{fmt(calculations.workersCompSavings)}</span>
-                  </div>
-                  <div style={{background: 'white', border: '2px solid #cbd5e1', borderRadius: '8px', padding: '12px', fontSize: '14px'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Claims prevented:</span><span style={{fontWeight: '600'}}>{fmtNum(calculations.claimsPrevented)}</span></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Avg claim cost:</span><span style={{fontWeight: '600'}}>$65,000</span></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}><span style={{color: '#64748b'}}>Base prevention:</span><span style={{fontWeight: '600', color: '#0066cc'}}>22%</span></div>
-                    {leadSeats > 0 && <div style={{fontSize: '11px', color: '#eab308', fontWeight: '600', marginTop: '8px'}}>💼 +{Math.round((calculations.leadershipClaimContribution / calculations.claimsPrevented) * 100)}% from Lead psych safety</div>}
-                  </div>
-                </div>
-
-                <div style={{background: 'white', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)'}}>
-                  <div style={{background: '#003d82', color: 'white', padding: '16px', borderRadius: '8px', marginBottom: '16px'}}>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', margin: 0}}>Discipline Prevention</h3>
-                    <p style={{fontSize: '12px', color: '#ffcc00', margin: '4px 0 0 0'}}>Stress & alcohol incidents</p>
-                  </div>
-                  <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '16px'}}>
-                    <span style={{fontSize: '14px'}}>Savings</span>
-                    <span style={{fontSize: '32px', fontWeight: 'bold', color: '#003d82'}}>{fmt(calculations.disciplineSavings)}</span>
-                  </div>
-                  <div style={{background: 'white', border: '2px solid #cbd5e1', borderRadius: '8px', padding: '12px', fontSize: '14px'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Cases prevented:</span><span style={{fontWeight: '600'}}>{fmtNum(calculations.totalPreventedDiscipline)}</span></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '4px'}}><span style={{color: '#64748b'}}>Avg case cost:</span><span style={{fontWeight: '600'}}>$23,500</span></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}><span style={{color: '#64748b'}}>Prevention rate:</span><span style={{fontWeight: '600', color: '#0066cc'}}>15-78%</span></div>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
-                <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '16px'}}>Performance Drivers</h3>
+            {showAdvancedDrivers && (
+              <div style={{marginTop: '20px'}}>
+                <p style={{fontSize: '13px', color: '#64748b', marginBottom: '16px', background: '#eff6ff', padding: '12px', borderRadius: '8px', border: '1px solid #bae6fd'}}>
+                  ℹ️ These drivers calculate retention effectiveness ({retentionEffectiveness}%) and readiness improvement. COAs set these automatically, but you can fine-tune for custom scenarios.
+                </p>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
                   {performanceDrivers.map(d => (
                     <div key={d.key} style={{border: '2px solid #dbeafe', borderRadius: '12px', padding: '20px', background: d.requiresLead ? '#fef3c7' : '#eff6ff'}}>
@@ -1011,138 +1045,108 @@ const CBPDashboard = () => {
                   ))}
                 </div>
               </div>
+            )}
+          </div>
 
-              <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
-                <div style={{background: '#003d82', color: 'white', borderRadius: '8px', padding: '16px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                  <Calculator size={20} color="#ffcc00" />
-                  <h3 style={{fontSize: '18px', fontWeight: 'bold', margin: 0}}>Course of Action (COA) Selection</h3>
-                </div>
-                <p style={{fontSize: '13px', color: '#64748b', marginBottom: '16px'}}>Select a COA to auto-configure seat mix, engagement assumptions, and performance priorities:</p>
-                <div style={{display: 'flex', gap: '12px', marginBottom: '20px'}}>
-                  <button 
-                    onClick={() => applyCOA(1)} 
-                    style={{flex: 1, padding: '16px', background: '#d1d5db', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px'}}
-                  >
-                    <div style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '4px'}}>COA 1</div>
-                    <div style={{fontSize: '11px', color: '#64748b'}}>Conservative • Prove Value</div>
-                  </button>
-                  <button 
-                    onClick={() => applyCOA(2)} 
-                    style={{flex: 1, padding: '16px', background: '#6b7280', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px'}}
-                  >
-                    <div style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '4px'}}>COA 2</div>
-                    <div style={{fontSize: '11px', opacity: 0.9}}>Moderate • Balanced</div>
-                  </button>
-                  <button 
-                    onClick={() => applyCOA(3)} 
-                    style={{flex: 1, padding: '16px', background: '#003d82', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px'}}
-                  >
-                    <div style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '4px'}}>COA 3</div>
-                    <div style={{fontSize: '11px', opacity: 0.9}}>Aggressive • Max Impact</div>
-                  </button>
-                </div>
-
-                <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px'}}>
-                  <div>
-                    <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Lead Seats: {fmtNum(leadSeats)}</label>
-                    <input 
-                      type="range" 
-                      min="0" 
-                      max="5000" 
-                      step="50" 
-                      value={leadSeats} 
-                      onChange={(e) => {
-                        const newLead = Number(e.target.value); 
-                        setLeadSeats(newLead); 
-                        setReadySeats(Math.max(0, (leadSeats + readySeats) - newLead)); 
-                        if (newLead === 0) setLeadershipCultureImprovement(0);
-                      }} 
-                      style={{width: '100%', height: '8px', accentColor: '#a855f7'}}
-                    />
-                    <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>Critical talent • {fmt(calculations.leadPrice)}/seat</div>
-                  </div>
-                  <div>
-                    <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Ready Seats: {fmtNum(readySeats)}</label>
-                    <input 
-                      type="range" 
-                      min="1000" 
-                      max="30000" 
-                      step="100" 
-                      value={readySeats} 
-                      onChange={(e) => setReadySeats(Number(e.target.value))} 
-                      style={{width: '100%', height: '8px', accentColor: '#0066cc'}}
-                    />
-                    <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>All personnel • $150/seat</div>
-                  </div>
-                </div>
-
-                <div style={{marginTop: '12px'}}>
-                  <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Engagement: {engagementRate}%</label>
+          <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
+            <div style={{background: '#003d82', color: 'white', borderRadius: '8px', padding: '12px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+              <Settings size={20} color="#ffcc00" />
+              <h4 style={{fontSize: '16px', fontWeight: '600', margin: 0}}>Advanced Settings</h4>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+              
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px'}}>
+                <div>
+                  <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Lead Seats: {fmtNum(leadSeats)}</label>
                   <input 
                     type="range" 
-                    min="40" 
-                    max="90" 
-                    value={engagementRate} 
-                    onChange={(e) => setEngagementRate(Number(e.target.value))} 
+                    min="0" 
+                    max="5000" 
+                    step="50" 
+                    value={leadSeats} 
+                    onChange={(e) => {
+                      const newLead = Number(e.target.value); 
+                      setLeadSeats(newLead); 
+                      setReadySeats(Math.max(0, (leadSeats + readySeats) - newLead)); 
+                      if (newLead === 0) setLeadershipCultureImprovement(0);
+                    }} 
+                    style={{width: '100%', height: '8px', accentColor: '#a855f7'}}
+                  />
+                  <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>Critical talent • {fmt(calculations.leadPrice)}/seat</div>
+                </div>
+                <div>
+                  <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Ready Seats: {fmtNum(readySeats)}</label>
+                  <input 
+                    type="range" 
+                    min="1000" 
+                    max="30000" 
+                    step="100" 
+                    value={readySeats} 
+                    onChange={(e) => setReadySeats(Number(e.target.value))} 
                     style={{width: '100%', height: '8px', accentColor: '#0066cc'}}
                   />
-                  <div style={{fontSize: '12px', color: '#64748b', marginTop: '4px'}}>{fmtNum(calculations.engaged)} engaged personnel</div>
+                  <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>All personnel • $150/seat</div>
                 </div>
               </div>
 
-              <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
-                <div style={{background: '#003d82', color: 'white', borderRadius: '8px', padding: '12px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                  <Settings size={20} color="#ffcc00" />
-                  <h4 style={{fontSize: '16px', fontWeight: '600', margin: 0}}>Advanced Settings</h4>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-                  
-                  <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
-                      <label style={{fontSize: '14px', fontWeight: '600'}}>Lead Duration: {use6MonthLead ? '6 months' : '12 months'}</label>
-                      <button
-                        onClick={() => setUse6MonthLead(!use6MonthLead)}
-                        style={{padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', border: 'none', cursor: 'pointer', background: use6MonthLead ? '#a855f7' : '#e5e7eb', color: use6MonthLead ? 'white' : '#374151'}}
-                      >
-                        {use6MonthLead ? '6-Month' : '12-Month'}
-                      </button>
-                    </div>
-                    <p style={{fontSize: '11px', color: '#64748b', background: '#f9fafb', padding: '8px', borderRadius: '4px'}}>
-                      {use6MonthLead ? '6-month recommended for pilots & transitions. Current price: ' + fmt(calculations.leadPrice) : '12-month recommended for leadership transformation. Current price: ' + fmt(calculations.leadPrice)}
-                    </p>
-                  </div>
+              <div>
+                <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Engagement: {engagementRate}%</label>
+                <input 
+                  type="range" 
+                  min="40" 
+                  max="90" 
+                  value={engagementRate} 
+                  onChange={(e) => setEngagementRate(Number(e.target.value))} 
+                  style={{width: '100%', height: '8px', accentColor: '#0066cc'}}
+                />
+                <div style={{fontSize: '12px', color: '#64748b', marginTop: '4px'}}>{fmtNum(calculations.engaged)} engaged personnel</div>
+              </div>
 
-                  <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
-                      <label style={{fontSize: '14px', fontWeight: '600'}}>Retention Effectiveness: {retentionEffectiveness}%</label>
-                      <button
-                        onClick={() => {
-                          setManualRetentionOverride(!manualRetentionOverride);
-                          if (!manualRetentionOverride) setManualRetentionValue(retentionEffectiveness);
-                        }}
-                        style={{padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', border: 'none', cursor: 'pointer', background: manualRetentionOverride ? '#f59e0b' : '#e5e7eb', color: manualRetentionOverride ? 'white' : '#374151'}}
-                      >
-                        {manualRetentionOverride ? '🔓 Manual ON' : '🔒 Auto-Calculate'}
-                      </button>
-                    </div>
-                    <input 
-                      type="range" 
-                      min="3" 
-                      max="35" 
-                      value={manualRetentionOverride ? manualRetentionValue : retentionEffectiveness}
-                      onChange={(e) => {if (manualRetentionOverride) setManualRetentionValue(Number(e.target.value));}}
-                      style={{width: '100%', height: '8px', accentColor: '#0066cc', cursor: manualRetentionOverride ? 'pointer' : 'not-allowed', opacity: manualRetentionOverride ? 1 : 0.5}}
-                    />
-                    {manualRetentionOverride ? (
-                      <p style={{fontSize: '11px', color: '#92400e', marginTop: '8px', fontWeight: '500', background: '#fffbeb', padding: '8px', borderRadius: '4px', border: '1px solid #fbbf24'}}>⚠️ Manual override active - drag slider to test rates</p>
-                    ) : (
-                      <p style={{fontSize: '11px', color: '#1e40af', marginTop: '8px', fontWeight: '500', background: '#eff6ff', padding: '8px', borderRadius: '4px', border: '1px solid #60a5fa'}}>⚡ Auto-calculated from Career + Leadership + Culture ({leadSeats > 0 ? 'with Lead boost' : 'Ready only'})</p>
-                    )}
-                  </div>
+              <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
+                  <label style={{fontSize: '14px', fontWeight: '600'}}>Lead Duration: {use6MonthLead ? '6 months' : '12 months'}</label>
+                  <button
+                    onClick={() => setUse6MonthLead(!use6MonthLead)}
+                    style={{padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', border: 'none', cursor: 'pointer', background: use6MonthLead ? '#a855f7' : '#e5e7eb', color: use6MonthLead ? 'white' : '#374151'}}
+                  >
+                    {use6MonthLead ? '6-Month' : '12-Month'}
+                  </button>
                 </div>
+                <p style={{fontSize: '11px', color: '#64748b', background: '#f9fafb', padding: '8px', borderRadius: '4px'}}>
+                  {use6MonthLead ? '6-month recommended for pilots & transitions. Current price: ' + fmt(calculations.leadPrice) : '12-month recommended for leadership transformation. Current price: ' + fmt(calculations.leadPrice)}
+                </p>
+              </div>
+
+              <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
+                  <label style={{fontSize: '14px', fontWeight: '600'}}>Retention Effectiveness: {retentionEffectiveness}%</label>
+                  <button
+                    onClick={() => {
+                      setManualRetentionOverride(!manualRetentionOverride);
+                      if (!manualRetentionOverride) setManualRetentionValue(retentionEffectiveness);
+                    }}
+                    style={{padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', border: 'none', cursor: 'pointer', background: manualRetentionOverride ? '#f59e0b' : '#e5e7eb', color: manualRetentionOverride ? 'white' : '#374151'}}
+                  >
+                    {manualRetentionOverride ? '🔓 Manual ON' : '🔒 Auto-Calculate'}
+                  </button>
+                </div>
+                <input 
+                  type="range" 
+                  min="3" 
+                  max="35" 
+                  value={manualRetentionOverride ? manualRetentionValue : retentionEffectiveness}
+                  onChange={(e) => {if (manualRetentionOverride) setManualRetentionValue(Number(e.target.value));}}
+                  style={{width: '100%', height: '8px', accentColor: '#0066cc', cursor: manualRetentionOverride ? 'pointer' : 'not-allowed', opacity: manualRetentionOverride ? 1 : 0.5}}
+                />
+                {manualRetentionOverride ? (
+                  <p style={{fontSize: '11px', color: '#92400e', marginTop: '8px', fontWeight: '500', background: '#fffbeb', padding: '8px', borderRadius: '4px', border: '1px solid #fbbf24'}}>⚠️ Manual override active - drag slider to test rates</p>
+                ) : (
+                  <p style={{fontSize: '11px', color: '#1e40af', marginTop: '8px', fontWeight: '500', background: '#eff6ff', padding: '8px', borderRadius: '4px', border: '1px solid #60a5fa'}}>⚡ Auto-calculated from Career + Leadership + Culture ({leadSeats > 0 ? 'with Lead boost' : 'Ready only'})</p>
+                )}
               </div>
             </div>
-          )}
+          </div>
+
         </div>
       )}
       {activeTab === 'details' && (
@@ -1199,12 +1203,12 @@ const CBPDashboard = () => {
               <div style={{fontSize: '14px', color: '#475569', lineHeight: 1.8}}>
                 <div style={{marginBottom: '8px'}}><strong>Attrition Rates:</strong> OFO {selectedOrganization?.attritionRate || 6.3}% annually | USBP 4.2% annually</div>
                 {isOFO && <div style={{fontSize: '14px', color: '#dc2626', fontWeight: 'bold', marginBottom: '8px'}}>⚠️ 2028 OFO: 2,220 officers retiring (400% increase over normal ~500/year)</div>}
-                <div style={{marginBottom: '8px'}}><strong>Replacement Cost:</strong> OFO $150K | USBP $150K per separation</div>
+                <div style={{marginBottom: '8px'}}><strong>Replacement Cost:</strong> OFO/USBP $150K per separation</div>
                 <div style={{marginBottom: '8px'}}><strong>Workers' Comp:</strong> $65,000 avg mental health claim cost (35% of total claims)</div>
                 <div style={{marginBottom: '8px'}}><strong>Discipline Cases:</strong> 11.3% of workforce annually, 20% stress-related, 1.78% alcohol-related</div>
                 <div style={{marginBottom: '8px'}}><strong>Base Prevention Rate:</strong> 22% workers' comp (JAMA 2024) + Leadership boost when Lead deployed</div>
                 <div style={{marginBottom: '8px'}}><strong>Discipline Prevention:</strong> 15% stress cases, 78% alcohol cases (EAP research)</div>
-                <div style={{marginBottom: '8px'}}><strong>Lead Pricing:</strong> Volume-discounted ({use6MonthLead ? '6-month' : '12-month'} term) - ${fmt(calculations.leadPrice)}/seat</div>
+                <div style={{marginBottom: '8px'}}><strong>Lead Pricing:</strong> Volume-discounted ({use6MonthLead ? '6-month' : '12-month'} term) - {fmt(calculations.leadPrice)}/seat</div>
                 <div><strong>Ready Pricing:</strong> $150/seat (12 months)</div>
               </div>
             </div>
@@ -1233,11 +1237,11 @@ const CBPDashboard = () => {
               <div style={{display: 'grid', gap: '12px'}}>
                 <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
                   <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Stress-Related Prevention</div>
-                  <div style={{fontSize: '12px', color: '#78350f'}}>15% of stress-related cases prevented through resilience training (HeartMath 40% stress reduction applied conservatively)</div>
+                  <div style={{fontSize: '12px', color: '#78350f'}}>15% of stress-related cases prevented through resilience training (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4010956/" target="_blank" rel="noopener noreferrer" style={{color: '#92400e', textDecoration: 'underline'}}>HeartMath 40% stress reduction</a> applied conservatively)</div>
                 </div>
                 <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
                   <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Alcohol-Related Prevention</div>
-                  <div style={{fontSize: '12px', color: '#78350f'}}>78% of at-risk employees no longer at-risk after EAP treatment × 50% reach = effective prevention (CuraLinc 2022 peer-reviewed study)</div>
+                  <div style={{fontSize: '12px', color: '#78350f'}}>78% of at-risk employees no longer at-risk after EAP treatment × 50% reach = effective prevention (<a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#92400e', textDecoration: 'underline'}}>CuraLinc 2022</a> peer-reviewed study)</div>
                 </div>
                 <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
                   <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Cost Per Case</div>
