@@ -37,22 +37,22 @@ const CBPDashboard = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
 
-  // ==================== ORGANIZATION DATA ====================
-  const orgData = {
-    'cbp-wide': { name: 'CBP-Wide (All Components)', officers: 60000, avgSalary: 95000 },
-    'ofo': { name: 'Office of Field Operations', officers: 26030, avgSalary: 95000 },
-    'usbp': { name: 'U.S. Border Patrol', officers: 19104, avgSalary: 92000 },
-    'amo': { name: 'Air & Marine Operations', officers: 1317, avgSalary: 110000 },
-    'usbp-swb': { name: 'USBP - Southwest Border', officers: 16500, avgSalary: 92000 },
-    'usbp-rgv': { name: 'USBP - Rio Grande Valley Sector', officers: 3500, avgSalary: 92000 },
-    'usbp-tuc': { name: 'USBP - Tucson Sector', officers: 3800, avgSalary: 92000 },
-    'usbp-sdg': { name: 'USBP - San Diego Sector', officers: 2400, avgSalary: 92000 },
-    'usbp-ept': { name: 'USBP - El Paso Sector', officers: 2500, avgSalary: 92000 },
-    'usbp-yum': { name: 'USBP - Yuma Sector', officers: 900, avgSalary: 92000 },
-    'usbp-bbb': { name: 'USBP - Big Bend Sector', officers: 600, avgSalary: 92000 },
-    'usbp-del': { name: 'USBP - Del Rio Sector', officers: 1200, avgSalary: 92000 },
-    'usbp-lrt': { name: 'USBP - Laredo Sector', officers: 1600, avgSalary: 92000 }
-  };
+// ==================== ORGANIZATION DATA ====================
+const orgData = useMemo(() => ({
+  'cbp-wide': { name: 'CBP-Wide (All Components)', officers: 60000, avgSalary: 95000 },
+  'ofo': { name: 'Office of Field Operations', officers: 26030, avgSalary: 95000 },
+  'usbp': { name: 'U.S. Border Patrol', officers: 19104, avgSalary: 92000 },
+  'amo': { name: 'Air & Marine Operations', officers: 1317, avgSalary: 110000 },
+  'usbp-swb': { name: 'USBP - Southwest Border', officers: 16500, avgSalary: 92000 },
+  'usbp-rgv': { name: 'USBP - Rio Grande Valley Sector', officers: 3500, avgSalary: 92000 },
+  'usbp-tuc': { name: 'USBP - Tucson Sector', officers: 3800, avgSalary: 92000 },
+  'usbp-sdg': { name: 'USBP - San Diego Sector', officers: 2400, avgSalary: 92000 },
+  'usbp-ept': { name: 'USBP - El Paso Sector', officers: 2500, avgSalary: 92000 },
+  'usbp-yum': { name: 'USBP - Yuma Sector', officers: 900, avgSalary: 92000 },
+  'usbp-bbb': { name: 'USBP - Big Bend Sector', officers: 600, avgSalary: 92000 },
+  'usbp-del': { name: 'USBP - Del Rio Sector', officers: 1200, avgSalary: 92000 },
+  'usbp-lrt': { name: 'USBP - Laredo Sector', officers: 1600, avgSalary: 92000 }
+}), []);
 
   // ==================== CALCULATIONS ====================
   const calculations = useMemo(() => {
@@ -127,8 +127,8 @@ const CBPDashboard = () => {
       baselineDisciplineCases, casesPrevented, disciplineSavings,
       totalSavings, netSavings, roi
     };
-  }, [org, coa, manualLeadSeats, manualReadySeats, manualEngagement, 
-      manualRetentionOverride, manualReadinessOverride, manualProfStandardsOverride]);
+}, [org, coa, manualLeadSeats, manualReadySeats, manualEngagement,
+    manualRetentionOverride, manualReadinessOverride, manualProfStandardsOverride, orgData]);
 
   // ==================== HELPER FUNCTIONS ====================
   const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
@@ -239,7 +239,7 @@ const CBPDashboard = () => {
             
             {/* Big Cost Number */}
             <div style={{background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)', color: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', boxShadow: '0 8px 24px rgba(220,38,38,0.3)'}}>
-              <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95'}}>
+            <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
                 {orgData[org].name} faces an estimated annual burden of:
               </div>
               <div style={{fontSize: '72px', fontWeight: '900', marginBottom: '16px'}}>
@@ -1312,11 +1312,11 @@ const CBPDashboard = () => {
               <div style={{display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
                 <div>
                   <strong>1. GAO-24-107029:</strong> "CBP Recruitment, Hiring, and Retention" — Documents $150K replacement costs and 12-month hiring timeline
-                  <a href="https://www.gao.gov/products/gao-24-107029" target="_blank" style={{color: '#0066cc', marginLeft: '8px'}}>↗</a>
+                <a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noreferrer" style={{color: '#0066cc', marginLeft: '8px'}}>↗</a>
                 </div>
                 <div>
                   <strong>2. JAMA Health Forum (2024):</strong> "Enhanced Behavioral Health Benefits and Mental Health Outcomes: A Randomized Clinical Trial" — 21.6% symptom reduction
-                  <a href="https://jamanetwork.com/journals/jama-health-forum/fullarticle/2817234" target="_blank" style={{color: '#0066cc', marginLeft: '8px'}}>↗</a>
+                  <a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noreferrer" style={{color: '#0066cc', marginLeft: '8px'}}>↗</a>
                 </div>
                 <div>
                   <strong>3. Montreal Police Service:</strong> 22-year longitudinal suicide prevention study — 65% reduction in suicide rate through early intervention
