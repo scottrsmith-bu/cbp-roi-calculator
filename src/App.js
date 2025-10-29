@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Shield, Calculator, MessageCircle, X, Settings, Award, TrendingUp, Users, DollarSign, Target, ChevronDown, ChevronUp, Sparkles, CheckCircle, BarChart3, FileText, Clock, Info, AlertCircle, TrendingDown, BookOpen } from 'lucide-react';
+import { Shield, Calculator, MessageCircle, X, Settings, ChevronDown, ChevronUp } from 'lucide-react';
 
 const CBPDashboard = () => {
   const [showExecutiveSummary, setShowExecutiveSummary] = useState(true);
@@ -8,11 +8,8 @@ const CBPDashboard = () => {
   const [showCommercialResults, setShowCommercialResults] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [showAssistant, setShowAssistant] = useState(false);
-  const [chatMessages, setChatMessages] = useState([]);
-  const [chatInput, setChatInput] = useState('');
-  const [showAdvancedDrivers, setShowAdvancedDrivers] = useState(false);
+  const [activeTab, setActiveTab] = useState('cost-problem');
+  const [expandedFactor, setExpandedFactor] = useState(null);
   
   const [missionReadinessImprovement, setMissionReadinessImprovement] = useState(17);
   const [resilienceImprovement, setResilienceImprovement] = useState(15);
@@ -25,45 +22,35 @@ const CBPDashboard = () => {
   const [manualRetentionValue, setManualRetentionValue] = useState(7);
   
   const [totalPersonnel, setTotalPersonnel] = useState(25879);
-  const [targetPopulation, setTargetPopulation] = useState(5000);
   const [leadSeats, setLeadSeats] = useState(250);
   const [readySeats, setReadySeats] = useState(4750);
   const [use6MonthLead, setUse6MonthLead] = useState(false);
   const [engagementRate, setEngagementRate] = useState(65);
+  
+  const [ptsdEffectiveness, setPtsdEffectiveness] = useState(25);
+  const [ptsdFilingRate, setPtsdFilingRate] = useState(10);
+  const [ptsdAcceptanceRate, setPtsdAcceptanceRate] = useState(50);
+  const [depressionEffectiveness, setDepressionEffectiveness] = useState(25);
+  const [depressionFilingRate, setDepressionFilingRate] = useState(10);
+  const [depressionAcceptanceRate, setDepressionAcceptanceRate] = useState(50);
+  const [sudEffectiveness, setSudEffectiveness] = useState(67);
+  const [sudFilingRate, setSudFilingRate] = useState(10);
+  const [sudAcceptanceRate, setSudAcceptanceRate] = useState(50);
 
   const organizations = [
     {id: 'cbp', name: 'CBP-Wide (All Components)', personnel: 60726, location: 'Nationwide', type: 'cbp-wide', description: 'Entire CBP workforce', attritionRate: 5.5, replacementCost: 150000, workersCompClaims: 8912, avgClaimCost: 41000},
     {id: 'ofo', name: 'Office of Field Operations (OFO)', personnel: 25879, location: '20 Field Offices & 328 Ports', type: 'component', highlight: true, description: 'CBP Officers at ports of entry', attritionRate: 6.3, replacementCost: 150000, workersCompClaims: 4107, avgClaimCost: 41000},
-    {id: 'usbp', name: 'U.S. Border Patrol (USBP)', personnel: 19648, location: '20 Sectors', type: 'component', description: 'Border Patrol Agents', attritionRate: 4.2, replacementCost: 150000, workersCompClaims: 2883, avgClaimCost: 41000},
-    {id: 'amt', name: 'Air and Marine Operations (AMO)', personnel: 3156, location: 'Nationwide', type: 'component', description: 'Air and marine interdiction', attritionRate: 5.8, replacementCost: 150000, workersCompClaims: 463, avgClaimCost: 41000},
-    {id: 'support', name: 'Support & Mission Staff', personnel: 9930, location: 'Nationwide', type: 'component', description: 'HQ and support personnel', attritionRate: 5.1, replacementCost: 120000, workersCompClaims: 1459, avgClaimCost: 41000},
-    {id: 'swb', name: 'USBP - Southwest Border', personnel: 16810, location: 'AZ, CA, NM, TX', type: 'usbp-region', description: 'All SWB sectors combined', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 2466, avgClaimCost: 41000},
-    {id: 'swb_bigbend', name: 'USBP - Big Bend Sector', personnel: 1125, location: 'Texas', type: 'usbp-sector', description: 'Big Bend region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 165, avgClaimCost: 41000},
-    {id: 'swb_delrio', name: 'USBP - Del Rio Sector', personnel: 2385, location: 'Texas', type: 'usbp-sector', description: 'Del Rio region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 350, avgClaimCost: 41000},
-    {id: 'swb_elpaso', name: 'USBP - El Paso Sector', personnel: 2550, location: 'Texas/New Mexico', type: 'usbp-sector', description: 'El Paso region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 374, avgClaimCost: 41000},
-    {id: 'swb_laredo', name: 'USBP - Laredo Sector', personnel: 1605, location: 'Texas', type: 'usbp-sector', description: 'Laredo region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 236, avgClaimCost: 41000},
-    {id: 'swb_rgv', name: 'USBP - Rio Grande Valley Sector', personnel: 3180, location: 'Texas', type: 'usbp-sector', description: 'RGV region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 467, avgClaimCost: 41000},
-    {id: 'swb_sandiego', name: 'USBP - San Diego Sector', personnel: 1590, location: 'California', type: 'usbp-sector', description: 'San Diego region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 233, avgClaimCost: 41000},
-    {id: 'swb_tucson', name: 'USBP - Tucson Sector', personnel: 3225, location: 'Arizona', type: 'usbp-sector', description: 'Tucson region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 473, avgClaimCost: 41000},
-    {id: 'swb_yuma', name: 'USBP - Yuma Sector', personnel: 1150, location: 'Arizona', type: 'usbp-sector', description: 'Yuma region', attritionRate: 4.5, replacementCost: 150000, workersCompClaims: 169, avgClaimCost: 41000}
+    {id: 'usbp', name: 'U.S. Border Patrol (USBP)', personnel: 19648, location: '20 Sectors', type: 'component', description: 'Border Patrol Agents', attritionRate: 4.2, replacementCost: 150000, workersCompClaims: 2883, avgClaimCost: 41000}
   ];
 
   const getLeadPrice = (seats) => {
     if (use6MonthLead) {
       if (seats >= 1000) return 3471;
       if (seats >= 500) return 3549;
-      if (seats >= 300) return 3627;
-      if (seats >= 200) return 3705;
-      if (seats >= 100) return 3783;
-      if (seats >= 50) return 3822;
       return 3900;
     } else {
       if (seats >= 1000) return 5785;
       if (seats >= 500) return 5915;
-      if (seats >= 300) return 6045;
-      if (seats >= 200) return 6175;
-      if (seats >= 100) return 6305;
-      if (seats >= 50) return 6370;
       return 6500;
     }
   };
@@ -90,7 +77,6 @@ const CBPDashboard = () => {
     const lead = Math.round(total * leadPct);
     const ready = total - lead;
     
-    setTargetPopulation(total);
     setLeadSeats(lead);
     setReadySeats(ready);
     
@@ -125,7 +111,6 @@ const CBPDashboard = () => {
     setSelectedOrganization(org);
     setTotalPersonnel(org.personnel);
     const defaultSeats = Math.round(org.personnel * 0.20);
-    setTargetPopulation(defaultSeats);
     setLeadSeats(Math.round(defaultSeats * 0.05));
     setReadySeats(Math.round(defaultSeats * 0.95));
     setShowLanding(false);
@@ -144,7 +129,7 @@ const CBPDashboard = () => {
   }, [missionReadinessImprovement, resilienceImprovement, standardsImprovement]);
 
   const calculations = useMemo(() => {
-    const org = selectedOrganization || organizations[0];
+    const org = selectedOrganization || organizations[1];
     const totalSeats = leadSeats + readySeats;
     const engaged = Math.round((totalSeats * engagementRate) / 100);
     const expectedSeparations = Math.round(totalSeats * (org.attritionRate / 100));
@@ -198,490 +183,36 @@ const CBPDashboard = () => {
   const fmt = (v) => new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', minimumFractionDigits: 0}).format(v);
   const fmtNum = (v) => new Intl.NumberFormat('en-US').format(v);
 
-  const isOFO = selectedOrganization?.id === 'ofo' || selectedOrganization?.type === 'ofo-field';
-
-  const performanceDrivers = [
-    {key: 'mission', priority: "MISSION READINESS", drivers: "Decision-Making • Cognitive Agility • Performance", baseline: 45, growth: 62, improvement: missionReadinessImprovement, setImprovement: setMissionReadinessImprovement},
-    {key: 'resilience', priority: "RESILIENCE & WELLNESS", drivers: "Burnout Prevention • Stress Management • Emotional Regulation", baseline: 47, growth: 62, improvement: resilienceImprovement, setImprovement: setResilienceImprovement, affectsWorkersComp: true},
-    {key: 'career', priority: "CAREER COMMITMENT", drivers: "Purpose • Career Development • Work-Life Integration", baseline: 48, growth: 54, improvement: careerCommitmentImprovement, setImprovement: setCareerCommitmentImprovement},
-    {key: 'leadership', priority: "LEADERSHIP", drivers: "Communication • Strategic Thinking • Empowerment", baseline: 50, growth: 56, improvement: leadershipImprovement, setImprovement: setLeadershipImprovement},
-    {key: 'standards', priority: "PROFESSIONAL STANDARDS", drivers: "Ethics • Judgment • Professional Demeanor", baseline: 49, growth: 59, improvement: standardsImprovement, setImprovement: setStandardsImprovement},
-    ...(leadSeats > 0 ? [{key: 'culture', priority: "LEADERSHIP CULTURE", drivers: "Supervisory Effectiveness • Trust Building • Command Climate", baseline: 42, growth: 58, improvement: leadershipCultureImprovement, setImprovement: setLeadershipCultureImprovement, requiresLead: true}] : [])
-  ];
+  const isOFO = selectedOrganization?.id === 'ofo';
 
   const filteredOrganizations = useMemo(() => {
     let filtered = organizations;
     if (searchTerm) filtered = filtered.filter(org => org.name.toLowerCase().includes(searchTerm.toLowerCase()));
-    return filtered.sort((a, b) => a.name.localeCompare(b.name));
+    return filtered;
   }, [searchTerm]);
 
-  const handleSendMessage = () => {
-    if (!chatInput.trim()) return;
-    const responses = {
-      'How is the net savings calculated?': 'Net savings = Total Savings (Retention + Workers Comp + Discipline Prevention) - BetterUp Program Cost. We calculate all three pathways independently and sum them.',
-      'Why is OFO facing a retirement crisis in 2028?': 'Officers hired in 2003-2008 have enhanced CBPO retirement coverage, making them eligible for retirement at 25 years of service. This creates a massive wave of 2,220 eligible retirees starting in 2028.',
-      'Explain the COA differences': 'COA 1 (Conservative) = 10-20% coverage, low engagement (55%), prove value. COA 2 (Moderate) = 15-25% coverage, realistic engagement (65%), balanced approach. COA 3 (Aggressive) = 33-40% coverage, high engagement (75%), maximum impact for 2028 crisis.',
-      "What's the difference between Lead and Ready?": 'Lead ($5,785-$6,500) = unlimited 1:1 coaching for critical talent/leadership, drives culture transformation. Ready ($150) = AI coach + learning journeys for all personnel, builds resilience at scale.',
-      'How does Leadership Culture affect ROI?': 'Leadership Culture (only available with Lead seats) contributes ~40% of retention gains and ~15-20% of workers comp reduction through psychological safety and supervisory effectiveness.'
-    };
-    const response = responses[chatInput] || `Great question about "${chatInput}". The ${selectedOrganization?.name || 'CBP'} model shows how BetterUp creates measurable value through three pathways based on Air Force proven results.`;
-    setChatMessages([...chatMessages, {type: 'user', text: chatInput}, {type: 'assistant', text: response}]);
-    setChatInput('');
-  };
-  const MethodologyImpactSection = () => {
-    const card = {
-      background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)',
-      border: '4px solid #64748b',
-      borderRadius: '16px',
-      padding: '28px'
-    };
-
-    const pill = (bg, color) => ({
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 8,
-      padding: '6px 10px',
-      borderRadius: 999,
-      fontSize: 12,
-      fontWeight: 700,
-      background: bg,
-      color,
-    });
-
-    const Callout = ({ x, y, text, color = '#111827', bg = 'white', lineTo }) => (
-      <g>
-        {lineTo && (
-          <line x1={x} y1={y} x2={lineTo.x} y2={lineTo.y} stroke={color} strokeOpacity="0.5" strokeWidth="1.5" />
-        )}
-        <rect x={x - 6} y={y - 18} rx="6" ry="6" width={Math.max(120, text.length * 6.4 + 14)} height="28" fill={bg} stroke={color} strokeOpacity="0.25" />
-        <text x={x + 8} y={y + 2} fill={color} fontSize="12" fontWeight="700">{text}</text>
-      </g>
-    );
-
-    return (
-      <div style={card}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-          <div style={{ width: 48, height: 48, background: '#475569', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>📈</div>
-          <h2 style={{ fontSize: 22, fontWeight: '800', color: '#111827', margin: 0 }}>
-            Methodology Impact: Why episodic training loses—and continuous development wins
-          </h2>
-        </div>
-
-        <div style={{ background: 'white', border: '2px solid #e5e7eb', borderRadius: 12, padding: 16 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <span style={pill('#fee2e2', '#991b1b')}>🔴 Episodic training (red line)</span>
-              <span style={pill('#dbeafe', '#1e40af')}>🔵 Continuous development (blue line)</span>
-            </div>
-            <div style={{ fontSize: 12, color: '#6b7280' }}>Higher area under curve = retained capability</div>
-          </div>
-
-          <svg viewBox="0 0 760 300" style={{ width: '100%', height: 260, display: 'block' }}>
-            <line x1="60" y1="24" x2="60" y2="250" stroke="#cbd5e1" strokeWidth="2" />
-            <line x1="60" y1="250" x2="730" y2="250" stroke="#cbd5e1" strokeWidth="2" />
-            <text x="14" y="34" fill="#475569" fontSize="11" fontWeight="700">Skill / Recall</text>
-            <text x="690" y="292" fill="#475569" fontSize="11" fontWeight="700">Time</text>
-
-            {[140, 220, 300, 380, 460, 540, 620, 700].map((x, i) => (
-              <line key={i} x1={x} y1="250" x2={x} y2="246" stroke="#cbd5e1" />
-            ))}
-            {[90, 130, 170, 210].map((y, i) => (
-              <line key={i} x1="60" y1={y} x2="730" y2={y} stroke="#e5e7eb" />
-            ))}
-
-            <path d="M 60 60 C 180 56, 250 80, 320 120 C 380 154, 450 190, 730 230" fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round" />
-            <path d="M 60 230 C 110 200, 150 190, 190 170 C 210 160, 230 150, 250 160 C 270 175, 300 150, 330 135 C 350 125, 370 120, 390 130 C 410 142, 440 128, 470 118 C 490 112, 510 110, 530 120 C 550 130, 585 118, 620 108 C 640 102, 660 98, 730 92" fill="none" stroke="#2563eb" strokeWidth="4.5" strokeLinecap="round" />
-
-            {[190, 250, 330, 390, 470, 530, 620].map((x, i) => (
-              <g key={i}>
-                <line x1={x} y1="250" x2={x} y2="242" stroke="#93c5fd" strokeWidth="2" />
-                <circle cx={x} cy={140 - i * 3 + 18} r="4" fill="#60a5fa" />
-              </g>
-            ))}
-
-            <Callout x={180} y={60} text="Peak right after event" color="#991b1b" bg="#fff5f5" lineTo={{ x: 150, y: 66 }} />
-            <Callout x={410} y={168} text="~70% forgotten in 24h" color="#991b1b" bg="#fff5f5" lineTo={{ x: 365, y: 150 }} />
-            <Callout x={640} y={228} text="~90% within a month" color="#991b1b" bg="#fff5f5" lineTo={{ x: 600, y: 212 }} />
-            <Callout x={520} y={84} text="Continuous reinforcement" color="#1e3a8a" bg="#eef2ff" lineTo={{ x: 560, y: 110 }} />
-          </svg>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 8 }}>
-            <div style={{ background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 8, padding: 12 }}>
-              <div style={{ fontSize: 13, color: '#9a3412', fontWeight: 700, marginBottom: 6 }}>The Red Line: Why retention stalls</div>
-              <ul style={{ margin: 0, paddingLeft: 16, color: '#7c2d12', fontSize: 13, lineHeight: 1.6 }}>
-                <li>Event spikes learning → rapid decay (forgetting curve)</li>
-                <li>Episodic workshops don't rewire habits</li>
-                <li>Leaders default to command-and-control under stress without reinforcement</li>
-              </ul>
-            </div>
-            <div style={{ background: '#ecfeff', border: '1px solid #67e8f9', borderRadius: 8, padding: 12 }}>
-              <div style={{ fontSize: 13, color: '#155e75', fontWeight: 700, marginBottom: 6 }}>The Blue Line: Why DAF moved retention +7%</div>
-              <ul style={{ margin: 0, paddingLeft: 16, color: '#0e7490', fontSize: 13, lineHeight: 1.6 }}>
-                <li>Continuous, personalized practice + coaching compounds capability</li>
-                <li>Just-in-time support during critical incidents & career choke points</li>
-                <li>Transforms one-off training into ongoing learning journeys</li>
-              </ul>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 12, fontSize: 12, color: '#475569' }}>
-            <strong>Leadership takeaway:</strong> preserve institutional knowledge through continuous development now—don't wait until 2028 exits make it irrecoverable.
-          </div>
-        </div>
-
-        <div style={{ marginTop: 16, background: '#fffbeb', border: '1px solid #fbbf24', borderRadius: 12, padding: 16 }}>
-          <p style={{ margin: 0, fontSize: 14, color: '#92400e', lineHeight: 1.6 }}>
-            CBP faces multiple retention challenges—including the 2028 retirement cliff, high operational tempo, leadership culture gaps, and career development barriers. <strong>The red line shows one contributing factor:</strong> episodic training that peaks and fades, failing to transfer institutional knowledge. <strong>The blue line shows BetterUp's approach:</strong> continuous development through coaching, AI support, and learning journeys that compound over time—helping address retention by building resilience, clarifying career paths, and developing leadership capability at critical decision points.
-          </p>
-        </div>
-
-        <div style={{ marginTop: 10, fontSize: 11, color: '#64748b' }}>
-          <strong>Sources:</strong> <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0120644" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Ebbinghaus forgetting curve</a>; spaced repetition research; <a href="https://www.betterup.com/customers/united-states-airforce" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>BetterUp DAF outcomes</a> (+7% retention); <a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>JAMA 2024</a> peer-reviewed burnout reduction.
-        </div>
-      </div>
-    );
-  };
   if (showExecutiveSummary) {
     return (
       <div style={{width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '32px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
-        <div style={{background: 'white', borderRadius: '16px', boxShadow: '0 8px 40px rgba(0,0,0,0.15)', overflow: 'hidden', borderTop: '8px solid #0066cc'}}>
-          
-          <div style={{background: 'linear-gradient(135deg, #003d82 0%, #0066cc 100%)', padding: '48px', color: 'white'}}>
-            <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'}}>
-              <Shield size={64} color="#ffcc00" strokeWidth={2.5} />
-              <div>
-                <h1 style={{fontSize: '52px', fontWeight: 'bold', margin: '0 0 12px 0', lineHeight: 1.1}}>BetterUp CBP Leadership Dashboard</h1>
-                <p style={{fontSize: '24px', color: '#ffcc00', margin: 0, fontWeight: 'bold'}}>Triple-Pathway ROI: Retention, Workers' Comp & Discipline Prevention</p>
-              </div>
-            </div>
-            <div style={{background: 'rgba(255,255,255,0.15)', borderRadius: '12px', padding: '20px', borderLeft: '5px solid #ffcc00'}}>
-              <p style={{fontSize: '18px', lineHeight: 1.7, margin: '0 0 12px 0'}}>
-                <strong style={{color: '#ffcc00'}}>Evidence-based ROI dashboard</strong> projecting the financial impact of precision resilience development—targeting the mindsets and behaviors that drive DHS/CBP strategic priorities: <strong>Mission Readiness, Officer Safety, Professional Standards, and Career Retention</strong>.
-              </p>
-              <p style={{fontSize: '16px', color: '#e0f2fe', margin: 0}}>
-                Built on <strong style={{color: '#ffcc00'}}>4 years of proven Air Force results</strong> (77K+ sessions, 11K+ participants) and <strong>JAMA 2024 peer-reviewed research</strong> showing 22% reduction in mental health conditions.
-              </p>
-            </div>
-          </div>
-
-          <div style={{padding: '48px', display: 'flex', flexDirection: 'column', gap: '32px'}}>
-            
-            <div>
-              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Air Force Proven Results (2021-2025)</h2>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px'}}>
-                {[
-                  {label: 'DAF Members', value: '11,215'},
-                  {label: 'Total Sessions', value: '77,333'},
-                  {label: 'Hours Delivered', value: '54,377'},
-                  {label: 'Satisfaction', value: '79%'}
-                ].map((stat, i) => (
-                  <div key={i} style={{background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(59,130,246,0.3)'}}>
-                    <div style={{fontSize: '13px', color: 'rgba(255,255,255,0.9)', marginBottom: '8px'}}>{stat.label}</div>
-                    <div style={{fontSize: '36px', fontWeight: 'bold', color: 'white'}}>{stat.value}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px'}}>
-                {['+13% Individual Readiness', '+7% Career Commitment', '+15% Unit Readiness'].map((result, i) => (
-                  <div key={i} style={{background: '#dbeafe', border: '2px solid #3b82f6', borderRadius: '10px', padding: '20px', textAlign: 'center'}}>
-                    <div style={{fontSize: '24px', fontWeight: 'bold', color: '#1e3a8a'}}>{result}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{textAlign: 'center'}}>
-                <button 
-                  onClick={() => setShowCommercialResults(!showCommercialResults)}
-                  style={{background: 'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)', color: 'white', border: 'none', padding: '14px 28px', borderRadius: '10px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124,58,237,0.4)'}}
-                >
-                  {showCommercialResults ? '− Hide' : '+ Show'} Commercial Results
-                </button>
-              </div>
-              
-              {showCommercialResults && (
-                <div style={{marginTop: '24px', background: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '3px solid #7c3aed', borderRadius: '16px', padding: '32px'}}>
-                  <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#6b21a8', textAlign: 'center', marginBottom: '16px'}}>Enterprise & Federal Proven Results</h3>
-                  <p style={{fontSize: '14px', color: '#7e22ce', textAlign: 'center', fontStyle: 'italic', marginBottom: '20px'}}>Aggregate outcomes (client-confidential)</p>
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
-                    {[
-                      {value: '+18%', label: 'Leadership Capability', sub: 'Avg enterprise clients'},
-                      {value: '+22%', label: 'Manager Effectiveness', sub: '360° assessments'},
-                      {value: '85%', label: 'Client Satisfaction', sub: 'Commercial & government'}
-                    ].map((metric, i) => (
-                      <div key={i} style={{background: 'white', borderRadius: '12px', padding: '20px', textAlign: 'center', border: '2px solid #a78bfa', boxShadow: '0 2px 8px rgba(124,58,237,0.2)'}}>
-                        <div style={{fontSize: '32px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '8px'}}>{metric.value}</div>
-                        <div style={{fontSize: '14px', fontWeight: 'bold', color: '#7e22ce', marginBottom: '4px'}}>{metric.label}</div>
-                        <div style={{fontSize: '12px', color: '#9333ea'}}>{metric.sub}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
-              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#78350f', marginBottom: '24px'}}>How the Model Works: Triple-Pathway Impact</h2>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px'}}>
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '48px', height: '48px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>1</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Workers' Comp Reduction</h3>
-                  </div>
-                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
-                    BetterUp builds resilience to prevent mental health claims (PTSD, depression, anxiety, SUD).
-                  </p>
-                  <div style={{background: '#fee2e2', borderRadius: '10px', padding: '12px'}}>
-                    <div style={{fontSize: '13px', color: '#991b1b', marginBottom: '4px'}}><strong>22% reduction</strong> in mental health claims</div>
-                    <div style={{fontSize: '11px', color: '#7f1d1d', fontStyle: 'italic'}}>Source: <a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#991b1b', textDecoration: 'underline'}}>JAMA 2024</a></div>
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '48px', height: '48px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>2</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Retention Economics</h3>
-                  </div>
-                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
-                    Career clarity and leadership culture at critical decision points (3-5yrs, pre-2028).
-                  </p>
-                  <div style={{background: '#fed7aa', borderRadius: '10px', padding: '12px'}}>
-                    <div style={{fontSize: '13px', color: '#92400e', marginBottom: '4px'}}><strong>$150K saved</strong> per prevented separation</div>
-                    <div style={{fontSize: '11px', color: '#78350f', fontStyle: 'italic'}}>Source: <a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noopener noreferrer" style={{color: '#78350f', textDecoration: 'underline'}}>GAO-24-107029</a></div>
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #78716c'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '48px', height: '48px', background: '#7c3aed', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>3</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1c1917', margin: 0}}>Discipline Prevention</h3>
-                  </div>
-                  <p style={{fontSize: '14px', color: '#44403c', marginBottom: '12px', lineHeight: 1.6}}>
-                    Early intervention prevents stress-related misconduct and alcohol incidents.
-                  </p>
-                  <div style={{background: '#f3e8ff', borderRadius: '10px', padding: '12px'}}>
-                    <div style={{fontSize: '13px', color: '#6b21a8', marginBottom: '4px'}}><strong>245 cases</strong> prevented annually</div>
-                    <div style={{fontSize: '11px', color: '#7e22ce', fontStyle: 'italic'}}>Source: <a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#7e22ce', textDecoration: 'underline'}}>EAP research</a> + CBP data</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px', textAlign: 'center'}}>Performance Drivers Aligned to CBP Strategic Priorities</h2>
-              <p style={{textAlign: 'center', color: '#64748b', marginBottom: '20px', fontSize: '15px'}}>BetterUp targets the behavioral foundations that drive DHS and CBP mission success</p>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px'}}>
-                {[
-                  {title: 'MISSION READINESS', sub: 'Rapid Decision-Making, Cognitive Agility, Sustained Performance'},
-                  {title: 'RESILIENCE', sub: 'Burnout Prevention, Stress Management, Emotional Regulation'},
-                  {title: 'CAREER COMMITMENT', sub: 'Purpose & Meaning, Career Development, Work-Life Integration'},
-                  {title: 'LEADERSHIP', sub: 'Communication, Strategic Thinking, Supervisory Effectiveness'},
-                  {title: 'STANDARDS', sub: 'Ethical Decision-Making, Professional Demeanor, Sound Judgment'}
-                ].map((priority, i) => (
-                  <div key={i} style={{background: '#dbeafe', padding: '16px', border: '2px solid #60a5fa', borderRadius: '12px', textAlign: 'center'}}>
-                    <div style={{fontSize: '13px', fontWeight: 'bold', color: '#003d82', marginBottom: '8px'}}>{priority.title}</div>
-                    <div style={{fontSize: '11px', color: '#64748b'}}>{priority.sub}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div style={{background: '#dbeafe', border: '4px solid #3b82f6', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'start', gap: '16px', marginBottom: '16px'}}>
-                <div style={{width: '48px', height: '48px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0}}>🎯</div>
-                <div style={{flex: 1}}>
-                  <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#1e40af', margin: '0 0 12px 0'}}>What This Tool Provides: Projections for Decision Support</h2>
-                  <p style={{fontSize: '16px', color: '#1e3a8a', margin: '0 0 16px 0', lineHeight: 1.6}}>
-                    This dashboard generates <strong>financial projections</strong> based on proven Air Force outcomes and peer-reviewed research applied to CBP workers' comp claim rates, separation data, and training costs from government sources (GAO, DHS OIG, NTEU testimony). These are <strong>evidence-based forecasts</strong>, not guarantees.
-                  </p>
-                  <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #60a5fa'}}>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Real Results Come After Implementation:</h3>
-                    <div style={{display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#1e3a8a'}}>
-                      <div style={{display: 'flex', gap: '12px'}}>
-                        <div style={{width: '24px', height: '24px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '12px', flexShrink: 0}}>1</div>
-                        <div><strong>Action Layer:</strong> BetterUp's Human Transformation Platform delivers virtual, just-in-time resilience development through human expertise, behavioral assessments, personalized learning journeys, and an AI development partner—improving mindsets and behaviors driving retention and operational readiness</div>
-                      </div>
-                      <div style={{display: 'flex', gap: '12px'}}>
-                        <div style={{width: '24px', height: '24px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '12px', flexShrink: 0}}>2</div>
-                        <div><strong>Sensing Layer:</strong> Real-time people analytics dashboard aggregates anonymized data from pre/post assessments, Reflection Points, and engagement patterns—providing leadership measurable visibility into wellness, resilience, and retention trends</div>
-                      </div>
-                      <div style={{display: 'flex', gap: '12px'}}>
-                        <div style={{width: '24px', height: '24px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '12px', flexShrink: 0}}>3</div>
-                        <div><strong>Measured Outcomes:</strong> After implementation, your actual results replace these projections with data from your agents, officers, and command</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <MethodologyImpactSection />
-
-            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>📚</div>
-                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#4338ca', margin: 0}}>How BetterUp Builds Mastery at CBP</h2>
-              </div>
-              
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
-                {[
-                  {num: '1', title: 'REFLECT', desc: 'WPM assessment identifies strengths & gaps', icon: '🪞', color: '#6366f1'},
-                  {num: '2', title: 'LEARN', desc: 'Personalized journeys + curated resources', icon: '📖', color: '#8b5cf6'},
-                  {num: '3', title: 'PRACTICE', desc: 'AI role-play + coaching rehearsal', icon: '🎯', color: '#a78bfa'},
-                  {num: '4', title: 'COMMIT', desc: 'Action plans at critical moments', icon: '✅', color: '#c4b5fd'},
-                  {num: '5', title: 'MEASURE', desc: 'Pre-post growth assessments', icon: '📊', color: '#ddd6fe'}
-                ].map((step, i) => (
-                  <div key={i} style={{background: 'white', borderRadius: '12px', padding: '16px', border: `2px solid ${step.color}`, textAlign: 'center'}}>
-                    <div style={{fontSize: '28px', marginBottom: '8px'}}>{step.icon}</div>
-                    <div style={{fontSize: '11px', fontWeight: 'bold', color: '#1e293b', marginBottom: '6px'}}>{step.num}. {step.title}</div>
-                    <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>{step.desc}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
-                <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#4338ca', marginBottom: '12px'}}>Applied to CBP Operational Challenges:</h3>
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>Use-of-Force Decisions:</strong> Practice high-pressure scenarios through AI role-play before real encounters
-                  </div>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies for volatile public interactions
-                  </div>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>Post-Incident Recovery:</strong> Just-in-time stress management after traumatic events
-                  </div>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at critical 3-5yr, 10-15yr, pre-2028 retirement points
-                  </div>
-                </div>
-              </div>
-
-              <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '16px', border: '2px solid #818cf8'}}>
-                <p style={{fontSize: '13px', color: '#3730a3', margin: 0, lineHeight: 1.6}}>
-                  <strong style={{color: '#4338ca'}}>From Air Force Weapons School:</strong> This mastery framework helped elite pilots strengthen decision-making under pressure, cognitive agility, and stress regulation—the same skills CBP officers and agents need for high-stakes law enforcement.
-                </p>
-              </div>
-            </div>
-
-            <div style={{background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', border: '4px solid #10b981', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
-                <div style={{width: '48px', height: '48px', background: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>🗺️</div>
-                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Proposed Implementation: Phased Rollout Strategy</h2>
-              </div>
-              
-              <p style={{fontSize: '15px', color: '#047857', marginBottom: '20px', lineHeight: 1.6}}>
-                Based on Air Force Weapons School deployment experience—start with high-impact pilot, validate results, then scale across CBP enterprise:
-              </p>
-
-              <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
-                    <div style={{width: '40px', height: '40px', background: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>1</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 1: Pilot (3-6 months)</h3>
-                  </div>
-                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
-                    <div>
-                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
-                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
-                        <li>Border Patrol Academy (new agents)</li>
-                        <li>Single OFO field office (e.g., Tucson, NY)</li>
-                        <li>~500-1,000 seats</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
-                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
-                        <li>Validate ROI model with actual data</li>
-                        <li>Establish baseline metrics</li>
-                        <li>Build champion network</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
-                    <div style={{width: '40px', height: '40px', background: '#059669', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>2</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 2: Targeted Expansion (6-12 months)</h3>
-                  </div>
-                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
-                    <div>
-                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
-                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
-                        <li>OFO field offices facing 2028 retirement</li>
-                        <li>High-tempo USBP sectors</li>
-                        <li>~5,000-10,000 seats</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
-                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
-                        <li>Demonstrate retention impact pre-2028</li>
-                        <li>Reduce workers' comp claims</li>
-                        <li>Scale proven pilot model</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
-                    <div style={{width: '40px', height: '40px', background: '#047857', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>3</div>
-                    <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 3: Enterprise (12+ months)</h3>
-                  </div>
-                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
-                    <div>
-                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
-                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
-                        <li>All CBP components nationwide</li>
-                        <li>OFO, USBP, AMO, OT, OPR</li>
-                        <li>20,000+ seats enterprise-wide</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
-                      <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
-                        <li>Full integration with CBPX programs</li>
-                        <li>Maximum institutional knowledge preservation</li>
-                        <li>Enterprise-wide resilience infrastructure</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{background: '#d1fae5', borderRadius: '10px', padding: '16px', marginTop: '16px', border: '2px solid #34d399'}}>
-                <p style={{fontSize: '13px', color: '#065f46', margin: 0, lineHeight: 1.6}}>
-                  <strong>Air Force Precedent:</strong> DAF started with pilot programs before expanding enterprise-wide. Weapons School demonstrated mastery framework with elite students before broader rollout. Same phased approach de-risks CBP investment while building internal champions.
-                </p>
-              </div>
-            </div>
-
-            <div style={{background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '16px', padding: '40px', textAlign: 'center'}}>
-              <h2 style={{fontSize: '32px', fontWeight: 'bold', color: 'white', marginBottom: '16px'}}>Ready to See Your Component's Projected Impact?</h2>
-              <p style={{fontSize: '18px', color: '#cbd5e1', marginBottom: '32px'}}>
-                Select your CBP component, sector, or field office to model ROI with adjustable parameters
-              </p>
-              <button 
-                onClick={() => {setShowExecutiveSummary(false); setShowLanding(true);}}
-                style={{background: '#ffcc00', color: '#003d82', border: 'none', padding: '16px 48px', borderRadius: '12px', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 8px 24px rgba(255,204,0,0.5)', transition: 'transform 0.2s'}}
-                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-              >
-                Select Your Component →
-              </button>
-              <p style={{fontSize: '13px', color: '#94a3b8', marginTop: '16px'}}>All data sources documented | Every assumption adjustable | Transparent methodology</p>
-            </div>
-
-          </div>
+        <div style={{textAlign: 'center', padding: '60px 20px'}}>
+          <h1 style={{fontSize: '48px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px'}}>CBP Mental Health ROI Calculator</h1>
+          <p style={{fontSize: '24px', color: '#64748b', marginBottom: '40px'}}>Evidence-Based Financial Impact Analysis</p>
+          <button 
+            onClick={() => {setShowExecutiveSummary(false); setShowLanding(true);}}
+            style={{background: '#0066cc', color: 'white', border: 'none', padding: '16px 48px', borderRadius: '12px', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer'}}
+          >
+            Get Started →
+          </button>
         </div>
       </div>
     );
   }
+
   if (showLanding) {
     return (
       <div style={{width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '32px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
-        <button onClick={() => {setShowExecutiveSummary(true); setShowLanding(false);}} style={{marginBottom: '16px', color: '#666', background: 'transparent', border: 'none', cursor: 'pointer', textDecoration: 'underline', fontSize: '14px', fontWeight: '600'}}>
-          ← Back to Executive Summary
+        <button onClick={() => setShowExecutiveSummary(true)} style={{marginBottom: '16px', color: '#666', background: 'transparent', border: 'none', cursor: 'pointer', textDecoration: 'underline', fontSize: '14px', fontWeight: '600'}}>
+          ← Back
         </button>
         <div style={{background: 'white', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', overflow: 'hidden', borderTop: '4px solid #0066cc'}}>
           <div style={{background: '#003d82', color: 'white', padding: '32px'}}>
@@ -708,21 +239,13 @@ const CBPDashboard = () => {
                     display: 'flex', 
                     justifyContent: 'space-between', 
                     alignItems: 'center', 
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }} 
-                  onMouseOver={(e) => e.currentTarget.style.background = '#eff6ff'} 
-                  onMouseOut={(e) => e.currentTarget.style.background = 'white'}
+                    cursor: 'pointer'
+                  }}
                 >
                   <div style={{flex: 1}}>
                     <div style={{fontWeight: 'bold', fontSize: '20px', color: '#003d82', marginBottom: '6px'}}>{org.name}</div>
                     <div style={{fontSize: '14px', color: '#666', marginBottom: '4px'}}>{org.description}</div>
-                    <div style={{fontSize: '13px', color: '#999'}}>{fmtNum(org.personnel)} personnel • {org.location}</div>
-                    {org.id === 'ofo' && (
-                      <div style={{fontSize: '13px', color: '#dc2626', fontWeight: 'bold', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '6px'}}>
-                        <span>⚠️</span> 2,220 officers retiring 2028 (400% increase)
-                      </div>
-                    )}
+                    <div style={{fontSize: '13px', color: '#999'}}>{fmtNum(org.personnel)} personnel</div>
                   </div>
                   <button 
                     onClick={() => selectOrganization(org)} 
@@ -736,8 +259,6 @@ const CBPDashboard = () => {
                       cursor: 'pointer',
                       fontSize: '15px'
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#0052a3'}
-                    onMouseOut={(e) => e.currentTarget.style.background = '#0066cc'}
                   >
                     Select
                   </button>
@@ -749,6 +270,7 @@ const CBPDashboard = () => {
       </div>
     );
   }
+
   return (
     <div style={{width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '24px', background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)', minHeight: '100vh'}}>
       <button onClick={() => setShowLanding(true)} style={{marginBottom: '16px', color: '#0066cc', background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline', fontSize: '14px'}}>
@@ -756,47 +278,230 @@ const CBPDashboard = () => {
       </button>
 
       <div style={{background: '#003d82', color: 'white', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', padding: '24px', marginBottom: '24px', borderTop: '4px solid #ffcc00'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
           <Shield size={40} color="#ffcc00" />
-          <h1 style={{fontSize: '28px', fontWeight: 'bold', margin: 0}}>{selectedOrganization?.name || 'CBP'} - Triple-Pathway ROI Dashboard</h1>
+          <div>
+            <h1 style={{fontSize: '28px', fontWeight: 'bold', margin: 0}}>{selectedOrganization?.name || 'CBP'} ROI Dashboard</h1>
+            <p style={{fontSize: '14px', color: '#cbd5e1', margin: '4px 0 0 0'}}>{fmtNum(totalPersonnel)} personnel</p>
+          </div>
         </div>
-        <p style={{fontSize: '14px', color: '#cbd5e1', margin: 0}}>{selectedOrganization?.location} ({fmtNum(totalPersonnel)} personnel) • Retention + Workers' Comp + Discipline Prevention</p>
       </div>
 
-      <div style={{marginBottom: '16px', display: 'flex', gap: '8px'}}>
-        <button 
-          onClick={() => setActiveTab('dashboard')} 
-          style={{
-            padding: '12px 24px', 
-            fontWeight: '600', 
-            borderRadius: '8px', 
-            border: activeTab === 'dashboard' ? 'none' : '2px solid #e5e7eb', 
-            background: activeTab === 'dashboard' ? '#0066cc' : 'white', 
-            color: activeTab === 'dashboard' ? 'white' : '#003d82', 
-            cursor: 'pointer',
-            fontSize: '15px'
-          }}
-        >
-          Dashboard
-        </button>
-        <button 
-          onClick={() => setActiveTab('details')} 
-          style={{
-            padding: '12px 24px', 
-            fontWeight: '600', 
-            borderRadius: '8px', 
-            border: activeTab === 'details' ? 'none' : '2px solid #e5e7eb', 
-            background: activeTab === 'details' ? '#0066cc' : 'white', 
-            color: activeTab === 'details' ? 'white' : '#003d82', 
-            cursor: 'pointer',
-            fontSize: '15px'
-          }}
-        >
-          Model Details
-        </button>
+      <div style={{marginBottom: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
+        {[
+          {id: 'cost-problem', label: 'Cost Problem', icon: '💰'},
+          {id: 'roi-model', label: 'ROI Model', icon: '📊'},
+          {id: 'factors', label: 'Factors', icon: '🔬'},
+          {id: 'proof', label: 'Proof', icon: '✓'},
+          {id: 'implementation', label: 'Implementation', icon: '🚀'}
+        ].map(tab => (
+          <button 
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)} 
+            style={{
+              padding: '12px 20px', 
+              fontWeight: '600', 
+              borderRadius: '8px', 
+              border: activeTab === tab.id ? 'none' : '2px solid #e5e7eb', 
+              background: activeTab === tab.id ? '#0066cc' : 'white', 
+              color: activeTab === tab.id ? 'white' : '#003d82', 
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+          >
+            {tab.icon} {tab.label}
+          </button>
+        ))}
       </div>
 
-      {activeTab === 'dashboard' && (
+      {activeTab === 'cost-problem' && (
+        <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+          
+          <div style={{background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)', borderRadius: '16px', padding: '48px', textAlign: 'center', boxShadow: '0 8px 32px rgba(220,38,38,0.3)', border: '4px solid #7f1d1d'}}>
+            <div style={{fontSize: '18px', color: '#fecaca', marginBottom: '8px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '2px'}}>
+              {selectedOrganization?.name || 'CBP'} Currently Pays
+            </div>
+            <div style={{fontSize: '72px', fontWeight: 'bold', color: 'white', marginBottom: '16px', lineHeight: 1}}>
+              {fmt(Math.round((calculations.workersCompSavings + calculations.retentionSavings + calculations.disciplineSavings) / 0.22))}
+            </div>
+            <div style={{fontSize: '28px', color: '#fecaca', fontWeight: '600', marginBottom: '24px'}}>
+              Every Year on Three Workforce Problems
+            </div>
+            <div style={{background: 'rgba(255,255,255,0.15)', borderRadius: '12px', padding: '20px', maxWidth: '900px', margin: '0 auto'}}>
+              <p style={{fontSize: '18px', color: 'white', margin: 0, lineHeight: 1.6}}>
+                Your current programs (EAP, training, resiliency initiatives) haven't stopped these costs. <strong style={{color: '#fef08a'}}>You keep paying them year after year.</strong>
+              </p>
+            </div>
+          </div>
+
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px'}}>
+            
+            <div style={{background: 'white', borderRadius: '16px', padding: '32px', border: '4px solid #dc2626', boxShadow: '0 4px 20px rgba(220,38,38,0.2)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <div style={{width: '56px', height: '56px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', flexShrink: 0}}>
+                  💊
+                </div>
+                <h3 style={{fontSize: '22px', fontWeight: 'bold', color: '#991b1b', margin: 0}}>
+                  PTSD & Mental Health Workers' Comp
+                </h3>
+              </div>
+              
+              <div style={{fontSize: '48px', fontWeight: 'bold', color: '#dc2626', marginBottom: '16px'}}>
+                {fmt(Math.round(calculations.workersCompSavings / 0.22))}
+              </div>
+              
+              <div style={{background: '#fee2e2', borderRadius: '10px', padding: '16px', marginBottom: '16px'}}>
+                <div style={{fontSize: '14px', color: '#7f1d1d', marginBottom: '8px'}}>
+                  <strong>{Math.round(calculations.claimsPrevented / 0.22).toLocaleString()} mental health claims</strong> annually
+                </div>
+                <div style={{fontSize: '13px', color: '#991b1b'}}>
+                  PTSD, Depression, Anxiety, Substance Use Disorder
+                </div>
+              </div>
+              
+              <div style={{fontSize: '14px', color: '#7f1d1d', lineHeight: 1.6}}>
+                <strong>The Pattern:</strong> Officers exposed to trauma (deaths, violence, child welfare crises) develop PTSD, depression, or turn to alcohol. Claims filed. Treatment costs mount. Disability payments continue.
+              </div>
+            </div>
+
+            <div style={{background: 'white', borderRadius: '16px', padding: '32px', border: '4px solid #f59e0b', boxShadow: '0 4px 20px rgba(245,158,11,0.2)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <div style={{width: '56px', height: '56px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', flexShrink: 0}}>
+                  🚪
+                </div>
+                <h3 style={{fontSize: '22px', fontWeight: 'bold', color: '#92400e', margin: 0}}>
+                  Retention Crisis & Turnover
+                </h3>
+              </div>
+              
+              <div style={{fontSize: '48px', fontWeight: 'bold', color: '#f59e0b', marginBottom: '16px'}}>
+                {fmt(Math.round(calculations.retentionSavings / (retentionEffectiveness / 100)))}
+              </div>
+              
+              <div style={{background: '#fef3c7', borderRadius: '10px', padding: '16px', marginBottom: '16px'}}>
+                <div style={{fontSize: '14px', color: '#78350f', marginBottom: '8px'}}>
+                  <strong>{Math.round(calculations.preventedSeparations / (retentionEffectiveness / 100)).toLocaleString()} officers separate</strong> annually
+                </div>
+                <div style={{fontSize: '13px', color: '#92400e'}}>
+                  $150K replacement cost each
+                </div>
+              </div>
+              
+              <div style={{fontSize: '14px', color: '#78350f', lineHeight: 1.6}}>
+                <strong>The Pattern:</strong> Burnout from mandatory overtime and TDYs. No career development. Toxic leadership. Officers hit 3-5 years and leave.
+              </div>
+              
+              {isOFO && (
+                <div style={{background: '#fffbeb', border: '2px solid #fbbf24', borderRadius: '8px', padding: '12px', marginTop: '12px'}}>
+                  <div style={{fontSize: '13px', color: '#92400e', fontWeight: 'bold'}}>
+                    ⚠️ 2028: 2,220 officers retiring (400% increase)
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div style={{background: 'white', borderRadius: '16px', padding: '32px', border: '4px solid #7c3aed', boxShadow: '0 4px 20px rgba(124,58,237,0.2)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <div style={{width: '56px', height: '56px', background: '#7c3aed', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', flexShrink: 0}}>
+                  ⚖️
+                </div>
+                <h3 style={{fontSize: '22px', fontWeight: 'bold', color: '#5b21b6', margin: 0}}>
+                  Discipline & Misconduct
+                </h3>
+              </div>
+              
+              <div style={{fontSize: '48px', fontWeight: 'bold', color: '#7c3aed', marginBottom: '16px'}}>
+                {fmt(Math.round(calculations.disciplineSavings / 0.15))}
+              </div>
+              
+              <div style={{background: '#f3e8ff', borderRadius: '10px', padding: '16px', marginBottom: '16px'}}>
+                <div style={{fontSize: '14px', color: '#5b21b6', marginBottom: '8px'}}>
+                  <strong>{Math.round(calculations.totalPreventedDiscipline / 0.15).toLocaleString()} cases</strong> annually
+                </div>
+                <div style={{fontSize: '13px', color: '#6b21a8'}}>
+                  Stress-related misconduct, alcohol incidents
+                </div>
+              </div>
+              
+              <div style={{fontSize: '14px', color: '#5b21b6', lineHeight: 1.6}}>
+                <strong>The Pattern:</strong> Chronic stress leads to poor decisions. Alcohol misuse escalates. Incidents occur. OPR investigates. Careers end.
+              </div>
+            </div>
+
+          </div>
+
+          <div style={{background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '16px', padding: '40px', border: '4px solid #475569'}}>
+            <div style={{textAlign: 'center', marginBottom: '32px'}}>
+              <h2 style={{fontSize: '36px', fontWeight: 'bold', color: 'white', marginBottom: '16px'}}>
+                These Aren't Three Problems — They're One Problem
+              </h2>
+              <p style={{fontSize: '20px', color: '#cbd5e1', maxWidth: '900px', margin: '0 auto'}}>
+                All three cost buckets share the same root causes. Addressing these behavioral foundations prevents costs across all three pathways.
+              </p>
+            </div>
+
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px'}}>
+              {[
+                {label: 'Chronic Stress & Burnout', desc: 'Drives PTSD, turnover, poor judgment', color: '#ef4444'},
+                {label: 'Lack of Purpose & Career Development', desc: 'Drives separations, disengagement', color: '#f59e0b'},
+                {label: 'Toxic Leadership Culture', desc: 'Drives retention crisis, misconduct', color: '#8b5cf6'},
+                {label: 'Alcohol & Substance Misuse', desc: 'Drives claims, discipline, deaths', color: '#ec4899'}
+              ].map((cause, i) => (
+                <div key={i} style={{background: 'rgba(255,255,255,0.1)', borderRadius: '12px', padding: '20px', border: '2px solid rgba(255,255,255,0.2)'}}>
+                  <div style={{width: '12px', height: '12px', background: cause.color, borderRadius: '50%', marginBottom: '12px'}}></div>
+                  <div style={{fontSize: '15px', fontWeight: 'bold', color: 'white', marginBottom: '8px'}}>{cause.label}</div>
+                  <div style={{fontSize: '13px', color: '#cbd5e1', lineHeight: 1.5}}>{cause.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{background: '#fffbeb', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+            <div style={{display: 'flex', alignItems: 'start', gap: '20px'}}>
+              <div style={{fontSize: '48px', flexShrink: 0}}>⚠️</div>
+              <div>
+                <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', marginBottom: '12px'}}>
+                  Your Current Approach Isn't Working
+                </h3>
+                <p style={{fontSize: '16px', color: '#78350f', marginBottom: '16px', lineHeight: 1.7}}>
+                  CBP has EAP services, resilience training programs, and wellness initiatives. Despite these efforts, you're still paying <strong>{fmt(Math.round((calculations.workersCompSavings + calculations.retentionSavings + calculations.disciplineSavings) / 0.22))}</strong> annually. The costs persist because:
+                </p>
+                <ul style={{fontSize: '15px', color: '#78350f', lineHeight: 1.8, margin: '0 0 16px 20px'}}>
+                  <li>One-off training creates temporary peaks, but behavioral change requires continuous reinforcement</li>
+                  <li>Episodic workshops don't rewire habits — officers default to old patterns under stress</li>
+                  <li>Stigma prevents help-seeking — officers fear career consequences for admitting struggle</li>
+                  <li>Leadership doesn't have the skills to create psychological safety and development culture</li>
+                </ul>
+                <div style={{background: '#fef3c7', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
+                  <p style={{fontSize: '15px', color: '#78350f', margin: 0, fontWeight: '600'}}>
+                    The question isn't whether to invest in your workforce. <strong style={{color: '#92400e'}}>You're already investing {fmt(Math.round((calculations.workersCompSavings + calculations.retentionSavings + calculations.disciplineSavings) / 0.22))} — you're just getting zero return.</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{background: 'linear-gradient(135deg, #0066cc 0%, #003d82 100%)', borderRadius: '16px', padding: '40px', textAlign: 'center'}}>
+            <h3 style={{fontSize: '32px', fontWeight: 'bold', color: 'white', marginBottom: '16px'}}>
+              What If You Could Prevent 22-79% of These Costs?
+            </h3>
+            <p style={{fontSize: '18px', color: '#dbeafe', marginBottom: '32px', maxWidth: '800px', margin: '0 auto 32px'}}>
+              Evidence-based interventions targeting the behavioral root causes can prevent costs across all three pathways. See your projected ROI based on proven Air Force outcomes.
+            </p>
+            <button 
+              onClick={() => setActiveTab('roi-model')}
+              style={{background: '#ffcc00', color: '#003d82', border: 'none', padding: '16px 48px', borderRadius: '12px', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 16px rgba(255,204,0,0.4)', transition: 'transform 0.2s'}}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              See Your ROI Model →
+            </button>
+          </div>
+
+        </div>
+      )}
+
+      {activeTab === 'roi-model' && (
         <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
           
           <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '3px solid #0066cc'}}>
@@ -848,7 +553,7 @@ const CBPDashboard = () => {
               <div style={{background: 'white', border: '4px solid #10b981', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 16px rgba(16,185,129,0.2)', textAlign: 'center'}}>
                 <div style={{fontSize: '14px', color: '#047857', marginBottom: '12px', fontWeight: '600'}}>NET ANNUAL SAVINGS</div>
                 <div style={{fontSize: '48px', fontWeight: 'bold', color: '#059669', marginBottom: '8px'}}>{fmt(calculations.netSavings)}</div>
-                <div style={{fontSize: '14px', color: '#047857'}}>After ${fmt(calculations.programCost)} program cost</div>
+                <div style={{fontSize: '14px', color: '#047857'}}>After {fmt(calculations.programCost)} program cost</div>
                 <div style={{fontSize: '16px', fontWeight: 'bold', color: '#10b981', marginTop: '12px'}}>ROI: {calculations.roi}%</div>
               </div>
 
@@ -876,8 +581,8 @@ const CBPDashboard = () => {
                     <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#991b1b', margin: 0}}>Workers' Comp</h4>
                   </div>
                   <div style={{fontSize: '28px', fontWeight: 'bold', color: '#dc2626', marginBottom: '8px'}}>{fmt(calculations.workersCompSavings)}</div>
-                  <div style={{fontSize: '13px', color: '#7f1d1d', marginBottom: '4px'}}><strong>{fmtNum(calculations.claimsPrevented)} mental health claims</strong> prevented</div>
-                  <div style={{fontSize: '12px', color: '#991b1b'}}>= Healthier workforce, reduced disability costs, fewer lost-time injuries</div>
+                  <div style={{fontSize: '13px', color: '#7f1d1d', marginBottom: '4px'}}><strong>{fmtNum(calculations.claimsPrevented)} claims</strong> prevented</div>
+                  <div style={{fontSize: '12px', color: '#991b1b'}}>Healthier workforce, reduced disability costs</div>
                 </div>
 
                 <div style={{background: '#fef3c7', border: '2px solid #fcd34d', borderRadius: '10px', padding: '20px'}}>
@@ -887,8 +592,8 @@ const CBPDashboard = () => {
                   </div>
                   <div style={{fontSize: '28px', fontWeight: 'bold', color: '#f59e0b', marginBottom: '8px'}}>{fmt(calculations.retentionSavings)}</div>
                   <div style={{fontSize: '13px', color: '#78350f', marginBottom: '4px'}}><strong>{fmtNum(calculations.preventedSeparations)} separations</strong> prevented</div>
-                  <div style={{fontSize: '12px', color: '#92400e'}}>= Institutional knowledge preserved through 2028 crisis, reduced recruiting/training costs</div>
-                  {leadSeats > 0 && <div style={{fontSize: '11px', color: '#eab308', fontWeight: '600', marginTop: '8px'}}>💼 {fmtNum(calculations.leadershipRetentionContribution)} from Lead culture impact</div>}
+                  <div style={{fontSize: '12px', color: '#92400e'}}>Institutional knowledge preserved</div>
+                  {leadSeats > 0 && <div style={{fontSize: '11px', color: '#eab308', fontWeight: '600', marginTop: '8px'}}>💼 {fmtNum(calculations.leadershipRetentionContribution)} from Lead</div>}
                 </div>
 
                 <div style={{background: '#f3e8ff', border: '2px solid #d8b4fe', borderRadius: '10px', padding: '20px'}}>
@@ -897,8 +602,8 @@ const CBPDashboard = () => {
                     <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#6b21a8', margin: 0}}>Discipline Prevention</h4>
                   </div>
                   <div style={{fontSize: '28px', fontWeight: 'bold', color: '#7c3aed', marginBottom: '8px'}}>{fmt(calculations.disciplineSavings)}</div>
-                  <div style={{fontSize: '13px', color: '#7e22ce', marginBottom: '4px'}}><strong>{fmtNum(calculations.totalPreventedDiscipline)} misconduct cases</strong> prevented</div>
-                  <div style={{fontSize: '12px', color: '#6b21a8'}}>= Reduced OPR investigator workload, fewer career-ending incidents, preserved personnel</div>
+                  <div style={{fontSize: '13px', color: '#7e22ce', marginBottom: '4px'}}><strong>{fmtNum(calculations.totalPreventedDiscipline)} cases</strong> prevented</div>
+                  <div style={{fontSize: '12px', color: '#6b21a8'}}>Reduced OPR workload, preserved careers</div>
                 </div>
 
               </div>
@@ -907,13 +612,15 @@ const CBPDashboard = () => {
 
           {isOFO && (
             <div style={{background: '#fffbeb', border: '4px solid #f59e0b', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(245,158,11,0.2)'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
                 <div style={{width: '40px', height: '40px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>⚠️</div>
-                <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', margin: 0}}>2028 OFO Retirement Crisis</h3>
+                <div>
+                  <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', margin: 0}}>2028 OFO Retirement Crisis</h3>
+                  <p style={{fontSize: '16px', color: '#92400e', margin: '4px 0 0 0'}}>
+                    <strong>2,220 CBP Officers</strong> retiring in 2028—a <strong>400% increase</strong> over normal
+                  </p>
+                </div>
               </div>
-              <p style={{fontSize: '16px', color: '#92400e', margin: 0}}>
-                <strong>2,220 CBP Officers</strong> projected to retire in 2028—a <strong>400% increase</strong> over normal ~500/year. Officers hired after July 6, 2008 received enhanced retirement coverage, creating a concentrated retirement wave.
-              </p>
             </div>
           )}
 
@@ -951,102 +658,25 @@ const CBPDashboard = () => {
             <div style={{background: 'linear-gradient(135deg, #fefce8 0%, #fef3c7 100%)', border: '3px solid #eab308', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 10px rgba(234,179,8,0.2)'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
                 <div style={{width: '40px', height: '40px', background: '#eab308', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>👥</div>
-                <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#713f12', margin: 0}}>Leadership Culture Transformation Impact</h3>
+                <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#713f12', margin: 0}}>Leadership Culture Transformation</h3>
               </div>
               <p style={{fontSize: '14px', color: '#854d0e', marginBottom: '16px', lineHeight: 1.6}}>
-                <strong>{fmtNum(leadSeats)} Lead seats</strong> deployed to develop command climate and address supervisory effectiveness gaps. Lead's unlimited 1:1 coaching builds trust, communication skills, and transformational leadership capabilities—moving from command-and-control to developmental leadership.
+                <strong>{fmtNum(leadSeats)} Lead seats</strong> build command climate through unlimited 1:1 coaching
               </p>
               <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
                 <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
-                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Retention Contribution</div>
-                  <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipRetentionContribution)}</div>
-                  <div style={{fontSize: '12px', color: '#854d0e'}}>separations prevented by better leadership (~40% of total retention gains)</div>
+                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Retention Impact</div>
+                  <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12'}}>{fmtNum(calculations.leadershipRetentionContribution)}</div>
+                  <div style={{fontSize: '12px', color: '#854d0e'}}>separations prevented (~40% of total)</div>
                 </div>
                 <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #fbbf24'}}>
-                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>Workers' Comp Contribution</div>
-                  <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12', marginBottom: '4px'}}>{fmtNum(calculations.leadershipClaimContribution)}</div>
-                  <div style={{fontSize: '12px', color: '#854d0e'}}>claims prevented through psychological safety (~{Math.round((calculations.leadershipClaimContribution / (calculations.claimsPrevented || 1)) * 100)}% of total)</div>
+                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>WC Impact</div>
+                  <div style={{fontSize: '24px', fontWeight: 'bold', color: '#713f12'}}>{fmtNum(calculations.leadershipClaimContribution)}</div>
+                  <div style={{fontSize: '12px', color: '#854d0e'}}>claims prevented through psych safety</div>
                 </div>
-              </div>
-              <div style={{background: '#fffbeb', borderRadius: '8px', padding: '12px', marginTop: '12px', border: '1px solid #fbbf24'}}>
-                <p style={{fontSize: '12px', color: '#78350f', margin: 0}}>
-                  <strong>Why This Matters:</strong> Federal Employee Viewpoint Survey data and GAO reports consistently identify leadership quality as a primary driver of federal law enforcement retention. Lead coaching transforms supervisory approaches, directly addressing the root cause of voluntary separations by creating psychologically safe environments where officers feel supported rather than micromanaged.
-                </p>
               </div>
             </div>
           )}
-
-          <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
-            <button 
-              onClick={() => setShowAdvancedDrivers(!showAdvancedDrivers)} 
-              style={{
-                width: '100%', 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center', 
-                background: 'transparent', 
-                border: 'none', 
-                cursor: 'pointer', 
-                padding: '12px 0'
-              }}
-            >
-              <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#003d82', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                <Target size={24} color="#0066cc" />
-                Advanced: Customize Performance Assumptions
-              </h3>
-              {showAdvancedDrivers ? <ChevronUp size={24} color="#0066cc" /> : <ChevronDown size={24} color="#0066cc" />}
-            </button>
-            
-            {!showAdvancedDrivers && (
-              <p style={{fontSize: '13px', color: '#64748b', marginTop: '8px'}}>
-                COAs automatically configure these drivers. Expand to manually adjust individual performance assumptions.
-              </p>
-            )}
-
-            {showAdvancedDrivers && (
-              <div style={{marginTop: '20px'}}>
-                <p style={{fontSize: '13px', color: '#64748b', marginBottom: '16px', background: '#eff6ff', padding: '12px', borderRadius: '8px', border: '1px solid #bae6fd'}}>
-                  ℹ️ These drivers calculate retention effectiveness ({retentionEffectiveness}%) and readiness improvement. COAs set these automatically, but you can fine-tune for custom scenarios.
-                </p>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-                  {performanceDrivers.map(d => (
-                    <div key={d.key} style={{border: '2px solid #dbeafe', borderRadius: '12px', padding: '20px', background: d.requiresLead ? '#fef3c7' : '#eff6ff'}}>
-                      <div style={{marginBottom: '12px'}}>
-                        <h4 style={{fontSize: '14px', fontWeight: 'bold', marginBottom: '4px', color: '#003d82'}}>{d.priority}</h4>
-                        <p style={{fontSize: '12px', color: '#64748b', marginBottom: '4px'}}>{d.drivers}</p>
-                        {d.affectsWorkersComp && <p style={{fontSize: '11px', color: '#dc2626', fontWeight: '600'}}>🎯 Directly reduces workers' comp claims</p>}
-                        {d.requiresLead && <p style={{fontSize: '11px', color: '#eab308', fontWeight: '600'}}>💼 Requires Lead deployment • Impacts retention + claims</p>}
-                      </div>
-                      <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
-                        <div style={{width: '48px', height: '48px', background: d.requiresLead ? '#eab308' : '#1e40af', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', boxShadow: '0 2px 8px rgba(30,64,175,0.3)'}}>{d.baseline}</div>
-                        <div style={{flex: 1, height: '40px', position: 'relative'}}>
-                          <div style={{position: 'absolute', width: '100%', height: '40px', background: '#93c5fd', borderRadius: '20px'}}></div>
-                          <div style={{position: 'absolute', height: '40px', background: d.requiresLead ? '#eab308' : '#1e40af', borderRadius: '20px', width: `${(d.growth / 70) * 100}%`}}></div>
-                        </div>
-                        <div style={{fontSize: '32px', fontWeight: 'bold', color: '#003d82'}}>+{d.improvement}%</div>
-                      </div>
-                      <div>
-                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px'}}>Adjust Priority: +{d.improvement}%</label>
-                        <input 
-                          type="range" 
-                          min="0" 
-                          max="30" 
-                          value={d.improvement} 
-                          onChange={(e) => d.setImprovement(Number(e.target.value))} 
-                          style={{width: '100%', height: '8px', accentColor: d.requiresLead ? '#eab308' : '#0066cc'}}
-                        />
-                        <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b', marginTop: '4px'}}>
-                          <span>0% (Low)</span>
-                          <span>15% (Medium)</span>
-                          <span>30% (High)</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
 
           <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderLeft: '4px solid #003d82'}}>
             <div style={{background: '#003d82', color: 'white', borderRadius: '8px', padding: '12px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px'}}>
@@ -1067,12 +697,11 @@ const CBPDashboard = () => {
                     onChange={(e) => {
                       const newLead = Number(e.target.value); 
                       setLeadSeats(newLead); 
-                      setReadySeats(Math.max(0, (leadSeats + readySeats) - newLead)); 
                       if (newLead === 0) setLeadershipCultureImprovement(0);
                     }} 
                     style={{width: '100%', height: '8px', accentColor: '#a855f7'}}
                   />
-                  <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>Critical talent • {fmt(calculations.leadPrice)}/seat</div>
+                  <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>@ {fmt(calculations.leadPrice)}/seat</div>
                 </div>
                 <div>
                   <label style={{display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px'}}>Ready Seats: {fmtNum(readySeats)}</label>
@@ -1085,7 +714,7 @@ const CBPDashboard = () => {
                     onChange={(e) => setReadySeats(Number(e.target.value))} 
                     style={{width: '100%', height: '8px', accentColor: '#0066cc'}}
                   />
-                  <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>All personnel • $150/seat</div>
+                  <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px'}}>@ $150/seat</div>
                 </div>
               </div>
 
@@ -1112,242 +741,766 @@ const CBPDashboard = () => {
                     {use6MonthLead ? '6-Month' : '12-Month'}
                   </button>
                 </div>
-                <p style={{fontSize: '11px', color: '#64748b', background: '#f9fafb', padding: '8px', borderRadius: '4px'}}>
-                  {use6MonthLead ? '6-month recommended for pilots & transitions. Current price: ' + fmt(calculations.leadPrice) : '12-month recommended for leadership transformation. Current price: ' + fmt(calculations.leadPrice)}
-                </p>
               </div>
 
-              <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px'}}>
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
-                  <label style={{fontSize: '14px', fontWeight: '600'}}>Retention Effectiveness: {retentionEffectiveness}%</label>
-                  <button
-                    onClick={() => {
-                      setManualRetentionOverride(!manualRetentionOverride);
-                      if (!manualRetentionOverride) setManualRetentionValue(retentionEffectiveness);
-                    }}
-                    style={{padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', border: 'none', cursor: 'pointer', background: manualRetentionOverride ? '#f59e0b' : '#e5e7eb', color: manualRetentionOverride ? 'white' : '#374151'}}
-                  >
-                    {manualRetentionOverride ? '🔓 Manual ON' : '🔒 Auto-Calculate'}
-                  </button>
-                </div>
-                <input 
-                  type="range" 
-                  min="3" 
-                  max="35" 
-                  value={manualRetentionOverride ? manualRetentionValue : retentionEffectiveness}
-                  onChange={(e) => {if (manualRetentionOverride) setManualRetentionValue(Number(e.target.value));}}
-                  style={{width: '100%', height: '8px', accentColor: '#0066cc', cursor: manualRetentionOverride ? 'pointer' : 'not-allowed', opacity: manualRetentionOverride ? 1 : 0.5}}
-                />
-                {manualRetentionOverride ? (
-                  <p style={{fontSize: '11px', color: '#92400e', marginTop: '8px', fontWeight: '500', background: '#fffbeb', padding: '8px', borderRadius: '4px', border: '1px solid #fbbf24'}}>⚠️ Manual override active - drag slider to test rates</p>
-                ) : (
-                  <p style={{fontSize: '11px', color: '#1e40af', marginTop: '8px', fontWeight: '500', background: '#eff6ff', padding: '8px', borderRadius: '4px', border: '1px solid #60a5fa'}}>⚡ Auto-calculated from Career + Leadership + Culture ({leadSeats > 0 ? 'with Lead boost' : 'Ready only'})</p>
-                )}
-              </div>
             </div>
           </div>
 
         </div>
       )}
-      {activeTab === 'details' && (
-        <div style={{background: 'white', borderRadius: '12px', padding: '24px'}}>
-          <h2 style={{fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', color: '#003d82'}}>Model Details & Measurement Strategy</h2>
+
+      {activeTab === 'factors' && (
+        <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
           
-          <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
-            
-            <div style={{border: '3px solid #0066cc', borderRadius: '12px', padding: '24px', background: '#eff6ff'}}>
-              <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#003d82'}}>📊 Proposed Metrics for CBP Implementation</h3>
-              
-              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px'}}>
-                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
-                  <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Individual Level</h4>
-                  <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
-                    <li><strong>Whole Person Model 3.0:</strong> Pre-post assessments</li>
-                    <li><strong>Decision-Making:</strong> Problem solving, strategic thinking</li>
-                    <li><strong>Stress Management:</strong> Emotional regulation, recovery</li>
-                    <li><strong>Resilience:</strong> Optimism, self-compassion</li>
-                    <li><strong>Career Commitment:</strong> Purpose clarity, growth mindset</li>
-                  </ul>
-                </div>
-                
-                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
-                  <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Sector/Field Office Level</h4>
-                  <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
-                    <li><strong>Team Cohesion:</strong> Anonymized unit trends</li>
-                    <li><strong>Leadership Climate:</strong> Communication, trust patterns</li>
-                    <li><strong>Morale Indicators:</strong> Engagement, satisfaction</li>
-                    <li><strong>Reflection Points:</strong> Real-time wellness check-ins</li>
-                  </ul>
-                </div>
-                
-                <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
-                  <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Organizational Level</h4>
-                  <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
-                    <li><strong>Retention Rates:</strong> Compared to baseline projections</li>
-                    <li><strong>Workers' Comp Claims:</strong> Mental health claim trends</li>
-                    <li><strong>Readiness Metrics:</strong> Performance capacity trends</li>
-                    <li><strong>ROI Tracking:</strong> Actual vs. projected savings</li>
-                  </ul>
-                </div>
+          <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #0066cc'}}>
+            <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#003d82', marginBottom: '16px'}}>Factor Breakdown: Validate the Model</h2>
+            <p style={{fontSize: '16px', color: '#475569', lineHeight: 1.7, marginBottom: '16px'}}>
+              This section allows power users to adjust the underlying assumptions driving the ROI calculations. Each mental health condition has three adjustable parameters:
+            </p>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px'}}>
+              <div style={{background: '#eff6ff', padding: '12px', borderRadius: '8px', border: '2px solid #3b82f6'}}>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#1e40af', marginBottom: '4px'}}>Coaching Effectiveness</div>
+                <div style={{fontSize: '12px', color: '#1e3a8a'}}>What % of cases can prevention reduce?</div>
               </div>
-
-              <div style={{background: '#dbeafe', borderRadius: '10px', padding: '16px', marginTop: '12px', border: '2px solid #3b82f6'}}>
-                <p style={{fontSize: '13px', color: '#1e40af', margin: 0}}>
-                  <strong>From Air Force Experience:</strong> BetterUp provides real-time People Analytics Dashboard showing engagement, satisfaction, and behavioral growth—replacing projections with actual measured outcomes from your personnel.
-                </p>
+              <div style={{background: '#eff6ff', padding: '12px', borderRadius: '8px', border: '2px solid #3b82f6'}}>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#1e40af', marginBottom: '4px'}}>WC Filing Rate</div>
+                <div style={{fontSize: '12px', color: '#1e3a8a'}}>What % of clinical cases file claims?</div>
+              </div>
+              <div style={{background: '#eff6ff', padding: '12px', borderRadius: '8px', border: '2px solid #3b82f6'}}>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#1e40af', marginBottom: '4px'}}>WC Acceptance Rate</div>
+                <div style={{fontSize: '12px', color: '#1e3a8a'}}>What % of filed claims get accepted?</div>
               </div>
             </div>
-
-            <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '20px'}}>
-              <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#003d82'}}>Model Assumptions</h4>
-              <div style={{fontSize: '14px', color: '#475569', lineHeight: 1.8}}>
-                <div style={{marginBottom: '8px'}}><strong>Attrition Rates:</strong> OFO {selectedOrganization?.attritionRate || 6.3}% annually | USBP 4.2% annually</div>
-                {isOFO && <div style={{fontSize: '14px', color: '#dc2626', fontWeight: 'bold', marginBottom: '8px'}}>⚠️ 2028 OFO: 2,220 officers retiring (400% increase over normal ~500/year)</div>}
-                <div style={{marginBottom: '8px'}}><strong>Replacement Cost:</strong> OFO/USBP $150K per separation</div>
-                <div style={{marginBottom: '8px'}}><strong>Workers' Comp:</strong> $65,000 avg mental health claim cost (35% of total claims)</div>
-                <div style={{marginBottom: '8px'}}><strong>Discipline Cases:</strong> 11.3% of workforce annually, 20% stress-related, 1.78% alcohol-related</div>
-                <div style={{marginBottom: '8px'}}><strong>Base Prevention Rate:</strong> 22% workers' comp (JAMA 2024) + Leadership boost when Lead deployed</div>
-                <div style={{marginBottom: '8px'}}><strong>Discipline Prevention:</strong> 15% stress cases, 78% alcohol cases (EAP research)</div>
-                <div style={{marginBottom: '8px'}}><strong>Lead Pricing:</strong> Volume-discounted ({use6MonthLead ? '6-month' : '12-month'} term) - {fmt(calculations.leadPrice)}/seat</div>
-                <div><strong>Ready Pricing:</strong> $150/seat (12 months)</div>
-              </div>
-            </div>
-
-            <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '20px'}}>
-              <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#003d82'}}>Data Sources</h4>
-              <div style={{fontSize: '12px', color: '#64748b', lineHeight: 1.8}}>
-                • <strong><a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>GAO-24-107029</a>:</strong> CBP Recruitment & Retention challenges, replacement costs<br/>
-                • <strong><a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>JAMA 2024</a>:</strong> 21.6% reduction in burnout & mental health conditions<br/>
-                • <strong><a href="https://www.oig.dhs.gov/sites/default/files/assets/2019-06/OIG-19-48-Jun19.pdf" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>DHS OIG Reports</a>:</strong> Discipline case volumes and misconduct oversight<br/>
-                • <strong><a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>CuraLinc EAP 2022</a>:</strong> 67% alcohol misuse severity reduction, 78% at-risk elimination<br/>
-                • <strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4010956/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>HeartMath Police Study</a>:</strong> 40% stress reduction, improved decision-making<br/>
-                • <strong><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0120644" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Ebbinghaus forgetting curve</a>:</strong> Learning decay & spaced repetition research<br/>
-                • <strong><a href="https://www.betterup.com/customers/united-states-airforce" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>BetterUp DAF outcomes</a> (2021–2025):</strong> +7% career commitment, +15% unit readiness, +13% individual readiness<br/>
-                • <strong><a href="https://www.nteu.org/legislative-action/congressional-testimony/fy-2025-budget-request-cbp" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>NTEU testimony</a>:</strong> CBP workforce challenges, operational tempo (April 2024)<br/>
-                • <strong><a href="https://www.nellis.af.mil/About/Fact-Sheets/Display/Article/284156/united-states-air-force-weapons-school/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Air Force Weapons School</a>:</strong> Mastery framework for high-performance development<br/>
-                • <strong>BetterUp volume pricing:</strong> Enterprise contract rates (Deal Desk for 1000+ seats)
-              </div>
-            </div>
-
-            <div style={{border: '2px solid #e5e7eb', borderRadius: '8px', padding: '20px', background: '#fef3c7'}}>
-              <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#92400e'}}>Third Pathway Methodology: Discipline Cost Reduction</h4>
-              <p style={{fontSize: '14px', color: '#78350f', marginBottom: '16px', lineHeight: 1.6}}>
-                CBP processes ~6,760 annual misconduct cases (11.3% of workforce). Research shows 20% are stress-related and 41.6% of arrests are alcohol/drug-related. BetterUp prevents these through early intervention:
-              </p>
-              <div style={{display: 'grid', gap: '12px'}}>
-                <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
-                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Stress-Related Prevention</div>
-                  <div style={{fontSize: '12px', color: '#78350f'}}>15% of stress-related cases prevented through resilience training (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4010956/" target="_blank" rel="noopener noreferrer" style={{color: '#92400e', textDecoration: 'underline'}}>HeartMath 40% stress reduction</a> applied conservatively)</div>
-                </div>
-                <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
-                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Alcohol-Related Prevention</div>
-                  <div style={{fontSize: '12px', color: '#78350f'}}>78% of at-risk employees no longer at-risk after EAP treatment × 50% reach = effective prevention (<a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#92400e', textDecoration: 'underline'}}>CuraLinc 2022</a> peer-reviewed study)</div>
-                </div>
-                <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
-                  <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Cost Per Case</div>
-                  <div style={{fontSize: '12px', color: '#78350f'}}>Investigation ($9,500) + Productivity loss ($14,000) = $23,500 avg. Arrests add potential termination costs ($80,000) = $103,500 total</div>
-                </div>
-              </div>
-              <div style={{background: '#fffbeb', borderRadius: '8px', padding: '12px', marginTop: '12px', border: '1px solid #fbbf24'}}>
-                <p style={{fontSize: '12px', color: '#78350f', margin: 0}}>
-                  <strong>Conservative Estimate:</strong> This pathway calculates {fmtNum(calculations.totalPreventedDiscipline)} prevented cases annually, saving {fmt(calculations.disciplineSavings)}. Actual costs may be higher when including legal fees, settlements, and reputational damage not tracked by CBP.
-                </p>
-              </div>
-            </div>
-
           </div>
-        </div>
-      )}
 
-      {!showAssistant && (
-        <button 
-          onClick={() => setShowAssistant(true)} 
-          style={{
-            position: 'fixed', 
-            bottom: '24px', 
-            right: '24px', 
-            width: '64px', 
-            height: '64px', 
-            background: '#0066cc', 
-            color: 'white', 
-            borderRadius: '50%', 
-            border: 'none', 
-            boxShadow: '0 4px 12px rgba(0,102,204,0.4)', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            cursor: 'pointer', 
-            zIndex: 1000
-          }}
-        >
-          <MessageCircle size={32} />
-        </button>
-      )}
-
-      {showAssistant && (
-        <div style={{position: 'fixed', right: '24px', bottom: '24px', background: 'white', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.2)', border: '2px solid #0066cc', width: '384px', zIndex: 1000}}>
-          <div style={{background: '#0066cc', color: 'white', padding: '16px', borderRadius: '10px 10px 0 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <div>
-              <h3 style={{fontSize: '16px', fontWeight: 'bold', margin: 0}}>Model Assistant</h3>
-              <p style={{fontSize: '11px', opacity: 0.9, margin: '4px 0 0 0'}}>Ask about calculations</p>
-            </div>
-            <button 
-              onClick={() => setShowAssistant(false)} 
-              style={{background: 'transparent', border: 'none', color: 'white', cursor: 'pointer', padding: '4px', borderRadius: '4px'}} 
-              onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'} 
-              onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+          <div style={{background: 'white', borderRadius: '12px', border: '3px solid #dc2626', overflow: 'hidden'}}>
+            <div 
+              onClick={() => setExpandedFactor(expandedFactor === 'ptsd' ? null : 'ptsd')}
+              style={{padding: '24px', cursor: 'pointer', background: expandedFactor === 'ptsd' ? '#fef2f2' : 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
             >
-              <X size={20} />
-            </button>
-          </div>
-          <div style={{padding: '16px', height: '384px', overflowY: 'auto', background: '#f9fafb'}}>
-            {chatMessages.length === 0 ? (
-              <div style={{textAlign: 'center', paddingTop: '32px'}}>
-                <p style={{fontWeight: '500', color: '#6b7280', marginBottom: '16px'}}>Ask anything about the model!</p>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
-                  {["How is the net savings calculated?", "Why is OFO facing a retirement crisis in 2028?", "Explain the COA differences", "What's the difference between Lead and Ready?", "How does Leadership Culture affect ROI?"].map((q, i) => (
-                    <button 
-                      key={i} 
-                      onClick={() => setChatInput(q)} 
-                      style={{width: '100%', textAlign: 'left', padding: '12px', background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '13px', cursor: 'pointer'}} 
-                      onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'} 
-                      onMouseOut={(e) => e.currentTarget.style.background = 'white'}
-                    >
-                      {q}
-                    </button>
-                  ))}
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>P</div>
+                <div>
+                  <h3 style={{fontSize: '22px', fontWeight: 'bold', color: '#991b1b', margin: 0}}>PTSD (Post-Traumatic Stress Disorder)</h3>
+                  <p style={{fontSize: '14px', color: '#7f1d1d', margin: '4px 0 0 0'}}>Prevalence: 15-20% | {Math.round((selectedOrganization?.personnel || 25879) * 0.18).toLocaleString()} officers affected</p>
                 </div>
               </div>
-            ) : (
-              <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
-                {chatMessages.map((m, i) => (
-                  <div key={i} style={{textAlign: m.type === 'user' ? 'right' : 'left'}}>
-                    <div style={{display: 'inline-block', maxWidth: '80%', padding: '12px', borderRadius: '8px', background: m.type === 'user' ? '#0066cc' : 'white', color: m.type === 'user' ? 'white' : '#1f2937', border: m.type === 'user' ? 'none' : '1px solid #e5e7eb', fontSize: '14px'}}>
-                      {m.text}
+              {expandedFactor === 'ptsd' ? <ChevronUp size={24} color="#dc2626" /> : <ChevronDown size={24} color="#dc2626" />}
+            </div>
+
+            {expandedFactor === 'ptsd' && (
+              <div style={{padding: '24px', background: '#fef2f2', borderTop: '2px solid #fca5a5'}}>
+                
+                <div style={{marginBottom: '24px'}}>
+                  <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#991b1b', marginBottom: '12px'}}>About PTSD in Law Enforcement</h4>
+                  <p style={{fontSize: '14px', color: '#7f1d1d', lineHeight: 1.6, marginBottom: '12px'}}>
+                    Officers exposed to 188 critical incidents over careers develop PTSD at 3-5x civilian rates. Symptoms include intrusive memories, hypervigilance, avoidance behaviors, and emotional dysregulation affecting decision-making and family life.
+                  </p>
+                  <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fca5a5'}}>
+                    <div style={{fontSize: '13px', color: '#991b1b', fontWeight: 'bold', marginBottom: '4px'}}>Sources:</div>
+                    <div style={{fontSize: '12px', color: '#7f1d1d'}}>
+                      UK Police (n=40,299): 20.5% PTSD | Dallas PD: 26% with mental illness | Conservative baseline: 15-20%
                     </div>
                   </div>
-                ))}
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px'}}>
+                  
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #fca5a5'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#991b1b', marginBottom: '8px'}}>
+                      Coaching Effectiveness: {ptsdEffectiveness}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="15" 
+                      max="35" 
+                      value={ptsdEffectiveness} 
+                      onChange={(e) => setPtsdEffectiveness(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#dc2626'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#7f1d1d', marginTop: '4px'}}>
+                      <span>15%</span>
+                      <span>25%</span>
+                      <span>35%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#991b1b', marginTop: '8px', background: '#fee2e2', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 25%
+                    </div>
+                  </div>
+
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #fca5a5'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#991b1b', marginBottom: '8px'}}>
+                      WC Filing Rate: {ptsdFilingRate}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="5" 
+                      max="15" 
+                      value={ptsdFilingRate} 
+                      onChange={(e) => setPtsdFilingRate(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#dc2626'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#7f1d1d', marginTop: '4px'}}>
+                      <span>5%</span>
+                      <span>10%</span>
+                      <span>15%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#991b1b', marginTop: '8px', background: '#fee2e2', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 10%
+                    </div>
+                  </div>
+
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #fca5a5'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#991b1b', marginBottom: '8px'}}>
+                      WC Acceptance: {ptsdAcceptanceRate}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="30" 
+                      max="70" 
+                      value={ptsdAcceptanceRate} 
+                      onChange={(e) => setPtsdAcceptanceRate(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#dc2626'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#7f1d1d', marginTop: '4px'}}>
+                      <span>30%</span>
+                      <span>50%</span>
+                      <span>70%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#991b1b', marginTop: '8px', background: '#fee2e2', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 50%
+                    </div>
+                  </div>
+
+                </div>
+
+                <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #dc2626'}}>
+                  <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#991b1b', marginBottom: '12px'}}>Cost Impact Calculation</h4>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px'}}>
+                    <div style={{background: '#fef2f2', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#7f1d1d', marginBottom: '4px'}}>Affected Officers</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#dc2626'}}>{Math.round((selectedOrganization?.personnel || 25879) * 0.18).toLocaleString()}</div>
+                    </div>
+                    <div style={{background: '#fef2f2', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#7f1d1d', marginBottom: '4px'}}>Cases Prevented</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#dc2626'}}>{Math.round((selectedOrganization?.personnel || 25879) * 0.18 * (ptsdEffectiveness / 100)).toLocaleString()}</div>
+                    </div>
+                    <div style={{background: '#fef2f2', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#7f1d1d', marginBottom: '4px'}}>WC Claims Prevented</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#dc2626'}}>{Math.round((selectedOrganization?.personnel || 25879) * 0.18 * (ptsdEffectiveness / 100) * (ptsdFilingRate / 100) * (ptsdAcceptanceRate / 100)).toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <div style={{marginTop: '12px', padding: '12px', background: '#fee2e2', borderRadius: '8px'}}>
+                    <div style={{fontSize: '13px', color: '#991b1b', fontWeight: 'bold'}}>
+                      Annual Savings: {fmt((Math.round((selectedOrganization?.personnel || 25879) * 0.18 * (ptsdEffectiveness / 100) * (ptsdFilingRate / 100) * (ptsdAcceptanceRate / 100))) * 65000)}
+                    </div>
+                  </div>
+                </div>
+
               </div>
             )}
           </div>
-          <div style={{padding: '16px', borderTop: '1px solid #e5e7eb', display: 'flex', gap: '8px'}}>
-            <input 
-              type="text" 
-              value={chatInput} 
-              onChange={(e) => setChatInput(e.target.value)} 
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()} 
-              placeholder="Ask about the model..." 
-              style={{flex: 1, padding: '8px 12px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px'}}
-            />
-            <button 
-              onClick={handleSendMessage} 
-              style={{padding: '8px 16px', background: '#0066cc', color: 'white', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: '600', cursor: 'pointer'}}
+
+          <div style={{background: 'white', borderRadius: '12px', border: '3px solid #f59e0b', overflow: 'hidden'}}>
+            <div 
+              onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')}
+              style={{padding: '24px', cursor: 'pointer', background: expandedFactor === 'depression' ? '#fffbeb' : 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
             >
-              Send
-            </button>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#f59e0b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>D</div>
+                <div>
+                  <h3 style={{fontSize: '22px', fontWeight: 'bold', color: '#92400e', margin: 0}}>Depression</h3>
+                  <p style={{fontSize: '14px', color: '#78350f', margin: '4px 0 0 0'}}>Prevalence: 15-20% | {Math.round((selectedOrganization?.personnel || 25879) * 0.18).toLocaleString()} officers affected</p>
+                </div>
+              </div>
+              {expandedFactor === 'depression' ? <ChevronUp size={24} color="#f59e0b" /> : <ChevronDown size={24} color="#f59e0b" />}
+            </div>
+
+            {expandedFactor === 'depression' && (
+              <div style={{padding: '24px', background: '#fffbeb', borderTop: '2px solid #fcd34d'}}>
+                
+                <div style={{marginBottom: '24px'}}>
+                  <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#92400e', marginBottom: '12px'}}>About Depression in Law Enforcement</h4>
+                  <p style={{fontSize: '14px', color: '#78350f', lineHeight: 1.6, marginBottom: '12px'}}>
+                    Officers face 2x elevated depression risk. Symptoms include persistent sadness, loss of interest, fatigue, difficulty concentrating. Depression drives massive presenteeism costs (20-30% productivity loss) and is highly treatable.
+                  </p>
+                  <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fcd34d'}}>
+                    <div style={{fontSize: '13px', color: '#92400e', fontWeight: 'bold', marginBottom: '4px'}}>Sources:</div>
+                    <div style={{fontSize: '12px', color: '#78350f'}}>
+                      Dallas PD: 44% of mental illness cases had depression | UK Police: 9.8% | CuraLinc: 59% severity reduction
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px'}}>
+                  
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #fcd34d'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>
+                      Effectiveness: {depressionEffectiveness}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="15" 
+                      max="35" 
+                      value={depressionEffectiveness} 
+                      onChange={(e) => setDepressionEffectiveness(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#f59e0b'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#78350f', marginTop: '4px'}}>
+                      <span>15%</span>
+                      <span>25%</span>
+                      <span>35%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#92400e', marginTop: '8px', background: '#fef3c7', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 25%
+                    </div>
+                  </div>
+
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #fcd34d'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>
+                      Filing Rate: {depressionFilingRate}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="5" 
+                      max="15" 
+                      value={depressionFilingRate} 
+                      onChange={(e) => setDepressionFilingRate(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#f59e0b'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#78350f', marginTop: '4px'}}>
+                      <span>5%</span>
+                      <span>10%</span>
+                      <span>15%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#92400e', marginTop: '8px', background: '#fef3c7', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 10%
+                    </div>
+                  </div>
+
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #fcd34d'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#92400e', marginBottom: '8px'}}>
+                      Acceptance: {depressionAcceptanceRate}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="30" 
+                      max="70" 
+                      value={depressionAcceptanceRate} 
+                      onChange={(e) => setDepressionAcceptanceRate(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#f59e0b'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#78350f', marginTop: '4px'}}>
+                      <span>30%</span>
+                      <span>50%</span>
+                      <span>70%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#92400e', marginTop: '8px', background: '#fef3c7', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 50%
+                    </div>
+                  </div>
+
+                </div>
+
+                <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #f59e0b'}}>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px'}}>
+                    <div style={{background: '#fffbeb', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#78350f', marginBottom: '4px'}}>Affected</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#f59e0b'}}>{Math.round((selectedOrganization?.personnel || 25879) * 0.18).toLocaleString()}</div>
+                    </div>
+                    <div style={{background: '#fffbeb', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#78350f', marginBottom: '4px'}}>Prevented</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#f59e0b'}}>{Math.round((selectedOrganization?.personnel || 25879) * 0.18 * (depressionEffectiveness / 100)).toLocaleString()}</div>
+                    </div>
+                    <div style={{background: '#fffbeb', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#78350f', marginBottom: '4px'}}>Savings</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#f59e0b'}}>{fmt((Math.round((selectedOrganization?.personnel || 25879) * 0.18 * (depressionEffectiveness / 100) * (depressionFilingRate / 100) * (depressionAcceptanceRate / 100))) * 65000)}</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            )}
           </div>
+
+          <div style={{background: 'white', borderRadius: '12px', border: '3px solid #7c3aed', overflow: 'hidden'}}>
+            <div 
+              onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')}
+              style={{padding: '24px', cursor: 'pointer', background: expandedFactor === 'sud' ? '#f3e8ff' : 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+            >
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#7c3aed', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '24px', fontWeight: 'bold'}}>S</div>
+                <div>
+                  <h3 style={{fontSize: '22px', fontWeight: 'bold', color: '#5b21b6', margin: 0}}>Substance Use Disorder (SUD)</h3>
+                  <p style={{fontSize: '14px', color: '#6b21a8', margin: '4px 0 0 0'}}>Prevalence: 20-30% | {Math.round((selectedOrganization?.personnel || 25879) * 0.25).toLocaleString()} officers affected</p>
+                </div>
+              </div>
+              {expandedFactor === 'sud' ? <ChevronUp size={24} color="#7c3aed" /> : <ChevronDown size={24} color="#7c3aed" />}
+            </div>
+
+            {expandedFactor === 'sud' && (
+              <div style={{padding: '24px', background: '#f3e8ff', borderTop: '2px solid #d8b4fe'}}>
+                
+                <div style={{marginBottom: '24px'}}>
+                  <h4 style={{fontSize: '16px', fontWeight: 'bold', color: '#5b21b6', marginBottom: '12px'}}>About SUD in Law Enforcement</h4>
+                  <p style={{fontSize: '14px', color: '#6b21a8', lineHeight: 1.6, marginBottom: '12px'}}>
+                    25% have alcohol misuse issues—triple civilian rates. 33% binge drinking past month. Often used to self-medicate PTSD. 41.6% of LE arrests are alcohol/drug-related.
+                  </p>
+                  <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #d8b4fe'}}>
+                    <div style={{fontSize: '13px', color: '#5b21b6', fontWeight: 'bold', marginBottom: '4px'}}>Sources:</div>
+                    <div style={{fontSize: '12px', color: '#6b21a8'}}>
+                      NIH: 18.1% male/15.9% female adverse consequences | CuraLinc: 67% severity reduction, 78% at-risk elimination
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px'}}>
+                  
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #d8b4fe'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#5b21b6', marginBottom: '8px'}}>
+                      Effectiveness: {sudEffectiveness}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="60" 
+                      max="78" 
+                      value={sudEffectiveness} 
+                      onChange={(e) => setSudEffectiveness(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#7c3aed'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b21a8', marginTop: '4px'}}>
+                      <span>60%</span>
+                      <span>67%</span>
+                      <span>78%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#5b21b6', marginTop: '8px', background: '#f3e8ff', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 67% (CuraLinc)
+                    </div>
+                  </div>
+
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #d8b4fe'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#5b21b6', marginBottom: '8px'}}>
+                      Filing Rate: {sudFilingRate}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="5" 
+                      max="15" 
+                      value={sudFilingRate} 
+                      onChange={(e) => setSudFilingRate(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#7c3aed'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b21a8', marginTop: '4px'}}>
+                      <span>5%</span>
+                      <span>10%</span>
+                      <span>15%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#5b21b6', marginTop: '8px', background: '#f3e8ff', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 10%
+                    </div>
+                  </div>
+
+                  <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #d8b4fe'}}>
+                    <label style={{display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#5b21b6', marginBottom: '8px'}}>
+                      Acceptance: {sudAcceptanceRate}%
+                    </label>
+                    <input 
+                      type="range" 
+                      min="30" 
+                      max="70" 
+                      value={sudAcceptanceRate} 
+                      onChange={(e) => setSudAcceptanceRate(Number(e.target.value))} 
+                      style={{width: '100%', height: '8px', accentColor: '#7c3aed'}}
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b21a8', marginTop: '4px'}}>
+                      <span>30%</span>
+                      <span>50%</span>
+                      <span>70%</span>
+                    </div>
+                    <div style={{fontSize: '12px', color: '#5b21b6', marginTop: '8px', background: '#f3e8ff', padding: '8px', borderRadius: '4px'}}>
+                      Standard: 50%
+                    </div>
+                  </div>
+
+                </div>
+
+                <div style={{background: 'white', padding: '16px', borderRadius: '10px', border: '2px solid #7c3aed'}}>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px'}}>
+                    <div style={{background: '#f3e8ff', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#6b21a8', marginBottom: '4px'}}>Affected</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#7c3aed'}}>{Math.round((selectedOrganization?.personnel || 25879) * 0.25).toLocaleString()}</div>
+                    </div>
+                    <div style={{background: '#f3e8ff', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#6b21a8', marginBottom: '4px'}}>Prevented</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#7c3aed'}}>{Math.round((selectedOrganization?.personnel || 25879) * 0.25 * (sudEffectiveness / 100)).toLocaleString()}</div>
+                    </div>
+                    <div style={{background: '#f3e8ff', padding: '12px', borderRadius: '8px'}}>
+                      <div style={{fontSize: '12px', color: '#6b21a8', marginBottom: '4px'}}>Savings</div>
+                      <div style={{fontSize: '20px', fontWeight: 'bold', color: '#7c3aed'}}>{fmt((Math.round((selectedOrganization?.personnel || 25879) * 0.25 * (sudEffectiveness / 100) * (sudFilingRate / 100) * (sudAcceptanceRate / 100))) * 65000)}</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            )}
+          </div>
+
         </div>
       )}
+
+      {activeTab === 'proof' && (
+        <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+          
+          <div style={{background: 'white', borderRadius: '16px', padding: '32px', border: '3px solid #3b82f6', boxShadow: '0 4px 20px rgba(59,130,246,0.15)'}}>
+            <h2 style={{fontSize: '28px', fontWeight: 'bold', color: '#1e40af', marginBottom: '24px', textAlign: 'center'}}>Air Force Proven Results (2021-2025)</h2>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px'}}>
+              {[
+                {label: 'DAF Members', value: '11,215'},
+                {label: 'Total Sessions', value: '77,333'},
+                {label: 'Hours Delivered', value: '54,377'},
+                {label: 'Satisfaction', value: '79%'}
+              ].map((stat, i) => (
+                <div key={i} style={{background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(59,130,246,0.3)'}}>
+                  <div style={{fontSize: '13px', color: 'rgba(255,255,255,0.9)', marginBottom: '8px'}}>{stat.label}</div>
+                  <div style={{fontSize: '36px', fontWeight: 'bold', color: 'white'}}>{stat.value}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px'}}>
+              {['+13% Individual Readiness', '+7% Career Commitment', '+15% Unit Readiness'].map((result, i) => (
+                <div key={i} style={{background: '#dbeafe', border: '2px solid #3b82f6', borderRadius: '10px', padding: '20px', textAlign: 'center'}}>
+                  <div style={{fontSize: '24px', fontWeight: 'bold', color: '#1e3a8a'}}>{result}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{textAlign: 'center'}}>
+              <button 
+                onClick={() => setShowCommercialResults(!showCommercialResults)}
+                style={{background: 'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)', color: 'white', border: 'none', padding: '14px 28px', borderRadius: '10px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124,58,237,0.4)'}}
+              >
+                {showCommercialResults ? '− Hide' : '+ Show'} Commercial Results
+              </button>
+            </div>
+            
+            {showCommercialResults && (
+              <div style={{marginTop: '24px', background: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '3px solid #7c3aed', borderRadius: '16px', padding: '32px'}}>
+                <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#6b21a8', textAlign: 'center', marginBottom: '16px'}}>Enterprise & Federal Results</h3>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
+                  {[
+                    {value: '+18%', label: 'Leadership Capability', sub: 'Enterprise clients'},
+                    {value: '+22%', label: 'Manager Effectiveness', sub: '360° assessments'},
+                    {value: '85%', label: 'Client Satisfaction', sub: 'Commercial & government'}
+                  ].map((metric, i) => (
+                    <div key={i} style={{background: 'white', borderRadius: '12px', padding: '20px', textAlign: 'center', border: '2px solid #a78bfa'}}>
+                      <div style={{fontSize: '32px', fontWeight: 'bold', color: '#6b21a8', marginBottom: '8px'}}>{metric.value}</div>
+                      <div style={{fontSize: '14px', fontWeight: 'bold', color: '#7e22ce', marginBottom: '4px'}}>{metric.label}</div>
+                      <div style={{fontSize: '12px', color: '#9333ea'}}>{metric.sub}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div style={{background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)', border: '3px solid #dc2626', borderRadius: '16px', padding: '32px'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+              <div style={{width: '56px', height: '56px', background: '#dc2626', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px'}}>📄</div>
+              <div>
+                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#991b1b', margin: 0}}>Peer-Reviewed Research: JAMA 2024</h2>
+                <p style={{fontSize: '14px', color: '#7f1d1d', margin: '4px 0 0 0'}}>Independent validation of mental health outcomes</p>
+              </div>
+            </div>
+            <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #fca5a5'}}>
+              <div style={{fontSize: '48px', fontWeight: 'bold', color: '#dc2626', textAlign: 'center', marginBottom: '12px'}}>21.6%</div>
+              <p style={{fontSize: '18px', color: '#991b1b', textAlign: 'center', marginBottom: '16px', fontWeight: '600'}}>
+                Reduction in burnout & mental health conditions
+              </p>
+              <div style={{fontSize: '14px', color: '#7f1d1d', lineHeight: 1.6}}>
+                Published in Journal of the American Medical Association Network Open. Study demonstrated clinically significant improvements in burnout prevention, stress management, and mental health outcomes.
+              </div>
+            </div>
+          </div>
+
+          <div style={{background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)', border: '3px solid #16a34a', borderRadius: '16px', padding: '32px'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+              <div style={{width: '56px', height: '56px', background: '#16a34a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px'}}>🛡️</div>
+              <div>
+                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#15803d', margin: 0}}>Montreal Police: 79% Suicide Reduction</h2>
+                <p style={{fontSize: '14px', color: '#166534', margin: '4px 0 0 0'}}>22-year peer-reviewed study - the gold standard</p>
+              </div>
+            </div>
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #86efac'}}>
+                <div style={{fontSize: '14px', color: '#166534', marginBottom: '8px', fontWeight: '600'}}>Baseline (1986-1996)</div>
+                <div style={{fontSize: '36px', fontWeight: 'bold', color: '#dc2626', marginBottom: '4px'}}>30.5 per 100K</div>
+                <div style={{fontSize: '13px', color: '#166534'}}>14 suicides in 11 years</div>
+              </div>
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #86efac'}}>
+                <div style={{fontSize: '14px', color: '#166534', marginBottom: '8px', fontWeight: '600'}}>Post-Program (1997-2018)</div>
+                <div style={{fontSize: '36px', fontWeight: 'bold', color: '#16a34a', marginBottom: '4px'}}>6.4 per 100K</div>
+                <div style={{fontSize: '13px', color: '#166534'}}>4 suicides in 12 years (79% reduction)</div>
+              </div>
+            </div>
+            <div style={{background: '#dcfce7', borderRadius: '10px', padding: '16px', marginTop: '16px', border: '2px solid #86efac'}}>
+              <p style={{fontSize: '13px', color: '#15803d', margin: 0, lineHeight: 1.6}}>
+                <strong>Program:</strong> Universal training, supervisor crisis intervention, 24/7 peer support, ongoing campaign. Published in Crisis journal.
+              </p>
+            </div>
+          </div>
+
+          <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+              <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>📚</div>
+              <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#4338ca', margin: 0}}>How BetterUp Builds Mastery</h2>
+            </div>
+            
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
+              {[
+                {num: '1', title: 'REFLECT', desc: 'WPM assessment', icon: '🪞'},
+                {num: '2', title: 'LEARN', desc: 'Personalized journeys', icon: '📖'},
+                {num: '3', title: 'PRACTICE', desc: 'AI role-play', icon: '🎯'},
+                {num: '4', title: 'COMMIT', desc: 'Action plans', icon: '✅'},
+                {num: '5', title: 'MEASURE', desc: 'Pre-post growth', icon: '📊'}
+              ].map((step, i) => (
+                <div key={i} style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #818cf8', textAlign: 'center'}}>
+                  <div style={{fontSize: '28px', marginBottom: '8px'}}>{step.icon}</div>
+                  <div style={{fontSize: '11px', fontWeight: 'bold', color: '#1e293b', marginBottom: '6px'}}>{step.num}. {step.title}</div>
+                  <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>{step.desc}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
+              <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#4338ca', marginBottom: '12px'}}>Applied to CBP Operations:</h3>
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
+                <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                  <strong style={{color: '#4338ca'}}>Use-of-Force:</strong> Practice scenarios before real encounters
+                </div>
+                <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                  <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies
+                </div>
+                <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                  <strong style={{color: '#4338ca'}}>Post-Incident:</strong> Just-in-time stress management
+                </div>
+                <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                  <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at 3-5yr, pre-2028 points
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #e5e7eb'}}>
+            <h3 style={{fontSize: '20px', fontWeight: 'bold', color: '#003d82', marginBottom: '16px'}}>Complete Research Bibliography</h3>
+            <div style={{fontSize: '13px', color: '#475569', lineHeight: 1.8}}>
+              • <strong><a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>JAMA 2024</a>:</strong> 21.6% burnout reduction<br/>
+              • <strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3380405/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Montreal Police (Crisis)</a>:</strong> 79% suicide reduction, 22-year validation<br/>
+              • <strong><a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>CuraLinc EAP 2022</a>:</strong> 67% alcohol severity reduction, 78% at-risk elimination<br/>
+              • <strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4010956/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>HeartMath Police</a>:</strong> 40% stress reduction<br/>
+              • <strong><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0240902" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>UK Police (PLOS ONE)</a>:</strong> 20.5% PTSD in 40,299 officers<br/>
+              • <strong><a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>GAO-24-107029</a>:</strong> CBP recruitment/retention challenges<br/>
+              • <strong><a href="https://www.nteu.org/legislative-action/congressional-testimony/fy-2025-budget-request-cbp" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>NTEU April 2024</a>:</strong> 156 suicides 2007-2022, operational tempo<br/>
+              • <strong><a href="https://www.betterup.com/customers/united-states-airforce" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>BetterUp DAF</a>:</strong> +7% career commitment, 11,215 members
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {activeTab === 'implementation' && (
+        <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+          
+          <div style={{background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', border: '4px solid #10b981', borderRadius: '16px', padding: '32px'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+              <div style={{width: '48px', height: '48px', background: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>🗺️</div>
+              <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Proposed Implementation: Phased Rollout</h2>
+            </div>
+            
+            <p style={{fontSize: '15px', color: '#047857', marginBottom: '20px', lineHeight: 1.6}}>
+              Based on Air Force Weapons School deployment—start with high-impact pilot, validate results, then scale across CBP enterprise:
+            </p>
+
+            <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+                  <div style={{width: '40px', height: '40px', background: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>1</div>
+                  <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 1: Pilot (3-6 months)</h3>
+                </div>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
+                  <div>
+                    <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
+                    <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                      <li>Border Patrol Academy (new agents)</li>
+                      <li>Single OFO field office (Tucson, NY)</li>
+                      <li>500-1,000 seats</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
+                    <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                      <li>Validate ROI with actual data</li>
+                      <li>Establish baseline metrics</li>
+                      <li>Build champion network</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+                  <div style={{width: '40px', height: '40px', background: '#059669', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>2</div>
+                  <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 2: Targeted Expansion (6-12 months)</h3>
+                </div>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
+                  <div>
+                    <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
+                    <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                      <li>OFO offices facing 2028 retirement</li>
+                      <li>High-tempo USBP sectors</li>
+                      <li>5,000-10,000 seats</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
+                    <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                      <li>Demonstrate retention impact pre-2028</li>
+                      <li>Reduce workers' comp claims</li>
+                      <li>Scale proven pilot model</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #34d399'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px'}}>
+                  <div style={{width: '40px', height: '40px', background: '#047857', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 'bold'}}>3</div>
+                  <h3 style={{fontSize: '18px', fontWeight: 'bold', color: '#065f46', margin: 0}}>Phase 3: Enterprise (12+ months)</h3>
+                </div>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#064e3b'}}>
+                  <div>
+                    <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Target Population:</div>
+                    <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                      <li>All CBP components nationwide</li>
+                      <li>OFO, USBP, AMO, OT, OPR</li>
+                      <li>20,000+ seats enterprise-wide</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <div style={{fontWeight: 'bold', marginBottom: '4px'}}>Goals:</div>
+                    <ul style={{margin: 0, paddingLeft: '16px', lineHeight: 1.6}}>
+                      <li>Full CBPX integration</li>
+                      <li>Max knowledge preservation</li>
+                      <li>Enterprise resilience infrastructure</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{background: 'white', borderRadius: '16px', padding: '32px', border: '3px solid #0066cc'}}>
+            <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#003d82', marginBottom: '24px'}}>Proposed Metrics for CBP Implementation</h2>
+            
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px'}}>
+              <div style={{background: '#eff6ff', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
+                <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Individual Level</h4>
+                <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
+                  <li>Whole Person Model pre-post</li>
+                  <li>Decision-making capability</li>
+                  <li>Stress management</li>
+                  <li>Resilience & optimism</li>
+                  <li>Career commitment</li>
+                </ul>
+              </div>
+              
+              <div style={{background: '#eff6ff', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
+                <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Sector/Field Office</h4>
+                <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
+                  <li>Team cohesion trends</li>
+                  <li>Leadership climate</li>
+                  <li>Morale indicators</li>
+                  <li>Reflection Points check-ins</li>
+                </ul>
+              </div>
+              
+              <div style={{background: '#eff6ff', borderRadius: '10px', padding: '16px', border: '2px solid #60a5fa'}}>
+                <h4 style={{fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '12px'}}>Organizational</h4>
+                <ul style={{margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.7}}>
+                  <li>Retention vs baseline</li>
+                  <li>Workers' comp claim trends</li>
+                  <li>Readiness metrics</li>
+                  <li>ROI tracking (actual vs projected)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #e5e7eb'}}>
+            <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#003d82'}}>Model Assumptions</h4>
+            <div style={{fontSize: '14px', color: '#475569', lineHeight: 1.8}}>
+              <div style={{marginBottom: '8px'}}><strong>Attrition Rates:</strong> OFO {(selectedOrganization?.attritionRate || 6.3).toFixed(1)}% annually | USBP 4.2%</div>
+              {isOFO && <div style={{fontSize: '14px', color: '#dc2626', fontWeight: 'bold', marginBottom: '8px'}}>⚠️ 2028 OFO: 2,220 officers retiring (400% increase)</div>}
+              <div style={{marginBottom: '8px'}}><strong>Replacement Cost:</strong> $150K per separation (recruitment, training, productivity loss)</div>
+              <div style={{marginBottom: '8px'}}><strong>Workers' Comp:</strong> $65K average mental health claim (35% of total claims)</div>
+              <div style={{marginBottom: '8px'}}><strong>Discipline Cases:</strong> 11.3% annually, 20% stress-related, 1.78% alcohol-related</div>
+              <div style={{marginBottom: '8px'}}><strong>Prevention Rates:</strong> 22% workers' comp (JAMA) + Leadership boost when Lead deployed</div>
+              <div style={{marginBottom: '8px'}}><strong>Lead Pricing:</strong> {fmt(calculations.leadPrice)}/seat ({use6MonthLead ? '6-month' : '12-month'})</div>
+              <div><strong>Ready Pricing:</strong> $150/seat (12 months)</div>
+            </div>
+          </div>
+
+          <div style={{background: '#fef3c7', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+            <h3 style={{fontSize: '24px', fontWeight: 'bold', color: '#92400e', marginBottom: '16px'}}>Third Pathway: Discipline Cost Reduction</h3>
+            <p style={{fontSize: '14px', color: '#78350f', marginBottom: '16px', lineHeight: 1.6}}>
+              CBP processes ~6,760 annual misconduct cases (11.3% of workforce). 20% are stress-related and 41.6% of arrests are alcohol/drug-related. BetterUp prevents these through early intervention:
+            </p>
+            <div style={{display: 'grid', gap: '12px'}}>
+              <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Stress-Related Prevention</div>
+                <div style={{fontSize: '12px', color: '#78350f'}}>15% of stress cases prevented through resilience (HeartMath 40% stress reduction applied conservatively)</div>
+              </div>
+              <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Alcohol-Related Prevention</div>
+                <div style={{fontSize: '12px', color: '#78350f'}}>78% at-risk no longer at-risk × 50% reach = effective prevention (CuraLinc peer-reviewed)</div>
+              </div>
+              <div style={{background: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #fbbf24'}}>
+                <div style={{fontSize: '13px', fontWeight: 'bold', color: '#92400e', marginBottom: '4px'}}>Cost Per Case</div>
+                <div style={{fontSize: '12px', color: '#78350f'}}>Investigation ($9,500) + Productivity ($14,000) = $23,500 avg. Arrests add termination ($80K) = $103,500 total</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid #e5e7eb'}}>
+            <h4 style={{fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#003d82'}}>Data Sources & Validation</h4>
+            <div style={{fontSize: '12px', color: '#64748b', lineHeight: 1.8}}>
+              • <strong><a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>GAO-24-107029</a>:</strong> CBP recruitment/retention, replacement costs<br/>
+              • <strong><a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2817481" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>JAMA 2024</a>:</strong> 21.6% burnout/mental health reduction<br/>
+              • <strong><a href="https://www.oig.dhs.gov/sites/default/files/assets/2019-06/OIG-19-48-Jun19.pdf" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>DHS OIG</a>:</strong> Discipline volumes, misconduct oversight<br/>
+              • <strong><a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>CuraLinc EAP 2022</a>:</strong> 67% alcohol reduction, 78% at-risk elimination<br/>
+              • <strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4010956/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>HeartMath Police</a>:</strong> 40% stress reduction, decision-making improvement<br/>
+              • <strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3380405/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Montreal Police (Crisis)</a>:</strong> 79% suicide reduction over 22 years<br/>
+              • <strong><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0120644" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Ebbinghaus forgetting curve</a>:</strong> Learning decay & spaced repetition<br/>
+              • <strong><a href="https://www.betterup.com/customers/united-states-airforce" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>BetterUp DAF</a>:</strong> +7% career commitment, +13% individual readiness, +15% unit readiness<br/>
+              • <strong><a href="https://www.nteu.org/legislative-action/congressional-testimony/fy-2025-budget-request-cbp" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>NTEU April 2024</a>:</strong> Operational tempo, 156 suicides 2007-2022<br/>
+              • <strong><a href="https://www.nellis.af.mil/About/Fact-Sheets/Display/Article/284156/united-states-air-force-weapons-school/" target="_blank" rel="noopener noreferrer" style={{color: '#0066cc', textDecoration: 'none'}}>Air Force Weapons School</a>:</strong> Mastery framework for high-performance<br/>
+              • <strong>BetterUp volume pricing:</strong> Enterprise contract rates (Deal Desk for 1000+ seats)
+            </div>
+          </div>
+
+          <div style={{background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', border: '3px solid #3b82f6', borderRadius: '16px', padding: '32px', textAlign: 'center'}}>
+            <h2 style={{fontSize: '32px', fontWeight: 'bold', color: '#1e40af', marginBottom: '16px'}}>
+              Ready to Discuss Implementation?
+            </h2>
+            <p style={{fontSize: '16px', color: '#1e3a8a', marginBottom: '24px', maxWidth: '700px', margin: '0 auto 24px'}}>
+              This calculator provides evidence-based projections. Real results come from actual implementation with your personnel, tracking your metrics, in your operational environment.
+            </p>
+            <div style={{fontSize: '14px', color: '#1e40af'}}>
+              Contact: <strong>Desiree Aveina, Director of Resiliency Program, CBP</strong>
+            </div>
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 };
