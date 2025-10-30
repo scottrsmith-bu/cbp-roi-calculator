@@ -69,8 +69,8 @@ const CBPDashboard = () => {
     const baseEngagement = 0.65;
     const engagement = manualEngagement !== null ? manualEngagement / 100 : baseEngagement;
     const activeUsers = Math.round(totalSeats * engagement);
-    const leadPrice = 3600;
-    const readyPrice = 1800;
+    const leadPrice = 5785;
+    const readyPrice = 150;
     const totalInvestment = (leadSeats * leadPrice) + (readySeats * readyPrice);
     const retentionLift = manualRetentionOverride !== null ? manualRetentionOverride / 100 : 0.07;
     const readinessLift = manualReadinessOverride !== null ? manualReadinessOverride / 100 : 0.37;
@@ -131,7 +131,7 @@ const CBPDashboard = () => {
       "How is the net savings calculated?": "Net savings = Total savings (retention + workers comp + discipline) minus BetterUp investment. We calculate savings from preventing separations ($150K each), Workers' Comp - Mental Health Claims/FECA ($65K each), and discipline cases ($45K each), then subtract the cost of Lead ($3,600/seat) and Ready ($1,800/seat) coaching.",
       "Why is OFO facing a retirement crisis?": "In 2028, OFO officers hired under Law Enforcement 6(c) retirement coverage become eligible at age 50. Combined with 6.8% annual attrition and CBP's 12-month hiring timeline, this creates unprecedented staffing challenges. Every prevented separation saves $150K in recruitment and training costs.",
       "Explain the COA differences": "Lead-Only targets 15% critical talent (supervisors, specialists) at $3,600/seat for intensive 1:1 coaching. Ready-Only reaches 35% frontline officers (GS-11/12) at $1,800/seat for digital coaching. Lead+Ready combines both for comprehensive coverage addressing all three cost pathways.",
-      "What's Lead vs Ready?": "Lead ($3,600/seat) provides intensive 1:1 coaching for supervisors and critical talent, focusing on leadership development. Ready ($1,800/seat) delivers scalable digital coaching for frontline officers, emphasizing resilience and career readiness. Both include AI coaching and assessments.",
+      "What's Lead vs Ready?": "Lead ($5,785/seat for 12-month commitment) provides intensive 1:1 coaching for supervisors and critical talent, focusing on leadership development. Ready ($150/seat) delivers scalable digital coaching for frontline officers, emphasizing resilience and career readiness. Both include AI coaching and assessments.",
       "How does Leadership Culture affect ROI?": "Leadership culture (measured by our Professional Standards metric) reduces discipline cases by 22%. Better-led teams have fewer misconduct incidents, lower use-of-force complaints, and stronger adherence to standards. Each prevented discipline case saves $45K in investigation, legal, and administrative costs."
     };
     setChatMessages([...chatMessages, 
@@ -345,9 +345,9 @@ return (
               </h2>
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px'}}>
                 {[
-                  { id: 'lead-only', label: 'Lead Only', desc: '15% critical talent • Intensive leadership development', seats: Math.round(calculations.officers * 0.15), price: 3600 },
+                  { id: 'lead-only', label: 'Lead Only', desc: '15% critical talent • Intensive leadership development', seats: Math.round(calculations.officers * 0.15), price: 5785 },
                   { id: 'lead-ready', label: 'Lead + Ready', desc: '15% critical talent + 20% frontline • Comprehensive coverage', seats: Math.round(calculations.officers * 0.35), price: 'Mixed' },
-                  { id: 'ready-only', label: 'Ready Only', desc: '35% frontline • Scalable resilience & career readiness', seats: Math.round(calculations.officers * 0.35), price: 1800 }
+                  { id: 'ready-only', label: 'Ready Only', desc: '35% frontline • Scalable resilience & career readiness', seats: Math.round(calculations.officers * 0.35), price: 150 }
                 ].map(option => (
                   <button
                     key={option.id}
@@ -386,7 +386,7 @@ return (
                 <div style={{marginTop: '16px', padding: '24px', background: '#f8fafc', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
                   <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px'}}>
                     <div style={{background: 'white', padding: '20px', borderRadius: '10px', border: '2px solid #0066cc'}}>
-                      <div style={{fontSize: '18px', fontWeight: '700', color: '#0066cc', marginBottom: '12px'}}>💎 Lead ($3,600/seat)</div>
+                      <div style={{fontSize: '18px', fontWeight: '700', color: '#0066cc', marginBottom: '12px'}}>💎 Lead ($5,785/seat - 12 month)</div>
                       <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7', marginBottom: '12px'}}>
                         <strong>Who:</strong> Supervisors (GS-13+), senior specialists, high-potentials, critical talent<br/>
                         <strong>What:</strong> Intensive 1:1 coaching with dedicated professional coaches<br/>
@@ -399,7 +399,7 @@ return (
                     </div>
 
                     <div style={{background: 'white', padding: '20px', borderRadius: '10px', border: '2px solid #0066cc'}}>
-                      <div style={{fontSize: '18px', fontWeight: '700', color: '#0066cc', marginBottom: '12px'}}>🎯 Ready ($1,800/seat)</div>
+                      <div style={{fontSize: '18px', fontWeight: '700', color: '#0066cc', marginBottom: '12px'}}>🎯 Ready ($150/seat - 12 month)</div>
                       <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7', marginBottom: '12px'}}>
                         <strong>Who:</strong> Frontline officers (GS-11/12), patrol agents, entry-level personnel<br/>
                         <strong>What:</strong> Scalable digital coaching with AI-powered support<br/>
