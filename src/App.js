@@ -147,7 +147,7 @@ return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '24px'}}>
       
       {/* PRETTIER HEADER */}
-      <div style={{maxWidth: '1200px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '48px', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #0078ae'}}>
+      <div style={{maxWidth: '1200px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '48px 32px', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #0078ae'}}>
         <div style={{marginBottom: '32px'}}>
           <h1 style={{fontSize: '42px', fontWeight: '900', color: 'white', marginBottom: '16px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
             Three Costs, One Crisis
