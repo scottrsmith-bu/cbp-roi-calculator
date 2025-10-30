@@ -147,7 +147,7 @@ return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
       
       {/* PRETTIER HEADER */}
-      <div style={{maxWidth: '1200px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '48px 32px', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #0078ae'}}>
+      <div style={{maxWidth: '1200px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '32px', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #0078ae'}}>
         <div style={{marginBottom: '32px'}}>
           <h1 style={{fontSize: '42px', fontWeight: '900', color: 'white', marginBottom: '16px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
             Three Costs, One Crisis
@@ -1062,29 +1062,29 @@ return (
               </div>
 
               <div style={{display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px', margin: '0 auto 32px'}}>
-                <div style={{background: '#e8f4e0', border: '3px solid #5e9732', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#5e9732', marginBottom: '8px'}}>
+                <div style={{background: '#e8f5e9', border: '3px solid #2e7d32', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#1b5e20', marginBottom: '8px'}}>
                     ✅ PREVENTION: $1,500-2,500 per officer
                   </div>
-                  <div style={{fontSize: '15px', color: '#4a7628', lineHeight: '1.6'}}>
+                  <div style={{fontSize: '15px', color: '#2e7d32', lineHeight: '1.6'}}>
                     Proactive coaching • Early symptom detection • Resilience building • Leadership development • 10:1 ROI
                   </div>
                 </div>
 
-                <div style={{background: '#fed7aa', border: '3px solid #f97316', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '60px'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c2410c', marginBottom: '8px'}}>
+                <div style={{background: '#fff3e0', border: '3px solid #f57c00', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '60px'}}>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#e65100', marginBottom: '8px'}}>
                     ⚠️ CRISIS: $40,000-85,000 per case
                   </div>
-                  <div style={{fontSize: '15px', color: '#9a3412', lineHeight: '1.6'}}>
+                  <div style={{fontSize: '15px', color: '#ef6c00', lineHeight: '1.6'}}>
                     Workers' Comp - Mental Health Claims (FECA) • Extended sick leave • Treatment costs • Temporary replacements • 2:1 ROI
                   </div>
                 </div>
 
-                <div style={{background: '#fecaca', border: '3px solid #c41230', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '120px'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#8f0e28', marginBottom: '8px'}}>
+                <div style={{background: '#ffebee', border: '3px solid #c41230', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '120px'}}>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#b71c1c', marginBottom: '8px'}}>
                     🚨 CATASTROPHIC: $150,000+ per separation
                   </div>
-                  <div style={{fontSize: '15px', color: '#6d0a1f', lineHeight: '1.6'}}>
+                  <div style={{fontSize: '15px', color: '#c62828', lineHeight: '1.6'}}>
                     Terminations • Permanent disability • Institutional knowledge loss • Team disruption • Negative ROI
                   </div>
                 </div>
