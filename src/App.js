@@ -472,7 +472,7 @@ return (
                     <div style={{background: 'white', padding: '20px', borderRadius: '10px', border: '2px solid #005288'}}>
                       <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>🎯 Ready (Tiered Volume Pricing - 12 month)</div>
                       <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7', marginBottom: '12px'}}>
-                        <strong>Who:</strong> Frontline officers (GS-11/12), patrol agents, entry-level personnel<br/>
+                        <strong>Who:</strong> CBP Officers (GS-11/12), Border Patrol Agents, entry-level personnel<br/>
                         <strong>What:</strong> Scalable digital coaching with AI-powered support<br/>
                         <strong>Focus:</strong> Resilience, stress management, career readiness, work-life integration<br/>
                         <strong>Delivery:</strong> On-demand AI coaching + digital resources + assessments
