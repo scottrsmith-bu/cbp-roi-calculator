@@ -299,7 +299,8 @@ const CBPDashboard = () => {
     const baseEngagement = 0.65;
     const engagement = manualEngagement !== null ? manualEngagement / 100 : baseEngagement;
     const activeUsers = Math.round(totalSeats * engagement);
-    const leadPrice = 5785;
+// Coverage = how much of the org we actually reach with engaged seats
+const coverage = Math.min(1, activeUsers / data.officers);    const leadPrice = 5785;
     const totalInvestment = (leadSeats * leadPrice) + (readySeats * readyPrice);
     
     // RETENTION CALCULATIONS - Using behavioral health separations
@@ -312,25 +313,28 @@ const CBPDashboard = () => {
     
     // BetterUp prevents portion of behavioral separations based on coaching effectiveness
     // Weighted average effectiveness across all conditions
-    const weightedEffectiveness = (
-      (behavioralHealthCalcs.ptsdSeparations * (ptsdCoachingEffectiveness / 100)) +
+    const weightedEffectiveness = behavioralSeparations > 0
+  ? (
+      (behavioralHealthCalcs.ptsdSeparations       * (ptsdCoachingEffectiveness / 100)) +
       (behavioralHealthCalcs.depressionSeparations * (depressionCoachingEffectiveness / 100)) +
-      (behavioralHealthCalcs.anxietySeparations * (anxietyCoachingEffectiveness / 100)) +
-      (behavioralHealthCalcs.sudSeparations * (sudCoachingEffectiveness / 100))
-    ) / behavioralSeparations;
+      (behavioralHealthCalcs.anxietySeparations    * (anxietyCoachingEffectiveness / 100)) +
+      (behavioralHealthCalcs.sudSeparations        * (sudCoachingEffectiveness / 100))
+    ) / behavioralSeparations
+  : 0;
     
-    const separationsPrevented = Math.round(behavioralSeparations * weightedEffectiveness * engagement);
-    const replacementCost = 150000;
+    const separationsPrevented = Math.round(
+  behavioralSeparations * (isFinite(weightedEffectiveness) ? weightedEffectiveness : 0) * coverage
+);    const replacementCost = 150000;
     const retentionSavings = separationsPrevented * replacementCost;
     
     // WORKERS' COMP CALCULATIONS - Using behavioral health claims
     const readinessLift = manualReadinessOverride !== null ? manualReadinessOverride / 100 : 0.37;
     
     // Claims prevented by condition
-    const ptsdClaimsPrevented = Math.round(behavioralHealthCalcs.ptsdWcClaims * (ptsdCoachingEffectiveness / 100) * engagement);
-    const depressionClaimsPrevented = Math.round(behavioralHealthCalcs.depressionWcClaims * (depressionCoachingEffectiveness / 100) * engagement);
-    const anxietyClaimsPrevented = Math.round(behavioralHealthCalcs.anxietyWcClaims * (anxietyCoachingEffectiveness / 100) * engagement);
-    const sudClaimsPrevented = Math.round(behavioralHealthCalcs.sudWcClaims * (sudCoachingEffectiveness / 100) * engagement);
+    const ptsdClaimsPrevented = Math.round(behavioralHealthCalcs.ptsdWcClaims * (ptsdCoachingEffectiveness / 100) * coverage);
+    const depressionClaimsPrevented = Math.round(behavioralHealthCalcs.depressionWcClaims * (depressionCoachingEffectiveness / 100) * coverage);
+    const anxietyClaimsPrevented = Math.round(behavioralHealthCalcs.anxietyWcClaims * (anxietyCoachingEffectiveness / 100) * coverage);
+    const sudClaimsPrevented = Math.round(behavioralHealthCalcs.sudWcClaims * (sudCoachingEffectiveness / 100) * coverage);
     
     const claimsPrevented = ptsdClaimsPrevented + depressionClaimsPrevented + anxietyClaimsPrevented + sudClaimsPrevented;
     
@@ -346,7 +350,7 @@ const CBPDashboard = () => {
     const profStandardsLift = manualProfStandardsOverride !== null ? manualProfStandardsOverride / 100 : 0.22;
     const baselineDisciplineCases = Math.round(data.officers * 0.035);
     const avgDisciplineCost = 45000;
-    const casesPrevented = Math.round(baselineDisciplineCases * profStandardsLift * engagement);
+    const casesPrevented = Math.round(baselineDisciplineCases * profStandardsLift * coverage);
     const disciplineSavings = casesPrevented * avgDisciplineCost;
     
     // TOTALS
@@ -2092,6 +2096,89 @@ const CBPDashboard = () => {
       )}
     </div>
   );
+};
+
+
+// ---- COA Preview Helper (ignores manual seat overrides on purpose) ----
+const computeCoaScenario = (optionId) => {
+  const data = orgData[org];
+
+  // Map COA → coverage %, Ready price
+  let readyPercent, leadPercent, readyPrice;
+  if (optionId === 'pilot') {
+    readyPercent = 0.15;
+    leadPercent = includeLeadForLeaders ? 0.10 : 0;
+    readyPrice = 250;
+  } else if (optionId === 'targeted') {
+    readyPercent = 0.25;
+    leadPercent = includeLeadForLeaders ? 0.10 : 0;
+    readyPrice = 200;
+  } else { // 'scaled'
+    readyPercent = 0.75;
+    leadPercent = includeLeadForLeaders ? 0.10 : 0;
+    readyPrice = 150;
+  }
+
+  // Seats (no manual overrides for preview)
+  const leadSeats = Math.round(data.officers * leadPercent);
+  const readySeats = Math.max(Math.round(data.officers * readyPercent), 500);
+  const totalSeats = leadSeats + readySeats;
+
+  // Prices / investment
+  const leadPrice = 5785;
+  const totalInvestment = (leadSeats * leadPrice) + (readySeats * readyPrice);
+
+  // Engagement & coverage (use current engagement override if set)
+  const engagement = manualEngagement !== null ? manualEngagement / 100 : 0.65;
+  const activeUsers = Math.round(totalSeats * engagement);
+  const coverage = Math.min(1, activeUsers / data.officers); // scales impact by reach
+
+  // Baselines
+  const baselineDisciplineCases = Math.round(data.officers * 0.035);
+  const replacementCost = 150000;
+  const avgDisciplineCost = 45000;
+
+  const behavioralSeparations = behavioralHealthCalcs.totalBehavioralSeparations;
+  const weightedEffectiveness = behavioralSeparations > 0
+    ? (
+        (behavioralHealthCalcs.ptsdSeparations       * (ptsdCoachingEffectiveness / 100)) +
+        (behavioralHealthCalcs.depressionSeparations * (depressionCoachingEffectiveness / 100)) +
+        (behavioralHealthCalcs.anxietySeparations    * (anxietyCoachingEffectiveness / 100)) +
+        (behavioralHealthCalcs.sudSeparations        * (sudCoachingEffectiveness / 100))
+      ) / behavioralSeparations
+    : 0;
+
+  // Prevented counts (scaled by coverage)
+  const separationsPrevented = Math.round(behavioralSeparations * weightedEffectiveness * coverage);
+
+  const ptsdClaimsPrevented       = Math.round(behavioralHealthCalcs.ptsdWcClaims       * (ptsdCoachingEffectiveness / 100)       * coverage);
+  const depressionClaimsPrevented = Math.round(behavioralHealthCalcs.depressionWcClaims * (depressionCoachingEffectiveness / 100) * coverage);
+  const anxietyClaimsPrevented    = Math.round(behavioralHealthCalcs.anxietyWcClaims    * (anxietyCoachingEffectiveness / 100)    * coverage);
+  const sudClaimsPrevented        = Math.round(behavioralHealthCalcs.sudWcClaims        * (sudCoachingEffectiveness / 100)        * coverage);
+  const claimsPrevented = ptsdClaimsPrevented + depressionClaimsPrevented + anxietyClaimsPrevented + sudClaimsPrevented;
+
+  const profStandardsLift = (manualProfStandardsOverride !== null ? manualProfStandardsOverride / 100 : 0.22);
+  const casesPrevented = Math.round(baselineDisciplineCases * profStandardsLift * coverage);
+
+  // Savings
+  const retentionSavings = separationsPrevented * replacementCost;
+  const wcSavings =
+    (ptsdClaimsPrevented * ptsdWcAvgCost) +
+    (depressionClaimsPrevented * depressionWcAvgCost) +
+    (anxietyClaimsPrevented * anxietyWcAvgCost) +
+    (sudClaimsPrevented * sudWcAvgCost);
+  const disciplineSavings = casesPrevented * avgDisciplineCost;
+
+  const totalSavings = retentionSavings + wcSavings + disciplineSavings;
+  const netSavings = totalSavings - totalInvestment;
+  const roi = totalInvestment > 0 ? (netSavings / totalInvestment) * 100 : 0;
+
+  return {
+    leadSeats, readySeats, totalSeats,
+    activeUsers, coverage, totalInvestment,
+    retentionSavings, wcSavings, disciplineSavings,
+    totalSavings, netSavings, roi
+  };
 };
 
 export default CBPDashboard;
