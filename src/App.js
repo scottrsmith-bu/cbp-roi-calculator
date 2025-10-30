@@ -1058,16 +1058,16 @@ return (
               </div>
               
               <div style={{fontSize: '16px', color: '#6d0a1f', marginBottom: '32px', lineHeight: '1.7'}}>
-                Mental health costs follow a predictable escalation pattern. Early intervention at the <strong>Prevention</strong> level costs $1,500-2,500 per officer (LEAD+READY COA). Waiting until <strong>Crisis</strong> costs $40K-85K in workers' comp claims. Reaching <strong>Catastrophic</strong> outcomes costs $150K+ in separations plus institutional damage. The business case for prevention is overwhelming.
+                Mental health costs follow a predictable escalation pattern. Early intervention at the <strong>Prevention</strong> level costs $150-250 per officer annually through proactive coaching. Waiting until <strong>Crisis</strong> costs $40K-85K in workers' comp claims. Reaching <strong>Catastrophic</strong> outcomes costs $150K+ in separations plus institutional damage. The business case for prevention is overwhelming.
               </div>
 
               <div style={{display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px', margin: '0 auto 32px'}}>
                 <div style={{background: 'white', border: '4px solid #5e9732', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(94,151,50,0.2)'}}>
                   <div style={{fontSize: '22px', fontWeight: '800', color: '#5e9732', marginBottom: '8px'}}>
-                    ✅ PREVENTION: $1,500-2,500 per officer
+                    ✅ PREVENTION: $150-250 per officer
                   </div>
                   <div style={{fontSize: '15px', color: '#1e293b', lineHeight: '1.6'}}>
-                    Proactive coaching • Early symptom detection • Resilience building • Leadership development • 10:1 ROI
+                    Proactive digital coaching • Early symptom detection • Resilience building • Optional leadership development • 10:1 ROI
                   </div>
                 </div>
 
