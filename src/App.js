@@ -50,20 +50,23 @@ const CBPDashboard = () => {
   // Calculations
   const calculations = useMemo(() => {
     const data = orgData[org];
-    let leadPercent, readyPercent;
-    if (coa === 'conservative') {
+    let leadPercent, readyPercent, readyPrice;
+    if (coa === 'pilot') {
       readyPercent = 0.15;
       leadPercent = includeLeadForLeaders ? 0.10 : 0;
-    } else if (coa === 'moderate') {
-      readyPercent = 0.35;
+      readyPrice = 250; // Higher price for pilot
+    } else if (coa === 'targeted') {
+      readyPercent = 0.25;
       leadPercent = includeLeadForLeaders ? 0.10 : 0;
+      readyPrice = 200; // Mid-tier pricing
     } else {
-      readyPercent = 0.50;
+      readyPercent = 0.75;
       leadPercent = includeLeadForLeaders ? 0.10 : 0;
+      readyPrice = 150; // Best price at scale
     }
     
     const baseLeadSeats = Math.round(data.officers * leadPercent);
-    const baseReadySeats = Math.round(data.officers * readyPercent);
+    const baseReadySeats = Math.max(Math.round(data.officers * readyPercent), 500); // Minimum 500 seats
     const leadSeats = manualLeadSeats !== null ? manualLeadSeats : baseLeadSeats;
     const readySeats = manualReadySeats !== null ? manualReadySeats : baseReadySeats;
     const totalSeats = leadSeats + readySeats;
@@ -71,7 +74,6 @@ const CBPDashboard = () => {
     const engagement = manualEngagement !== null ? manualEngagement / 100 : baseEngagement;
     const activeUsers = Math.round(totalSeats * engagement);
     const leadPrice = 5785;
-    const readyPrice = 150;
     const totalInvestment = (leadSeats * leadPrice) + (readySeats * readyPrice);
     const retentionLift = manualRetentionOverride !== null ? manualRetentionOverride / 100 : 0.07;
     const readinessLift = manualReadinessOverride !== null ? manualReadinessOverride / 100 : 0.37;
@@ -153,7 +155,7 @@ return (
           <h2 style={{fontSize: '24px', fontWeight: '600', color: '#94a3b8', marginBottom: '24px', lineHeight: '1.3'}}>
             Understanding CBP's Interconnected Workforce Challenges
           </h2>
-          <p style={{fontSize: '17px', color: '#cbd5e1', lineHeight: '1.6', maxWidth: '900px'}}>
+          <p style={{fontSize: '17px', color: '#cbd5e1', lineHeight: '1.6', maxWidth: '1200px'}}>
             A data-driven analysis of CBP's workforce sustainability challenges and BetterUp's proven intervention framework
           </p>
         </div>
@@ -338,7 +340,7 @@ return (
               <div style={{fontSize: '24px', fontWeight: '700', color: '#1e40af', marginBottom: '12px'}}>
                 There's a Better Way Forward
               </div>
-              <div style={{fontSize: '17px', color: '#1e40af', lineHeight: '1.7', maxWidth: '900px', margin: '0 auto 24px'}}>
+              <div style={{fontSize: '17px', color: '#1e40af', lineHeight: '1.7', maxWidth: '1200px', margin: '0 auto 24px'}}>
                 BetterUp's proven intervention framework addresses all three cost categories simultaneously by targeting root causes early, scaling across the entire workforce, and building leadership capability. Explore the ROI Model to see the financial impact.
               </div>
               <button 
@@ -363,25 +365,28 @@ return (
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px'}}>
                 {[
                   { 
-                    id: 'conservative', 
-                    label: 'Conservative', 
-                    desc: '15% high-risk populations • Ready-Only • Prove concept & engagement', 
-                    seats: Math.round(calculations.officers * 0.15),
-                    investment: fmt(Math.round(calculations.officers * 0.15) * 150)
+                    id: 'pilot', 
+                    label: 'COA 1: Pilot', 
+                    desc: '15% of workforce • Select offices • Proof of concept at premium pilot pricing', 
+                    seats: Math.max(Math.round(calculations.officers * 0.15), 500),
+                    investment: fmt(Math.max(Math.round(calculations.officers * 0.15), 500) * 250),
+                    price: '$250/seat'
                   },
                   { 
-                    id: 'moderate', 
-                    label: 'Moderate (Recommended)', 
-                    desc: '35% frontline officers • Ready-Only • Optimal scale for impact', 
-                    seats: Math.round(calculations.officers * 0.35),
-                    investment: fmt(Math.round(calculations.officers * 0.35) * 150)
+                    id: 'targeted', 
+                    label: 'COA 2: Targeted (Recommended)', 
+                    desc: '25% of workforce • Select offices • Balanced scale with volume discount', 
+                    seats: Math.max(Math.round(calculations.officers * 0.25), 500),
+                    investment: fmt(Math.max(Math.round(calculations.officers * 0.25), 500) * 200),
+                    price: '$200/seat'
                   },
                   { 
-                    id: 'aggressive', 
-                    label: 'Aggressive', 
-                    desc: '50% workforce • Ready-Only • Maximum coverage & cultural shift', 
-                    seats: Math.round(calculations.officers * 0.50),
-                    investment: fmt(Math.round(calculations.officers * 0.50) * 150)
+                    id: 'scaled', 
+                    label: 'COA 3: Scaled', 
+                    desc: '75% of workforce • Select offices • Maximum impact at list price', 
+                    seats: Math.max(Math.round(calculations.officers * 0.75), 500),
+                    investment: fmt(Math.max(Math.round(calculations.officers * 0.75), 500) * 150),
+                    price: '$150/seat'
                   }
                 ].map(option => (
                   <button
@@ -403,8 +408,11 @@ return (
                     <div style={{fontSize: '14px', color: '#64748b', marginBottom: '12px'}}>
                       {option.desc}
                     </div>
-                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b'}}>
-                      {option.seats.toLocaleString()} Ready seats • Investment: {option.investment}
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                      {option.seats.toLocaleString()} Ready seats • {option.price}
+                    </div>
+                    <div style={{fontSize: '14px', color: '#64748b'}}>
+                      Investment: {option.investment}
                     </div>
                   </button>
                 ))}
@@ -464,7 +472,7 @@ return (
                     </div>
 
                     <div style={{background: 'white', padding: '20px', borderRadius: '10px', border: '2px solid #0066cc'}}>
-                      <div style={{fontSize: '18px', fontWeight: '700', color: '#0066cc', marginBottom: '12px'}}>🎯 Ready ($150/seat - 12 month)</div>
+                      <div style={{fontSize: '18px', fontWeight: '700', color: '#0066cc', marginBottom: '12px'}}>🎯 Ready (Tiered Volume Pricing - 12 month)</div>
                       <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7', marginBottom: '12px'}}>
                         <strong>Who:</strong> Frontline officers (GS-11/12), patrol agents, entry-level personnel<br/>
                         <strong>What:</strong> Scalable digital coaching with AI-powered support<br/>
@@ -479,7 +487,8 @@ return (
                   
                   <div style={{marginTop: '20px', padding: '16px', background: '#eff6ff', borderRadius: '10px', border: '2px solid #0066cc'}}>
                     <div style={{fontSize: '15px', color: '#1e40af', lineHeight: '1.7'}}>
-                      <strong>Why the Mix Matters:</strong> Lead develops the leadership culture that prevents discipline cases and retains teams. Ready provides the resilience foundation that prevents Workers' Comp claims and burnout. Together, they address all three cost pathways simultaneously.
+                      <strong>Why the Mix Matters:</strong> Lead develops the leadership culture that prevents discipline cases and retains teams. Ready provides the resilience foundation that prevents Workers' Comp claims and burnout. Together, they address all three cost pathways simultaneously.<br/><br/>
+                      <strong>Volume-Based Pricing Strategy:</strong> Pilot pricing ($250/seat) reflects higher per-user setup costs for small deployments. As CBP scales to Targeted ($200/seat) and Scaled ($150/seat at list price), volume efficiencies drive down per-seat costs, creating strong incentive for enterprise-wide adoption.
                     </div>
                   </div>
                 </div>
