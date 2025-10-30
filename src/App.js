@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 const CBPDashboard = () => {
   // State Management
   const [org, setOrg] = useState('ofo');
-  const [coa, setCoa] = useState('moderate');
+  const [coa, setCoa] = useState('targeted');
   const [includeLeadForLeaders, setIncludeLeadForLeaders] = useState(false);
   const [activeTab, setActiveTab] = useState('cost-problem');
   const [showCoaDetails, setShowCoaDetails] = useState(false);
@@ -618,7 +618,7 @@ return (
                     type="number" 
                     value={manualLeadSeats === null ? '' : manualLeadSeats}
                     onChange={(e) => setManualLeadSeats(e.target.value === '' ? null : parseInt(e.target.value))}
-                    placeholder={`Default: ${Math.round(calculations.officers * (coa === 'lead-only' ? 0.15 : coa === 'lead-ready' ? 0.15 : 0))}`}
+                    placeholder={`Default: ${calculations.leadSeats}`}
                     style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
                   />
                 </div>
@@ -631,7 +631,7 @@ return (
                     type="number" 
                     value={manualReadySeats === null ? '' : manualReadySeats}
                     onChange={(e) => setManualReadySeats(e.target.value === '' ? null : parseInt(e.target.value))}
-                    placeholder={`Default: ${Math.round(calculations.officers * (coa === 'ready-only' ? 0.35 : coa === 'lead-ready' ? 0.20 : 0))}`}
+                    placeholder={`Default: ${calculations.readySeats}`}
                     style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
                   />
                 </div>
@@ -1290,9 +1290,6 @@ return (
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
                     Composite of Air Force +17% mission readiness and +15% resilience with Montreal Police 40% stress reduction. Assumes 2.5% baseline mental health Workers' Comp claim rate (conservative vs industry 3-5%). JAMA 21.6% symptom reduction validates clinical effectiveness.
                   </div>
-                  <div style={{marginTop: '12px', padding: '12px', background: '#e6f2f8', borderRadius: '8px', fontSize: '13px', color: '#0078ae', lineHeight: '1.6'}}>
-                    <strong>📊 Note:</strong> We're using a 2.5% baseline mental health claim rate, which is conservative compared to law enforcement industry standards of 3-5%. We welcome CBP's actual FECA claims data to refine this model and provide more precise ROI projections specific to your workforce.
-                  </div>
                 </div>
 
                 <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
@@ -1416,79 +1413,277 @@ return (
         {activeTab === 'implementation' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
             
-            {/* 3-Phase Rollout */}
+            {/* Decision Framework */}
             <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
-                🚀 Recommended 3-Phase Rollout Strategy
+                🎯 Decision Framework for CBP Leadership
               </h2>
               
-              <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
-                {/* Phase 1 */}
-                <div style={{background: '#e6f2f8', border: '3px solid #005288', borderRadius: '12px', padding: '24px'}}>
-                  <div style={{fontSize: '20px', fontWeight: '800', color: '#005288', marginBottom: '12px'}}>
-                    Phase 1: Pilot (Months 1-6) — Proof of Concept
+              <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
+                Selecting the right Course of Action depends on four key factors. This framework helps CBP leadership align deployment strategy with organizational constraints and strategic priorities.
+              </div>
+
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px'}}>
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    💰 Budget & Timeline Considerations
                   </div>
-                  <div style={{fontSize: '15px', color: '#0078ae', marginBottom: '16px', lineHeight: '1.7'}}>
-                    <strong>Target:</strong> 500-1,000 officers in high-need location (e.g., San Diego Sector, Rio Grande Valley, or OFO high-traffic ports)<br/>
-                    <strong>Product Mix:</strong> Lead (150 supervisors) + Ready (500 frontline)<br/>
-                    <strong>Goals:</strong> Validate engagement rates, measure early retention signals, establish baseline metrics, refine implementation playbook
-                  </div>
-                  <div style={{background: 'white', padding: '16px', borderRadius: '8px'}}>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      <strong>Success Metrics:</strong><br/>
-                      • 60%+ engagement rate in first 90 days<br/>
-                      • 85%+ satisfaction scores<br/>
-                      • Measurable improvements in resilience assessments<br/>
-                      • Supervisor endorsement for full rollout
-                    </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Available funding:</strong> FY25 vs FY26 budget cycles<br/>
+                    • <strong>Approval authority:</strong> Component-level vs enterprise-level<br/>
+                    • <strong>Urgency:</strong> 2028 retirement crisis timeline<br/>
+                    • <strong>Risk tolerance:</strong> Prove concept first vs scale immediately
                   </div>
                 </div>
 
-                {/* Phase 2 */}
-                <div style={{background: '#f0fdf4', border: '3px solid #5e9732', borderRadius: '12px', padding: '24px'}}>
-                  <div style={{fontSize: '20px', fontWeight: '800', color: '#5e9732', marginBottom: '12px'}}>
-                    Phase 2: Regional Expansion (Months 7-18) — Scale & Refine
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    👥 Target Population Selection
                   </div>
-                  <div style={{fontSize: '15px', color: '#5e9732', marginBottom: '16px', lineHeight: '1.7'}}>
-                    <strong>Target:</strong> 3,000-5,000 officers across 3-5 high-priority regions<br/>
-                    <strong>Product Mix:</strong> Lead (15% = 600) + Ready (20% = 1,000)<br/>
-                    <strong>Goals:</strong> Demonstrate ROI at scale, refine change management approach, build internal champions network
-                  </div>
-                  <div style={{background: 'white', padding: '16px', borderRadius: '8px'}}>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      <strong>Success Metrics:</strong><br/>
-                      • 10-15% reduction in voluntary separations among engaged users<br/>
-                      • Measurable decline in Workers' Comp - Mental Health Claims (FECA)<br/>
-                      • Supervisor-reported improvements in team performance<br/>
-                      • Cost-benefit analysis shows positive ROI trajectory
-                    </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Component focus:</strong> OFO-only, USBP-only, or cross-component<br/>
+                    • <strong>Geographic scope:</strong> Single location vs multiple regions<br/>
+                    • <strong>Population type:</strong> High-risk groups vs broad workforce<br/>
+                    • <strong>Career stage:</strong> Entry-level, mid-career, or supervisor focus
                   </div>
                 </div>
 
-                {/* Phase 3 */}
-                <div style={{background: '#fef3c7', border: '3px solid #f59e0b', borderRadius: '12px', padding: '24px'}}>
-                  <div style={{fontSize: '20px', fontWeight: '800', color: '#d97706', marginBottom: '12px'}}>
-                    Phase 3: Enterprise Deployment (Months 19-36) — Full Integration
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    📊 Success Metrics & Evaluation
                   </div>
-                  <div style={{fontSize: '15px', color: '#b45309', marginBottom: '16px', lineHeight: '1.7'}}>
-                    <strong>Target:</strong> All CBP components (OFO, USBP, AMO) — 10,000-15,000 officers<br/>
-                    <strong>Product Mix:</strong> Flexible COA selection by component based on mission needs<br/>
-                    <strong>Goals:</strong> Institutionalize coaching culture, integrate with Resiliency Program, demonstrate sustained workforce impact
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Primary outcomes:</strong> Retention, Workers' Comp claims, or discipline<br/>
+                    • <strong>Measurement timeline:</strong> 6-month, 12-month, or 24-month evaluation<br/>
+                    • <strong>Data access:</strong> Availability of baseline metrics<br/>
+                    • <strong>ROI threshold:</strong> Required payback period for continuation
                   </div>
-                  <div style={{background: 'white', padding: '16px', borderRadius: '8px'}}>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      <strong>Success Metrics:</strong><br/>
-                      • Enterprise-wide retention improvement (7%+ lift)<br/>
-                      • Measurable reduction in all three cost pathways<br/>
-                      • Leadership capability improvements (360 assessments)<br/>
-                      • Cultural transformation (FEVS scores, climate surveys)
-                    </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🤝 Stakeholder Alignment
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Resiliency Program integration:</strong> Complement vs replace existing services<br/>
+                    • <strong>Field leadership buy-in:</strong> Port Directors, Sector Chiefs, supervisors<br/>
+                    • <strong>Union considerations:</strong> NTEU engagement and communication<br/>
+                    • <strong>CBPX coordination:</strong> Employee experience strategy alignment
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* What Success Looks Like by COA */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+                ✅ What Success Looks Like by COA
+              </h2>
+
+              <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+                <div style={{background: '#e6f2f8', border: '3px solid #005288', borderRadius: '12px', padding: '24px'}}>
+                  <div style={{fontSize: '20px', fontWeight: '800', color: '#005288', marginBottom: '12px'}}>
+                    COA 1: Pilot (15% Coverage) — Proof of Concept
+                  </div>
+                  <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7'}}>
+                    <strong>Deployment:</strong> Minimum 500 seats in select high-need offices (e.g., high-traffic ports, high-attrition sectors)<br/>
+                    <strong>Timeline:</strong> 12-month engagement with 6-month interim evaluation<br/>
+                    <strong>Primary Goal:</strong> Validate engagement rates and early retention signals in CBP environment<br/>
+                    <strong>Success Criteria:</strong> 60%+ engagement, 85%+ satisfaction, measurable resilience improvements, field leadership endorsement for expansion<br/>
+                    <strong>Investment:</strong> ~$125K-$975K depending on organization size (see ROI Model tab)
+                  </div>
+                </div>
+
+                <div style={{background: '#f0f9ff', border: '3px solid #0078ae', borderRadius: '12px', padding: '24px'}}>
+                  <div style={{fontSize: '20px', fontWeight: '800', color: '#0078ae', marginBottom: '12px'}}>
+                    COA 2: Targeted (25% Coverage) — Balanced Scale (Recommended)
+                  </div>
+                  <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7'}}>
+                    <strong>Deployment:</strong> Minimum 500 seats across select offices with demonstrated need<br/>
+                    <strong>Timeline:</strong> 12-month engagement with quarterly performance reviews<br/>
+                    <strong>Primary Goal:</strong> Demonstrate measurable ROI while building internal champions network<br/>
+                    <strong>Success Criteria:</strong> 5-10% reduction in voluntary separations, measurable FECA claims decline, positive cost-benefit analysis, supervisor-reported team improvements<br/>
+                    <strong>Investment:</strong> ~$100K-$1.3M with volume discount pricing (see ROI Model tab)
+                  </div>
+                </div>
+
+                <div style={{background: '#f0fdf4', border: '3px solid #5e9732', borderRadius: '12px', padding: '24px'}}>
+                  <div style={{fontSize: '20px', fontWeight: '800', color: '#5e9732', marginBottom: '12px'}}>
+                    COA 3: Scaled (75% Coverage) — Maximum Impact
+                  </div>
+                  <div style={{fontSize: '15px', color: '#5e9732', lineHeight: '1.7'}}>
+                    <strong>Deployment:</strong> Minimum 500 seats reaching majority of workforce in select offices<br/>
+                    <strong>Timeline:</strong> 12-month engagement with cultural transformation focus<br/>
+                    <strong>Primary Goal:</strong> Enterprise-wide workforce sustainability and cultural shift<br/>
+                    <strong>Success Criteria:</strong> 7%+ retention improvement, reduction across all three cost pathways, leadership capability gains, FEVS score improvements, sustained engagement<br/>
+                    <strong>Investment:</strong> ~$75K-$2.9M at list price with maximum coverage (see ROI Model tab)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Required Inputs from CBP */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+                📋 Required Inputs from CBP for Model Refinement
+              </h2>
+
+              <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
+                To provide the most accurate ROI projections and tailor the implementation to CBP's specific needs, we welcome collaboration on the following data points:
+              </div>
+
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px'}}>
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    📊 Baseline Workforce Data
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>FECA mental health claims:</strong> Annual volume and average cost by component (currently modeled at conservative 2.5% rate)<br/>
+                    • <strong>Attrition patterns:</strong> Voluntary separation rates by location, tenure, and role<br/>
+                    • <strong>Discipline cases:</strong> Annual volume and cost of behaviorally-driven incidents<br/>
+                    • <strong>Sick leave utilization:</strong> Mental health-related absences
+                  </div>
+                  <div style={{marginTop: '12px', padding: '12px', background: '#e6f2f8', borderRadius: '8px', fontSize: '13px', color: '#0078ae'}}>
+                    <strong>Note:</strong> We're using 2.5% baseline mental health claim rate (conservative vs industry 3-5%). Actual CBP data will refine ROI projections.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🎯 Strategic Priorities
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>High-priority locations:</strong> Offices/sectors with greatest need<br/>
+                    • <strong>Critical populations:</strong> Roles facing highest attrition or stress<br/>
+                    • <strong>Existing infrastructure:</strong> Resiliency Program services and utilization<br/>
+                    • <strong>Integration requirements:</strong> Systems, platforms, communication channels
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    👔 Stakeholder Access
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Field leadership:</strong> Port Directors, Sector Chiefs, Area Port Directors<br/>
+                    • <strong>CBPX coordination:</strong> Employee experience strategy alignment<br/>
+                    • <strong>HR/workforce analytics:</strong> Data owners and reporting structure<br/>
+                    • <strong>Union engagement:</strong> NTEU communication and collaboration
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🔧 Implementation Support
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Change management:</strong> Communication strategy and leadership sponsorship<br/>
+                    • <strong>IT/technical requirements:</strong> SSO, data integration, platform access<br/>
+                    • <strong>Evaluation framework:</strong> Success metrics and reporting cadence<br/>
+                    • <strong>Pilot location nomination:</strong> Field leadership volunteers
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contracting & Procurement */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+                📝 Contracting & Procurement Pathways
+              </h2>
+
+              <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
+                BetterUp is exploring multiple procurement pathways to provide CBP maximum flexibility in deployment approach. Current pathways under consideration include:
+              </div>
+
+              <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    🏥 Holistic Health Support Centers Contract Vehicle
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Potential integration with CBP's planned wellness infrastructure through existing or upcoming contract vehicles focused on comprehensive employee health and resilience services.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    👔 Human Capital Strategy Contracts
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Alignment with workforce development, talent management, and organizational effectiveness initiatives through human capital-focused contract mechanisms.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    🤝 Prime Contractor Partnerships
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Collaboration with existing CBP prime contractors who hold relevant contract vehicles and can integrate BetterUp's platform as part of comprehensive service delivery.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    ⚡ Flexible Deployment Models
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    BetterUp can deploy through various contracting mechanisms depending on CBP's procurement constraints, timeline requirements, and organizational preferences. We adapt to your existing infrastructure and approval processes.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Next Steps */}
+            <div style={{background: 'linear-gradient(135deg, #e6f2f8 0%, #cce5f0 100%)', border: '3px solid #005288', borderRadius: '12px', padding: '32px'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#005288', marginBottom: '24px', textAlign: 'center'}}>
+                🚀 Recommended Next Steps
+              </h2>
+
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px'}}>
+                <div style={{background: 'white', padding: '20px', borderRadius: '12px', textAlign: 'center'}}>
+                  <div style={{fontSize: '48px', marginBottom: '12px'}}>1️⃣</div>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    Review & Refine Model
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
+                    Validate assumptions with CBP's actual workforce data and adjust ROI projections
+                  </div>
+                </div>
+
+                <div style={{background: 'white', padding: '20px', borderRadius: '12px', textAlign: 'center'}}>
+                  <div style={{fontSize: '48px', marginBottom: '12px'}}>2️⃣</div>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    Stakeholder Briefings
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
+                    Present business case to field leadership, CBPX, HR, and other key decision-makers
+                  </div>
+                </div>
+
+                <div style={{background: 'white', padding: '20px', borderRadius: '12px', textAlign: 'center'}}>
+                  <div style={{fontSize: '48px', marginBottom: '12px'}}>3️⃣</div>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    Select COA & Pathway
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
+                    Choose deployment scale and identify optimal procurement mechanism
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: 'white', padding: '24px', borderRadius: '12px', textAlign: 'center'}}>
+                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                  Ready to discuss how BetterUp can support CBP's workforce sustainability goals?
+                </div>
+                <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
+                  Contact BetterUp's federal team to schedule a collaborative discovery session, review CBP-specific data, and refine this model to your mission requirements.
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        )}</parameter>
       </div>
 
       {/* FLOATING CHATBOT ASSISTANT */}
