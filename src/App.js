@@ -1,5 +1,119 @@
 import React, { useState, useMemo } from 'react';
 
+const MethodologyImpactSection = () => {
+  const card = {
+    background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)',
+    border: '4px solid #64748b',
+    borderRadius: '16px',
+    padding: '28px'
+  };
+
+  const pill = (bg, color) => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    padding: '6px 10px',
+    borderRadius: 999,
+    fontSize: 12,
+    fontWeight: 700,
+    background: bg,
+    color,
+  });
+
+  const Callout = ({ x, y, text, color = '#111827', bg = 'white', lineTo }) => (
+    <g>
+      {lineTo && (
+        <line x1={x} y1={y} x2={lineTo.x} y2={lineTo.y} stroke={color} strokeOpacity="0.5" strokeWidth="1.5" />
+      )}
+      <rect x={x - 6} y={y - 18} rx="6" ry="6" width={Math.max(120, text.length * 6.4 + 14)} height="28" fill={bg} stroke={color} strokeOpacity="0.25" />
+      <text x={x + 8} y={y + 2} fill={color} fontSize="12" fontWeight="700">{text}</text>
+    </g>
+  );
+
+  return (
+    <div style={card}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+        <div style={{ width: 48, height: 48, background: '#475569', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>📈</div>
+        <h2 style={{ fontSize: 22, fontWeight: '800', color: '#111827', margin: 0 }}>
+          Methodology Impact: Why Episodic Training Fails—and Continuous Development Works
+        </h2>
+      </div>
+
+      <div style={{ background: 'white', border: '2px solid #e5e7eb', borderRadius: 12, padding: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <span style={pill('#fee2e2', '#991b1b')}>🔴 Episodic training (red line)</span>
+            <span style={pill('#dbeafe', '#1e40af')}>🔵 Continuous development (blue line)</span>
+          </div>
+          <div style={{ fontSize: 12, color: '#6b7280' }}>Higher area under curve = retained capability</div>
+        </div>
+
+        <svg viewBox="0 0 760 300" style={{ width: '100%', height: 260, display: 'block' }}>
+          <line x1="60" y1="24" x2="60" y2="250" stroke="#cbd5e1" strokeWidth="2" />
+          <line x1="60" y1="250" x2="730" y2="250" stroke="#cbd5e1" strokeWidth="2" />
+          <text x="14" y="34" fill="#475569" fontSize="11" fontWeight="700">Skill / Recall</text>
+          <text x="690" y="292" fill="#475569" fontSize="11" fontWeight="700">Time</text>
+
+          {[140, 220, 300, 380, 460, 540, 620, 700].map((x, i) => (
+            <line key={i} x1={x} y1="250" x2={x} y2="246" stroke="#cbd5e1" />
+          ))}
+          {[90, 130, 170, 210].map((y, i) => (
+            <line key={i} x1="60" y1={y} x2="730" y2={y} stroke="#e5e7eb" />
+          ))}
+
+          <path d="M 60 60 C 180 56, 250 80, 320 120 C 380 154, 450 190, 730 230" fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round" />
+          <path d="M 60 230 C 110 200, 150 190, 190 170 C 210 160, 230 150, 250 160 C 270 175, 300 150, 330 135 C 350 125, 370 120, 390 130 C 410 142, 440 128, 470 118 C 490 112, 510 110, 530 120 C 550 130, 585 118, 620 108 C 640 102, 660 98, 730 92" fill="none" stroke="#2563eb" strokeWidth="4.5" strokeLinecap="round" />
+
+          {[190, 250, 330, 390, 470, 530, 620].map((x, i) => (
+            <g key={i}>
+              <line x1={x} y1="250" x2={x} y2="242" stroke="#93c5fd" strokeWidth="2" />
+              <circle cx={x} cy={140 - i * 3 + 18} r="4" fill="#60a5fa" />
+            </g>
+          ))}
+
+          <Callout x={180} y={60} text="Peak right after event" color="#991b1b" bg="#fff5f5" lineTo={{ x: 150, y: 66 }} />
+          <Callout x={410} y={168} text="~70% forgotten in 24h" color="#991b1b" bg="#fff5f5" lineTo={{ x: 365, y: 150 }} />
+          <Callout x={640} y={228} text="~90% within a month" color="#991b1b" bg="#fff5f5" lineTo={{ x: 600, y: 212 }} />
+          <Callout x={520} y={84} text="Continuous reinforcement" color="#1e3a8a" bg="#eef2ff" lineTo={{ x: 560, y: 110 }} />
+        </svg>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 8 }}>
+          <div style={{ background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 8, padding: 12 }}>
+            <div style={{ fontSize: 13, color: '#9a3412', fontWeight: 700, marginBottom: 6 }}>The Red Line: Why retention stalls</div>
+            <ul style={{ margin: 0, paddingLeft: 16, color: '#7c2d12', fontSize: 13, lineHeight: 1.6 }}>
+              <li>Event spikes learning → rapid decay (forgetting curve)</li>
+              <li>Episodic workshops don't rewire habits</li>
+              <li>Leaders default to command-and-control under stress without reinforcement</li>
+            </ul>
+          </div>
+          <div style={{ background: '#ecfeff', border: '1px solid #67e8f9', borderRadius: 8, padding: 12 }}>
+            <div style={{ fontSize: 13, color: '#155e75', fontWeight: 700, marginBottom: 6 }}>The Blue Line: Why DAF moved retention +7%</div>
+            <ul style={{ margin: 0, paddingLeft: 16, color: '#0e7490', fontSize: 13, lineHeight: 1.6 }}>
+              <li>Continuous, personalized practice + coaching compounds capability</li>
+              <li>Just-in-time support during critical incidents & career choke points</li>
+              <li>Transforms one-off training into ongoing learning journeys</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 12, fontSize: 12, color: '#475569' }}>
+          <strong>Leadership takeaway:</strong> Preserve institutional knowledge through continuous development now—don't wait until 2028 exits make it irrecoverable.
+        </div>
+      </div>
+
+      <div style={{ marginTop: 16, background: '#fffbeb', border: '1px solid #fbbf24', borderRadius: 12, padding: 16 }}>
+        <p style={{ margin: 0, fontSize: 14, color: '#92400e', lineHeight: 1.6 }}>
+          CBP faces multiple retention challenges—including the 2028 retirement cliff, high operational tempo, leadership culture gaps, and career development barriers. <strong>The red line shows one contributing factor:</strong> episodic training that peaks and fades, failing to transfer institutional knowledge. <strong>The blue line shows BetterUp's approach:</strong> continuous development through coaching, AI support, and learning journeys that compound over time—helping address retention by building resilience, clarifying career paths, and developing leadership capability at critical decision points.
+        </p>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: '#64748b' }}>
+        <strong>Sources:</strong> Ebbinghaus forgetting curve; spaced repetition research; BetterUp DAF outcomes (+7% retention); JAMA 2024 peer-reviewed burnout reduction.
+      </div>
+    </div>
+  );
+};
+
 const CBPDashboard = () => {
   // State Management
   const [org, setOrg] = useState('ofo');
@@ -1128,6 +1242,57 @@ return (
                     🎯 Prevention ROI Multiplier: <strong>Every $1 invested early prevents $3.50 in crisis costs</strong>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Methodology Impact Section */}
+            <MethodologyImpactSection />
+
+            {/* 5-Step Mastery Framework */}
+            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>📚</div>
+                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#4338ca', margin: 0}}>How BetterUp Builds Mastery at CBP</h2>
+              </div>
+             
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
+                {[
+                  {num: '1', title: 'REFLECT', desc: 'WPM assessment identifies strengths & gaps', icon: '🪞'},
+                  {num: '2', title: 'LEARN', desc: 'Personalized journeys + curated resources', icon: '📖'},
+                  {num: '3', title: 'PRACTICE', desc: 'AI role-play + coaching rehearsal', icon: '🎯'},
+                  {num: '4', title: 'COMMIT', desc: 'Action plans at critical moments', icon: '✅'},
+                  {num: '5', title: 'MEASURE', desc: 'Pre-post growth assessments', icon: '📊'}
+                ].map((step, i) => (
+                  <div key={i} style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #818cf8', textAlign: 'center'}}>
+                    <div style={{fontSize: '28px', marginBottom: '8px'}}>{step.icon}</div>
+                    <div style={{fontSize: '11px', fontWeight: 'bold', color: '#1e293b', marginBottom: '6px'}}>{step.num}. {step.title}</div>
+                    <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>{step.desc}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
+                <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#4338ca', marginBottom: '12px'}}>Applied to CBP Operational Challenges:</h3>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Use-of-Force Decisions:</strong> Practice high-pressure scenarios through AI role-play before real encounters
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies for volatile public interactions
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Post-Incident Recovery:</strong> Just-in-time stress management after traumatic events
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at critical 3-5yr, 10-15yr, pre-2028 retirement points
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '16px', border: '2px solid #818cf8'}}>
+                <p style={{fontSize: '13px', color: '#3730a3', margin: 0, lineHeight: 1.6}}>
+                  <strong style={{color: '#4338ca'}}>From Air Force Weapons School:</strong> This mastery framework helped elite pilots strengthen decision-making under pressure, cognitive agility, and stress regulation—the same skills CBP officers and agents need for high-stakes law enforcement.
+                </p>
               </div>
             </div>
 
