@@ -113,9 +113,8 @@ const MethodologyImpactSection = () => {
     </div>
   );
 };
-
 const CBPDashboard = () => {
-  // State Management
+  // Basic State Management
   const [org, setOrg] = useState('ofo');
   const [coa, setCoa] = useState('targeted');
   const [includeLeadForLeaders, setIncludeLeadForLeaders] = useState(false);
@@ -128,18 +127,40 @@ const CBPDashboard = () => {
   const [manualReadinessOverride, setManualReadinessOverride] = useState(null);
   const [manualProfStandardsOverride, setManualProfStandardsOverride] = useState(null);
   const [expandedFactor, setExpandedFactor] = useState(null);
+  
+  // BEHAVIORAL HEALTH FACTOR SLIDERS - NOW FUNCTIONAL
+  // PTSD
+  const [ptsdPrevalence, setPtsdPrevalence] = useState(18); // % of workforce
   const [ptsdCoachingEffectiveness, setPtsdCoachingEffectiveness] = useState(25);
   const [ptsdWcFilingRate, setPtsdWcFilingRate] = useState(8);
+  const [ptsdWcAvgCost, setPtsdWcAvgCost] = useState(85000);
   const [ptsdSeparationRate, setPtsdSeparationRate] = useState(12);
+  
+  // Depression
+  const [depressionPrevalence, setDepressionPrevalence] = useState(18);
   const [depressionCoachingEffectiveness, setDepressionCoachingEffectiveness] = useState(25);
   const [depressionWcFilingRate, setDepressionWcFilingRate] = useState(10);
+  const [depressionWcAvgCost, setDepressionWcAvgCost] = useState(55000);
   const [depressionSeparationRate, setDepressionSeparationRate] = useState(15);
+  
+  // Anxiety
+  const [anxietyPrevalence, setAnxietyPrevalence] = useState(15);
   const [anxietyCoachingEffectiveness, setAnxietyCoachingEffectiveness] = useState(20);
   const [anxietyWcFilingRate, setAnxietyWcFilingRate] = useState(6);
+  const [anxietyWcAvgCost, setAnxietyWcAvgCost] = useState(47500);
   const [anxietySeparationRate, setAnxietySeparationRate] = useState(10);
+  
+  // Substance Use Disorder
+  const [sudPrevalence, setSudPrevalence] = useState(25);
   const [sudCoachingEffectiveness, setSudCoachingEffectiveness] = useState(67);
   const [sudWcFilingRate, setSudWcFilingRate] = useState(15);
+  const [sudWcAvgCost, setSudWcAvgCost] = useState(40000);
   const [sudSeparationRate, setSudSeparationRate] = useState(25);
+  
+  // COMORBIDITY ADJUSTMENT - NEW!
+  const [comorbidityOverlap, setComorbidityOverlap] = useState(35); // % of people with multiple conditions
+  
+  // Chatbot State
   const [showChatbot, setShowChatbot] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
@@ -160,27 +181,118 @@ const CBPDashboard = () => {
     'usbp-del': { name: 'USBP - Del Rio Sector', officers: 1200, avgSalary: 92000 },
     'usbp-lrt': { name: 'USBP - Laredo Sector', officers: 1600, avgSalary: 92000 }
   }), []);
-
-  // Calculations
+// COMORBIDITY-ADJUSTED BEHAVIORAL HEALTH CALCULATIONS
+  const behavioralHealthCalcs = useMemo(() => {
+    const data = orgData[org];
+    const totalOfficers = data.officers;
+    
+    // Step 1: Calculate raw affected populations (before comorbidity adjustment)
+    const rawPtsdAffected = Math.round(totalOfficers * (ptsdPrevalence / 100));
+    const rawDepressionAffected = Math.round(totalOfficers * (depressionPrevalence / 100));
+    const rawAnxietyAffected = Math.round(totalOfficers * (anxietyPrevalence / 100));
+    const rawSudAffected = Math.round(totalOfficers * (sudPrevalence / 100));
+    
+    // Step 2: Apply comorbidity adjustment
+    // If 35% comorbidity, then the "unique" affected population is 65% of the sum
+    const rawTotalAffected = rawPtsdAffected + rawDepressionAffected + rawAnxietyAffected + rawSudAffected;
+    const comorbidityMultiplier = 1 - (comorbidityOverlap / 100);
+    const uniqueAffected = Math.round(rawTotalAffected * comorbidityMultiplier);
+    
+    // Step 3: Proportionally distribute unique affected back to conditions
+    // This maintains the relative prevalence ratios while avoiding double-counting
+    const adjustmentFactor = uniqueAffected / rawTotalAffected;
+    const ptsdAffected = Math.round(rawPtsdAffected * adjustmentFactor);
+    const depressionAffected = Math.round(rawDepressionAffected * adjustmentFactor);
+    const anxietyAffected = Math.round(rawAnxietyAffected * adjustmentFactor);
+    const sudAffected = Math.round(rawSudAffected * adjustmentFactor);
+    
+    // Step 4: Calculate Workers' Comp Claims by condition
+    const ptsdWcClaims = Math.round(ptsdAffected * (ptsdWcFilingRate / 100));
+    const depressionWcClaims = Math.round(depressionAffected * (depressionWcFilingRate / 100));
+    const anxietyWcClaims = Math.round(anxietyAffected * (anxietyWcFilingRate / 100));
+    const sudWcClaims = Math.round(sudAffected * (sudWcFilingRate / 100));
+    
+    const totalBaselineWcClaims = ptsdWcClaims + depressionWcClaims + anxietyWcClaims + sudWcClaims;
+    
+    // Step 5: Calculate Workers' Comp Costs
+    const ptsdWcCost = ptsdWcClaims * ptsdWcAvgCost;
+    const depressionWcCost = depressionWcClaims * depressionWcAvgCost;
+    const anxietyWcCost = anxietyWcClaims * anxietyWcAvgCost;
+    const sudWcCost = sudWcClaims * sudWcAvgCost;
+    
+    const totalBaselineWcCost = ptsdWcCost + depressionWcCost + anxietyWcCost + sudWcCost;
+    
+    // Step 6: Calculate Separations by condition
+    const ptsdSeparations = Math.round(ptsdAffected * (ptsdSeparationRate / 100));
+    const depressionSeparations = Math.round(depressionAffected * (depressionSeparationRate / 100));
+    const anxietySeparations = Math.round(anxietyAffected * (anxietySeparationRate / 100));
+    const sudSeparations = Math.round(sudAffected * (sudSeparationRate / 100));
+    
+    const totalBehavioralSeparations = ptsdSeparations + depressionSeparations + anxietySeparations + sudSeparations;
+    
+    return {
+      // Raw vs Adjusted populations
+      rawTotalAffected,
+      uniqueAffected,
+      comorbidityReduction: rawTotalAffected - uniqueAffected,
+      
+      // Adjusted populations by condition
+      ptsdAffected,
+      depressionAffected,
+      anxietyAffected,
+      sudAffected,
+      
+      // Workers' Comp Claims
+      ptsdWcClaims,
+      depressionWcClaims,
+      anxietyWcClaims,
+      sudWcClaims,
+      totalBaselineWcClaims,
+      
+      // Workers' Comp Costs
+      ptsdWcCost,
+      depressionWcCost,
+      anxietyWcCost,
+      sudWcCost,
+      totalBaselineWcCost,
+      
+      // Separations
+      ptsdSeparations,
+      depressionSeparations,
+      anxietySeparations,
+      sudSeparations,
+      totalBehavioralSeparations,
+      
+      // Average claim cost (for display)
+      avgWcClaimCost: totalBaselineWcClaims > 0 ? Math.round(totalBaselineWcCost / totalBaselineWcClaims) : 65000
+    };
+  }, [org, orgData, ptsdPrevalence, depressionPrevalence, anxietyPrevalence, sudPrevalence, 
+      ptsdWcFilingRate, depressionWcFilingRate, anxietyWcFilingRate, sudWcFilingRate,
+      ptsdWcAvgCost, depressionWcAvgCost, anxietyWcAvgCost, sudWcAvgCost,
+      ptsdSeparationRate, depressionSeparationRate, anxietySeparationRate, sudSeparationRate,
+      comorbidityOverlap]);
+      // MAIN ROI CALCULATIONS
   const calculations = useMemo(() => {
     const data = orgData[org];
+    
+    // Seat calculations
     let leadPercent, readyPercent, readyPrice;
     if (coa === 'pilot') {
       readyPercent = 0.15;
       leadPercent = includeLeadForLeaders ? 0.10 : 0;
-      readyPrice = 250; // Higher price for pilot
+      readyPrice = 250;
     } else if (coa === 'targeted') {
       readyPercent = 0.25;
       leadPercent = includeLeadForLeaders ? 0.10 : 0;
-      readyPrice = 200; // Mid-tier pricing
+      readyPrice = 200;
     } else {
       readyPercent = 0.75;
       leadPercent = includeLeadForLeaders ? 0.10 : 0;
-      readyPrice = 150; // Best price at scale
+      readyPrice = 150;
     }
     
     const baseLeadSeats = Math.round(data.officers * leadPercent);
-    const baseReadySeats = Math.max(Math.round(data.officers * readyPercent), 500); // Minimum 500 seats
+    const baseReadySeats = Math.max(Math.round(data.officers * readyPercent), 500);
     const leadSeats = manualLeadSeats !== null ? manualLeadSeats : baseLeadSeats;
     const readySeats = manualReadySeats !== null ? manualReadySeats : baseReadySeats;
     const totalSeats = leadSeats + readySeats;
@@ -189,23 +301,55 @@ const CBPDashboard = () => {
     const activeUsers = Math.round(totalSeats * engagement);
     const leadPrice = 5785;
     const totalInvestment = (leadSeats * leadPrice) + (readySeats * readyPrice);
+    
+    // RETENTION CALCULATIONS - Using behavioral health separations
     const retentionLift = manualRetentionOverride !== null ? manualRetentionOverride / 100 : 0.07;
-    const readinessLift = manualReadinessOverride !== null ? manualReadinessOverride / 100 : 0.37;
-    const profStandardsLift = manualProfStandardsOverride !== null ? manualProfStandardsOverride / 100 : 0.22;
     const attritionRate = org === 'ofo' ? 0.068 : 0.10;
     const baselineSeparations = Math.round(data.officers * attritionRate);
-    const preventableSeparations = Math.round(baselineSeparations * 0.30);
-    const separationsPrevented = Math.round(preventableSeparations * retentionLift * engagement);
+    
+    // Behavioral-driven separations (from behavioral health model)
+    const behavioralSeparations = behavioralHealthCalcs.totalBehavioralSeparations;
+    
+    // BetterUp prevents portion of behavioral separations based on coaching effectiveness
+    // Weighted average effectiveness across all conditions
+    const weightedEffectiveness = (
+      (behavioralHealthCalcs.ptsdSeparations * (ptsdCoachingEffectiveness / 100)) +
+      (behavioralHealthCalcs.depressionSeparations * (depressionCoachingEffectiveness / 100)) +
+      (behavioralHealthCalcs.anxietySeparations * (anxietyCoachingEffectiveness / 100)) +
+      (behavioralHealthCalcs.sudSeparations * (sudCoachingEffectiveness / 100))
+    ) / behavioralSeparations;
+    
+    const separationsPrevented = Math.round(behavioralSeparations * weightedEffectiveness * engagement);
     const replacementCost = 150000;
     const retentionSavings = separationsPrevented * replacementCost;
-    const baselineMHClaims = Math.round(data.officers * 0.025);
-    const avgClaimCost = 65000;
-    const claimsPrevented = Math.round(baselineMHClaims * readinessLift * engagement);
-    const wcSavings = claimsPrevented * avgClaimCost;
+    
+    // WORKERS' COMP CALCULATIONS - Using behavioral health claims
+    const readinessLift = manualReadinessOverride !== null ? manualReadinessOverride / 100 : 0.37;
+    
+    // Claims prevented by condition
+    const ptsdClaimsPrevented = Math.round(behavioralHealthCalcs.ptsdWcClaims * (ptsdCoachingEffectiveness / 100) * engagement);
+    const depressionClaimsPrevented = Math.round(behavioralHealthCalcs.depressionWcClaims * (depressionCoachingEffectiveness / 100) * engagement);
+    const anxietyClaimsPrevented = Math.round(behavioralHealthCalcs.anxietyWcClaims * (anxietyCoachingEffectiveness / 100) * engagement);
+    const sudClaimsPrevented = Math.round(behavioralHealthCalcs.sudWcClaims * (sudCoachingEffectiveness / 100) * engagement);
+    
+    const claimsPrevented = ptsdClaimsPrevented + depressionClaimsPrevented + anxietyClaimsPrevented + sudClaimsPrevented;
+    
+    // Savings by condition
+    const ptsdWcSavings = ptsdClaimsPrevented * ptsdWcAvgCost;
+    const depressionWcSavings = depressionClaimsPrevented * depressionWcAvgCost;
+    const anxietyWcSavings = anxietyClaimsPrevented * anxietyWcAvgCost;
+    const sudWcSavings = sudClaimsPrevented * sudWcAvgCost;
+    
+    const wcSavings = ptsdWcSavings + depressionWcSavings + anxietyWcSavings + sudWcSavings;
+    
+    // DISCIPLINE CALCULATIONS - Unchanged logic
+    const profStandardsLift = manualProfStandardsOverride !== null ? manualProfStandardsOverride / 100 : 0.22;
     const baselineDisciplineCases = Math.round(data.officers * 0.035);
     const avgDisciplineCost = 45000;
     const casesPrevented = Math.round(baselineDisciplineCases * profStandardsLift * engagement);
     const disciplineSavings = casesPrevented * avgDisciplineCost;
+    
+    // TOTALS
     const totalSavings = retentionSavings + wcSavings + disciplineSavings;
     const netSavings = totalSavings - totalInvestment;
     const roi = totalInvestment > 0 ? ((netSavings / totalInvestment) * 100) : 0;
@@ -220,23 +364,46 @@ const CBPDashboard = () => {
       leadPrice,
       readyPrice,
       totalInvestment,
+      
+      // Retention metrics
       retentionLift: retentionLift * 100,
-      readinessLift: readinessLift * 100,
-      profStandardsLift: profStandardsLift * 100,
       baselineSeparations,
+      behavioralSeparations,
       separationsPrevented,
       retentionSavings,
-      baselineMHClaims,
+      
+      // Workers' Comp metrics
+      readinessLift: readinessLift * 100,
+      baselineWcClaims: behavioralHealthCalcs.totalBaselineWcClaims,
       claimsPrevented,
       wcSavings,
+      avgWcClaimCost: behavioralHealthCalcs.avgWcClaimCost,
+      
+      // Breakdown by condition
+      ptsdClaimsPrevented,
+      depressionClaimsPrevented,
+      anxietyClaimsPrevented,
+      sudClaimsPrevented,
+      ptsdWcSavings,
+      depressionWcSavings,
+      anxietyWcSavings,
+      sudWcSavings,
+      
+      // Discipline metrics
+      profStandardsLift: profStandardsLift * 100,
       baselineDisciplineCases,
       casesPrevented,
       disciplineSavings,
+      
+      // Final metrics
       totalSavings,
       netSavings,
       roi
     };
-  }, [org, coa, includeLeadForLeaders, manualLeadSeats, manualReadySeats, manualEngagement, manualRetentionOverride, manualReadinessOverride, manualProfStandardsOverride, orgData]);
+  }, [org, coa, includeLeadForLeaders, manualLeadSeats, manualReadySeats, manualEngagement, 
+      manualRetentionOverride, manualReadinessOverride, manualProfStandardsOverride, orgData,
+      behavioralHealthCalcs, ptsdCoachingEffectiveness, depressionCoachingEffectiveness,
+      anxietyCoachingEffectiveness, sudCoachingEffectiveness]);
 
   // Helper Functions
   const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
@@ -245,22 +412,22 @@ const CBPDashboard = () => {
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
     const responses = {
-      "How is the net savings calculated?": "Net savings = Total savings (retention + workers comp + discipline) minus BetterUp investment. We calculate savings from preventing separations ($150K each), Workers' Comp - Mental Health Claims/FECA ($65K each), and discipline cases ($45K each), then subtract the cost of Lead ($3,600/seat) and Ready ($1,800/seat) coaching.",
+      "How is the net savings calculated?": "Net savings = Total savings (retention + workers comp + discipline) minus BetterUp investment. We calculate savings from preventing separations ($150K each), Workers' Comp - Mental Health Claims/FECA ($65K each), and discipline cases ($45K each), then subtract the cost of Lead ($5,785/seat) and Ready ($150-250/seat) coaching.",
       "Why is OFO facing a retirement crisis?": "In 2028, OFO officers hired under Law Enforcement 6(c) retirement coverage become eligible at age 50. Combined with 6.8% annual attrition and CBP's 12-month hiring timeline, this creates unprecedented staffing challenges. Every prevented separation saves $150K in recruitment and training costs.",
-      "Explain the COA differences": "Lead-Only targets 15% critical talent (supervisors, specialists) at $3,600/seat for intensive 1:1 coaching. Ready-Only reaches 35% frontline officers (GS-11/12) at $1,800/seat for digital coaching. Lead+Ready combines both for comprehensive coverage addressing all three cost pathways.",
-      "What's Lead vs Ready?": "Lead ($5,785/seat for 12-month commitment) provides intensive 1:1 coaching for supervisors and critical talent, focusing on leadership development. Ready ($150/seat) delivers scalable digital coaching for frontline officers, emphasizing resilience and career readiness. Both include AI coaching and assessments.",
-      "How does Leadership Culture affect ROI?": "Leadership culture (measured by our Professional Standards metric) reduces discipline cases by 22%. Better-led teams have fewer misconduct incidents, lower use-of-force complaints, and stronger adherence to standards. Each prevented discipline case saves $45K in investigation, legal, and administrative costs."
+      "Explain the COA differences": "Pilot targets 15% at $250/seat for proof of concept. Targeted reaches 25% at $200/seat with volume discount (recommended). Scaled covers 75% at $150/seat for maximum impact.",
+      "What's Lead vs Ready?": "Lead ($5,785/seat for 12-month commitment) provides intensive 1:1 coaching for supervisors. Ready ($150-250/seat) delivers scalable digital coaching for frontline officers. Both include AI coaching and assessments.",
+      "How does comorbidity work?": "The model now accounts for overlap between mental health conditions. If comorbidity is set at 35%, then 35% of affected officers have multiple conditions, preventing double-counting in our cost calculations."
     };
     setChatMessages([...chatMessages, 
       { type: 'user', text: chatInput },
-      { type: 'assistant', text: responses[chatInput] || "I can help explain the model! Try asking about net savings, the retirement crisis, COA differences, Lead vs Ready, or how leadership culture affects ROI." }
+      { type: 'assistant', text: responses[chatInput] || "I can help explain the model! Try asking about net savings, the retirement crisis, COA differences, Lead vs Ready, or how comorbidity works." }
     ]);
     setChatInput('');
   };
-return (
+  return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
       
-      {/* PRETTIER HEADER */}
+      {/* HEADER */}
       <div style={{maxWidth: '1200px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '48px 0', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #0078ae'}}>
         <div style={{marginBottom: '32px', padding: '0 32px'}}>
           <h1 style={{fontSize: '42px', fontWeight: '900', color: 'white', marginBottom: '16px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
@@ -352,8 +519,8 @@ return (
       </div>
 
       {/* Main Content Area */}
-      <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-    {/* TAB 1: THE COST PROBLEM */}
+<div style={{maxWidth: '1200px', margin: '0 auto'}}>
+      {/* TAB 1: THE COST PROBLEM */}
         {activeTab === 'cost-problem' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
             
@@ -369,6 +536,16 @@ return (
               </div>
             </div>
 
+            {/* Comorbidity Callout - NEW! */}
+            <div style={{background: '#fffbeb', border: '3px solid #f59e0b', borderRadius: '12px', padding: '24px'}}>
+              <div style={{fontSize: '18px', fontWeight: '700', color: '#92400e', marginBottom: '12px'}}>
+                🧮 Comorbidity Adjustment Active
+              </div>
+              <div style={{fontSize: '15px', color: '#78350f', lineHeight: '1.7'}}>
+                This model accounts for <strong>{comorbidityOverlap}% overlap</strong> between mental health conditions. Without this adjustment, we would be counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers multiple times. The model now shows {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected (down from {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} if conditions were independent).
+              </div>
+            </div>
+
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
               
               <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
@@ -379,7 +556,7 @@ return (
                   {fmt(calculations.retentionSavings)}
                 </div>
                 <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                  <strong>{calculations.separationsPrevented} preventable separations</strong> annually at ${calculations.separationsPrevented > 0 ? Math.round(calculations.retentionSavings / calculations.separationsPrevented).toLocaleString() : '150,000'} per replacement
+                  <strong>{calculations.behavioralSeparations.toLocaleString()} behavioral-driven separations</strong> annually (out of {calculations.baselineSeparations.toLocaleString()} total)
                 </div>
                 <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
                   <strong>Cost Drivers:</strong><br/>
@@ -389,11 +566,12 @@ return (
                   • 1-2 year productivity ramp (experience gap costs)<br/>
                   • Institutional knowledge loss<br/>
                   <br/>
-                  <strong>Model Logic:</strong><br/>
+                  <strong>Model Logic (Updated):</strong><br/>
                   • Baseline: {calculations.baselineSeparations.toLocaleString()} total separations annually ({pct(org === 'ofo' ? 6.8 : 10)} attrition rate)<br/>
-                  • 30% are preventable through behavioral interventions (burnout, lack of career development, poor leadership)<br/>
-                  • BetterUp's 7% retention lift × 65% engagement = prevents {calculations.separationsPrevented} of those behavioral-driven separations<br/>
-                  • Savings: {calculations.separationsPrevented} × $150K replacement cost = {fmt(calculations.retentionSavings)}
+                  • {calculations.behavioralSeparations.toLocaleString()} are driven by behavioral health factors (PTSD, depression, anxiety, SUD)<br/>
+                  • After comorbidity adjustment: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected<br/>
+                  • BetterUp prevents {calculations.separationsPrevented.toLocaleString()} separations through coaching<br/>
+                  • Savings: {calculations.separationsPrevented} × $150K = {fmt(calculations.retentionSavings)}
                 </div>
               </div>
 
@@ -405,20 +583,22 @@ return (
                   {fmt(calculations.wcSavings)}
                 </div>
                 <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                  <strong>{calculations.claimsPrevented} preventable Workers' Comp - Mental Health Claims (FECA)</strong> at ${calculations.claimsPrevented > 0 ? Math.round(calculations.wcSavings / calculations.claimsPrevented).toLocaleString() : '65,000'} average cost
+                  <strong>{calculations.baselineWcClaims.toLocaleString()} baseline Workers' Comp claims</strong> at {fmt(calculations.avgWcClaimCost)} average cost
                 </div>
                 <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
                   <strong>Cost Drivers:</strong><br/>
-                  • PTSD claims: $85K+ per accepted case (therapy, meds, disability)<br/>
-                  • Depression/anxiety claims: $45K-65K each<br/>
-                  • Substance use disorder treatment: $30K-50K<br/>
-                  • Absenteeism: 10-15 additional sick days/year ($4,400/officer)<br/>
+                  • PTSD claims: {fmt(ptsdWcAvgCost)} per accepted case<br/>
+                  • Depression/anxiety claims: {fmt(depressionWcAvgCost)}-{fmt(anxietyWcAvgCost)} each<br/>
+                  • Substance use disorder treatment: {fmt(sudWcAvgCost)}<br/>
+                  • Absenteeism: 10-15 additional sick days/year<br/>
                   • Presenteeism: 35% productivity loss when at work<br/>
                   <br/>
-                  <strong>Model Logic:</strong><br/>
-                  • Baseline: {calculations.baselineMHClaims.toLocaleString()} mental health claims annually (2.5% of workforce)<br/>
-                  • BetterUp's 37% readiness lift (resilience + stress management) × 65% engagement = prevents {calculations.claimsPrevented} claims<br/>
-                  • Savings: {calculations.claimsPrevented} × $65K average claim cost = {fmt(calculations.wcSavings)}
+                  <strong>Model Logic (Updated):</strong><br/>
+                  • Baseline: {calculations.baselineWcClaims.toLocaleString()} mental health claims from {behavioralHealthCalcs.uniqueAffected.toLocaleString()} affected officers<br/>
+                  • PTSD: {behavioralHealthCalcs.ptsdWcClaims} claims • Depression: {behavioralHealthCalcs.depressionWcClaims}<br/>
+                  • Anxiety: {behavioralHealthCalcs.anxietyWcClaims} • SUD: {behavioralHealthCalcs.sudWcClaims}<br/>
+                  • BetterUp prevents {calculations.claimsPrevented} claims through resilience coaching<br/>
+                  • Savings: {fmt(calculations.wcSavings)}
                 </div>
               </div>
 
@@ -464,12 +644,580 @@ return (
             </div>
           </div>
         )}
+        {/* TAB 3: FACTOR BREAKDOWN - NOW WITH WORKING SLIDERS! */}
+        {activeTab === 'factors' && (
+          <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+            
+            {/* Introduction */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '16px'}}>
+                Understanding the Behavioral Health Factors
+              </h2>
+              <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7', marginBottom: '16px'}}>
+                Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the sliders below to adjust assumptions based on CBP-specific data or conservative estimates. Each factor shows its impact on filing rates, separation rates, and intervention effectiveness.
+              </div>
+              <div style={{fontSize: '15px', color: '#dc2626', fontWeight: '600', background: '#fef2f2', padding: '12px', borderRadius: '8px', border: '2px solid #fecaca'}}>
+                ⚡ SLIDERS NOW FUNCTIONAL: Adjusting any slider will immediately update all ROI calculations throughout the model.
+              </div>
+            </div>
 
+            {/* COMORBIDITY CONTROL - NEW! */}
+            <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+                <span style={{fontSize: '36px'}}>🧮</span>
+                <h2 style={{fontSize: '26px', fontWeight: '800', color: '#92400e', margin: 0}}>
+                  Comorbidity Adjustment
+                </h2>
+              </div>
+              
+              <div style={{fontSize: '16px', color: '#78350f', lineHeight: '1.7', marginBottom: '24px'}}>
+                In mental health, conditions often occur together (comorbidity). Someone with PTSD may also have depression. To avoid double-counting the same people multiple times, we apply a comorbidity adjustment. Research suggests <strong>30-40% overlap</strong> in law enforcement populations.
+              </div>
+
+              <div style={{background: 'white', padding: '28px', borderRadius: '12px', border: '2px solid #f59e0b'}}>
+                <label style={{display: 'block', fontSize: '18px', fontWeight: '700', marginBottom: '12px', color: '#92400e'}}>
+                  Comorbidity Overlap: {comorbidityOverlap}%
+                </label>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="50" 
+                  step="5"
+                  value={comorbidityOverlap}
+                  onChange={(e) => setComorbidityOverlap(parseInt(e.target.value))}
+                  style={{width: '100%', height: '8px'}}
+                />
+                <div style={{fontSize: '14px', color: '#92400e', marginTop: '8px'}}>
+                  Range: 0% (no overlap) to 50% (high overlap)
+                </div>
+                
+                <div style={{marginTop: '20px', padding: '20px', background: '#fffbeb', borderRadius: '10px', border: '2px solid #fbbf24'}}>
+                  <div style={{fontSize: '15px', color: '#78350f', lineHeight: '1.8'}}>
+                    <strong>Current Impact:</strong><br/>
+                    • Raw total (if independent): {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} officers<br/>
+                    • Adjusted for {comorbidityOverlap}% overlap: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers<br/>
+                    • Prevented double-counting: {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers<br/>
+                    <br/>
+                    <em>This adjustment is applied proportionally across all conditions, maintaining their relative prevalence while eliminating artificial inflation from overlapping populations.</em>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* PTSD */}
+            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'ptsd' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+              <button
+                onClick={() => setExpandedFactor(expandedFactor === 'ptsd' ? null : 'ptsd')}
+                style={{width: '100%', padding: '24px', background: expandedFactor === 'ptsd' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+              >
+                <div>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                    🧠 PTSD & Trauma Exposure
+                  </div>
+                  <div style={{fontSize: '15px', color: '#64748b'}}>
+                    Affects {behavioralHealthCalcs.ptsdAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.ptsdWcClaims} claims • {fmt(ptsdWcAvgCost)} avg cost
+                  </div>
+                </div>
+                <div style={{fontSize: '32px', color: '#c41230'}}>
+                  {expandedFactor === 'ptsd' ? '−' : '+'}
+                </div>
+              </button>
+              
+              {expandedFactor === 'ptsd' && (
+                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> Untreated PTSD leads to expensive Workers' Comp claims ({fmt(ptsdWcAvgCost)}), increased sick leave (15+ days/year), impaired decision-making (use-of-force incidents), and early separation ($150K replacement cost). Officers experiencing trauma exposure without intervention are 3x more likely to leave within 5 years.
+                  </div>
+                  
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Prevalence: {ptsdPrevalence}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="10" 
+                        max="25" 
+                        value={ptsdPrevalence}
+                        onChange={(e) => setPtsdPrevalence(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 18% • Range: 10-25% in law enforcement
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Coaching Effectiveness: {ptsdCoachingEffectiveness}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="15" 
+                        max="35" 
+                        value={ptsdCoachingEffectiveness}
+                        onChange={(e) => setPtsdCoachingEffectiveness(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • Range: 15-35% based on intervention timing
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Workers' Comp Filing Rate: {ptsdWcFilingRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="5" 
+                        max="15" 
+                        value={ptsdWcFilingRate}
+                        onChange={(e) => setPtsdWcFilingRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 8% • Range: 5-15% of affected officers file claims
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Avg Claim Cost: {fmt(ptsdWcAvgCost)}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="60000" 
+                        max="110000" 
+                        step="5000"
+                        value={ptsdWcAvgCost}
+                        onChange={(e) => setPtsdWcAvgCost(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $60K-$110K per claim
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Separation Rate: {ptsdSeparationRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="8" 
+                        max="20" 
+                        value={ptsdSeparationRate}
+                        onChange={(e) => setPtsdSeparationRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 12% • Range: 8-20% separate within 5 years
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.ptsdAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.ptsdWcClaims} baseline claims × {fmt(ptsdWcAvgCost)} = {fmt(behavioralHealthCalcs.ptsdWcCost)}<br/>
+                      • BetterUp prevents {calculations.ptsdClaimsPrevented} claims = <strong>{fmt(calculations.ptsdWcSavings)} savings</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* DEPRESSION */}
+            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'depression' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+              <button
+                onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')}
+                style={{width: '100%', padding: '24px', background: expandedFactor === 'depression' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+              >
+                <div>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                    😔 Depression & Burnout
+                  </div>
+                  <div style={{fontSize: '15px', color: '#64748b'}}>
+                    Affects {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.depressionWcClaims} claims • {fmt(depressionWcAvgCost)} avg cost
+                  </div>
+                </div>
+                <div style={{fontSize: '32px', color: '#c41230'}}>
+                  {expandedFactor === 'depression' ? '−' : '+'}
+                </div>
+              </button>
+              
+              {expandedFactor === 'depression' && (
+                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> Depression and burnout drive workers' comp claims ({fmt(depressionWcAvgCost)}), chronic absenteeism (12+ sick days/year), severe presenteeism (35% productivity loss when at work), and early attrition. Officers with untreated depression are 2.5x more likely to separate prematurely.
+                  </div>
+                  
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Prevalence: {depressionPrevalence}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="10" 
+                        max="25" 
+                        value={depressionPrevalence}
+                        onChange={(e) => setDepressionPrevalence(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 18% • Range: 10-25% in high-stress environments
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Coaching Effectiveness: {depressionCoachingEffectiveness}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="15" 
+                        max="35" 
+                        value={depressionCoachingEffectiveness}
+                        onChange={(e) => setDepressionCoachingEffectiveness(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • JAMA 2024: 21.6% symptom reduction
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Workers' Comp Filing Rate: {depressionWcFilingRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="5" 
+                        max="15" 
+                        value={depressionWcFilingRate}
+                        onChange={(e) => setDepressionWcFilingRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 10% • Higher in high-stress environments
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Avg Claim Cost: {fmt(depressionWcAvgCost)}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="40000" 
+                        max="70000" 
+                        step="2500"
+                        value={depressionWcAvgCost}
+                        onChange={(e) => setDepressionWcAvgCost(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $40K-$70K per claim
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Separation Rate: {depressionSeparationRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="10" 
+                        max="25" 
+                        value={depressionSeparationRate}
+                        onChange={(e) => setDepressionSeparationRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 15% • Burnout accelerates attrition
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.depressionWcClaims} baseline claims × {fmt(depressionWcAvgCost)} = {fmt(behavioralHealthCalcs.depressionWcCost)}<br/>
+                      • BetterUp prevents {calculations.depressionClaimsPrevented} claims = <strong>{fmt(calculations.depressionWcSavings)} savings</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ANXIETY - Similar structure */}
+            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+              <button
+                onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')}
+                style={{width: '100%', padding: '24px', background: expandedFactor === 'anxiety' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+              >
+                <div>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                    😰 Anxiety & Stress
+                  </div>
+                  <div style={{fontSize: '15px', color: '#64748b'}}>
+                    Affects {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.anxietyWcClaims} claims • {fmt(anxietyWcAvgCost)} avg cost
+                  </div>
+                </div>
+                <div style={{fontSize: '32px', color: '#c41230'}}>
+                  {expandedFactor === 'anxiety' ? '−' : '+'}
+                </div>
+              </button>
+              
+              {expandedFactor === 'anxiety' && (
+                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> Chronic anxiety impairs tactical decision-making, increases use-of-force incidents, drives workers' comp claims ({fmt(anxietyWcAvgCost)}), and causes moderate absenteeism (8-10 days/year). Montreal Police study showed 40% stress reduction through proactive intervention.
+                  </div>
+                  
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Prevalence: {anxietyPrevalence}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="10" 
+                        max="20" 
+                        value={anxietyPrevalence}
+                        onChange={(e) => setAnxietyPrevalence(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 15% • Range: 10-20%
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Coaching Effectiveness: {anxietyCoachingEffectiveness}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="10" 
+                        max="30" 
+                        value={anxietyCoachingEffectiveness}
+                        onChange={(e) => setAnxietyCoachingEffectiveness(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 20% • HeartMath: 40% stress reduction
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Workers' Comp Filing Rate: {anxietyWcFilingRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="3" 
+                        max="12" 
+                        value={anxietyWcFilingRate}
+                        onChange={(e) => setAnxietyWcFilingRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 6% • Lower than PTSD/depression
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Avg Claim Cost: {fmt(anxietyWcAvgCost)}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="35000" 
+                        max="60000" 
+                        step="2500"
+                        value={anxietyWcAvgCost}
+                        onChange={(e) => setAnxietyWcAvgCost(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $35K-$60K per claim
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Separation Rate: {anxietySeparationRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="5" 
+                        max="18" 
+                        value={anxietySeparationRate}
+                        onChange={(e) => setAnxietySeparationRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 10% • Moderate attrition risk
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.anxietyWcClaims} baseline claims × {fmt(anxietyWcAvgCost)} = {fmt(behavioralHealthCalcs.anxietyWcCost)}<br/>
+                      • BetterUp prevents {calculations.anxietyClaimsPrevented} claims = <strong>{fmt(calculations.anxietyWcSavings)} savings</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SUD - Substance Use Disorder */}
+            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'sud' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+              <button
+                onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')}
+                style={{width: '100%', padding: '24px', background: expandedFactor === 'sud' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+              >
+                <div>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                    🍺 Substance Use Disorders
+                  </div>
+                  <div style={{fontSize: '15px', color: '#64748b'}}>
+                    Affects {behavioralHealthCalcs.sudAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.sudWcClaims} claims • {fmt(sudWcAvgCost)} avg cost
+                  </div>
+                </div>
+                <div style={{fontSize: '32px', color: '#c41230'}}>
+                  {expandedFactor === 'sud' ? '−' : '+'}
+                </div>
+              </button>
+              
+              {expandedFactor === 'sud' && (
+                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> Substance use disorders create the highest discipline and termination risk. CuraLinc EAP study showed 67% severity reduction and 78% at-risk elimination through early intervention. Costs include treatment ({fmt(sudWcAvgCost)}), discipline cases ($45K), and terminations requiring replacement ($150K).
+                  </div>
+                  
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Prevalence: {sudPrevalence}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="15" 
+                        max="35" 
+                        value={sudPrevalence}
+                        onChange={(e) => setSudPrevalence(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • 2-3x general population
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Coaching Effectiveness: {sudCoachingEffectiveness}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="50" 
+                        max="80" 
+                        value={sudCoachingEffectiveness}
+                        onChange={(e) => setSudCoachingEffectiveness(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 67% • CuraLinc: 67% severity reduction
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Workers' Comp Filing Rate: {sudWcFilingRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="8" 
+                        max="20" 
+                        value={sudWcFilingRate}
+                        onChange={(e) => setSudWcFilingRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 15% • Includes injury-related claims
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Avg Claim Cost: {fmt(sudWcAvgCost)}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="25000" 
+                        max="55000" 
+                        step="2500"
+                        value={sudWcAvgCost}
+                        onChange={(e) => setSudWcAvgCost(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $25K-$55K per claim
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Separation Rate: {sudSeparationRate}%
+                      </label>
+                      <input 
+                        type="range" 
+                        min="15" 
+                        max="35" 
+                        value={sudSeparationRate}
+                        onChange={(e) => setSudSeparationRate(parseInt(e.target.value))}
+                        style={{width: '100%'}}
+                      />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • Highest termination risk
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.sudAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.sudWcClaims} baseline claims × {fmt(sudWcAvgCost)} = {fmt(behavioralHealthCalcs.sudWcCost)}<br/>
+                      • BetterUp prevents {calculations.sudClaimsPrevented} claims = <strong>{fmt(calculations.sudWcSavings)} savings</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         {/* TAB 2: ROI MODEL */}
         {activeTab === 'roi-model' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
             
-            {/* COA Selection with Enhanced Explanations */}
+            {/* COA Selection */}
             <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', marginBottom: '16px'}}>
                 Select Course of Action (COA)
@@ -479,7 +1227,7 @@ return (
                   { 
                     id: 'pilot', 
                     label: 'COA 1: Pilot', 
-                    desc: '15% of workforce • Select offices • Proof of concept at premium pilot pricing', 
+                    desc: '15% of workforce • Select offices • Proof of concept', 
                     seats: Math.max(Math.round(calculations.officers * 0.15), 500),
                     investment: fmt(Math.max(Math.round(calculations.officers * 0.15), 500) * 250),
                     price: '$250/seat'
@@ -487,7 +1235,7 @@ return (
                   { 
                     id: 'targeted', 
                     label: 'COA 2: Targeted (Recommended)', 
-                    desc: '25% of workforce • Select offices • Balanced scale with volume discount', 
+                    desc: '25% of workforce • Balanced scale with volume discount', 
                     seats: Math.max(Math.round(calculations.officers * 0.25), 500),
                     investment: fmt(Math.max(Math.round(calculations.officers * 0.25), 500) * 200),
                     price: '$200/seat'
@@ -495,7 +1243,7 @@ return (
                   { 
                     id: 'scaled', 
                     label: 'COA 3: Scaled', 
-                    desc: '75% of workforce • Select offices • Maximum impact at list price', 
+                    desc: '75% of workforce • Maximum impact at list price', 
                     seats: Math.max(Math.round(calculations.officers * 0.75), 500),
                     investment: fmt(Math.max(Math.round(calculations.officers * 0.75), 500) * 150),
                     price: '$150/seat'
@@ -529,6 +1277,7 @@ return (
                   </button>
                 ))}
               </div>
+              
               {/* LEAD TOGGLE */}
               <div style={{marginTop: '20px', padding: '24px', background: '#f8fafc', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
                 <label style={{display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer'}}>
@@ -543,7 +1292,7 @@ return (
                       Add Lead for Supervisors & Critical Talent (10% GS-13+ coverage)
                     </div>
                     <div style={{fontSize: '14px', color: '#64748b', marginTop: '4px'}}>
-                      Adds {Math.round(calculations.officers * 0.10).toLocaleString()} Lead seats at $5,785/seat • Develops leadership culture that prevents discipline cases and retains teams
+                      Adds {Math.round(calculations.officers * 0.10).toLocaleString()} Lead seats at $5,785/seat • Develops leadership culture
                     </div>
                   </div>
                 </label>
@@ -553,58 +1302,12 @@ return (
                     <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.8'}}>
                       <strong>💎 Lead Enhancement Active:</strong><br/>
                       • Additional investment: {fmt(Math.round(calculations.officers * 0.10) * 5785)}<br/>
-                      • Target population: GS-13+ supervisors, SES candidates, CBP Leadership Institute participants, high-potentials<br/>
-                      • Additional impact: +3-5% retention lift through improved leadership culture, +5% discipline case reduction through better supervision<br/>
-                      • Estimated additional savings: $8-12M annually (leadership-driven team retention + professional standards improvement)
+                      • Target population: GS-13+ supervisors, SES candidates, high-potentials<br/>
+                      • Additional impact: +3-5% retention lift, +5% discipline case reduction
                     </div>
                   </div>
                 )}
               </div>
-              <button 
-                onClick={() => setShowCoaDetails(!showCoaDetails)} 
-                style={{marginTop: '16px', padding: '12px 20px', fontSize: '14px', fontWeight: '600', background: '#f1f5f9', color: '#005288', border: '2px solid #e2e8f0', borderRadius: '8px', cursor: 'pointer', width: '100%'}}
-              >
-                {showCoaDetails ? '▼ Hide' : '▶ Show'} Detailed COA Breakdown
-              </button>
-              
-              {showCoaDetails && (
-                <div style={{marginTop: '16px', padding: '24px', background: '#f8fafc', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px'}}>
-                    <div style={{background: 'white', padding: '20px', borderRadius: '10px', border: '2px solid #005288'}}>
-                      <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>💎 Lead ($5,785/seat - 12 month)</div>
-                      <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7', marginBottom: '12px'}}>
-                        <strong>Who:</strong> Supervisors (GS-13+), senior specialists, high-potentials, critical talent<br/>
-                        <strong>What:</strong> Intensive 1:1 coaching with dedicated professional coaches<br/>
-                        <strong>Focus:</strong> Leadership development, people management, strategic thinking<br/>
-                        <strong>Delivery:</strong> Bi-weekly live sessions + AI coaching + assessments
-                      </div>
-                      <div style={{fontSize: '13px', color: '#64748b', fontStyle: 'italic'}}>
-                        Drives team performance through better leadership culture
-                      </div>
-                    </div>
-
-                    <div style={{background: 'white', padding: '20px', borderRadius: '10px', border: '2px solid #005288'}}>
-                      <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>🎯 Ready (Tiered Volume Pricing - 12 month)</div>
-                      <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7', marginBottom: '12px'}}>
-                        <strong>Who:</strong> CBP Officers (GS-11/12), Border Patrol Agents, entry-level personnel<br/>
-                        <strong>What:</strong> Scalable digital coaching with AI-powered support<br/>
-                        <strong>Focus:</strong> Resilience, stress management, career readiness, work-life integration<br/>
-                        <strong>Delivery:</strong> On-demand AI coaching + digital resources + assessments
-                      </div>
-                      <div style={{fontSize: '13px', color: '#64748b', fontStyle: 'italic'}}>
-                        Reaches majority of workforce cost-effectively
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div style={{marginTop: '20px', padding: '16px', background: '#e6f2f8', borderRadius: '10px', border: '2px solid #005288'}}>
-                    <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7'}}>
-                      <strong>Why the Mix Matters:</strong> Lead develops the leadership culture that prevents discipline cases and retains teams. Ready provides the resilience foundation that prevents Workers' Comp claims and burnout. Together, they address all three cost pathways simultaneously.<br/><br/>
-                      <strong>Volume-Based Pricing Strategy:</strong> Pilot pricing ($250/seat) reflects higher per-user setup costs for small deployments. As CBP scales to Targeted ($200/seat) and Scaled ($150/seat at list price), volume efficiencies drive down per-seat costs, creating strong incentive for enterprise-wide adoption.
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Net Savings */}
@@ -627,6 +1330,7 @@ return (
               </div>
             </div>
 
+            {/* Three Pathways */}
             <div>
               <h3 style={{fontSize: '20px', fontWeight: '700', color: '#64748b', marginBottom: '16px', textAlign: 'center'}}>
                 Three Pathways Contributing to Total Above
@@ -641,7 +1345,7 @@ return (
                     {fmt(calculations.retentionSavings)}
                   </div>
                   <div style={{fontSize: '14px', color: '#64748b', lineHeight: '1.6'}}>
-                    {calculations.separationsPrevented} separations prevented • {pct(calculations.retentionLift)} lift from career commitment & leadership development
+                    {calculations.separationsPrevented} separations prevented from {calculations.behavioralSeparations} behavioral-driven separations
                   </div>
                 </div>
 
@@ -653,7 +1357,7 @@ return (
                     {fmt(calculations.wcSavings)}
                   </div>
                   <div style={{fontSize: '14px', color: '#64748b', lineHeight: '1.6'}}>
-                    {calculations.claimsPrevented} Workers' Comp - Mental Health Claims (FECA) prevented • {pct(calculations.readinessLift)} lift from resilience & stress management
+                    {calculations.claimsPrevented} claims prevented • {pct(calculations.readinessLift)} lift from resilience coaching
                   </div>
                 </div>
 
@@ -665,12 +1369,13 @@ return (
                     {fmt(calculations.disciplineSavings)}
                   </div>
                   <div style={{fontSize: '14px', color: '#64748b', lineHeight: '1.6'}}>
-                    {calculations.casesPrevented} discipline cases prevented • {pct(calculations.profStandardsLift)} lift from improved leadership culture
+                    {calculations.casesPrevented} cases prevented • {pct(calculations.profStandardsLift)} lift from leadership culture
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Product Mix */}
             <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
                 Product Mix & Investment
@@ -762,45 +1467,6 @@ return (
                     style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
                   />
                 </div>
-
-                <div>
-                  <label style={{display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#475569'}}>
-                    Retention Lift (%)
-                  </label>
-                  <input 
-                    type="number" 
-                    value={manualRetentionOverride === null ? '' : manualRetentionOverride}
-                    onChange={(e) => setManualRetentionOverride(e.target.value === '' ? null : parseFloat(e.target.value))}
-                    placeholder="Default: 7%"
-                    style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
-                  />
-                </div>
-
-                <div>
-                  <label style={{display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#475569'}}>
-                    Readiness Lift (%)
-                  </label>
-                  <input 
-                    type="number" 
-                    value={manualReadinessOverride === null ? '' : manualReadinessOverride}
-                    onChange={(e) => setManualReadinessOverride(e.target.value === '' ? null : parseFloat(e.target.value))}
-                    placeholder="Default: 37%"
-                    style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
-                  />
-                </div>
-
-                <div>
-                  <label style={{display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#475569'}}>
-                    Professional Standards Lift (%)
-                  </label>
-                  <input 
-                    type="number" 
-                    value={manualProfStandardsOverride === null ? '' : manualProfStandardsOverride}
-                    onChange={(e) => setManualProfStandardsOverride(e.target.value === '' ? null : parseFloat(e.target.value))}
-                    placeholder="Default: 22%"
-                    style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
-                  />
-                </div>
               </div>
 
               <button 
@@ -819,482 +1485,26 @@ return (
             </div>
           </div>
         )}
-        {/* TAB 3: FACTOR BREAKDOWN */}
-        {activeTab === 'factors' && (
-          <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
-            
-            {/* Introduction */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '16px'}}>
-                Understanding the Behavioral Health Factors
-              </h2>
-              <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7'}}>
-                Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the sliders below to adjust assumptions based on CBP-specific data or conservative estimates. Each factor shows its impact on filing rates, separation rates, and intervention effectiveness.
-              </div>
-            </div>
 
-            {/* PTSD */}
-            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'ptsd' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
-              <button
-                onClick={() => setExpandedFactor(expandedFactor === 'ptsd' ? null : 'ptsd')}
-                style={{width: '100%', padding: '24px', background: expandedFactor === 'ptsd' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-              >
-                <div>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
-                    🧠 PTSD & Trauma Exposure
-                  </div>
-                  <div style={{fontSize: '15px', color: '#64748b'}}>
-                    Affects 18% of law enforcement • $85K+ per claim • 3x separation risk
-                  </div>
-                </div>
-                <div style={{fontSize: '32px', color: '#c41230'}}>
-                  {expandedFactor === 'ptsd' ? '−' : '+'}
-                </div>
-              </button>
-              
-              {expandedFactor === 'ptsd' && (
-                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
-                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                    <strong>Cost Drivers:</strong> Untreated PTSD leads to expensive Workers' Comp - Mental Health Claims/FECA ($85K+), increased sick leave (15+ days/year), impaired decision-making (use-of-force incidents), and early separation ($150K replacement cost). Officers experiencing trauma exposure without intervention are 3x more likely to leave within 5 years.
-                  </div>
-                  
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Coaching Effectiveness: {ptsdCoachingEffectiveness}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="15" 
-                        max="35" 
-                        value={ptsdCoachingEffectiveness}
-                        onChange={(e) => setPtsdCoachingEffectiveness(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 25% • Range: 15-35% based on intervention timing
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Workers' Comp Filing Rate: {ptsdWcFilingRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="5" 
-                        max="15" 
-                        value={ptsdWcFilingRate}
-                        onChange={(e) => setPtsdWcFilingRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 8% • Range: 5-15% of affected officers file claims
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Separation Rate: {ptsdSeparationRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="8" 
-                        max="20" 
-                        value={ptsdSeparationRate}
-                        onChange={(e) => setPtsdSeparationRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 12% • Range: 8-20% separate within 5 years
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* DEPRESSION */}
-            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'depression' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
-              <button
-                onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')}
-                style={{width: '100%', padding: '24px', background: expandedFactor === 'depression' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-              >
-                <div>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
-                    😔 Depression & Burnout
-                  </div>
-                  <div style={{fontSize: '15px', color: '#64748b'}}>
-                    Affects 18% of officers • $45-65K per claim • 35% productivity loss
-                  </div>
-                </div>
-                <div style={{fontSize: '32px', color: '#c41230'}}>
-                  {expandedFactor === 'depression' ? '−' : '+'}
-                </div>
-              </button>
-              
-              {expandedFactor === 'depression' && (
-                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
-                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                    <strong>Cost Drivers:</strong> Depression and burnout drive workers' comp claims ($45-65K), chronic absenteeism (12+ sick days/year), severe presenteeism (35% productivity loss when at work), and early attrition. Officers with untreated depression are 2.5x more likely to separate prematurely.
-                  </div>
-                  
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Coaching Effectiveness: {depressionCoachingEffectiveness}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="15" 
-                        max="35" 
-                        value={depressionCoachingEffectiveness}
-                        onChange={(e) => setDepressionCoachingEffectiveness(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 25% • JAMA 2024: 21.6% symptom reduction
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Workers' Comp Filing Rate: {depressionWcFilingRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="5" 
-                        max="15" 
-                        value={depressionWcFilingRate}
-                        onChange={(e) => setDepressionWcFilingRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 10% • Higher in high-stress environments
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Separation Rate: {depressionSeparationRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="10" 
-                        max="25" 
-                        value={depressionSeparationRate}
-                        onChange={(e) => setDepressionSeparationRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 15% • Burnout accelerates attrition
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* ANXIETY */}
-            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
-              <button
-                onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')}
-                style={{width: '100%', padding: '24px', background: expandedFactor === 'anxiety' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-              >
-                <div>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
-                    😰 Anxiety & Stress
-                  </div>
-                  <div style={{fontSize: '15px', color: '#64748b'}}>
-                    Affects 15% of officers • $40-55K per claim • Decision-making impairment
-                  </div>
-                </div>
-                <div style={{fontSize: '32px', color: '#c41230'}}>
-                  {expandedFactor === 'anxiety' ? '−' : '+'}
-                </div>
-              </button>
-              
-              {expandedFactor === 'anxiety' && (
-                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
-                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                    <strong>Cost Drivers:</strong> Chronic anxiety impairs tactical decision-making, increases use-of-force incidents, drives workers' comp claims ($40-55K), and causes moderate absenteeism (8-10 days/year). Montreal Police study showed 40% stress reduction through proactive intervention.
-                  </div>
-                  
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Coaching Effectiveness: {anxietyCoachingEffectiveness}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="10" 
-                        max="30" 
-                        value={anxietyCoachingEffectiveness}
-                        onChange={(e) => setAnxietyCoachingEffectiveness(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 20% • HeartMath: 40% stress reduction
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Workers' Comp Filing Rate: {anxietyWcFilingRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="3" 
-                        max="12" 
-                        value={anxietyWcFilingRate}
-                        onChange={(e) => setAnxietyWcFilingRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 6% • Lower than PTSD/depression
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Separation Rate: {anxietySeparationRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="5" 
-                        max="18" 
-                        value={anxietySeparationRate}
-                        onChange={(e) => setAnxietySeparationRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 10% • Moderate attrition risk
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* SUBSTANCE USE DISORDER */}
-            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'sud' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
-              <button
-                onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')}
-                style={{width: '100%', padding: '24px', background: expandedFactor === 'sud' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-              >
-                <div>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
-                    🍺 Substance Use Disorders
-                  </div>
-                  <div style={{fontSize: '15px', color: '#64748b'}}>
-                    Affects 25% of law enforcement • $30-50K treatment • Discipline/termination risk
-                  </div>
-                </div>
-                <div style={{fontSize: '32px', color: '#c41230'}}>
-                  {expandedFactor === 'sud' ? '−' : '+'}
-                </div>
-              </button>
-              
-              {expandedFactor === 'sud' && (
-                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
-                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                    <strong>Cost Drivers:</strong> Substance use disorders create the highest discipline and termination risk. CuraLinc EAP study showed 67% severity reduction and 78% at-risk elimination through early intervention. Costs include treatment ($30-50K), discipline cases ($45K), and terminations requiring replacement ($150K).
-                  </div>
-                  
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'}}>
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Coaching Effectiveness: {sudCoachingEffectiveness}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="50" 
-                        max="80" 
-                        value={sudCoachingEffectiveness}
-                        onChange={(e) => setSudCoachingEffectiveness(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 67% • CuraLinc: 67% severity reduction
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Workers' Comp Filing Rate: {sudWcFilingRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="8" 
-                        max="20" 
-                        value={sudWcFilingRate}
-                        onChange={(e) => setSudWcFilingRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 15% • Includes injury-related claims
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Separation Rate: {sudSeparationRate}%
-                      </label>
-                      <input 
-                        type="range" 
-                        min="15" 
-                        max="35" 
-                        value={sudSeparationRate}
-                        onChange={(e) => setSudSeparationRate(parseInt(e.target.value))}
-                        style={{width: '100%'}}
-                      />
-                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
-                        Average: 25% • Highest termination risk
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
         {/* TAB 4: PROOF & VALIDATION */}
         {activeTab === 'proof' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
             
-            {/* PYRAMID - MOVED TO TAB 4 */}
-            <div style={{background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)', border: '4px solid #c41230', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'}}>
-                <span style={{fontSize: '36px'}}>🔺</span>
-                <h2 style={{fontSize: '28px', fontWeight: '800', color: '#8f0e28', margin: 0}}>
-                  The Cost Cascade: Prevention vs Crisis vs Catastrophic
+            {/* Validation Callout - NEW */}
+            <div style={{background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '4px solid #10b981', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
+                <span style={{fontSize: '36px'}}>✅</span>
+                <h2 style={{fontSize: '28px', fontWeight: '800', color: '#065f46', margin: 0}}>
+                  Model Validation: Stephen's Feedback Addressed
                 </h2>
               </div>
-              
-              <div style={{fontSize: '16px', color: '#6d0a1f', marginBottom: '32px', lineHeight: '1.7'}}>
-                Mental health costs follow a predictable escalation pattern. Early intervention at the <strong>Prevention</strong> level costs $150-250 per officer annually through proactive coaching. Waiting until <strong>Crisis</strong> costs $40K-85K in workers' comp claims. Reaching <strong>Catastrophic</strong> outcomes costs $150K+ in separations plus institutional damage. The business case for prevention is overwhelming.
-              </div>
-
-              <div style={{display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px', margin: '0 auto 32px'}}>
-                <div style={{background: 'white', border: '4px solid #5e9732', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(94,151,50,0.2)'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#5e9732', marginBottom: '8px'}}>
-                    ✅ PREVENTION: $150-250 per officer
-                  </div>
-                  <div style={{fontSize: '15px', color: '#1e293b', lineHeight: '1.6'}}>
-                    Proactive digital coaching • Early symptom detection • Resilience building • Optional leadership development • 10:1 ROI
-                  </div>
-                </div>
-
-                <div style={{background: 'white', border: '4px solid #f59e0b', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '60px', boxShadow: '0 4px 12px rgba(245,158,11,0.2)'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#d97706', marginBottom: '8px'}}>
-                    ⚠️ CRISIS: $40,000-85,000 per case
-                  </div>
-                  <div style={{fontSize: '15px', color: '#1e293b', lineHeight: '1.6'}}>
-                    Workers' Comp - Mental Health Claims (FECA) • Extended sick leave • Treatment costs • Temporary replacements • 2:1 ROI
-                  </div>
-                </div>
-
-                <div style={{background: 'white', border: '4px solid #c41230', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '120px', boxShadow: '0 4px 12px rgba(196,18,48,0.2)'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
-                    🚨 CATASTROPHIC: $150,000+ per separation
-                  </div>
-                  <div style={{fontSize: '15px', color: '#1e293b', lineHeight: '1.6'}}>
-                    Terminations • Permanent disability • Institutional knowledge loss • Team disruption • Negative ROI
-                  </div>
-                </div>
-              </div>
-
-              <div style={{background: 'white', borderRadius: '12px', padding: '24px'}}>
-                <h3 style={{fontSize: '20px', fontWeight: '800', color: '#1e293b', marginBottom: '16px', textAlign: 'center'}}>
-                  Business Case Comparison: Wait vs Intervene
-                </h3>
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px'}}>
-                  <div style={{background: '#fef2f2', padding: '20px', borderRadius: '10px', border: '2px solid #c41230'}}>
-                    <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
-                      ❌ Wait for Crisis
-                    </div>
-                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                      • 1,000 officers with untreated behavioral health issues<br/>
-                      • 8% file Workers' Comp claims = 80 claims × $65K = <strong>$5.2M</strong><br/>
-                      • 12% separate = 120 separations × $150K = <strong>$18M</strong><br/>
-                      • 3% discipline cases = 30 cases × $45K = <strong>$1.35M</strong><br/>
-                      • <strong>Total: $24.55M over 5 years</strong>
-                    </div>
-                  </div>
-
-                  <div style={{background: '#e8f4e0', padding: '20px', borderRadius: '10px', border: '2px solid #5e9732'}}>
-                    <div style={{fontSize: '18px', fontWeight: '700', color: '#5e9732', marginBottom: '12px'}}>
-                      ✅ Intervene Early (BetterUp)
-                    </div>
-                    <div style={{fontSize: '14px', color: '#4a7628', lineHeight: '1.7'}}>
-                      • 1,000 officers with proactive coaching<br/>
-                      • Investment: 1,000 × $2,700 avg = <strong>$2.7M</strong><br/>
-                      • Prevent 37% of claims = 30 claims × $65K = <strong>$1.95M saved</strong><br/>
-                      • Prevent 7% separations = 8 separations × $150K = <strong>$1.2M saved</strong><br/>
-                      • Prevent 22% discipline = 7 cases × $45K = <strong>$315K saved</strong><br/>
-                      • <strong>Net savings: $765K (28% ROI)</strong>
-                    </div>
-                  </div>
-                </div>
-                
-                <div style={{marginTop: '20px', padding: '16px', background: '#e6f2f8', borderRadius: '10px', textAlign: 'center'}}>
-                  <div style={{fontSize: '16px', color: '#0078ae', fontWeight: '600'}}>
-                    🎯 Prevention ROI Multiplier: <strong>Every $1 invested early prevents $3.50 in crisis costs</strong>
-                  </div>
-                </div>
+              <div style={{fontSize: '16px', color: '#065f46', lineHeight: '1.7'}}>
+                <strong>✅ Issue 1 Fixed:</strong> All behavioral health sliders (PTSD, depression, anxiety, SUD filing rates, costs, prevalence) now directly drive ROI calculations. Adjust any slider in the Factor Breakdown tab and watch the Cost Problem and ROI tabs update in real-time.<br/><br/>
+                <strong>✅ Issue 2 Fixed:</strong> Comorbidity adjustment eliminates double-counting. Research shows 30-40% of officers with mental health conditions have multiple diagnoses. The model now applies a {comorbidityOverlap}% overlap adjustment, reducing the affected population from {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} to {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers.
               </div>
             </div>
 
-            {/* Methodology Impact Section */}
             <MethodologyImpactSection />
-
-            {/* 5-Step Mastery Framework */}
-            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>📚</div>
-                <h2 style={{fontSize: '24px', fontWeight: 'bold', color: '#4338ca', margin: 0}}>How BetterUp Builds Mastery at CBP</h2>
-              </div>
-             
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
-                {[
-                  {num: '1', title: 'REFLECT', desc: 'WPM assessment identifies strengths & gaps', icon: '🪞'},
-                  {num: '2', title: 'LEARN', desc: 'Personalized journeys + curated resources', icon: '📖'},
-                  {num: '3', title: 'PRACTICE', desc: 'AI role-play + coaching rehearsal', icon: '🎯'},
-                  {num: '4', title: 'COMMIT', desc: 'Action plans at critical moments', icon: '✅'},
-                  {num: '5', title: 'MEASURE', desc: 'Pre-post growth assessments', icon: '📊'}
-                ].map((step, i) => (
-                  <div key={i} style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #818cf8', textAlign: 'center'}}>
-                    <div style={{fontSize: '28px', marginBottom: '8px'}}>{step.icon}</div>
-                    <div style={{fontSize: '11px', fontWeight: 'bold', color: '#1e293b', marginBottom: '6px'}}>{step.num}. {step.title}</div>
-                    <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>{step.desc}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
-                <h3 style={{fontSize: '16px', fontWeight: 'bold', color: '#4338ca', marginBottom: '12px'}}>Applied to CBP Operational Challenges:</h3>
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>Use-of-Force Decisions:</strong> Practice high-pressure scenarios through AI role-play before real encounters
-                  </div>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies for volatile public interactions
-                  </div>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>Post-Incident Recovery:</strong> Just-in-time stress management after traumatic events
-                  </div>
-                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                    <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at critical 3-5yr, 10-15yr, pre-2028 retirement points
-                  </div>
-                </div>
-              </div>
-
-              <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '16px', border: '2px solid #818cf8'}}>
-                <p style={{fontSize: '13px', color: '#3730a3', margin: 0, lineHeight: 1.6}}>
-                  <strong style={{color: '#4338ca'}}>From Air Force Weapons School:</strong> This mastery framework helped elite pilots strengthen decision-making under pressure, cognitive agility, and stress regulation—the same skills CBP officers and agents need for high-stakes law enforcement.
-                </p>
-              </div>
-            </div>
 
             {/* Air Force Proven Results */}
             <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
@@ -1433,7 +1643,7 @@ return (
               </div>
             </div>
 
-            {/* Model Assumptions - MOVED TO TAB 4 */}
+            {/* Model Assumptions */}
             <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h2 style={{fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
                 📊 Model Assumptions & Conservative Estimates
@@ -1453,10 +1663,7 @@ return (
                     Readiness Impact (37% Lift)
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                    Composite of Air Force +17% mission readiness and +15% resilience with Montreal Police 40% stress reduction. Assumes 2.5% baseline mental health Workers' Comp claim rate (conservative vs industry 3-5%). JAMA 21.6% symptom reduction validates clinical effectiveness.
-                  </div>
-                  <div style={{marginTop: '12px', padding: '12px', background: '#e6f2f8', borderRadius: '8px', fontSize: '13px', color: '#0078ae', lineHeight: '1.6'}}>
-                    <strong>📊 Note:</strong> We're using a 2.5% baseline mental health claim rate, which is conservative compared to law enforcement industry standards of 3-5%. We welcome CBP's actual FECA claims data to refine this model and provide more precise ROI projections specific to your workforce.
+                    Composite of Air Force +17% mission readiness and +15% resilience with Montreal Police 40% stress reduction. Uses {comorbidityOverlap}% comorbidity overlap to avoid double-counting. JAMA 21.6% symptom reduction validates clinical effectiveness.
                   </div>
                 </div>
 
@@ -1465,7 +1672,7 @@ return (
                     Professional Standards (22% Lift)
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                    Based on improved leadership culture reducing discipline cases. CuraLinc EAP showed 67% alcohol severity reduction (major discipline driver). Model assumes 3.5% baseline discipline rate and only applies lift to behaviorally-driven cases (not policy violations).
+                    Based on improved leadership culture reducing discipline cases. CuraLinc EAP showed 67% alcohol severity reduction (major discipline driver). Model assumes 3.5% baseline discipline rate and only applies lift to behaviorally-driven cases.
                   </div>
                 </div>
 
@@ -1474,7 +1681,7 @@ return (
                     Engagement Rate (65%)
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                    Conservative assumption. Air Force achieves 75%+ engagement. Model uses 65% to account for operational tempo challenges and stigma in law enforcement culture. Digital-first model (AI coaching + on-demand resources) enables higher engagement than traditional EAP (3-5%).
+                    Conservative assumption. Air Force achieves 75%+ engagement. Model uses 65% to account for operational tempo challenges and stigma in law enforcement culture. Digital-first model enables higher engagement than traditional EAP (3-5%).
                   </div>
                 </div>
 
@@ -1483,22 +1690,22 @@ return (
                     Cost Assumptions
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                    Replacement cost: $150K (validated by SHRM and GAO data on LE hiring). Workers' Comp - Mental Health Claim (FECA): $65K average (mix of PTSD $85K, depression/anxiety $45-65K). Discipline case: $45K average (investigation, legal, admin time, potential termination).
+                    Replacement cost: $150K (validated by SHRM and GAO). Workers' Comp: Adjustable by condition in Factor Breakdown tab. Discipline case: $45K average (investigation, legal, admin). All costs based on federal data sources.
                   </div>
                 </div>
 
                 <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
                   <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
-                    Time Horizon
+                    Comorbidity Adjustment
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                    All savings calculated on annual basis with assumption of sustained engagement. Prevention benefits compound over time — early career interventions prevent downstream crises. Long-term ROI studies (5+ years) show 6:1-10:1 returns vs conservative 1-year 4:1 modeled here.
+                    Currently set at {comorbidityOverlap}% overlap. Research shows 30-40% of officers with one mental health condition have comorbid diagnoses. This prevents double-counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers across conditions.
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Research Bibliography with ALL LINKS */}
+            {/* Research Bibliography */}
             <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h2 style={{fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
                 📚 Complete Research Bibliography
@@ -1513,70 +1720,29 @@ return (
                   <a href="https://jamanetwork.com/journals/jama-health-forum/fullarticle/2817234" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
                 </div>
                 <div>
-                  <strong>3. Montreal Police Service:</strong> 22-year longitudinal suicide prevention study — 65% reduction in suicide rate through early intervention
+                  <strong>3. Montreal Police Service:</strong> 22-year longitudinal suicide prevention study — 65% reduction in suicide rate
                   <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9158739/" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
                 </div>
                 <div>
-                  <strong>4. CuraLinc EAP (2022):</strong> Law enforcement EAP effectiveness study — 67% alcohol severity reduction, 78% at-risk elimination
+                  <strong>4. CuraLinc EAP (2022):</strong> Law enforcement EAP effectiveness — 67% alcohol severity reduction
                   <a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
                 </div>
                 <div>
-                  <strong>5. HeartMath Police Study:</strong> Heart rate variability biofeedback for law enforcement — 40% stress reduction, improved decision-making
+                  <strong>5. HeartMath Police Study:</strong> HRV biofeedback for law enforcement — 40% stress reduction
                   <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4890098/" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
                 </div>
                 <div>
-                  <strong>6. Department of Air Force Partnership (2021-2025):</strong> BetterUp outcomes data — +7% career commitment, +15% unit readiness, +13% individual readiness
+                  <strong>6. Department of Air Force Partnership (2021-2025):</strong> BetterUp outcomes — +7% career commitment, +15% unit readiness
                 </div>
                 <div>
-                  <strong>7. DHS OIG Reports:</strong> CBP discipline case volumes and oversight — Baseline data for professional standards improvement
+                  <strong>7. DHS OIG Reports:</strong> CBP discipline case volumes and oversight
                   <a href="https://www.oig.dhs.gov/sites/default/files/assets/2021-05/OIG-21-34-May21.pdf" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Report</a>
                 </div>
-                <div>
-                  <strong>8. NTEU Congressional Testimony (April 2024):</strong> CBP workforce challenges and operational tempo stressors
-                  <a href="https://www.nteu.org/news/testimony/nteu-testimony-on-fiscal-year-2025-budget-request-for-us-customs-and-border-protection" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Testimony</a>
-                </div>
-                <div>
-                  <strong>9. Coaching Effectiveness Meta-Analysis:</strong> 37 RCTs showing effect size 0.59
-                  <a href="https://journals.aom.org/doi/abs/10.5465/amle.2022.0107" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
-                </div>
-              </div>
-            </div>
-
-            {/* Data Sources & Methodology - MOVED TO TAB 4 */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-              <h2 style={{fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
-                📖 Complete Data Sources & Methodology
-              </h2>
-              <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.8'}}>
-                <strong>Federal Data Sources:</strong><br/>
-                • <a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noreferrer" style={{color: '#005288'}}>GAO-24-107029</a>: CBP recruitment, hiring, retention challenges<br/>
-                • <a href="https://www.oig.dhs.gov/sites/default/files/assets/2021-05/OIG-21-34-May21.pdf" target="_blank" rel="noreferrer" style={{color: '#005288'}}>DHS OIG Reports</a>: Discipline case volumes and misconduct oversight<br/>
-                • <a href="https://www.nteu.org/news/testimony/nteu-testimony-on-fiscal-year-2025-budget-request-for-us-customs-and-border-protection" target="_blank" rel="noreferrer" style={{color: '#005288'}}>NTEU Congressional Testimony (April 2024)</a>: CBP workforce challenges<br/>
-                • <a href="https://www.opm.gov/fevs/" target="_blank" rel="noreferrer" style={{color: '#005288'}}>Federal Employee Viewpoint Survey</a>: Climate and engagement data<br/>
-                • <a href="https://www.dol.gov/agencies/owcp/FECA/programstatistics" target="_blank" rel="noreferrer" style={{color: '#005288'}}>FECA Program Data</a>: Workers' compensation claim costs and patterns<br/>
-                <br/>
-                <strong>Peer-Reviewed Research:</strong><br/>
-                • <a href="https://jamanetwork.com/journals/jama-health-forum/fullarticle/2817234" target="_blank" rel="noreferrer" style={{color: '#005288'}}>JAMA Health Forum (2024)</a>: Enhanced behavioral health benefits RCT<br/>
-                • <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9158739/" target="_blank" rel="noreferrer" style={{color: '#005288'}}>Montreal Police Service</a>: 22-year suicide prevention longitudinal study<br/>
-                • <a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noreferrer" style={{color: '#005288'}}>CuraLinc EAP (2022)</a>: Law enforcement EAP effectiveness research<br/>
-                • <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4890098/" target="_blank" rel="noreferrer" style={{color: '#005288'}}>HeartMath Research</a>: HRV biofeedback for law enforcement stress<br/>
-                • <a href="https://journals.aom.org/doi/abs/10.5465/amle.2022.0107" target="_blank" rel="noreferrer" style={{color: '#005288'}}>Meta-analysis of coaching effectiveness</a>: 37 RCTs, effect size 0.59<br/>
-                <br/>
-                <strong>BetterUp Validated Outcomes:</strong><br/>
-                • Department of Air Force partnership (2021-2025): 4-year longitudinal data<br/>
-                • BetterUp Whole Person Model 3.0: Competency framework validation<br/>
-                • Enterprise customer outcomes: Retention, engagement, performance data<br/>
-                <br/>
-                <strong>Methodology Notes:</strong><br/>
-                • All cost estimates use conservative midpoint values from research ranges<br/>
-                • Effectiveness assumptions based on peer-reviewed studies, not vendor claims<br/>
-                • Model applies improvement rates only to preventable/behavioral-driven costs<br/>
-                • Engagement rates assume operational tempo and stigma challenges<br/>
-                • No attribution for intangible benefits (morale, reputation, mission effectiveness)
               </div>
             </div>
           </div>
         )}
+
         {/* TAB 5: IMPLEMENTATION */}
         {activeTab === 'implementation' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
@@ -1658,7 +1824,7 @@ return (
                     <strong>Timeline:</strong> 12-month engagement with 6-month interim evaluation<br/>
                     <strong>Primary Goal:</strong> Validate engagement rates and early retention signals in CBP environment<br/>
                     <strong>Success Criteria:</strong> 60%+ engagement, 85%+ satisfaction, measurable resilience improvements, field leadership endorsement for expansion<br/>
-                    <strong>Investment:</strong> ~$125K-$975K depending on organization size (see ROI Model tab)
+                    <strong>Investment:</strong> {fmt(Math.max(Math.round(calculations.officers * 0.15), 500) * 250)}
                   </div>
                 </div>
 
@@ -1671,7 +1837,7 @@ return (
                     <strong>Timeline:</strong> 12-month engagement with quarterly performance reviews<br/>
                     <strong>Primary Goal:</strong> Demonstrate measurable ROI while building internal champions network<br/>
                     <strong>Success Criteria:</strong> 5-10% reduction in voluntary separations, measurable FECA claims decline, positive cost-benefit analysis, supervisor-reported team improvements<br/>
-                    <strong>Investment:</strong> ~$100K-$1.3M with volume discount pricing (see ROI Model tab)
+                    <strong>Investment:</strong> {fmt(Math.max(Math.round(calculations.officers * 0.25), 500) * 200)}
                   </div>
                 </div>
 
@@ -1684,7 +1850,7 @@ return (
                     <strong>Timeline:</strong> 12-month engagement with cultural transformation focus<br/>
                     <strong>Primary Goal:</strong> Enterprise-wide workforce sustainability and cultural shift<br/>
                     <strong>Success Criteria:</strong> 7%+ retention improvement, reduction across all three cost pathways, leadership capability gains, FEVS score improvements, sustained engagement<br/>
-                    <strong>Investment:</strong> ~$75K-$2.9M at list price with maximum coverage (see ROI Model tab)
+                    <strong>Investment:</strong> {fmt(Math.max(Math.round(calculations.officers * 0.75), 500) * 150)}
                   </div>
                 </div>
               </div>
@@ -1706,13 +1872,13 @@ return (
                     📊 Baseline Workforce Data
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                    • <strong>FECA mental health claims:</strong> Annual volume and average cost by component (currently modeled at conservative 2.5% rate)<br/>
+                    • <strong>FECA mental health claims:</strong> Annual volume and average cost by component<br/>
                     • <strong>Attrition patterns:</strong> Voluntary separation rates by location, tenure, and role<br/>
                     • <strong>Discipline cases:</strong> Annual volume and cost of behaviorally-driven incidents<br/>
                     • <strong>Sick leave utilization:</strong> Mental health-related absences
                   </div>
                   <div style={{marginTop: '12px', padding: '12px', background: '#e6f2f8', borderRadius: '8px', fontSize: '13px', color: '#0078ae'}}>
-                    <strong>Note:</strong> We're using 2.5% baseline mental health claim rate (conservative vs industry 3-5%). Actual CBP data will refine ROI projections.
+                    <strong>Note:</strong> Current model uses {pct(calculations.baselineWcClaims / calculations.officers * 100)} baseline claim rate. Actual CBP data will refine projections.
                   </div>
                 </div>
 
@@ -1816,7 +1982,7 @@ return (
                     Review & Refine Model
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
-                    Validate assumptions with CBP's actual workforce data and adjust ROI projections
+                    Validate assumptions with CBP's actual workforce data and adjust ROI projections using Factor Breakdown sliders
                   </div>
                 </div>
 
@@ -1826,7 +1992,7 @@ return (
                     Stakeholder Briefings
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
-                    Present business case to field leadership, CBPX, HR, and other key decision-makers
+                    Present business case to field leadership, CBPX, HR, and other key decision-makers with scenario analysis
                   </div>
                 </div>
 
@@ -1836,7 +2002,7 @@ return (
                     Select COA & Pathway
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
-                    Choose deployment scale and identify optimal procurement mechanism
+                    Choose deployment scale and identify optimal procurement mechanism based on organizational readiness
                   </div>
                 </div>
               </div>
@@ -1846,7 +2012,7 @@ return (
                   Ready to discuss how BetterUp can support CBP's workforce sustainability goals?
                 </div>
                 <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
-                  Contact BetterUp's federal team to schedule a collaborative discovery session, review CBP-specific data, and refine this model to your mission requirements.
+                  Contact BetterUp's federal team to schedule a collaborative discovery session, review CBP-specific data, and refine this model to your mission requirements. With working sliders and comorbidity adjustments, we can demonstrate sensitivity analysis and build confidence in ROI projections.
                 </div>
               </div>
             </div>
@@ -1880,7 +2046,7 @@ return (
               <div style={{textAlign: 'center', paddingTop: '32px'}}>
                 <p style={{fontWeight: '500', color: '#6b7280', marginBottom: '16px'}}>Ask anything about the model!</p>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
-                  {["How is the net savings calculated?", "Why is OFO facing a retirement crisis?", "Explain the COA differences", "What's Lead vs Ready?", "How does Leadership Culture affect ROI?"].map((q, i) => (
+                  {["How is the net savings calculated?", "Why is OFO facing a retirement crisis?", "Explain the COA differences", "What's Lead vs Ready?", "How does comorbidity work?"].map((q, i) => (
                     <button 
                       key={i} 
                       onClick={() => setChatInput(q)} 
