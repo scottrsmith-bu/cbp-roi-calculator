@@ -145,7 +145,7 @@ return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '24px'}}>
       
       {/* PRETTIER HEADER */}
-      <div style={{maxWidth: '1400px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', borderRadius: '20px', padding: '48px', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', border: '1px solid #334155'}}>
+      <div style={{maxWidth: '1200px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', borderRadius: '20px', padding: '48px', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', border: '1px solid #334155'}}>
         <div style={{marginBottom: '32px'}}>
           <h1 style={{fontSize: '42px', fontWeight: '900', color: 'white', marginBottom: '16px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
             Three Costs, One Crisis
@@ -206,7 +206,7 @@ return (
       </div>
 
       {/* Tab Navigation */}
-      <div style={{maxWidth: '1400px', margin: '0 auto 24px', display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
+      <div style={{maxWidth: '1200px', margin: '0 auto 24px', display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
         {[
           { id: 'cost-problem', label: 'The Cost Problem', icon: '⚠️' },
           { id: 'roi-model', label: 'ROI Model', icon: '💰' },
@@ -236,7 +236,7 @@ return (
       </div>
 
       {/* Main Content Area */}
-      <div style={{maxWidth: '1400px', margin: '0 auto'}}>
+      <div style={{maxWidth: '1200px', margin: '0 auto'}}>
 
       </div>
     {/* TAB 1: THE COST PROBLEM */}
