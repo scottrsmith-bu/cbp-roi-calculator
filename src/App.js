@@ -1290,6 +1290,9 @@ return (
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
                     Composite of Air Force +17% mission readiness and +15% resilience with Montreal Police 40% stress reduction. Assumes 2.5% baseline mental health Workers' Comp claim rate (conservative vs industry 3-5%). JAMA 21.6% symptom reduction validates clinical effectiveness.
                   </div>
+                  <div style={{marginTop: '12px', padding: '12px', background: '#e6f2f8', borderRadius: '8px', fontSize: '13px', color: '#0078ae', lineHeight: '1.6'}}>
+                    <strong>📊 Note:</strong> We're using a 2.5% baseline mental health claim rate, which is conservative compared to law enforcement industry standards of 3-5%. We welcome CBP's actual FECA claims data to refine this model and provide more precise ROI projections specific to your workforce.
+                  </div>
                 </div>
 
                 <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
