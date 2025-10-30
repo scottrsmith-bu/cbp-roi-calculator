@@ -1062,29 +1062,29 @@ return (
               </div>
 
               <div style={{display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px', margin: '0 auto 32px'}}>
-                <div style={{background: '#e8f5e9', border: '3px solid #2e7d32', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#1b5e20', marginBottom: '8px'}}>
+                <div style={{background: 'white', border: '4px solid #5e9732', borderRadius: '12px', padding: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(94,151,50,0.2)'}}>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#5e9732', marginBottom: '8px'}}>
                     ✅ PREVENTION: $1,500-2,500 per officer
                   </div>
-                  <div style={{fontSize: '15px', color: '#2e7d32', lineHeight: '1.6'}}>
+                  <div style={{fontSize: '15px', color: '#1e293b', lineHeight: '1.6'}}>
                     Proactive coaching • Early symptom detection • Resilience building • Leadership development • 10:1 ROI
                   </div>
                 </div>
 
-                <div style={{background: '#fff3e0', border: '3px solid #f57c00', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '60px'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#e65100', marginBottom: '8px'}}>
+                <div style={{background: 'white', border: '4px solid #f59e0b', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '60px', boxShadow: '0 4px 12px rgba(245,158,11,0.2)'}}>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#d97706', marginBottom: '8px'}}>
                     ⚠️ CRISIS: $40,000-85,000 per case
                   </div>
-                  <div style={{fontSize: '15px', color: '#ef6c00', lineHeight: '1.6'}}>
+                  <div style={{fontSize: '15px', color: '#1e293b', lineHeight: '1.6'}}>
                     Workers' Comp - Mental Health Claims (FECA) • Extended sick leave • Treatment costs • Temporary replacements • 2:1 ROI
                   </div>
                 </div>
 
-                <div style={{background: '#ffebee', border: '3px solid #c41230', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '120px'}}>
-                  <div style={{fontSize: '22px', fontWeight: '800', color: '#b71c1c', marginBottom: '8px'}}>
+                <div style={{background: 'white', border: '4px solid #c41230', borderRadius: '12px', padding: '24px', textAlign: 'center', marginLeft: '120px', boxShadow: '0 4px 12px rgba(196,18,48,0.2)'}}>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
                     🚨 CATASTROPHIC: $150,000+ per separation
                   </div>
-                  <div style={{fontSize: '15px', color: '#c62828', lineHeight: '1.6'}}>
+                  <div style={{fontSize: '15px', color: '#1e293b', lineHeight: '1.6'}}>
                     Terminations • Permanent disability • Institutional knowledge loss • Team disruption • Negative ROI
                   </div>
                 </div>
@@ -1289,6 +1289,9 @@ return (
                   </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
                     Composite of Air Force +17% mission readiness and +15% resilience with Montreal Police 40% stress reduction. Assumes 2.5% baseline mental health Workers' Comp claim rate (conservative vs industry 3-5%). JAMA 21.6% symptom reduction validates clinical effectiveness.
+                  </div>
+                  <div style={{marginTop: '12px', padding: '12px', background: '#e6f2f8', borderRadius: '8px', fontSize: '13px', color: '#0078ae', lineHeight: '1.6'}}>
+                    <strong>📊 Note:</strong> We're using a 2.5% baseline mental health claim rate, which is conservative compared to law enforcement industry standards of 3-5%. We welcome CBP's actual FECA claims data to refine this model and provide more precise ROI projections specific to your workforce.
                   </div>
                 </div>
 
