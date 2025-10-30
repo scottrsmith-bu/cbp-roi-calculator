@@ -239,8 +239,6 @@ return (
 
       {/* Main Content Area */}
       <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-
-      </div>
     {/* TAB 1: THE COST PROBLEM */}
         {activeTab === 'cost-problem' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
@@ -1488,6 +1486,7 @@ return (
             </div>
           </div>
         )}
+      </div>
 
       {/* FLOATING CHATBOT ASSISTANT */}
       {!showChatbot && (
