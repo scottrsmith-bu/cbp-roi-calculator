@@ -272,7 +272,13 @@ return (
                   • 6-month academy + equipment ($75K-120K total)<br/>
                   • 3-6 month field training with FTO supervision<br/>
                   • 1-2 year productivity ramp (experience gap costs)<br/>
-                  • Institutional knowledge loss
+                  • Institutional knowledge loss<br/>
+                  <br/>
+                  <strong>Model Logic:</strong><br/>
+                  • Baseline: {calculations.baselineSeparations.toLocaleString()} total separations annually ({pct(org === 'ofo' ? 6.8 : 10)} attrition rate)<br/>
+                  • 30% are preventable through behavioral interventions (burnout, lack of career development, poor leadership)<br/>
+                  • BetterUp's 7% retention lift × 65% engagement = prevents {calculations.separationsPrevented} of those behavioral-driven separations<br/>
+                  • Savings: {calculations.separationsPrevented} × $150K replacement cost = {fmt(calculations.retentionSavings)}
                 </div>
               </div>
 
@@ -292,7 +298,12 @@ return (
                   • Depression/anxiety claims: $45K-65K each<br/>
                   • Substance use disorder treatment: $30K-50K<br/>
                   • Absenteeism: 10-15 additional sick days/year ($4,400/officer)<br/>
-                  • Presenteeism: 35% productivity loss when at work
+                  • Presenteeism: 35% productivity loss when at work<br/>
+                  <br/>
+                  <strong>Model Logic:</strong><br/>
+                  • Baseline: {calculations.baselineMHClaims.toLocaleString()} mental health claims annually (2.5% of workforce)<br/>
+                  • BetterUp's 37% readiness lift (resilience + stress management) × 65% engagement = prevents {calculations.claimsPrevented} claims<br/>
+                  • Savings: {calculations.claimsPrevented} × $65K average claim cost = {fmt(calculations.wcSavings)}
                 </div>
               </div>
 
@@ -312,7 +323,12 @@ return (
                   • Misconduct cases: $30K-50K (legal, admin time)<br/>
                   • Substance abuse violations: $25K-40K<br/>
                   • Terminations: $150K+ (replacement + institutional damage)<br/>
-                  • Reputation/morale impact on team performance
+                  • Reputation/morale impact on team performance<br/>
+                  <br/>
+                  <strong>Model Logic:</strong><br/>
+                  • Baseline: {calculations.baselineDisciplineCases.toLocaleString()} discipline cases annually (3.5% of workforce)<br/>
+                  • BetterUp's 22% professional standards lift (improved leadership culture) × 65% engagement = prevents {calculations.casesPrevented} cases<br/>
+                  • Savings: {calculations.casesPrevented} × $45K average case cost = {fmt(calculations.disciplineSavings)}
                 </div>
               </div>
             </div>
