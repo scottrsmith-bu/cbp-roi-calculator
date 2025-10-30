@@ -3,7 +3,8 @@ import React, { useState, useMemo } from 'react';
 const CBPDashboard = () => {
   // State Management
   const [org, setOrg] = useState('ofo');
-  const [coa, setCoa] = useState('lead-ready');
+  const [coa, setCoa] = useState('moderate');
+  const [includeLeadForLeaders, setIncludeLeadForLeaders] = useState(false);
   const [activeTab, setActiveTab] = useState('cost-problem');
   const [showCoaDetails, setShowCoaDetails] = useState(false);
   const [manualLeadSeats, setManualLeadSeats] = useState(null);
@@ -50,15 +51,15 @@ const CBPDashboard = () => {
   const calculations = useMemo(() => {
     const data = orgData[org];
     let leadPercent, readyPercent;
-    if (coa === 'lead-only') {
-      leadPercent = 0.15;
-      readyPercent = 0;
-    } else if (coa === 'lead-ready') {
-      leadPercent = 0.15;
-      readyPercent = 0.20;
-    } else {
-      leadPercent = 0;
+    if (coa === 'conservative') {
+      readyPercent = 0.15;
+      leadPercent = includeLeadForLeaders ? 0.10 : 0;
+    } else if (coa === 'moderate') {
       readyPercent = 0.35;
+      leadPercent = includeLeadForLeaders ? 0.10 : 0;
+    } else {
+      readyPercent = 0.50;
+      leadPercent = includeLeadForLeaders ? 0.10 : 0;
     }
     
     const baseLeadSeats = Math.round(data.officers * leadPercent);
@@ -119,7 +120,7 @@ const CBPDashboard = () => {
       netSavings,
       roi
     };
-  }, [org, coa, manualLeadSeats, manualReadySeats, manualEngagement, manualRetentionOverride, manualReadinessOverride, manualProfStandardsOverride, orgData]);
+  }, [org, coa, includeLeadForLeaders, manualLeadSeats, manualReadySeats, manualEngagement, manualRetentionOverride, manualReadinessOverride, manualProfStandardsOverride, orgData]);
 
   // Helper Functions
   const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
@@ -361,9 +362,27 @@ return (
               </h2>
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px'}}>
                 {[
-                  { id: 'lead-only', label: 'Lead Only', desc: '15% critical talent • Intensive leadership development', seats: Math.round(calculations.officers * 0.15), price: 5785 },
-                  { id: 'lead-ready', label: 'Lead + Ready', desc: '15% critical talent + 20% frontline • Comprehensive coverage', seats: Math.round(calculations.officers * 0.35), price: 'Mixed' },
-                  { id: 'ready-only', label: 'Ready Only', desc: '35% frontline • Scalable resilience & career readiness', seats: Math.round(calculations.officers * 0.35), price: 150 }
+                  { 
+                    id: 'conservative', 
+                    label: 'Conservative', 
+                    desc: '15% high-risk populations • Ready-Only • Prove concept & engagement', 
+                    seats: Math.round(calculations.officers * 0.15),
+                    investment: fmt(Math.round(calculations.officers * 0.15) * 150)
+                  },
+                  { 
+                    id: 'moderate', 
+                    label: 'Moderate (Recommended)', 
+                    desc: '35% frontline officers • Ready-Only • Optimal scale for impact', 
+                    seats: Math.round(calculations.officers * 0.35),
+                    investment: fmt(Math.round(calculations.officers * 0.35) * 150)
+                  },
+                  { 
+                    id: 'aggressive', 
+                    label: 'Aggressive', 
+                    desc: '50% workforce • Ready-Only • Maximum coverage & cultural shift', 
+                    seats: Math.round(calculations.officers * 0.50),
+                    investment: fmt(Math.round(calculations.officers * 0.50) * 150)
+                  }
                 ].map(option => (
                   <button
                     key={option.id}
@@ -385,12 +404,42 @@ return (
                       {option.desc}
                     </div>
                     <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b'}}>
-                      {option.seats.toLocaleString()} seats • {typeof option.price === 'number' ? fmt(option.price) + '/seat' : option.price}
+                      {option.seats.toLocaleString()} Ready seats • Investment: {option.investment}
                     </div>
                   </button>
                 ))}
               </div>
-              
+              {/* LEAD TOGGLE */}
+              <div style={{marginTop: '20px', padding: '24px', background: '#f8fafc', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                <label style={{display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer'}}>
+                  <input 
+                    type="checkbox" 
+                    checked={includeLeadForLeaders}
+                    onChange={(e) => setIncludeLeadForLeaders(e.target.checked)}
+                    style={{width: '20px', height: '20px', cursor: 'pointer'}}
+                  />
+                  <div>
+                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b'}}>
+                      Add Lead for Supervisors & Critical Talent (10% GS-13+ coverage)
+                    </div>
+                    <div style={{fontSize: '14px', color: '#64748b', marginTop: '4px'}}>
+                      Adds {Math.round(calculations.officers * 0.10).toLocaleString()} Lead seats at $5,785/seat • Develops leadership culture that prevents discipline cases and retains teams
+                    </div>
+                  </div>
+                </label>
+                
+                {includeLeadForLeaders && (
+                  <div style={{marginTop: '16px', padding: '20px', background: '#eff6ff', borderRadius: '10px', border: '2px solid #0066cc'}}>
+                    <div style={{fontSize: '15px', color: '#1e40af', lineHeight: '1.8'}}>
+                      <strong>💎 Lead Enhancement Active:</strong><br/>
+                      • Additional investment: {fmt(Math.round(calculations.officers * 0.10) * 5785)}<br/>
+                      • Target population: GS-13+ supervisors, SES candidates, CBP Leadership Institute participants, high-potentials<br/>
+                      • Additional impact: +3-5% retention lift through improved leadership culture, +5% discipline case reduction through better supervision<br/>
+                      • Estimated additional savings: $8-12M annually (leadership-driven team retention + professional standards improvement)
+                    </div>
+                  </div>
+                )}
+              </div>
               <button 
                 onClick={() => setShowCoaDetails(!showCoaDetails)} 
                 style={{marginTop: '16px', padding: '12px 20px', fontSize: '14px', fontWeight: '600', background: '#f1f5f9', color: '#0066cc', border: '2px solid #e2e8f0', borderRadius: '8px', cursor: 'pointer', width: '100%'}}
