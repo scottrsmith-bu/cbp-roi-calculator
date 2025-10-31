@@ -647,7 +647,7 @@ const CBPDashboard = () => {
               </div>
               
               <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.8', marginBottom: '20px'}}>
-                These aren't three separate problems — they're interconnected symptoms of the same workforce sustainability crisis. <strong>The same officer often appears in all three cost categories simultaneously.</strong> An officer struggling with PTSD may file a Workers' Comp claim, take disciplinary action due to impaired judgment, and ultimately separate from service — creating cascading costs across all three pathways.
+                These aren't three separate problems — they're interconnected symptoms of the same workforce sustainability crisis. <strong>The same CBP officer or agent often appears in all three cost categories simultaneously.</strong> An officer struggling with PTSD may file a Workers' Comp claim, take disciplinary action due to impaired judgment, and ultimately separate from service — creating cascading costs across all three pathways.
               </div>
 
               <div style={{background: 'white', padding: '24px', borderRadius: '12px', border: '2px solid #64748b'}}>
