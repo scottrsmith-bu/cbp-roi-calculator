@@ -1509,6 +1509,75 @@ const CBPDashboard = () => {
                   </div>
                 ))}
               </div>
+              
+{/* Weapons School Translation to CBP */}
+            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px'}}>📚</div>
+                <h2 style={{fontSize: '24px', fontWeight: '800', color: '#4338ca', margin: 0}}>
+                  From Air Force Weapons School: Mastery Framework Applied to CBP
+                </h2>
+              </div>
+
+              <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7', marginBottom: '24px'}}>
+                The Air Force Weapons School program developed elite pilots using a structured mastery framework focused on <strong>decision-making under pressure, communication under pressure, cognitive agility, stress regulation, resilience, and values clarity</strong>. These same peak performance skills directly translate to CBP's high-stakes law enforcement environment.
+              </div>
+             
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
+                <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #6366f1', textAlign: 'center'}}>
+                  <div style={{fontSize: '28px', marginBottom: '8px'}}>🪞</div>
+                  <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>1. REFLECT</div>
+                  <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>WPM assessment identifies strengths & gaps</div>
+                </div>
+                <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #8b5cf6', textAlign: 'center'}}>
+                  <div style={{fontSize: '28px', marginBottom: '8px'}}>📖</div>
+                  <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>2. LEARN</div>
+                  <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Personalized journeys + curated resources</div>
+                </div>
+                <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #a78bfa', textAlign: 'center'}}>
+                  <div style={{fontSize: '28px', marginBottom: '8px'}}>🎯</div>
+                  <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>3. PRACTICE</div>
+                  <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>AI role-play + coaching rehearsal</div>
+                </div>
+                <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #c4b5fd', textAlign: 'center'}}>
+                  <div style={{fontSize: '28px', marginBottom: '8px'}}>✅</div>
+                  <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>4. COMMIT</div>
+                  <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Action plans at critical moments</div>
+                </div>
+                <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #ddd6fe', textAlign: 'center'}}>
+                  <div style={{fontSize: '28px', marginBottom: '8px'}}>📊</div>
+                  <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>5. MEASURE</div>
+                  <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Pre-post growth assessments</div>
+                </div>
+              </div>
+
+              <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
+                <h3 style={{fontSize: '16px', fontWeight: '700', color: '#4338ca', marginBottom: '12px'}}>
+                  Weapons School Skills → CBP Operational Challenges
+                </h3>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Use-of-Force Decisions:</strong> Practice high-pressure scenarios through AI role-play before real encounters
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies for volatile public interactions
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Post-Incident Recovery:</strong> Just-in-time stress management after traumatic events
+                  </div>
+                  <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                    <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at critical 3-5yr, 10-15yr, pre-2028 retirement points
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '16px', border: '2px solid #818cf8'}}>
+                <p style={{fontSize: '13px', color: '#3730a3', margin: 0, lineHeight: 1.6}}>
+                  <strong style={{color: '#4338ca'}}>From Weapons School to CBP:</strong> The same mastery framework that helped elite pilots strengthen decision-making under pressure, cognitive agility, and stress regulation translates directly to CBP officers and agents facing high-stakes law enforcement decisions—from port-of-entry inspections to border encounters to critical incident responses.
+                </p>
+              </div>
+            </div>
+
             {/* JAMA 2024 Study */}
             <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
