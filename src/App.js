@@ -536,15 +536,7 @@ const CBPDashboard = () => {
               </div>
             </div>
 
-            {/* Comorbidity Callout */}
-            <div style={{background: '#fffbeb', border: '3px solid #f59e0b', borderRadius: '12px', padding: '24px'}}>
-              <div style={{fontSize: '18px', fontWeight: '700', color: '#92400e', marginBottom: '12px'}}>
-                🧮 Comorbidity Adjustment Active
-              </div>
-              <div style={{fontSize: '15px', color: '#78350f', lineHeight: '1.7'}}>
-                This model accounts for <strong>{comorbidityOverlap}% overlap</strong> between mental health conditions. Without this adjustment, we would be counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers multiple times. The model now shows {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected (down from {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} if conditions were independent).
-              </div>
-            </div>
+<div style={{background: '#fffbeb', border: '3px solid #f59e0b', borderRadius: '12px', padding: '24px'}}><div style={{fontSize: '18px', fontWeight: '700', color: '#92400e', marginBottom: '12px'}}>🧮 Comorbidity Adjustment</div><div style={{fontSize: '15px', color: '#78350f'}}>Accounts for {comorbidityOverlap}% overlap to prevent double-counting. {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected.</div></div>
 
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
