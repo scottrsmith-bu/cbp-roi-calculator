@@ -638,6 +638,51 @@ const CBPDashboard = () => {
               </div>
             </div>
 
+            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px', marginBottom: '24px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
+                <span style={{fontSize: '36px'}}>🔗</span>
+                <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                  One Root Cause, Three Cost Symptoms
+                </h2>
+              </div>
+              
+              <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.8', marginBottom: '20px'}}>
+                These aren't three separate problems — they're interconnected symptoms of the same workforce sustainability crisis. <strong>The same officer often appears in all three cost categories simultaneously.</strong> An officer struggling with PTSD may file a Workers' Comp claim, take disciplinary action due to impaired judgment, and ultimately separate from service — creating cascading costs across all three pathways.
+              </div>
+
+              <div style={{background: 'white', padding: '24px', borderRadius: '12px', border: '2px solid #64748b'}}>
+                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
+                  Why This Matters for ROI Modeling
+                </div>
+                <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
+                  BetterUp addresses the <strong>root cause</strong> by building resilience and developing leadership capability <strong>before</strong> officers reach crisis points. Early intervention through continuous coaching prevents the behavioral health deterioration that drives all three cost categories. This is why our model applies <strong>comorbidity adjustments</strong> (currently {comorbidityOverlap}%) — to avoid double-counting the same officers across conditions and provide accurate, conservative ROI projections.
+                </div>
+              </div>
+            </div>
+
+            <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px', marginBottom: '24px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+                <span style={{fontSize: '36px'}}>🧮</span>
+                <h2 style={{fontSize: '26px', fontWeight: '800', color: '#92400e', margin: 0}}>
+                  Comorbidity Adjustment Explained
+                </h2>
+              </div>
+
+              <div style={{fontSize: '16px', color: '#78350f', lineHeight: '1.7', marginBottom: '24px'}}>
+                In mental health, conditions often occur together (comorbidity). Someone with PTSD may also have depression. To avoid double-counting the same people multiple times, we apply a comorbidity adjustment of <strong>{comorbidityOverlap}% overlap</strong>.
+              </div>
+
+              <div style={{background: 'white', padding: '28px', borderRadius: '12px', border: '2px solid #f59e0b'}}>
+                <div style={{fontSize: '15px', color: '#78350f', lineHeight: '1.8'}}>
+                  <strong>Current Impact:</strong><br/>
+                  • Raw total (if conditions were independent): {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} officers<br/>
+                  • Adjusted for {comorbidityOverlap}% overlap: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers<br/>
+                  • Prevented double-counting: {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers<br/><br/>
+                  <em>This ensures our ROI calculations are conservative and don't overstate the affected population.</em>
+                </div>
+              </div>
+            </div>
+
             <div style={{background: 'linear-gradient(135deg, #e6f2f8 0%, #cce5f0 100%)', border: '3px solid #005288', borderRadius: '12px', padding: '32px', textAlign: 'center'}}>
               <div style={{fontSize: '24px', fontWeight: '700', color: '#0078ae', marginBottom: '12px'}}>
                 There's a Better Way Forward
