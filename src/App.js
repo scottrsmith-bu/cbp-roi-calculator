@@ -944,8 +944,8 @@ const CBPDashboard = () => {
             </div>
 
             {/* Product Mix */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-              <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
+            <div style={{background: 'white', borderRadius: '12px', padding: '20px 28px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', marginBottom: '16px'}}>
                 Product Mix & Investment
               </h3>
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px'}}>
@@ -970,7 +970,7 @@ const CBPDashboard = () => {
 
 
         {/* Manual Adjustment Sliders */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '28px', marginTop: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #f59e0b'}}>
+            <div style={{background: 'white', borderRadius: '12px', padding: '20px 28px 28px 28px', marginTop: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #f59e0b'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
                 <span style={{fontSize: '22px'}}>⚙️</span>
                 <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', margin: 0}}>
