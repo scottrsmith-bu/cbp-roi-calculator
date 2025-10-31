@@ -637,28 +637,6 @@ const CBPDashboard = () => {
               </div>
             </div>
 
-            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px', marginBottom: '24px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
-                <span style={{fontSize: '36px'}}>🔗</span>
-                <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', margin: 0}}>
-                  One Root Cause, Three Cost Symptoms
-                </h2>
-              </div>
-              
-              <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.8', marginBottom: '20px'}}>
-                These aren't three separate problems — they're interconnected symptoms of the same workforce sustainability crisis. <strong>The same CBP officer or agent often appears in all three cost categories simultaneously.</strong> An officer struggling with PTSD may file a Workers' Comp claim, take disciplinary action due to impaired judgment, and ultimately separate from service — creating cascading costs across all three pathways.
-              </div>
-
-              <div style={{background: 'white', padding: '24px', borderRadius: '12px', border: '2px solid #64748b'}}>
-                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
-                  Why This Matters for ROI Modeling
-                </div>
-                <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
-                  BetterUp addresses the <strong>root cause</strong> by building resilience and developing leadership capability <strong>before</strong> officers reach crisis points. Early intervention through continuous coaching prevents the behavioral health deterioration that drives all three cost categories. This is why our model applies <strong>comorbidity adjustments</strong> (currently {comorbidityOverlap}%) — to avoid double-counting the same officers across conditions and provide accurate, conservative ROI projections.
-                </div>
-              </div>
-            </div>
-
             <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px', marginBottom: '24px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
                 <span style={{fontSize: '36px'}}>🧮</span>
