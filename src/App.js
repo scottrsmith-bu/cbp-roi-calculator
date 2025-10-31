@@ -944,10 +944,13 @@ const CBPDashboard = () => {
             </div>
 
             {/* Product Mix */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '20px 28px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-              <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', marginBottom: '16px'}}>
-                Product Mix & Investment
-              </h3>
+            <div style={{background: 'white', borderRadius: '12px', padding: '20px 28px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #3b82f6'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                <span style={{fontSize: '22px'}}>💼</span>
+                <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                  Product Mix & Investment
+                </h3>
+              </div>
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px'}}>
                 <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
                   <div style={{fontSize: '15px', fontWeight: '600', color: '#64748b', marginBottom: '8px'}}>Lead Seats</div>
