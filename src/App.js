@@ -1046,8 +1046,17 @@ const CBPDashboard = () => {
               <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7', marginBottom: '16px'}}>
                 Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the sliders below to adjust assumptions based on CBP-specific data or conservative estimates.
               </div>
-              <div style={{fontSize: '15px', color: '#dc2626', fontWeight: '600', background: '#fef2f2', padding: '12px', borderRadius: '8px', border: '2px solid #fecaca'}}>
-                ⚡ SLIDERS NOW FUNCTIONAL: Adjusting any slider will immediately update all ROI calculations throughout the model.
+            </div>
+
+            <div style={{background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '4px solid #10b981', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
+                <span style={{fontSize: '36px'}}>✅</span>
+                <h2 style={{fontSize: '28px', fontWeight: '800', color: '#065f46', margin: 0}}>
+                  Model Validation: Sliders & Comorbidity Working
+                </h2>
+              </div>
+              <div style={{fontSize: '16px', color: '#065f46', lineHeight: '1.7'}}>
+                All behavioral health sliders now drive ROI calculations in real-time. Comorbidity adjustment at {comorbidityOverlap}% prevents double-counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers.
               </div>
             </div>
 
@@ -1446,18 +1455,6 @@ const CBPDashboard = () => {
         {/* TAB 4: PROOF & VALIDATION */}
         {activeTab === 'proof' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
-
-            <div style={{background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '4px solid #10b981', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
-                <span style={{fontSize: '36px'}}>✅</span>
-                <h2 style={{fontSize: '28px', fontWeight: '800', color: '#065f46', margin: 0}}>
-                  Model Validation: Sliders & Comorbidity Working
-                </h2>
-              </div>
-              <div style={{fontSize: '16px', color: '#065f46', lineHeight: '1.7'}}>
-                All behavioral health sliders now drive ROI calculations in real-time. Comorbidity adjustment at {comorbidityOverlap}% prevents double-counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers.
-              </div>
-            </div>
 
             <MethodologyImpactSection />
 
