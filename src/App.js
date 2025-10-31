@@ -616,7 +616,7 @@ const CBPDashboard = () => {
               </div>
             </div>
 
-            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px', marginBottom: '24px'}}>
+            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
                 <span style={{fontSize: '36px'}}>🔗</span>
                 <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', margin: 0}}>
