@@ -1511,7 +1511,7 @@ const CBPDashboard = () => {
               </div>
 
 {/* Weapons School Translation to CBP */}
-            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
+            <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '24px 32px 32px 32px', marginTop: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
                 <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px'}}>📚</div>
                 <h2 style={{fontSize: '24px', fontWeight: '800', color: '#4338ca', margin: 0}}>
