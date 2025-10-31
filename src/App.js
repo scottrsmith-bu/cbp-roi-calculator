@@ -923,11 +923,12 @@ const CBPDashboard = () => {
                   <div style={{fontSize: '15px', fontWeight: '600', color: '#005288', marginBottom: '8px'}}>Total Investment</div>
                   <div style={{fontSize: '32px', fontWeight: '900', color: '#005288'}}>{fmt(calculations.totalInvestment)}</div>
                   <div style={{fontSize: '13px', color: '#005288', marginTop: '4px'}}>{calculations.totalSeats.toLocaleString()} seats • {pct(calculations.engagement)} engagement</div>
-                </div>
               </div>
+            </div>
+
 
         {/* Manual Adjustment Sliders */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #f59e0b'}}>
+            <div style={{background: 'white', borderRadius: '12px', padding: '28px', marginTop: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #f59e0b'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
                 <span style={{fontSize: '22px'}}>⚙️</span>
                 <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', margin: 0}}>
