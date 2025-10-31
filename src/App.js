@@ -426,7 +426,7 @@ const CBPDashboard = () => {
     return { leadSeats, readySeats, totalSeats, activeUsers, coverage, totalInvestment,
       retentionSavings, wcSavings, disciplineSavings, totalSavings, netSavings, roi };
   };
-return (
+  return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
 
       {/* HEADER */}
@@ -933,6 +933,68 @@ return (
                   <div style={{fontSize: '13px', color: '#005288', marginTop: '4px'}}>{calculations.totalSeats.toLocaleString()} seats • {pct(calculations.engagement)} engagement</div>
                 </div>
               </div>
+
+        {/* Manual Adjustment Sliders */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #f59e0b'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <span style={{fontSize: '22px'}}>⚙️</span>
+                <h3 style={{fontSize: '22px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                  Advanced Settings (Manual Override)
+                </h3>
+              </div>
+
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px'}}>
+                <div>
+                  <label style={{display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#475569'}}>
+                    Lead Seats Override
+                  </label>
+                  <input
+                    type="number"
+                    value={manualLeadSeats === null ? '' : manualLeadSeats}
+                    onChange={(e) => setManualLeadSeats(e.target.value === '' ? null : parseInt(e.target.value))}
+                    placeholder={`Default: ${calculations.leadSeats}`}
+                    style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
+                  />
+                </div>
+
+                <div>
+                  <label style={{display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#475569'}}>
+                    Ready Seats Override
+                  </label>
+                  <input
+                    type="number"
+                    value={manualReadySeats === null ? '' : manualReadySeats}
+                    onChange={(e) => setManualReadySeats(e.target.value === '' ? null : parseInt(e.target.value))}
+                    placeholder={`Default: ${calculations.readySeats}`}
+                    style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
+                  />
+                </div>
+
+                <div>
+                  <label style={{display: 'block', fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: '#475569'}}>
+                    Engagement Rate (%)
+                  </label>
+                  <input
+                    type="number"
+                    value={manualEngagement === null ? '' : manualEngagement}
+                    onChange={(e) => setManualEngagement(e.target.value === '' ? null : parseFloat(e.target.value))}
+                    placeholder="Default: 65%"
+                    style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
+/>
+          </div>
+        </div>
+
+        <button
+          onClick={() => {
+            setManualLeadSeats(null);
+            setManualReadySeats(null);
+            setManualEngagement(null);
+          }}
+          style={{marginTop: '20px', padding: '12px 24px', fontSize: '14px', fontWeight: '600', background: '#64748b', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer'}}
+        >
+          Reset All to Defaults
+        </button>
+      </div>
             </div>
           </div>
         )}
@@ -1055,11 +1117,293 @@ return (
                 </div>
               )}
             </div>
+            {/* DEPRESSION PANEL */}
+            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'depression' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+              <button
+                onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')}
+                style={{width: '100%', padding: '24px', background: expandedFactor === 'depression' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+              >
+                <div>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                    😔 Depression & Burnout
+                  </div>
+                  <div style={{fontSize: '15px', color: '#64748b'}}>
+                    Affects {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.depressionWcClaims} claims • {fmt(depressionWcAvgCost)} avg
+                  </div>
+                </div>
+                <div style={{fontSize: '32px', color: '#c41230'}}>
+                  {expandedFactor === 'depression' ? '−' : '+'}
+                </div>
+              </button>
 
-            {/* Add Depression, Anxiety, SUD panels with same structure - abbreviated for space */}
-            {/* Depression panel would go here with depressionPrevalence, depressionCoachingEffectiveness, etc. */}
-            {/* Anxiety panel would go here with anxietyPrevalence, anxietyCoachingEffectiveness, etc. */}
-            {/* SUD panel would go here with sudPrevalence, sudCoachingEffectiveness, etc. */}
+              {expandedFactor === 'depression' && (
+                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> Depression and burnout drive workers' comp claims ({fmt(depressionWcAvgCost)}), chronic absenteeism (12+ sick days/year), severe presenteeism (35% productivity loss when at work), and early attrition. Officers with untreated depression are 2.5x more likely to separate prematurely.
+                  </div>
+
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px'}}>
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Prevalence: {depressionPrevalence}%
+                      </label>
+                      <input type="range" min="10" max="25" value={depressionPrevalence}
+                        onChange={(e) => setDepressionPrevalence(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 18% • Range: 10-25% in high-stress environments
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Coaching Effectiveness: {depressionCoachingEffectiveness}%
+                      </label>
+                      <input type="range" min="15" max="35" value={depressionCoachingEffectiveness}
+                        onChange={(e) => setDepressionCoachingEffectiveness(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • JAMA 2024: 21.6% symptom reduction
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Workers' Comp Filing Rate: {depressionWcFilingRate}%
+                      </label>
+                      <input type="range" min="5" max="15" value={depressionWcFilingRate}
+                        onChange={(e) => setDepressionWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 10% • Higher in high-stress environments
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Avg Claim Cost: {fmt(depressionWcAvgCost)}
+                      </label>
+                      <input type="range" min="40000" max="70000" step="2500" value={depressionWcAvgCost}
+                        onChange={(e) => setDepressionWcAvgCost(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $40K-$70K per claim
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Separation Rate: {depressionSeparationRate}%
+                      </label>
+                      <input type="range" min="10" max="25" value={depressionSeparationRate}
+                        onChange={(e) => setDepressionSeparationRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 15% • Burnout accelerates attrition
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.depressionWcClaims} baseline claims × {fmt(depressionWcAvgCost)} = {fmt(behavioralHealthCalcs.depressionWcCost)}<br/>
+                      • BetterUp prevents {calculations.depressionClaimsPrevented} claims = <strong>{fmt(calculations.depressionWcSavings)} savings</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ANXIETY PANEL */}
+            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+              <button
+                onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')}
+                style={{width: '100%', padding: '24px', background: expandedFactor === 'anxiety' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+              >
+                <div>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                    😰 Anxiety & Stress
+                  </div>
+                  <div style={{fontSize: '15px', color: '#64748b'}}>
+                    Affects {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.anxietyWcClaims} claims • {fmt(anxietyWcAvgCost)} avg
+                  </div>
+                </div>
+                <div style={{fontSize: '32px', color: '#c41230'}}>
+                  {expandedFactor === 'anxiety' ? '−' : '+'}
+                </div>
+              </button>
+
+              {expandedFactor === 'anxiety' && (
+                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> Chronic anxiety impairs tactical decision-making, increases use-of-force incidents, drives workers' comp claims ({fmt(anxietyWcAvgCost)}), and causes moderate absenteeism (8-10 days/year). Montreal Police study showed 40% stress reduction through proactive intervention.
+                  </div>
+
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px'}}>
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Prevalence: {anxietyPrevalence}%
+                      </label>
+                      <input type="range" min="10" max="20" value={anxietyPrevalence}
+                        onChange={(e) => setAnxietyPrevalence(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 15% • Range: 10-20%
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Coaching Effectiveness: {anxietyCoachingEffectiveness}%
+                      </label>
+                      <input type="range" min="10" max="30" value={anxietyCoachingEffectiveness}
+                        onChange={(e) => setAnxietyCoachingEffectiveness(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 20% • HeartMath: 40% stress reduction
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Workers' Comp Filing Rate: {anxietyWcFilingRate}%
+                      </label>
+                      <input type="range" min="3" max="12" value={anxietyWcFilingRate}
+                        onChange={(e) => setAnxietyWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 6% • Lower than PTSD/depression
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Avg Claim Cost: {fmt(anxietyWcAvgCost)}
+                      </label>
+                      <input type="range" min="35000" max="60000" step="2500" value={anxietyWcAvgCost}
+                        onChange={(e) => setAnxietyWcAvgCost(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $35K-$60K per claim
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Separation Rate: {anxietySeparationRate}%
+                      </label>
+                      <input type="range" min="5" max="18" value={anxietySeparationRate}
+                        onChange={(e) => setAnxietySeparationRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 10% • Moderate attrition risk
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.anxietyWcClaims} baseline claims × {fmt(anxietyWcAvgCost)} = {fmt(behavioralHealthCalcs.anxietyWcCost)}<br/>
+                      • BetterUp prevents {calculations.anxietyClaimsPrevented} claims = <strong>{fmt(calculations.anxietyWcSavings)} savings</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SUD PANEL */}
+            <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'sud' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+              <button
+                onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')}
+                style={{width: '100%', padding: '24px', background: expandedFactor === 'sud' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+              >
+                <div>
+                  <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                    🍺 Substance Use Disorders
+                  </div>
+                  <div style={{fontSize: '15px', color: '#64748b'}}>
+                    Affects {behavioralHealthCalcs.sudAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.sudWcClaims} claims • {fmt(sudWcAvgCost)} avg
+                  </div>
+                </div>
+                <div style={{fontSize: '32px', color: '#c41230'}}>
+                  {expandedFactor === 'sud' ? '−' : '+'}
+                </div>
+              </button>
+
+              {expandedFactor === 'sud' && (
+                <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> Substance use disorders create the highest discipline and termination risk. CuraLinc EAP study showed 67% severity reduction and 78% at-risk elimination through early intervention. Costs include treatment ({fmt(sudWcAvgCost)}), discipline cases ($45K), and terminations requiring replacement ($150K).
+                  </div>
+
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px'}}>
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Prevalence: {sudPrevalence}%
+                      </label>
+                      <input type="range" min="15" max="35" value={sudPrevalence}
+                        onChange={(e) => setSudPrevalence(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • 2-3x general population
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Coaching Effectiveness: {sudCoachingEffectiveness}%
+                      </label>
+                      <input type="range" min="50" max="80" value={sudCoachingEffectiveness}
+                        onChange={(e) => setSudCoachingEffectiveness(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 67% • CuraLinc: 67% severity reduction
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Workers' Comp Filing Rate: {sudWcFilingRate}%
+                      </label>
+                      <input type="range" min="8" max="20" value={sudWcFilingRate}
+                        onChange={(e) => setSudWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 15% • Includes injury-related claims
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Avg Claim Cost: {fmt(sudWcAvgCost)}
+                      </label>
+                      <input type="range" min="25000" max="55000" step="2500" value={sudWcAvgCost}
+                        onChange={(e) => setSudWcAvgCost(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $25K-$55K per claim
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                        Separation Rate: {sudSeparationRate}%
+                      </label>
+                      <input type="range" min="15" max="35" value={sudSeparationRate}
+                        onChange={(e) => setSudSeparationRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • Highest termination risk
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.sudAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.sudWcClaims} baseline claims × {fmt(sudWcAvgCost)} = {fmt(behavioralHealthCalcs.sudWcCost)}<br/>
+                      • BetterUp prevents {calculations.sudClaimsPrevented} claims = <strong>{fmt(calculations.sudWcSavings)} savings</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
           </div>
         )}
@@ -1101,57 +1445,454 @@ return (
                   </div>
                 ))}
               </div>
+            {/* JAMA 2024 Study */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+                <span style={{fontSize: '36px'}}>🔬</span>
+                <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                  JAMA 2024: Peer-Reviewed Clinical Validation
+                </h2>
+              </div>
+              
+              <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7', fontStyle: 'italic'}}>
+                "Enhanced Behavioral Health Benefits and Mental Health Outcomes: A Randomized Clinical Trial"<br/>
+                Published in JAMA Health Forum, April 2024
+              </div>
+
+              <div style={{background: '#f1f5f9', padding: '24px', borderRadius: '12px', marginBottom: '24px'}}>
+                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
+                  🎯 Key Finding: 21.6% Reduction in Burnout & Mental Health Conditions
+                </div>
+                <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
+                  Randomized controlled trial with 1,132 participants across multiple employers showed that <strong>enhanced behavioral health benefits (including coaching and digital CBT) reduced mental health symptoms by 21.6%</strong> compared to traditional EAP-only control groups. Effect sizes were consistent across depression, anxiety, and burnout measures.
+                </div>
+              </div>
+            </div>
+
+            {/* Montreal Police Study */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+                <span style={{fontSize: '36px'}}>🚔</span>
+                <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                  Montreal Police: 22-Year Suicide Prevention Program
+                </h2>
+              </div>
+              
+              <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
+                Montreal Police Service implemented a comprehensive early intervention program combining peer support, psychological services, and organizational culture change. The 22-year longitudinal study provides the gold standard for law enforcement suicide prevention.
+              </div>
+
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px'}}>
+                <div style={{background: '#fef2f2', padding: '24px', borderRadius: '12px', border: '3px solid #c41230', textAlign: 'center'}}>
+                  <div style={{fontSize: '16px', fontWeight: '600', color: '#8f0e28', marginBottom: '12px'}}>
+                    Before Program (Baseline)
+                  </div>
+                  <div style={{fontSize: '56px', fontWeight: '900', color: '#c41230', marginBottom: '8px'}}>
+                    29.4
+                  </div>
+                  <div style={{fontSize: '15px', color: '#6d0a1f'}}>
+                    suicides per 100,000 officers/year
+                  </div>
+                </div>
+
+                <div style={{background: '#e8f4e0', padding: '24px', borderRadius: '12px', border: '3px solid #5e9732', textAlign: 'center'}}>
+                  <div style={{fontSize: '16px', fontWeight: '600', color: '#5e9732', marginBottom: '12px'}}>
+                    After Program (22 years)
+                  </div>
+                  <div style={{fontSize: '56px', fontWeight: '900', color: '#5e9732', marginBottom: '8px'}}>
+                    10.2
+                  </div>
+                  <div style={{fontSize: '15px', color: '#4a7628'}}>
+                    suicides per 100,000 officers/year
+                  </div>
+                </div>
+              </div>
+
+              <div style={{background: '#e6f2f8', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                <div style={{fontSize: '20px', fontWeight: '800', color: '#0078ae', marginBottom: '16px', textAlign: 'center'}}>
+                  65% Reduction in Suicide Rate — Lives Saved Through Prevention
+                </div>
+                <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7', textAlign: 'center'}}>
+                  The program's success came from <strong>early detection, peer support networks, destigmatization of help-seeking, and organizational leadership commitment</strong>. These same principles underpin BetterUp's approach for CBP.
+                </div>
+              </div>
+            </div>
+
+            {/* Model Assumptions */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
+                📐 Model Assumptions & Conservative Estimates
+              </h2>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px'}}>
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                    Retention Impact (7% Lift)
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Based on Air Force +7% career commitment over 4 years. Model assumes only behavioral/burnout-driven separations are preventable through coaching (not mission-related transfers). Conservative compared to private sector coaching studies showing 10-15% retention improvements.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                    Readiness Impact (Comorbidity-Adjusted)
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Uses {comorbidityOverlap}% comorbidity overlap to avoid double-counting officers with multiple conditions. JAMA 21.6% symptom reduction validates clinical effectiveness. Montreal Police 40% stress reduction and CuraLinc 67% SUD severity reduction support factor-specific assumptions.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                    Professional Standards (22% Lift)
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Based on improved leadership culture reducing discipline cases. CuraLinc EAP showed 67% alcohol severity reduction (major discipline driver). Model assumes 3.5% baseline discipline rate and only applies lift to behaviorally-driven cases.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                    Engagement Rate (65%)
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Conservative assumption. Air Force achieves 75%+ engagement. Model uses 65% to account for operational tempo challenges and stigma in law enforcement culture. Digital-first model enables higher engagement than traditional EAP (3-5%).
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                    Cost Assumptions
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Replacement cost: $150K (validated by SHRM and GAO). Workers' Comp: Adjustable by condition in Factor Breakdown tab. Discipline case: $45K average (investigation, legal, admin). All costs based on federal data sources.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                    Comorbidity Adjustment
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Currently set at {comorbidityOverlap}% overlap. Research shows 30-40% of officers with one mental health condition have comorbid diagnoses. This prevents double-counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers across conditions.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Research Bibliography */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+                📚 Complete Research Bibliography
+              </h2>
+              <div style={{display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                <div>
+                  <strong>1. GAO-24-107029:</strong> "CBP Recruitment, Hiring, and Retention" — Documents $150K replacement costs and 12-month hiring timeline
+                  <a href="https://www.gao.gov/products/gao-24-107029" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Report</a>
+                </div>
+                <div>
+                  <strong>2. JAMA Health Forum (2024):</strong> "Enhanced Behavioral Health Benefits and Mental Health Outcomes: A Randomized Clinical Trial" — 21.6% symptom reduction
+                  <a href="https://jamanetwork.com/journals/jama-health-forum/fullarticle/2817234" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
+                </div>
+                <div>
+                  <strong>3. Montreal Police Service:</strong> 22-year longitudinal suicide prevention study — 65% reduction in suicide rate
+                  <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9158739/" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
+                </div>
+                <div>
+                  <strong>4. CuraLinc EAP (2022):</strong> Law enforcement EAP effectiveness — 67% alcohol severity reduction
+                  <a href="https://curalinc.com/outcomes-study-2022" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
+                </div>
+                <div>
+                  <strong>5. HeartMath Police Study:</strong> HRV biofeedback for law enforcement — 40% stress reduction
+                  <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4890098/" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Study</a>
+                </div>
+                <div>
+                  <strong>6. Department of Air Force Partnership (2021-2025):</strong> BetterUp outcomes — +7% career commitment, +15% unit readiness
+                </div>
+                <div>
+                  <strong>7. DHS OIG Reports:</strong> CBP discipline case volumes and oversight
+                  <a href="https://www.oig.dhs.gov/sites/default/files/assets/2021-05/OIG-21-34-May21.pdf" target="_blank" rel="noreferrer" style={{color: '#005288', marginLeft: '8px'}}>↗ View Report</a>
+                </div>
+              </div>
             </div>
 
           </div>
-        )}
+        </div>
+      )}
 
-        {/* TAB 5: IMPLEMENTATION */}
+{/* TAB 5: IMPLEMENTATION */}
         {activeTab === 'implementation' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
             
+            {/* Decision Framework */}
             <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
                 🎯 Decision Framework for CBP Leadership
               </h2>
+              
               <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
-                Use the COA Comparison feature in the ROI Model tab to evaluate deployment options based on budget, organizational readiness, and strategic priorities.
+                Selecting the right Course of Action depends on four key factors. This framework helps CBP leadership align deployment strategy with organizational constraints and strategic priorities.
+              </div>
+
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px'}}>
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    📅 Budget & Timeline Considerations
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Available funding:</strong> FY25 vs FY26 budget cycles<br/>
+                    • <strong>Approval authority:</strong> Component-level vs enterprise-level<br/>
+                    • <strong>Urgency:</strong> 2028 retirement crisis timeline<br/>
+                    • <strong>Risk tolerance:</strong> Prove concept first vs scale immediately
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    👥 Target Population Selection
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Component focus:</strong> OFO-only, USBP-only, or cross-component<br/>
+                    • <strong>Geographic scope:</strong> Single location vs multiple regions<br/>
+                    • <strong>Population type:</strong> High-risk groups vs broad workforce<br/>
+                    • <strong>Career stage:</strong> Entry-level, mid-career, or supervisor focus
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    📊 Success Metrics & Evaluation
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Primary outcomes:</strong> Retention, Workers' Comp claims, or discipline<br/>
+                    • <strong>Measurement timeline:</strong> 6-month, 12-month, or 24-month evaluation<br/>
+                    • <strong>Data access:</strong> Availability of baseline metrics<br/>
+                    • <strong>ROI threshold:</strong> Required payback period for continuation
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🤝 Stakeholder Alignment
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Resiliency Program integration:</strong> Complement vs replace existing services<br/>
+                    • <strong>Field leadership buy-in:</strong> Port Directors, Sector Chiefs, supervisors<br/>
+                    • <strong>Union considerations:</strong> NTEU engagement and communication<br/>
+                    • <strong>CBPX coordination:</strong> Employee experience strategy alignment
+                  </div>
+                </div>
               </div>
             </div>
 
+            {/* What Success Looks Like by COA */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+                🎯 What Success Looks Like by COA
+              </h2>
+
+              <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+                <div style={{background: '#e6f2f8', border: '3px solid #005288', borderRadius: '12px', padding: '24px'}}>
+                  <div style={{fontSize: '20px', fontWeight: '800', color: '#005288', marginBottom: '12px'}}>
+                    COA 1: Pilot (15% Coverage) — Proof of Concept
+                  </div>
+                  <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7'}}>
+                    <strong>Deployment:</strong> Minimum 500 seats in select high-need offices<br/>
+                    <strong>Timeline:</strong> 12-month engagement with 6-month interim evaluation<br/>
+                    <strong>Primary Goal:</strong> Validate engagement rates and early retention signals<br/>
+                    <strong>Success Criteria:</strong> 60%+ engagement, 85%+ satisfaction, measurable resilience improvements<br/>
+                    <strong>Investment:</strong> {fmt(Math.max(Math.round(calculations.officers * 0.15), 500) * 250)}
+                  </div>
+                </div>
+
+                <div style={{background: '#f0f9ff', border: '3px solid #0078ae', borderRadius: '12px', padding: '24px'}}>
+                  <div style={{fontSize: '20px', fontWeight: '800', color: '#0078ae', marginBottom: '12px'}}>
+                    COA 2: Targeted (25% Coverage) — Balanced Scale (Recommended)
+                  </div>
+                  <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7'}}>
+                    <strong>Deployment:</strong> Minimum 500 seats across select offices with demonstrated need<br/>
+                    <strong>Timeline:</strong> 12-month engagement with quarterly performance reviews<br/>
+                    <strong>Primary Goal:</strong> Demonstrate measurable ROI while building internal champions network<br/>
+                    <strong>Success Criteria:</strong> 5-10% reduction in voluntary separations, measurable FECA claims decline<br/>
+                    <strong>Investment:</strong> {fmt(Math.max(Math.round(calculations.officers * 0.25), 500) * 200)}
+                  </div>
+                </div>
+
+                <div style={{background: '#f0fdf4', border: '3px solid #5e9732', borderRadius: '12px', padding: '24px'}}>
+                  <div style={{fontSize: '20px', fontWeight: '800', color: '#5e9732', marginBottom: '12px'}}>
+                    COA 3: Scaled (75% Coverage) — Maximum Impact
+                  </div>
+                  <div style={{fontSize: '15px', color: '#5e9732', lineHeight: '1.7'}}>
+                    <strong>Deployment:</strong> Minimum 500 seats reaching majority of workforce<br/>
+                    <strong>Timeline:</strong> 12-month engagement with cultural transformation focus<br/>
+                    <strong>Primary Goal:</strong> Enterprise-wide workforce sustainability and cultural shift<br/>
+                    <strong>Success Criteria:</strong> 7%+ retention improvement, reduction across all three cost pathways<br/>
+                    <strong>Investment:</strong> {fmt(Math.max(Math.round(calculations.officers * 0.75), 500) * 150)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Required Inputs from CBP */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+                📋 Required Inputs from CBP for Model Refinement
+              </h2>
+
+              <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
+                To provide the most accurate ROI projections and tailor implementation to CBP's specific needs, we welcome collaboration on the following data points:
+              </div>
+
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px'}}>
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    📊 Baseline Workforce Data
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>FECA mental health claims:</strong> Annual volume and average cost by component<br/>
+                    • <strong>Attrition patterns:</strong> Voluntary separation rates by location, tenure, and role<br/>
+                    • <strong>Discipline cases:</strong> Annual volume and cost of behaviorally-driven incidents<br/>
+                    • <strong>Sick leave utilization:</strong> Mental health-related absences
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🎯 Strategic Priorities
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>High-priority locations:</strong> Offices/sectors with greatest need<br/>
+                    • <strong>Critical populations:</strong> Roles facing highest attrition or stress<br/>
+                    • <strong>Existing infrastructure:</strong> Resiliency Program services and utilization<br/>
+                    • <strong>Integration requirements:</strong> Systems, platforms, communication channels
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🤝 Stakeholder Access
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Field leadership:</strong> Port Directors, Sector Chiefs, Area Port Directors<br/>
+                    • <strong>CBPX coordination:</strong> Employee experience strategy alignment<br/>
+                    • <strong>HR/workforce analytics:</strong> Data owners and reporting structure<br/>
+                    • <strong>Union engagement:</strong> NTEU communication and collaboration
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🛠️ Implementation Support
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    • <strong>Change management:</strong> Communication strategy and leadership sponsorship<br/>
+                    • <strong>IT/technical requirements:</strong> SSO, data integration, platform access<br/>
+                    • <strong>Evaluation framework:</strong> Success metrics and reporting cadence<br/>
+                    • <strong>Pilot location nomination:</strong> Field leadership volunteers
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contracting & Procurement */}
+            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+                📜 Contracting & Procurement Pathways
+              </h2>
+
+              <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
+                BetterUp is exploring multiple procurement pathways to provide CBP maximum flexibility. Current pathways under consideration include:
+              </div>
+
+              <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    🏥 Holistic Health Support Centers
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Integration with CBP's planned wellness infrastructure through contract vehicles focused on comprehensive employee health and resilience services.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    👔 Human Capital Strategy Contracts
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Alignment with workforce development, talent management, and organizational effectiveness initiatives.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    🤝 Prime Contractor Partnerships
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    Collaboration with existing CBP prime contractors who can integrate BetterUp's platform as part of comprehensive service delivery.
+                  </div>
+                </div>
+
+                <div style={{background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '2px solid #e2e8f0'}}>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    🔄 Flexible Deployment Models
+                  </div>
+                  <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                    BetterUp adapts to your existing infrastructure and approval processes.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Next Steps */}
             <div style={{background: 'linear-gradient(135deg, #e6f2f8 0%, #cce5f0 100%)', border: '3px solid #005288', borderRadius: '12px', padding: '32px'}}>
               <h2 style={{fontSize: '28px', fontWeight: '800', color: '#005288', marginBottom: '24px', textAlign: 'center'}}>
                 🚀 Recommended Next Steps
               </h2>
+
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px'}}>
                 <div style={{background: 'white', padding: '20px', borderRadius: '12px', textAlign: 'center'}}>
                   <div style={{fontSize: '48px', marginBottom: '12px'}}>1️⃣</div>
-                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>Review & Refine Model</div>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    Review & Refine Model
+                  </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
-                    Validate assumptions with CBP data and adjust using Factor Breakdown sliders
+                    Validate assumptions with CBP data using Factor Breakdown sliders
                   </div>
                 </div>
+
                 <div style={{background: 'white', padding: '20px', borderRadius: '12px', textAlign: 'center'}}>
                   <div style={{fontSize: '48px', marginBottom: '12px'}}>2️⃣</div>
-                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>Use COA Comparison</div>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    Stakeholder Briefings
+                  </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
-                    Show stakeholders side-by-side analysis with incremental investment/return
+                    Present business case with COA Comparison scenario analysis
                   </div>
                 </div>
+
                 <div style={{background: 'white', padding: '20px', borderRadius: '12px', textAlign: 'center'}}>
                   <div style={{fontSize: '48px', marginBottom: '12px'}}>3️⃣</div>
-                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>Select COA & Deploy</div>
+                  <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px'}}>
+                    Select COA & Deploy
+                  </div>
                   <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.6'}}>
                     Choose deployment scale based on organizational readiness
                   </div>
                 </div>
               </div>
+
+              <div style={{background: 'white', padding: '24px', borderRadius: '12px', textAlign: 'center'}}>
+                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                  Ready to discuss how BetterUp can support CBP's workforce sustainability goals?
+                </div>
+                <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
+                  Contact BetterUp's federal team to schedule a discovery session. With working sliders, comorbidity adjustments, and COA comparison, we can demonstrate sensitivity analysis and build stakeholder confidence.
+                </div>
+              </div>
             </div>
           </div>
         )}
-
-      </div>
-
+        
       {/* FLOATING CHATBOT */}
       {!showChatbot && (
         <button
@@ -1218,9 +1959,10 @@ return (
             </button>
           </div>
         </div>
-      )}
+     )}
+      </div>
     </div>
-  );
-};
+    );
+  };
 
 export default CBPDashboard;
