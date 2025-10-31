@@ -681,7 +681,7 @@ const CBPDashboard = () => {
           <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
 
             {/* COA Selection */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+            <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', marginBottom: '16px'}}>
                 Select Course of Action (COA)
               </h2>
@@ -931,7 +931,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Net Savings Display */}
-            <div style={{background: 'linear-gradient(135deg, #e8f4e0 0%, #d0eac0 100%)', border: '4px solid #5e9732', borderRadius: '16px', padding: '40px', textAlign: 'center', boxShadow: '0 8px 24px rgba(22,163,74,0.25)'}}>
+            <div style={{background: 'linear-gradient(135deg, #e8f4e0 0%, #d0eac0 100%)', border: '4px solid #5e9732', borderRadius: '16px', padding: '28px 40px', textAlign: 'center', boxShadow: '0 8px 24px rgba(22,163,74,0.25)'}}>
               <div style={{fontSize: '22px', fontWeight: '600', color: '#5e9732', marginBottom: '12px'}}>
                 Estimated Annual Net Savings
               </div>
@@ -1459,8 +1459,8 @@ const CBPDashboard = () => {
             <MethodologyImpactSection />
 
             {/* Air Force Results */}
-            <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
+            <div style={{background: 'white', borderRadius: '12px', padding: '24px 32px 32px 32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+              <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
                 🎖️ Department of Air Force: Federal Law Enforcement Translation
               </h2>
               
