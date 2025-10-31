@@ -1461,8 +1461,40 @@ const CBPDashboard = () => {
             {/* Air Force Results */}
             <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
               <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', marginBottom: '24px'}}>
-                🎖️ Department of Air Force: Proven at Scale
+                🎖️ Department of Air Force: Federal Law Enforcement Translation
               </h2>
+              
+              <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7', marginBottom: '24px'}}>
+                BetterUp's multi-year partnership with the Department of Air Force demonstrates proven outcomes in high-stress federal environments. The Air Force Weapons School program—serving elite students, instructors, and their families—provides particularly relevant validation for CBP's challenges.
+              </div>
+
+              <div style={{background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '2px solid #e2e8f0', marginBottom: '24px'}}>
+                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
+                  Why Air Force Results Translate to CBP
+                </div>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                  <div>
+                    <strong>✓ High-stress operational environments</strong><br/>
+                    Both populations face life-or-death decision-making under extreme pressure with mission-critical consequences
+                  </div>
+                  <div>
+                    <strong>✓ Irregular schedules and family strain</strong><br/>
+                    Deployments, shift work, and extended separations create similar family stressors and work-life integration challenges
+                  </div>
+                  <div>
+                    <strong>✓ Retention-critical populations</strong><br/>
+                    Both services face retention crises with experienced personnel and high replacement costs
+                  </div>
+                  <div>
+                    <strong>✓ Performance under scrutiny</strong><br/>
+                    Split-second decisions carry institutional, legal, and public accountability
+                  </div>
+                </div>
+              </div>
+
+              <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
+                Whole-of-Force Impact: 2021-2025 Results
+              </div>
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px'}}>
                 {[
                   { metric: '+7%', label: 'Career Commitment', desc: '4-year study' },
