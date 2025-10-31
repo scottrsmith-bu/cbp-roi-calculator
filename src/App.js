@@ -538,6 +538,8 @@ const CBPDashboard = () => {
 
 <div style={{background: '#fffbeb', border: '3px solid #f59e0b', borderRadius: '12px', padding: '24px'}}><div style={{fontSize: '18px', fontWeight: '700', color: '#92400e', marginBottom: '12px'}}>🧮 Comorbidity Adjustment</div><div style={{fontSize: '15px', color: '#78350f'}}>Accounts for {comorbidityOverlap}% overlap to prevent double-counting. {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected.</div></div>
 
+<div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px'}}><div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}><span style={{fontSize: '36px'}}>🔗</span><h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', margin: 0}}>One Root Cause, Three Cost Symptoms</h2></div><div style={{fontSize: '16px', color: '#475569', lineHeight: '1.8'}}>These aren't three separate problems — they're interconnected symptoms of the same workforce sustainability crisis. The same officer often appears in all three cost categories simultaneously. BetterUp addresses the root cause by building resilience and developing leadership capability before officers reach crisis points.</div></div>
+
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
               <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
