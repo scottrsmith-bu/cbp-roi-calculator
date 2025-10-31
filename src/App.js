@@ -637,7 +637,7 @@ const CBPDashboard = () => {
               </div>
             </div>
 
-            <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px', marginBottom: '24px'}}>
+            <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
                 <span style={{fontSize: '36px'}}>🧮</span>
                 <h2 style={{fontSize: '26px', fontWeight: '800', color: '#92400e', margin: 0}}>
@@ -1509,7 +1509,7 @@ const CBPDashboard = () => {
                   </div>
                 ))}
               </div>
-              
+
 {/* Weapons School Translation to CBP */}
             <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
