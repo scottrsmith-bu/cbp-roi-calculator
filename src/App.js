@@ -621,114 +621,135 @@ const CBPDashboard = () => {
   return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
 
-{/* ENHANCED HEADER - Educational Framing */}
-      <div style={{maxWidth: '1200px', margin: '0 auto 24px', background: 'linear-gradient(to right, #221F20, #3a3a3a)', borderRadius: '16px', padding: '48px', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #475569'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'}}>
-          <div style={{width: '64px', height: '64px', background: '#005288', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', flexShrink: 0}}>
+{/* COMPACT PROFESSIONAL HEADER */}
+      <div style={{maxWidth: '1400px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '16px', padding: '40px 48px', boxShadow: '0 8px 32px rgba(0,82,136,0.3)', border: '2px solid #0078ae'}}>
+        <div style={{display: 'flex', alignItems: 'flex-start', gap: '24px', marginBottom: '28px'}}>
+          <div style={{width: '72px', height: '72px', background: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.2)'}}>
             🛂
           </div>
           <div style={{flex: 1}}>
-            <h1 style={{fontSize: '42px', fontWeight: '900', color: 'white', marginBottom: '12px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
+            <h1 style={{fontSize: '36px', fontWeight: '900', color: 'white', marginBottom: '8px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
               CBP Workforce Sustainability Dashboard
             </h1>
-            <p style={{fontSize: '18px', fontWeight: '600', color: '#94a3b8', marginBottom: '12px', lineHeight: '1.3'}}>
-              Division & Component Readiness, Retention and Cost Avoidance ROI Projections
+            <p style={{fontSize: '16px', fontWeight: '600', color: '#94a3b8', marginBottom: '12px', lineHeight: '1.3'}}>
+              Readiness, Retention and Cost Avoidance ROI Projections
             </p>
-            <p style={{fontSize: '14px', color: '#cbd5e1', lineHeight: '1.5', maxWidth: '1000px'}}>
-              Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps CBP commanders and leadership understand how proven intervention frameworks address workforce sustainability challenges.
+            <p style={{fontSize: '13px', color: '#cbd5e1', lineHeight: '1.5', maxWidth: '900px', marginBottom: '0'}}>
+              Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
             </p>
           </div>
         </div>
 
-        <div style={{background: 'rgba(255,204,1,0.1)', borderRadius: '12px', padding: '24px', border: '2px solid rgba(255,204,1,0.3)', marginBottom: '24px'}}>
-          <p style={{fontSize: '15px', color: '#e2e8f0', lineHeight: '1.7', marginBottom: '0'}}>
-            <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Division and Component commanders. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations ahead of the 2028 retirement wave, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability in advance of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
+        <div style={{background: 'rgba(0,82,136,0.2)', borderRadius: '12px', padding: '20px 24px', border: '2px solid rgba(255,255,255,0.3)', marginBottom: '24px'}}>
+          <p style={{fontSize: '14px', color: '#e2e8f0', lineHeight: '1.6', marginBottom: '0'}}>
+            <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Port Directors, Field Office Directors, and Sector Chiefs. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability.
           </p>
         </div>
 
-        <div style={{padding: '0'}}>
-          <label style={{display: 'block', fontSize: '14px', fontWeight: '700', color: '#e2e8f0', marginBottom: '12px', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
-            Select Your Organization
-          </label>
-          <select value={org} onChange={(e) => setOrg(e.target.value)}
-            style={{
-              width: '100%',
-              maxWidth: '700px',
-              padding: '16px 20px',
-              fontSize: '16px',
-              fontWeight: '600',
-              color: '#1e293b',
-              border: '2px solid #005288',
-              borderRadius: '12px',
-              background: 'white',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,82,136,0.1)',
-              transition: 'all 0.2s'
-            }}>
-            <option value="">Choose your organization...</option>
-            
-            <optgroup label="📊 CBP Enterprise">
-              <option value="cbp-wide">CBP-Wide (All Components) - 60,000 officers</option>
-            </optgroup>
-            
-            <optgroup label="🛂 Office of Field Operations">
-              <option value="ofo">OFO (All Field Offices) - 26,030 officers</option>
-            </optgroup>
-            
-            <optgroup label="🏢 OFO Field Offices - Tier 1 (Major International Ports)">
-              <option value="ofo-ny">New York Field Office - 2,200 officers</option>
-              <option value="ofo-la">Los Angeles Field Office - 2,100 officers</option>
-              <option value="ofo-miami">Miami Field Office - 2,000 officers</option>
-              <option value="ofo-houston">Houston Field Office - 1,900 officers</option>
-              <option value="ofo-sandiego">San Diego Field Office - 1,800 officers</option>
-            </optgroup>
-            
-            <optgroup label="🏢 OFO Field Offices - Tier 2 (Regional Hubs)">
-              <option value="ofo-chicago">Chicago Field Office - 1,500 officers</option>
-              <option value="ofo-seattle">Seattle Field Office - 1,450 officers</option>
-              <option value="ofo-sanfrancisco">San Francisco Field Office - 1,400 officers</option>
-              <option value="ofo-elpaso">El Paso Field Office - 1,350 officers</option>
-              <option value="ofo-laredo">Laredo Field Office - 1,300 officers</option>
-            </optgroup>
-            
-            <optgroup label="🏢 OFO Field Offices - Tier 3 (Regional Offices)">
-              <option value="ofo-boston">Boston Field Office - 1,000 officers</option>
-              <option value="ofo-baltimore">Baltimore Field Office - 950 officers</option>
-              <option value="ofo-atlanta">Atlanta Field Office - 900 officers</option>
-              <option value="ofo-sanjuan">San Juan Field Office - 900 officers</option>
-              <option value="ofo-detroit">Detroit Field Office - 850 officers</option>
-              <option value="ofo-neworleans">New Orleans Field Office - 850 officers</option>
-              <option value="ofo-tampa">Tampa Field Office - 850 officers</option>
-              <option value="ofo-portland">Portland Field Office - 850 officers</option>
-              <option value="ofo-buffalo">Buffalo Field Office - 800 officers</option>
-              <option value="ofo-tucson">Tucson Field Office - 800 officers</option>
-            </optgroup>
-            
-            <optgroup label="🚔 U.S. Border Patrol">
-              <option value="usbp">USBP (All Sectors) - 19,104 agents</option>
-              <option value="usbp-swb">USBP - Southwest Border - 16,500 agents</option>
-            </optgroup>
-            
-            <optgroup label="🚁 USBP Individual Sectors">
-              <option value="usbp-rgv">Rio Grande Valley Sector - 3,500 agents</option>
-              <option value="usbp-tuc">Tucson Sector - 3,800 agents</option>
-              <option value="usbp-sdg">San Diego Sector - 2,400 agents</option>
-              <option value="usbp-ept">El Paso Sector - 2,500 agents</option>
-              <option value="usbp-yum">Yuma Sector - 900 agents</option>
-              <option value="usbp-bbb">Big Bend Sector - 600 agents</option>
-              <option value="usbp-del">Del Rio Sector - 1,200 agents</option>
-              <option value="usbp-lrt">Laredo Sector - 1,600 agents</option>
-            </optgroup>
-            
-            <optgroup label="✈️ Air & Marine Operations">
-              <option value="amo">AMO (All Units) - 1,317 officers</option>
-            </optgroup>
-          </select>
+        <div style={{display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', alignItems: 'end'}}>
+          <div>
+            <label style={{display: 'block', fontSize: '13px', fontWeight: '700', color: '#e2e8f0', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
+              Select Your Organization
+            </label>
+            <select value={org} onChange={(e) => setOrg(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '14px 18px',
+                fontSize: '15px',
+                fontWeight: '600',
+                color: '#1e293b',
+                border: '2px solid #0078ae',
+                borderRadius: '10px',
+                background: 'white',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s'
+              }}>
+              <option value="">Choose your organization...</option>
+              
+              <optgroup label="📊 CBP Enterprise">
+                <option value="cbp-wide">CBP-Wide (All Components) - 60,000 officers</option>
+              </optgroup>
+              
+              <optgroup label="🛂 Office of Field Operations">
+                <option value="ofo">OFO (All Field Offices) - 26,030 officers</option>
+              </optgroup>
+              
+              <optgroup label="🏢 OFO Field Offices - Tier 1 (Major International Ports)">
+                <option value="ofo-ny">New York Field Office - 2,200 officers</option>
+                <option value="ofo-la">Los Angeles Field Office - 2,100 officers</option>
+                <option value="ofo-miami">Miami Field Office - 2,000 officers</option>
+                <option value="ofo-houston">Houston Field Office - 1,900 officers</option>
+                <option value="ofo-sandiego">San Diego Field Office - 1,800 officers</option>
+              </optgroup>
+              
+              <optgroup label="🏢 OFO Field Offices - Tier 2 (Regional Hubs)">
+                <option value="ofo-chicago">Chicago Field Office - 1,500 officers</option>
+                <option value="ofo-seattle">Seattle Field Office - 1,450 officers</option>
+                <option value="ofo-sanfrancisco">San Francisco Field Office - 1,400 officers</option>
+                <option value="ofo-elpaso">El Paso Field Office - 1,350 officers</option>
+                <option value="ofo-laredo">Laredo Field Office - 1,300 officers</option>
+              </optgroup>
+              
+              <optgroup label="🏢 OFO Field Offices - Tier 3 (Regional Offices)">
+                <option value="ofo-boston">Boston Field Office - 1,000 officers</option>
+                <option value="ofo-baltimore">Baltimore Field Office - 950 officers</option>
+                <option value="ofo-atlanta">Atlanta Field Office - 900 officers</option>
+                <option value="ofo-sanjuan">San Juan Field Office - 900 officers</option>
+                <option value="ofo-detroit">Detroit Field Office - 850 officers</option>
+                <option value="ofo-neworleans">New Orleans Field Office - 850 officers</option>
+                <option value="ofo-tampa">Tampa Field Office - 850 officers</option>
+                <option value="ofo-portland">Portland Field Office - 850 officers</option>
+                <option value="ofo-buffalo">Buffalo Field Office - 800 officers</option>
+                <option value="ofo-tucson">Tucson Field Office - 800 officers</option>
+              </optgroup>
+              
+              <optgroup label="🚔 U.S. Border Patrol">
+                <option value="usbp">USBP (All Sectors) - 19,104 agents</option>
+                <option value="usbp-swb">USBP - Southwest Border - 16,500 agents</option>
+              </optgroup>
+              
+              <optgroup label="🚁 USBP Individual Sectors">
+                <option value="usbp-rgv">Rio Grande Valley Sector - 3,500 agents</option>
+                <option value="usbp-tuc">Tucson Sector - 3,800 agents</option>
+                <option value="usbp-sdg">San Diego Sector - 2,400 agents</option>
+                <option value="usbp-ept">El Paso Sector - 2,500 agents</option>
+                <option value="usbp-yum">Yuma Sector - 900 agents</option>
+                <option value="usbp-bbb">Big Bend Sector - 600 agents</option>
+                <option value="usbp-del">Del Rio Sector - 1,200 agents</option>
+                <option value="usbp-lrt">Laredo Sector - 1,600 agents</option>
+              </optgroup>
+              
+              <optgroup label="✈️ Air & Marine Operations">
+                <option value="amo">AMO (All Units) - 1,317 officers</option>
+              </optgroup>
+            </select>
+          </div>
+
+          {/* ORGANIZATION PREVIEW CARD */}
+          {orgData[org] && (
+            <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #0078ae', boxShadow: '0 4px 12px rgba(0,0,0,0.15)'}}>
+              <div style={{fontSize: '11px', fontWeight: '600', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
+                Selected Organization
+              </div>
+              <div style={{fontSize: '16px', fontWeight: '800', color: '#005288', marginBottom: '4px'}}>
+                {orgData[org].name}
+              </div>
+              <div style={{fontSize: '13px', color: '#475569'}}>
+                {orgData[org].officers.toLocaleString()} officers
+              </div>
+              {orgData[org].location && (
+                <div style={{fontSize: '11px', color: '#64748b', marginTop: '6px', borderTop: '1px solid #e2e8f0', paddingTop: '6px'}}>
+                  📍 {orgData[org].location}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Tab Navigation with View Mode Toggle */}
-      <div style={{maxWidth: '1200px', margin: '0 auto 24px'}}>
+      <div style={{maxWidth: '1400px', margin: '0 auto 24px'}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
           <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1}}>
             {[
@@ -742,8 +763,8 @@ const CBPDashboard = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 style={{
-                  padding: '14px 24px',
-                  fontSize: '15px',
+                  padding: '12px 20px',
+                  fontSize: '14px',
                   fontWeight: '600',
                   border: 'none',
                   borderRadius: '10px',
@@ -807,7 +828,7 @@ const CBPDashboard = () => {
       </div>
 
       {/* Main Content Area */}
-      <div style={{maxWidth: '1200px', margin: '0 auto'}}>
+      <div style={{maxWidth: '1400px', margin: '0 auto'}}>
 
         {/* TAB 1: THE COST PROBLEM */}
         {activeTab === 'cost-problem' && (
@@ -1149,8 +1170,8 @@ const CBPDashboard = () => {
                 onClick={() => setShowCoaComparison(!showCoaComparison)}
                 style={{
                   marginTop: '16px',
-                  padding: '14px 24px',
-                  fontSize: '15px',
+                  padding: '12px 20px',
+                  fontSize: '14px',
                   fontWeight: '700',
                   background: '#f59e0b',
                   color: 'white',
