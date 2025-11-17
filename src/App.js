@@ -874,106 +874,171 @@ const CBPDashboard = () => {
               </div>
             )}
 
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
+            {/* DUAL-VIEW COST CATEGORY CARDS */}
+            {viewMode === 'enterprise' ? (
+              // ENTERPRISE COSTS VIEW (Financial)
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
-              <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
-                  💼 Retention Crisis
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
+                    💼 Retention Crisis
+                  </div>
+                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
+                    {fmt(calculations.retentionSavings)}
+                  </div>
+                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
+                    <strong>{calculations.behavioralSeparations.toLocaleString()} behavioral-driven separations</strong> annually (out of {calculations.baselineSeparations.toLocaleString()} total)
+                  </div>
+                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
+                    <strong>Cost Drivers:</strong><br/>
+                    • 12-month hiring timeline ($35K-45K salary during training)<br/>
+                    • 6-month academy + equipment ($75K-120K total)<br/>
+                    • 3-6 month field training with FTO supervision<br/>
+                    • 1-2 year productivity ramp<br/>
+                    • Institutional knowledge loss<br/>
+                    <br/>
+                    <strong>Model Logic:</strong><br/>
+                    • Baseline: {calculations.baselineSeparations.toLocaleString()} total separations<br/>
+                    • {calculations.behavioralSeparations.toLocaleString()} driven by behavioral health<br/>
+                    • After comorbidity: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected<br/>
+                    • BetterUp prevents {calculations.separationsPrevented.toLocaleString()} separations<br/>
+                    • Savings: {calculations.separationsPrevented} × $150K = {fmt(calculations.retentionSavings)}
+                  </div>
                 </div>
-                <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                  {fmt(calculations.retentionSavings)}
-                </div>
-                <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                  <strong>{calculations.behavioralSeparations.toLocaleString()} behavioral-driven separations</strong> annually (out of {calculations.baselineSeparations.toLocaleString()} total)
-                </div>
-                <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
-                  <strong>Cost Drivers:</strong><br/>
-                  • 12-month hiring timeline ($35K-45K salary during training)<br/>
-                  • 6-month academy + equipment ($75K-120K total)<br/>
-                  • 3-6 month field training with FTO supervision<br/>
-                  • 1-2 year productivity ramp<br/>
-                  • Institutional knowledge loss<br/>
-                  <br/>
-                  <strong>Model Logic (Updated):</strong><br/>
-                  • Baseline: {calculations.baselineSeparations.toLocaleString()} total separations ({pct(org === 'ofo' ? 6.8 : 10)} attrition)<br/>
-                  • {calculations.behavioralSeparations.toLocaleString()} driven by behavioral health factors<br/>
-                  • After comorbidity: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected<br/>
-                  • BetterUp prevents {calculations.separationsPrevented.toLocaleString()} separations<br/>
-                  • Savings: {calculations.separationsPrevented} × $150K = {fmt(calculations.retentionSavings)}
-                </div>
-              </div>
 
-              <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
-                  🏥 Workers' Comp - Mental Health Claims (FECA)
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
+                    🏥 Workers' Comp - Mental Health Claims (FECA)
+                  </div>
+                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
+                    {fmt(calculations.wcSavings)}
+                  </div>
+                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
+                    <strong>{calculations.baselineWcClaims.toLocaleString()} baseline claims</strong> at {fmt(calculations.avgWcClaimCost)} average cost
+                  </div>
+                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
+                    <strong>Cost Drivers:</strong><br/>
+                    • PTSD claims: {fmt(ptsdWcAvgCost)} per case<br/>
+                    • Depression/anxiety: {fmt(depressionWcAvgCost)}-{fmt(anxietyWcAvgCost)} each<br/>
+                    • SUD treatment: {fmt(sudWcAvgCost)}<br/>
+                    • Absenteeism: 10-15 additional sick days/year<br/>
+                    • Presenteeism: 35% productivity loss<br/>
+                    <br/>
+                    <strong>Model Logic:</strong><br/>
+                    • Baseline: {calculations.baselineWcClaims.toLocaleString()} claims from {behavioralHealthCalcs.uniqueAffected.toLocaleString()} affected officers<br/>
+                    • PTSD: {behavioralHealthCalcs.ptsdWcClaims} • Depression: {behavioralHealthCalcs.depressionWcClaims} • Anxiety: {behavioralHealthCalcs.anxietyWcClaims} • SUD: {behavioralHealthCalcs.sudWcClaims}<br/>
+                    • BetterUp prevents {calculations.claimsPrevented} claims = {fmt(calculations.wcSavings)}
+                  </div>
                 </div>
-                <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                  {fmt(calculations.wcSavings)}
-                </div>
-                <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                  <strong>{calculations.baselineWcClaims.toLocaleString()} baseline claims</strong> at {fmt(calculations.avgWcClaimCost)} average cost
-                </div>
-                <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
-                  <strong>Cost Drivers:</strong><br/>
-                  • PTSD claims: {fmt(ptsdWcAvgCost)} per case<br/>
-                  • Depression/anxiety: {fmt(depressionWcAvgCost)}-{fmt(anxietyWcAvgCost)} each<br/>
-                  • SUD treatment: {fmt(sudWcAvgCost)}<br/>
-                  • Absenteeism: 10-15 additional sick days/year<br/>
-                  • Presenteeism: 35% productivity loss<br/>
-                  <br/>
-                  <strong>Model Logic (Updated):</strong><br/>
-                  • Baseline: {calculations.baselineWcClaims.toLocaleString()} claims from {behavioralHealthCalcs.uniqueAffected.toLocaleString()} affected officers<br/>
-                  • PTSD: {behavioralHealthCalcs.ptsdWcClaims} • Depression: {behavioralHealthCalcs.depressionWcClaims} • Anxiety: {behavioralHealthCalcs.anxietyWcClaims} • SUD: {behavioralHealthCalcs.sudWcClaims}<br/>
-                  • BetterUp prevents {calculations.claimsPrevented} claims = {fmt(calculations.wcSavings)}
-                </div>
-              </div>
 
-              <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
-                  ⚖️ Professional Standards
-                </div>
-                <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                  {fmt(calculations.disciplineSavings)}
-                </div>
-                <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                  <strong>{calculations.casesPrevented} preventable discipline cases</strong> at ${calculations.casesPrevented > 0 ? Math.round(calculations.disciplineSavings / calculations.casesPrevented).toLocaleString() : '45,000'} average cost
-                </div>
-                <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
-                  <strong>Cost Drivers:</strong><br/>
-                  • Use-of-force investigations: $15K-25K per incident<br/>
-                  • Misconduct cases: $30K-50K (legal, admin time)<br/>
-                  • Substance abuse violations: $25K-40K<br/>
-                  • Terminations: $150K+ (replacement + institutional damage)<br/>
-                  • Reputation/morale impact on team performance<br/>
-                  <br/>
-                  <strong>Model Logic:</strong><br/>
-                  • Baseline: {calculations.baselineDisciplineCases.toLocaleString()} discipline cases annually (3.5% of workforce)<br/>
-                  • BetterUp's 22% professional standards lift × {pct(calculations.coverage * 100)} coverage = prevents {calculations.casesPrevented} cases<br/>
-                  • Savings: {calculations.casesPrevented} × $45K = {fmt(calculations.disciplineSavings)}
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
+                    ⚖️ Professional Standards
+                  </div>
+                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
+                    {fmt(calculations.disciplineSavings)}
+                  </div>
+                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
+                    <strong>{calculations.casesPrevented} preventable discipline cases</strong> at ${calculations.casesPrevented > 0 ? Math.round(calculations.disciplineSavings / calculations.casesPrevented).toLocaleString() : '45,000'} average cost
+                  </div>
+                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
+                    <strong>Cost Drivers:</strong><br/>
+                    • Use-of-force investigations: $15K-25K per incident<br/>
+                    • Misconduct cases: $30K-50K (legal, admin time)<br/>
+                    • Substance abuse violations: $25K-40K<br/>
+                    • Terminations: $150K+ (replacement + institutional damage)<br/>
+                    • Reputation/morale impact on team performance<br/>
+                    <br/>
+                    <strong>Model Logic:</strong><br/>
+                    • Baseline: {calculations.baselineDisciplineCases.toLocaleString()} discipline cases annually (3.5% of workforce)<br/>
+                    • BetterUp's 22% professional standards lift × {(calculations.coverage * 100).toFixed(1)}% coverage = prevents {calculations.casesPrevented} cases<br/>
+                    • Savings: {calculations.casesPrevented} × $45K = {fmt(calculations.disciplineSavings)}
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              // FIELD IMPACT VIEW (Operational)
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
-            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
-                <span style={{fontSize: '36px'}}>🔗</span>
-                <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', margin: 0}}>
-                  One Root Cause, Three Cost Symptoms
-                </h2>
-              </div>
-              
-              <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.8', marginBottom: '20px'}}>
-              </div>
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    💼 Officers at Risk of Separation
+                  </div>
+                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
+                    {calculations.behavioralSeparations.toLocaleString()}
+                  </div>
+                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
+                    Out of {calculations.baselineSeparations.toLocaleString()} total annual separations, <strong>{calculations.behavioralSeparations.toLocaleString()} are preventable</strong> through behavioral health intervention
+                  </div>
+                  <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#005288', lineHeight: '1.6'}}>
+                    <strong>Field Impact:</strong><br/>
+                    • Creates staffing gaps across {orgData[org].name}<br/>
+                    • Increases workload on remaining officers<br/>
+                    • Disrupts team cohesion and continuity<br/>
+                    • Forces overtime and shift coverage issues<br/>
+                    • Accelerates burnout in remaining workforce<br/>
+                    <br/>
+                    <strong>BetterUp Prevention:</strong><br/>
+                    • Prevents {calculations.separationsPrevented.toLocaleString()} separations annually<br/>
+                    • Maintains operational capacity<br/>
+                    • Preserves institutional knowledge<br/>
+                    • Reduces hiring/training pipeline pressure
+                  </div>
+                </div>
 
-              <div style={{background: 'white', padding: '24px', borderRadius: '12px', border: '2px solid #64748b'}}>
-                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
-                  Why This Matters for ROI Modeling
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    🏥 Officers on Limited Duty
+                  </div>
+                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
+                    {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20).toLocaleString()}
+                  </div>
+                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
+                    Approximately <strong>20% of {behavioralHealthCalcs.uniqueAffected.toLocaleString()} officers with behavioral health challenges</strong> are on limited duty profiles at any given time
+                  </div>
+                  <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#005288', lineHeight: '1.6'}}>
+                    <strong>Field Impact:</strong><br/>
+                    • Officers present but not fully mission-capable<br/>
+                    • Cannot perform full range of duties<br/>
+                    • Avg 87 limited duty days per officer<br/>
+                    • Reduces team operational capacity<br/>
+                    • Creates coverage gaps during critical operations<br/>
+                    <br/>
+                    <strong>BetterUp Impact:</strong><br/>
+                    • Early intervention reduces severity<br/>
+                    • Prevents escalation to limited duty status<br/>
+                    • Faster return to full duty when profiles occur<br/>
+                    • {calculations.claimsPrevented} fewer FECA claims = fewer long-term profiles
+                  </div>
                 </div>
-                <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
-                  BetterUp addresses the <strong>root cause</strong> by building resilience and developing leadership capability <strong>before</strong> officers reach crisis points. Early intervention through continuous coaching prevents the behavioral health deterioration that drives all three cost categories. This is why our model applies <strong>comorbidity adjustments</strong> (currently {comorbidityOverlap}%) — to avoid double-counting the same officers across conditions and provide accurate, conservative ROI projections.
+
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                    ⚖️ Discipline Cases Prevented
+                  </div>
+                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
+                    {calculations.casesPrevented}
+                  </div>
+                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
+                    Out of {calculations.baselineDisciplineCases.toLocaleString()} baseline discipline cases, <strong>{calculations.casesPrevented} are preventable</strong> through improved accountability and wellness
+                  </div>
+                  <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#005288', lineHeight: '1.6'}}>
+                    <strong>Field Impact:</strong><br/>
+                    • Command time spent on investigations<br/>
+                    • Team morale degradation from incidents<br/>
+                    • Public trust and reputation concerns<br/>
+                    • Officer removal from duty during investigation<br/>
+                    • Leadership attention diverted from mission<br/>
+                    <br/>
+                    <strong>BetterUp Prevention:</strong><br/>
+                    • Early behavioral health support<br/>
+                    • Stress management before crisis points<br/>
+                    • Leadership accountability development<br/>
+                    • Culture of wellness reduces incident rates
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
