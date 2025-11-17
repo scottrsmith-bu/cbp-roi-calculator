@@ -813,17 +813,66 @@ const CBPDashboard = () => {
         {activeTab === 'cost-problem' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
 
-            <div style={{background: 'linear-gradient(135deg, #c41230 0%, #8f0e28 100%)', color: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', boxShadow: '0 8px 24px rgba(220,38,38,0.3)'}}>
-              <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
-                {orgData[org].name} faces an estimated annual burden of:
+            {/* DUAL-VIEW HERO CARD */}
+            {viewMode === 'enterprise' ? (
+              // ENTERPRISE COSTS VIEW
+              <div style={{background: 'linear-gradient(135deg, #c41230 0%, #8f0e28 100%)', color: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', boxShadow: '0 8px 24px rgba(220,38,38,0.3)'}}>
+                <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
+                  {orgData[org].name} faces an estimated annual burden of:
+                </div>
+                <div style={{fontSize: '72px', fontWeight: '900', marginBottom: '16px'}}>
+                  {fmt(calculations.totalSavings)}
+                </div>
+                <div style={{fontSize: '20px', fontWeight: '500', opacity: 0.9, maxWidth: '900px', margin: '0 auto'}}>
+                  in preventable costs from workforce challenges—before accounting for any intervention
+                </div>
               </div>
-              <div style={{fontSize: '72px', fontWeight: '900', marginBottom: '16px'}}>
-                {fmt(calculations.totalSavings)}
+            ) : (
+              // FIELD IMPACT VIEW
+              <div style={{background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', color: 'white', borderRadius: '16px', padding: '48px', boxShadow: '0 8px 24px rgba(0,82,136,0.3)'}}>
+                <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
+                  {orgData[org].name} Operational Readiness Impact:
+                </div>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginTop: '24px'}}>
+                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
+                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                      {calculations.separationsPrevented}
+                    </div>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                      Officers at Risk of Separation
+                    </div>
+                    <div style={{fontSize: '13px', color: '#64748b'}}>
+                      Preventable behavioral health-driven exits
+                    </div>
+                  </div>
+                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
+                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                      {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20)}
+                    </div>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                      Officers Non-Deployable
+                    </div>
+                    <div style={{fontSize: '13px', color: '#64748b'}}>
+                      On limited duty profiles (20% of affected)
+                    </div>
+                  </div>
+                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
+                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                      {calculations.claimsPrevented}
+                    </div>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                      FECA Claims Preventable
+                    </div>
+                    <div style={{fontSize: '13px', color: '#64748b'}}>
+                      Mental health-related workers' comp
+                    </div>
+                  </div>
+                </div>
+                <div style={{marginTop: '24px', fontSize: '16px', opacity: 0.9}}>
+                  These operational impacts are what you see daily—officers on limited duty, vacancies from separations, and team degradation from wellness challenges
+                </div>
               </div>
-              <div style={{fontSize: '20px', fontWeight: '500', opacity: 0.9, maxWidth: '900px', margin: '0 auto'}}>
-                in preventable costs from workforce challenges—before accounting for any intervention
-              </div>
-            </div>
+            )}
 
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
