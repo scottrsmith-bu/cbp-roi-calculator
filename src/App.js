@@ -622,31 +622,28 @@ const CBPDashboard = () => {
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
 
 {/* COMPACT PROFESSIONAL HEADER */}
-      <div style={{maxWidth: '1400px', margin: '0 auto 32px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '16px', padding: '40px 48px', boxShadow: '0 8px 32px rgba(0,82,136,0.3)', border: '2px solid #0078ae'}}>
-        <div style={{display: 'flex', alignItems: 'flex-start', gap: '24px', marginBottom: '28px'}}>
-          <div style={{width: '72px', height: '72px', background: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.2)'}}>
-            🛂
-          </div>
+      <div style={{maxWidth: '1100px', margin: '0 auto 28px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '32px 40px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
+        <div style={{marginBottom: '24px'}}>
           <div style={{flex: 1}}>
-            <h1 style={{fontSize: '36px', fontWeight: '900', color: 'white', marginBottom: '8px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
+            <h1 style={{fontSize: '32px', fontWeight: '800', color: 'white', marginBottom: '10px', lineHeight: '1.2'}}>
               CBP Workforce Sustainability Dashboard
             </h1>
-            <p style={{fontSize: '16px', fontWeight: '600', color: '#94a3b8', marginBottom: '12px', lineHeight: '1.3'}}>
-              Readiness, Retention and Cost Avoidance ROI Projections
+            <p style={{fontSize: '15px', fontWeight: '600', color: '#cbd5e1', marginBottom: '14px', lineHeight: '1.4'}}>
+              Readiness, Retention and Cost Avoidance ROI Projections for Port Directors, Field Office Directors, and Sector Chiefs
             </p>
-            <p style={{fontSize: '13px', color: '#cbd5e1', lineHeight: '1.5', maxWidth: '900px', marginBottom: '0'}}>
+            <p style={{fontSize: '14px', color: '#e2e8f0', lineHeight: '1.6', maxWidth: '950px'}}>
               Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
             </p>
           </div>
         </div>
 
-        <div style={{background: 'rgba(0,82,136,0.2)', borderRadius: '12px', padding: '20px 24px', border: '2px solid rgba(255,255,255,0.3)', marginBottom: '24px'}}>
-          <p style={{fontSize: '14px', color: '#e2e8f0', lineHeight: '1.6', marginBottom: '0'}}>
+        <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '10px', padding: '18px 22px', border: '1px solid rgba(255,204,1,0.4)', marginBottom: '20px'}}>
+          <p style={{fontSize: '13px', color: '#e2e8f0', lineHeight: '1.6', marginBottom: '0'}}>
             <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Port Directors, Field Office Directors, and Sector Chiefs. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability.
           </p>
         </div>
 
-        <div style={{display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', alignItems: 'end'}}>
+        <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '0'}}>
           <div>
             <label style={{display: 'block', fontSize: '13px', fontWeight: '700', color: '#e2e8f0', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
               Select Your Organization
@@ -726,30 +723,11 @@ const CBPDashboard = () => {
             </select>
           </div>
 
-          {/* ORGANIZATION PREVIEW CARD */}
-          {orgData[org] && (
-            <div style={{background: 'white', borderRadius: '10px', padding: '16px', border: '2px solid #0078ae', boxShadow: '0 4px 12px rgba(0,0,0,0.15)'}}>
-              <div style={{fontSize: '11px', fontWeight: '600', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
-                Selected Organization
-              </div>
-              <div style={{fontSize: '16px', fontWeight: '800', color: '#005288', marginBottom: '4px'}}>
-                {orgData[org].name}
-              </div>
-              <div style={{fontSize: '13px', color: '#475569'}}>
-                {orgData[org].officers.toLocaleString()} officers
-              </div>
-              {orgData[org].location && (
-                <div style={{fontSize: '11px', color: '#64748b', marginTop: '6px', borderTop: '1px solid #e2e8f0', paddingTop: '6px'}}>
-                  📍 {orgData[org].location}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
       {/* Tab Navigation with View Mode Toggle */}
-      <div style={{maxWidth: '1400px', margin: '0 auto 24px'}}>
+      <div style={{maxWidth: '1100px', margin: '0 auto 24px'}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
           <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1}}>
             {[
@@ -828,7 +806,7 @@ const CBPDashboard = () => {
       </div>
 
       {/* Main Content Area */}
-      <div style={{maxWidth: '1400px', margin: '0 auto'}}>
+      <div style={{maxWidth: '1100px', margin: '0 auto'}}>
 
         {/* TAB 1: THE COST PROBLEM */}
         {activeTab === 'cost-problem' && (
