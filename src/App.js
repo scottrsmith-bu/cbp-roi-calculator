@@ -627,18 +627,19 @@ const CBPDashboard = () => {
           <h1 style={{fontSize: '34px', fontWeight: '900', color: '#FFCC01', marginBottom: '10px', lineHeight: '1.2'}}>
             CBP Workforce Sustainability Dashboard
           </h1>
-          <p style={{fontSize: '15px', fontWeight: '600', color: '#cbd5e1', marginBottom: '14px', lineHeight: '1.4'}}>
+          <p style={{fontSize: '15px', fontWeight: '600', color: '#cbd5e1', marginBottom: '0', lineHeight: '1.4'}}>
             Readiness, Retention and Cost Avoidance ROI Projections for Port Directors, Field Office Directors, and Sector Chiefs
-          </p>
-          <p style={{fontSize: '14px', color: '#e2e8f0', lineHeight: '1.6', maxWidth: '950px'}}>
-            Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
           </p>
         </div>
 
-        <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '10px', padding: '20px 24px', border: '2px solid rgba(255,204,1,0.5)', marginBottom: '20px'}}>
+        <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '10px', padding: '16px 22px', border: '2px solid rgba(255,204,1,0.5)', marginBottom: '16px'}}>
           <p style={{fontSize: '14.5px', color: '#ffffff', lineHeight: '1.7', marginBottom: '0'}}>
             <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Port Directors, Field Office Directors, and Sector Chiefs. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability.
           </p>
+        </div>
+
+        <div style={{fontSize: '13px', color: '#cbd5e1', lineHeight: '1.5', marginBottom: '20px', fontStyle: 'italic'}}>
+          Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
         </div>
 
         <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '0'}}>
@@ -762,8 +763,8 @@ const CBPDashboard = () => {
               <button
                 onClick={() => setViewMode('field')}
                 style={{
-                  padding: '10px 20px',
-                  fontSize: '14px',
+                  padding: '8px 14px',
+                  fontSize: '12px',
                   fontWeight: '700',
                   border: 'none',
                   borderRadius: '8px',
@@ -779,8 +780,8 @@ const CBPDashboard = () => {
               <button
                 onClick={() => setViewMode('enterprise')}
                 style={{
-                  padding: '10px 20px',
-                  fontSize: '14px',
+                  padding: '8px 14px',
+                  fontSize: '12px',
                   fontWeight: '700',
                   border: 'none',
                   borderRadius: '8px',
