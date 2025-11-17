@@ -174,22 +174,214 @@ const CBPDashboard = () => {
   const [showChatbot, setShowChatbot] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const [viewMode, setViewMode] = useState('field'); // 'field' or 'enterprise'
 
   // Organization Data
   const orgData = useMemo(() => ({
-    'cbp-wide': { name: 'CBP-Wide (All Components)', officers: 60000 },
-    'ofo': { name: 'Office of Field Operations', officers: 26030 },
-    'usbp': { name: 'U.S. Border Patrol', officers: 19104 },
-    'amo': { name: 'Air & Marine Operations', officers: 1317 },
-    'usbp-swb': { name: 'USBP - Southwest Border', officers: 16500 },
-    'usbp-rgv': { name: 'USBP - Rio Grande Valley', officers: 3500 },
-    'usbp-tuc': { name: 'USBP - Tucson', officers: 3800 },
-    'usbp-sdg': { name: 'USBP - San Diego', officers: 2400 },
-    'usbp-ept': { name: 'USBP - El Paso', officers: 2500 },
-    'usbp-yum': { name: 'USBP - Yuma', officers: 900 },
-    'usbp-bbb': { name: 'USBP - Big Bend', officers: 600 },
-    'usbp-del': { name: 'USBP - Del Rio', officers: 1200 },
-    'usbp-lrt': { name: 'USBP - Laredo', officers: 1600 }
+    // CBP Enterprise
+    'cbp-wide': { name: 'CBP-Wide (All Components)', officers: 60000, type: 'enterprise' },
+    
+    // OFO Component-Level
+    'ofo': { name: 'Office of Field Operations (All)', officers: 26030, type: 'component' },
+    
+    // OFO FIELD OFFICES - TIER 1 (Major International Ports)
+    'ofo-ny': { 
+      name: 'OFO - New York Field Office', 
+      officers: 2200, 
+      location: 'One World Trade Center, Suite 50.200, New York, NY 10007',
+      tier: 1,
+      type: 'ofo-field',
+      criticalPorts: ['JFK Airport', 'Newark Liberty', 'Port of NY/NJ'],
+      description: 'Largest OFO field office, highest passenger volume in nation'
+    },
+    'ofo-la': { 
+      name: 'OFO - Los Angeles Field Office', 
+      officers: 2100, 
+      location: '1 World Trade Center, Suite 741, Long Beach, CA 90831',
+      tier: 1,
+      type: 'ofo-field',
+      criticalPorts: ['LAX Airport', 'Port of Los Angeles', 'Port of Long Beach'],
+      description: 'Second largest container port complex in nation'
+    },
+    'ofo-miami': { 
+      name: 'OFO - Miami Field Office', 
+      officers: 2000, 
+      location: '909 S.E. 1st Avenue, Suite 980, Miami, FL 33131',
+      tier: 1,
+      type: 'ofo-field',
+      criticalPorts: ['Miami International Airport', 'Port of Miami', 'Port Everglades'],
+      description: 'Gateway to Caribbean and Latin America, cruise capital'
+    },
+    'ofo-houston': { 
+      name: 'OFO - Houston Field Office', 
+      officers: 1900, 
+      location: '2323 S. Shepherd #1300, Houston, TX 77019',
+      tier: 1,
+      type: 'ofo-field',
+      criticalPorts: ['IAH Airport', 'Port of Houston'],
+      description: 'Energy corridor gateway, major petrochemical imports'
+    },
+    'ofo-sandiego': { 
+      name: 'OFO - San Diego Field Office', 
+      officers: 1800, 
+      location: '720 East San Ysidro Blvd, San Diego, CA 92173',
+      tier: 1,
+      type: 'ofo-field',
+      criticalPorts: ['San Ysidro POE', 'Otay Mesa POE', 'San Diego Airport'],
+      description: 'Busiest land border crossing in Western Hemisphere'
+    },
+
+    // OFO FIELD OFFICES - TIER 2 (Regional Hubs)
+    'ofo-chicago': { 
+      name: 'OFO - Chicago Field Office', 
+      officers: 1500, 
+      location: '610 S. Canal Street, Room 300, Chicago, IL 60607',
+      tier: 2,
+      type: 'ofo-field',
+      criticalPorts: ["O'Hare Airport", 'Midway Airport'],
+      description: 'Midwest transportation hub, Great Lakes ports'
+    },
+    'ofo-seattle': { 
+      name: 'OFO - Seattle Field Office', 
+      officers: 1450, 
+      location: '1000 2nd Avenue, Suite 2100, Seattle, WA 98104',
+      tier: 2,
+      type: 'ofo-field',
+      criticalPorts: ['SeaTac Airport', 'Port of Seattle', 'Port of Tacoma'],
+      description: 'Pacific Northwest gateway, major container port'
+    },
+    'ofo-sanfrancisco': { 
+      name: 'OFO - San Francisco Field Office', 
+      officers: 1400, 
+      location: '33 New Montgomery St., 16th floor, San Francisco, CA 94105',
+      tier: 2,
+      type: 'ofo-field',
+      criticalPorts: ['SFO Airport', 'Oakland Airport', 'Port of Oakland'],
+      description: 'Bay Area trade gateway, tech industry imports'
+    },
+    'ofo-elpaso': { 
+      name: 'OFO - El Paso Field Office', 
+      officers: 1350, 
+      location: '6070 Gateway Boulevard East, 3rd Floor, El Paso, TX 79905',
+      tier: 2,
+      type: 'ofo-field',
+      criticalPorts: ['Paso del Norte POE', 'Bridge of the Americas', 'Ysleta POE'],
+      description: 'Major Texas border crossing, manufacturing corridor'
+    },
+    'ofo-laredo': { 
+      name: 'OFO - Laredo Field Office', 
+      officers: 1300, 
+      location: '109 Shiloh Dr., Suite 300, Laredo, TX 78045',
+      tier: 2,
+      type: 'ofo-field',
+      criticalPorts: ['World Trade Bridge', 'Gateway to the Americas Bridge'],
+      description: 'Largest land port of entry by trade volume'
+    },
+
+    // OFO FIELD OFFICES - TIER 3 (Regional Offices)
+    'ofo-boston': { 
+      name: 'OFO - Boston Field Office', 
+      officers: 1000, 
+      location: '10 Causeway St, Room 801, Boston, MA 02222',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Logan Airport', 'Port of Boston'],
+      description: 'New England gateway, maritime commerce'
+    },
+    'ofo-baltimore': { 
+      name: 'OFO - Baltimore Field Office', 
+      officers: 950, 
+      location: '217 E. Redwood Street, 12th Floor, Baltimore, MD 21202',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['BWI Airport', 'Port of Baltimore'],
+      description: 'Mid-Atlantic trade corridor'
+    },
+    'ofo-atlanta': { 
+      name: 'OFO - Atlanta Field Office', 
+      officers: 900, 
+      location: '1500 Centre Parkway, Suite 101, Atlanta, GA 30344',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Hartsfield-Jackson Airport'],
+      description: 'Southeast regional hub, busiest airport globally'
+    },
+    'ofo-detroit': { 
+      name: 'OFO - Detroit Field Office', 
+      officers: 850, 
+      location: '985 Michigan Ave., Suite 510, Detroit, MI 48226',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Ambassador Bridge', 'Detroit-Windsor Tunnel'],
+      description: 'Great Lakes trade gateway, automotive corridor'
+    },
+    'ofo-buffalo': { 
+      name: 'OFO - Buffalo Field Office', 
+      officers: 800, 
+      location: 'Buffalo Field Office, Buffalo, NY 14225',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Peace Bridge', 'Rainbow Bridge', 'Lewiston-Queenston Bridge'],
+      description: 'Northern border gateway to Canada'
+    },
+    'ofo-neworleans': { 
+      name: 'OFO - New Orleans Field Office', 
+      officers: 850, 
+      location: '423 Canal Street, Room 350, New Orleans, LA 70130',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Port of New Orleans', 'Port of South Louisiana'],
+      description: 'Gulf Coast maritime hub, petrochemical gateway'
+    },
+    'ofo-sanjuan': { 
+      name: 'OFO - San Juan Field Office', 
+      officers: 900, 
+      location: '#1 La Puntilla St., San Juan, PR 00901',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Luis Muñoz Marín Airport', 'Port of San Juan'],
+      description: 'Caribbean gateway, cruise and cargo operations'
+    },
+    'ofo-tampa': { 
+      name: 'OFO - Tampa Field Office', 
+      officers: 850, 
+      location: '5519 W Hillsborough Ave, Tampa, FL 33634',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Tampa Airport', 'Port of Tampa'],
+      description: 'Florida Gulf Coast operations'
+    },
+    'ofo-tucson': { 
+      name: 'OFO - Tucson Field Office', 
+      officers: 800, 
+      location: '4760 N. Oracle Road, Suite 316, Tucson, AZ 85705',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Nogales POE', 'Douglas POE'],
+      description: 'Arizona border corridor'
+    },
+    'ofo-portland': { 
+      name: 'OFO - Portland Field Office', 
+      officers: 850, 
+      location: '33 New Montgomery, Suite 1600, San Francisco, CA 94105',
+      tier: 3,
+      type: 'ofo-field',
+      criticalPorts: ['Portland Airport', 'Port of Portland'],
+      description: 'Pacific Northwest operations'
+    },
+
+    // USBP Component & Sectors (existing)
+    'usbp': { name: 'U.S. Border Patrol', officers: 19104, type: 'component' },
+    'amo': { name: 'Air & Marine Operations', officers: 1317, type: 'component' },
+    'usbp-swb': { name: 'USBP - Southwest Border', officers: 16500, type: 'usbp-region' },
+    'usbp-rgv': { name: 'USBP - Rio Grande Valley', officers: 3500, type: 'usbp-sector' },
+    'usbp-tuc': { name: 'USBP - Tucson', officers: 3800, type: 'usbp-sector' },
+    'usbp-sdg': { name: 'USBP - San Diego', officers: 2400, type: 'usbp-sector' },
+    'usbp-ept': { name: 'USBP - El Paso', officers: 2500, type: 'usbp-sector' },
+    'usbp-yum': { name: 'USBP - Yuma', officers: 900, type: 'usbp-sector' },
+    'usbp-bbb': { name: 'USBP - Big Bend', officers: 600, type: 'usbp-sector' },
+    'usbp-del': { name: 'USBP - Del Rio', officers: 1200, type: 'usbp-sector' },
+    'usbp-lrt': { name: 'USBP - Laredo', officers: 1600, type: 'usbp-sector' }
   }), []);
   // COMORBIDITY-ADJUSTED BEHAVIORAL HEALTH CALCULATIONS
   const behavioralHealthCalcs = useMemo(() => {
@@ -429,92 +621,212 @@ const CBPDashboard = () => {
   return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
 
-      {/* HEADER */}
-      <div style={{maxWidth: '1200px', margin: '0 auto 24px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '32px 0', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #0078ae'}}>
+      {/* ENHANCED HEADER - 2028 RETIREMENT CRISIS FRAMING */}
+      <div style={{maxWidth: '1200px', margin: '0 auto 24px', background: 'linear-gradient(135deg, #c41230 0%, #8f0e28 100%)', borderRadius: '12px', padding: '32px 0', boxShadow: '0 8px 32px rgba(196,18,48,0.3)', border: '1px solid #a10f26'}}>
         <div style={{marginBottom: '20px', padding: '0 32px'}}>
+          <div style={{display: 'inline-block', background: 'rgba(255,255,255,0.15)', padding: '6px 16px', borderRadius: '20px', marginBottom: '16px'}}>
+            <span style={{color: '#fff', fontSize: '14px', fontWeight: '700', letterSpacing: '0.05em'}}>⏰ URGENT: 2028 RETIREMENT WAVE</span>
+          </div>
           <h1 style={{fontSize: '38px', fontWeight: '900', color: 'white', marginBottom: '10px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
             Three Costs, One Crisis
           </h1>
-          <h2 style={{fontSize: '20px', fontWeight: '600', color: '#94a3b8', marginBottom: '12px', lineHeight: '1.3'}}>
-            Understanding CBP's Interconnected Workforce Challenges
+          <h2 style={{fontSize: '20px', fontWeight: '600', color: '#e2e8f0', marginBottom: '12px', lineHeight: '1.3'}}>
+            When 18,000+ Officers with 6(c) Coverage Hit 20 Years in 2028
           </h2>
-          <p style={{fontSize: '15px', color: '#cbd5e1', lineHeight: '1.5', maxWidth: '1200px'}}>
-            A data-driven analysis of CBP's workforce sustainability challenges and BetterUp's proven intervention framework
+          <p style={{fontSize: '15px', color: '#cbd5e1', lineHeight: '1.5', maxWidth: '1000px'}}>
+            In 2008, Congress extended Law Enforcement 6(c) retirement coverage to CBP officers. In 2028, these officers become eligible for retirement at age 50 with 20 years of service—creating an unprecedented staffing crisis. <strong style={{color: '#fff'}}>Without intervention, CBP faces a retention catastrophe</strong> that cascades across three interconnected cost categories.
           </p>
         </div>
 
+        <div style={{padding: '0 32px', marginBottom: '20px'}}>
+          <div style={{background: 'rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', border: '2px solid rgba(255,255,255,0.2)'}}>
+            <div style={{fontSize: '15px', color: '#fff', lineHeight: '1.7', marginBottom: '16px'}}>
+              <strong>The 2028 retirement eligibility creates cascading workforce challenges:</strong>
+            </div>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
+              <div style={{background: 'rgba(255,255,255,0.15)', padding: '16px', borderRadius: '10px'}}>
+                <div style={{fontSize: '28px', marginBottom: '8px'}}>💼</div>
+                <div style={{fontSize: '13px', fontWeight: '700', color: '#fff', marginBottom: '6px'}}>RETENTION CRISIS</div>
+                <div style={{fontSize: '12px', color: '#e2e8f0', lineHeight: '1.4'}}>
+                  Officers facing burnout, family strain, and career uncertainty accelerate retirement decisions
+                </div>
+              </div>
+              <div style={{background: 'rgba(255,255,255,0.15)', padding: '16px', borderRadius: '10px'}}>
+                <div style={{fontSize: '28px', marginBottom: '8px'}}>🏥</div>
+                <div style={{fontSize: '13px', fontWeight: '700', color: '#fff', marginBottom: '6px'}}>WORKERS' COMP SURGE</div>
+                <div style={{fontSize: '12px', color: '#e2e8f0', lineHeight: '1.4'}}>
+                  Pre-retirement FECA claims spike as officers secure disability benefits before separation
+                </div>
+              </div>
+              <div style={{background: 'rgba(255,255,255,0.15)', padding: '16px', borderRadius: '10px'}}>
+                <div style={{fontSize: '28px', marginBottom: '8px'}}>⚖️</div>
+                <div style={{fontSize: '13px', fontWeight: '700', color: '#fff', marginBottom: '6px'}}>STANDARDS DEGRADATION</div>
+                <div style={{fontSize: '12px', color: '#e2e8f0', lineHeight: '1.4'}}>
+                  "Short-timer" mentality, reduced accountability, and loss of institutional knowledge
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div style={{padding: '0 32px'}}>
-          <label style={{display: 'block', fontSize: '15px', fontWeight: '700', color: '#e2e8f0', marginBottom: '12px', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
+          <label style={{display: 'block', fontSize: '14px', fontWeight: '700', color: '#e2e8f0', marginBottom: '12px', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
             Select Organization
           </label>
           <select value={org} onChange={(e) => setOrg(e.target.value)}
             style={{
               width: '100%',
-              maxWidth: '600px',
+              maxWidth: '700px',
               padding: '16px 20px',
-              fontSize: '17px',
+              fontSize: '16px',
               fontWeight: '600',
               color: '#1e293b',
-              border: '2px solid #475569',
+              border: '2px solid #005288',
               borderRadius: '12px',
               background: 'white',
               cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              boxShadow: '0 2px 8px rgba(0,82,136,0.1)',
               transition: 'all 0.2s'
             }}>
-            <optgroup label="CBP-Wide">
-              <option value="cbp-wide">📊 All CBP Components (60,000 officers)</option>
+            <option value="">Choose your organization...</option>
+            
+            <optgroup label="📊 CBP Enterprise">
+              <option value="cbp-wide">CBP-Wide (All Components) - 60,000 officers</option>
             </optgroup>
-            <optgroup label="Major Components">
-              <option value="ofo">🛂 Office of Field Operations (26,030)</option>
-              <option value="usbp">🚔 U.S. Border Patrol (19,104)</option>
-              <option value="amo">✈️ Air & Marine Operations (1,317)</option>
+            
+            <optgroup label="🛂 Office of Field Operations">
+              <option value="ofo">OFO (All Field Offices) - 26,030 officers</option>
             </optgroup>
-            <optgroup label="USBP Regions">
-              <option value="usbp-swb">🌵 USBP - Southwest Border (16,500)</option>
+            
+            <optgroup label="🏢 OFO Field Offices - Tier 1 (Major International Ports)">
+              <option value="ofo-ny">New York Field Office - 2,200 officers</option>
+              <option value="ofo-la">Los Angeles Field Office - 2,100 officers</option>
+              <option value="ofo-miami">Miami Field Office - 2,000 officers</option>
+              <option value="ofo-houston">Houston Field Office - 1,900 officers</option>
+              <option value="ofo-sandiego">San Diego Field Office - 1,800 officers</option>
             </optgroup>
-            <optgroup label="USBP Individual Sectors">
-              <option value="usbp-rgv">USBP - Rio Grande Valley (3,500)</option>
-              <option value="usbp-tuc">USBP - Tucson (3,800)</option>
-              <option value="usbp-sdg">USBP - San Diego (2,400)</option>
-              <option value="usbp-ept">USBP - El Paso (2,500)</option>
-              <option value="usbp-yum">USBP - Yuma (900)</option>
-              <option value="usbp-bbb">USBP - Big Bend (600)</option>
-              <option value="usbp-del">USBP - Del Rio (1,200)</option>
-              <option value="usbp-lrt">USBP - Laredo (1,600)</option>
+            
+            <optgroup label="🏢 OFO Field Offices - Tier 2 (Regional Hubs)">
+              <option value="ofo-chicago">Chicago Field Office - 1,500 officers</option>
+              <option value="ofo-seattle">Seattle Field Office - 1,450 officers</option>
+              <option value="ofo-sanfrancisco">San Francisco Field Office - 1,400 officers</option>
+              <option value="ofo-elpaso">El Paso Field Office - 1,350 officers</option>
+              <option value="ofo-laredo">Laredo Field Office - 1,300 officers</option>
+            </optgroup>
+            
+            <optgroup label="🏢 OFO Field Offices - Tier 3 (Regional Offices)">
+              <option value="ofo-boston">Boston Field Office - 1,000 officers</option>
+              <option value="ofo-baltimore">Baltimore Field Office - 950 officers</option>
+              <option value="ofo-atlanta">Atlanta Field Office - 900 officers</option>
+              <option value="ofo-sanjuan">San Juan Field Office - 900 officers</option>
+              <option value="ofo-detroit">Detroit Field Office - 850 officers</option>
+              <option value="ofo-neworleans">New Orleans Field Office - 850 officers</option>
+              <option value="ofo-tampa">Tampa Field Office - 850 officers</option>
+              <option value="ofo-portland">Portland Field Office - 850 officers</option>
+              <option value="ofo-buffalo">Buffalo Field Office - 800 officers</option>
+              <option value="ofo-tucson">Tucson Field Office - 800 officers</option>
+            </optgroup>
+            
+            <optgroup label="🚔 U.S. Border Patrol">
+              <option value="usbp">USBP (All Sectors) - 19,104 agents</option>
+              <option value="usbp-swb">USBP - Southwest Border - 16,500 agents</option>
+            </optgroup>
+            
+            <optgroup label="🚁 USBP Individual Sectors">
+              <option value="usbp-rgv">Rio Grande Valley Sector - 3,500 agents</option>
+              <option value="usbp-tuc">Tucson Sector - 3,800 agents</option>
+              <option value="usbp-sdg">San Diego Sector - 2,400 agents</option>
+              <option value="usbp-ept">El Paso Sector - 2,500 agents</option>
+              <option value="usbp-yum">Yuma Sector - 900 agents</option>
+              <option value="usbp-bbb">Big Bend Sector - 600 agents</option>
+              <option value="usbp-del">Del Rio Sector - 1,200 agents</option>
+              <option value="usbp-lrt">Laredo Sector - 1,600 agents</option>
+            </optgroup>
+            
+            <optgroup label="✈️ Air & Marine Operations">
+              <option value="amo">AMO (All Units) - 1,317 officers</option>
             </optgroup>
           </select>
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div style={{maxWidth: '1200px', margin: '0 auto 24px', display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
-        {[
-          { id: 'cost-problem', label: 'The Cost Problem', icon: '⚠️' },
-          { id: 'roi-model', label: 'ROI Model', icon: '💰' },
-          { id: 'factors', label: 'Factor Breakdown', icon: '🔬' },
-          { id: 'proof', label: 'Proof & Validation', icon: '✅' },
-          { id: 'implementation', label: 'Implementation', icon: '🚀' }
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            style={{
-              padding: '14px 24px',
-              fontSize: '15px',
-              fontWeight: '600',
-              border: 'none',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              background: activeTab === tab.id ? '#005288' : 'white',
-              color: activeTab === tab.id ? 'white' : '#475569',
-              boxShadow: activeTab === tab.id ? '0 4px 12px rgba(0,82,136,0.3)' : '0 2px 4px rgba(0,0,0,0.05)',
-              transition: 'all 0.2s'
-            }}
-          >
-            {tab.icon} {tab.label}
-          </button>
-        ))}
+      {/* Tab Navigation with View Mode Toggle */}
+      <div style={{maxWidth: '1200px', margin: '0 auto 24px'}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
+          <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1}}>
+            {[
+              { id: 'cost-problem', label: 'The Cost Problem', icon: '⚠️' },
+              { id: 'roi-model', label: 'ROI Model', icon: '💰' },
+              { id: 'factors', label: 'Factor Breakdown', icon: '🔬' },
+              { id: 'proof', label: 'Proof & Validation', icon: '✅' },
+              { id: 'implementation', label: 'Implementation', icon: '🚀' }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  padding: '14px 24px',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  border: 'none',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  background: activeTab === tab.id ? '#005288' : 'white',
+                  color: activeTab === tab.id ? 'white' : '#475569',
+                  boxShadow: activeTab === tab.id ? '0 4px 12px rgba(0,82,136,0.3)' : '0 2px 4px rgba(0,0,0,0.05)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {tab.icon} {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* VIEW MODE TOGGLE */}
+          <div>
+            <div style={{display: 'flex', gap: '2px', alignItems: 'center', background: 'white', borderRadius: '12px', padding: '4px', border: '2px solid #005288', boxShadow: '0 2px 8px rgba(0,82,136,0.1)'}}>
+              <button
+                onClick={() => setViewMode('field')}
+                style={{
+                  padding: '10px 20px',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  background: viewMode === 'field' ? '#005288' : 'transparent',
+                  color: viewMode === 'field' ? 'white' : '#64748b',
+                  transition: 'all 0.2s'
+                }}
+                title="Operational impact you see and control"
+              >
+                🎯 Field Impact
+              </button>
+              <button
+                onClick={() => setViewMode('enterprise')}
+                style={{
+                  padding: '10px 20px',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  background: viewMode === 'enterprise' ? '#005288' : 'transparent',
+                  color: viewMode === 'enterprise' ? 'white' : '#64748b',
+                  transition: 'all 0.2s'
+                }}
+                title="Total CBP costs across all budgets"
+              >
+                🏛️ Enterprise Costs
+              </button>
+            </div>
+            <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px', textAlign: 'right', maxWidth: '280px'}}>
+              {viewMode === 'field' 
+                ? 'Shows operational impact you can see and influence' 
+                : 'Shows total costs distributed across DHS budgets'}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Main Content Area */}
