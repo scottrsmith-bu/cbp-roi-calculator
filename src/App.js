@@ -621,57 +621,34 @@ const CBPDashboard = () => {
   return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
 
-      {/* ENHANCED HEADER - 2028 RETIREMENT CRISIS FRAMING */}
-      <div style={{maxWidth: '1200px', margin: '0 auto 24px', background: 'linear-gradient(135deg, #c41230 0%, #8f0e28 100%)', borderRadius: '12px', padding: '32px 0', boxShadow: '0 8px 32px rgba(196,18,48,0.3)', border: '1px solid #a10f26'}}>
-        <div style={{marginBottom: '20px', padding: '0 32px'}}>
-          <div style={{display: 'inline-block', background: 'rgba(255,255,255,0.15)', padding: '6px 16px', borderRadius: '20px', marginBottom: '16px'}}>
-            <span style={{color: '#fff', fontSize: '14px', fontWeight: '700', letterSpacing: '0.05em'}}>⏰ URGENT: 2028 RETIREMENT WAVE</span>
+{/* ENHANCED HEADER - Educational Framing */}
+      <div style={{maxWidth: '1200px', margin: '0 auto 24px', background: 'linear-gradient(to right, #221F20, #3a3a3a)', borderRadius: '16px', padding: '48px', boxShadow: '0 8px 32px rgba(0,82,136,0.2)', border: '1px solid #475569'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'}}>
+          <div style={{width: '64px', height: '64px', background: '#005288', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', flexShrink: 0}}>
+            🛂
           </div>
-          <h1 style={{fontSize: '38px', fontWeight: '900', color: 'white', marginBottom: '10px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
-            Three Costs, One Crisis
-          </h1>
-          <h2 style={{fontSize: '20px', fontWeight: '600', color: '#e2e8f0', marginBottom: '12px', lineHeight: '1.3'}}>
-            When 18,000+ Officers with 6(c) Coverage Hit 20 Years in 2028
-          </h2>
-          <p style={{fontSize: '15px', color: '#cbd5e1', lineHeight: '1.5', maxWidth: '1000px'}}>
-            In 2008, Congress extended Law Enforcement 6(c) retirement coverage to CBP officers. In 2028, these officers become eligible for retirement at age 50 with 20 years of service—creating an unprecedented staffing crisis. <strong style={{color: '#fff'}}>Without intervention, CBP faces a retention catastrophe</strong> that cascades across three interconnected cost categories.
+          <div style={{flex: 1}}>
+            <h1 style={{fontSize: '42px', fontWeight: '900', color: 'white', marginBottom: '12px', lineHeight: '1.1', letterSpacing: '-0.02em'}}>
+              CBP Workforce Sustainability Dashboard
+            </h1>
+            <p style={{fontSize: '18px', fontWeight: '600', color: '#94a3b8', marginBottom: '12px', lineHeight: '1.3'}}>
+              Division & Component Readiness, Retention and Cost Avoidance ROI Projections
+            </p>
+            <p style={{fontSize: '14px', color: '#cbd5e1', lineHeight: '1.5', maxWidth: '1000px'}}>
+              Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps CBP commanders and leadership understand how proven intervention frameworks address workforce sustainability challenges.
+            </p>
+          </div>
+        </div>
+
+        <div style={{background: 'rgba(255,204,1,0.1)', borderRadius: '12px', padding: '24px', border: '2px solid rgba(255,204,1,0.3)', marginBottom: '24px'}}>
+          <p style={{fontSize: '15px', color: '#e2e8f0', lineHeight: '1.7', marginBottom: '0'}}>
+            <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Division and Component commanders. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations ahead of the 2028 retirement wave, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability in advance of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
           </p>
         </div>
 
-        <div style={{padding: '0 32px', marginBottom: '20px'}}>
-          <div style={{background: 'rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', border: '2px solid rgba(255,255,255,0.2)'}}>
-            <div style={{fontSize: '15px', color: '#fff', lineHeight: '1.7', marginBottom: '16px'}}>
-              <strong>The 2028 retirement eligibility creates cascading workforce challenges:</strong>
-            </div>
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
-              <div style={{background: 'rgba(255,255,255,0.15)', padding: '16px', borderRadius: '10px'}}>
-                <div style={{fontSize: '28px', marginBottom: '8px'}}>💼</div>
-                <div style={{fontSize: '13px', fontWeight: '700', color: '#fff', marginBottom: '6px'}}>RETENTION CRISIS</div>
-                <div style={{fontSize: '12px', color: '#e2e8f0', lineHeight: '1.4'}}>
-                  Officers facing burnout, family strain, and career uncertainty accelerate retirement decisions
-                </div>
-              </div>
-              <div style={{background: 'rgba(255,255,255,0.15)', padding: '16px', borderRadius: '10px'}}>
-                <div style={{fontSize: '28px', marginBottom: '8px'}}>🏥</div>
-                <div style={{fontSize: '13px', fontWeight: '700', color: '#fff', marginBottom: '6px'}}>WORKERS' COMP SURGE</div>
-                <div style={{fontSize: '12px', color: '#e2e8f0', lineHeight: '1.4'}}>
-                  Pre-retirement FECA claims spike as officers secure disability benefits before separation
-                </div>
-              </div>
-              <div style={{background: 'rgba(255,255,255,0.15)', padding: '16px', borderRadius: '10px'}}>
-                <div style={{fontSize: '28px', marginBottom: '8px'}}>⚖️</div>
-                <div style={{fontSize: '13px', fontWeight: '700', color: '#fff', marginBottom: '6px'}}>STANDARDS DEGRADATION</div>
-                <div style={{fontSize: '12px', color: '#e2e8f0', lineHeight: '1.4'}}>
-                  "Short-timer" mentality, reduced accountability, and loss of institutional knowledge
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style={{padding: '0 32px'}}>
+        <div style={{padding: '0'}}>
           <label style={{display: 'block', fontSize: '14px', fontWeight: '700', color: '#e2e8f0', marginBottom: '12px', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
-            Select Organization
+            Select Your Organization
           </label>
           <select value={org} onChange={(e) => setOrg(e.target.value)}
             style={{
