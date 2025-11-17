@@ -175,7 +175,7 @@ const CBPDashboard = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [viewMode, setViewMode] = useState('field'); // 'field' or 'enterprise'
-
+  
   // Organization Data
   const orgData = useMemo(() => ({
     // CBP Enterprise
@@ -1500,7 +1500,7 @@ const CBPDashboard = () => {
           </div>
         )}
 
-        {/* TAB 3: FACTOR BREAKDOWN - START */}
+        {/* TAB 3: FACTOR BREAKDOWN - Expandable Panels */}
         {activeTab === 'factors' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
 
@@ -1510,23 +1510,11 @@ const CBPDashboard = () => {
                 Understanding the Behavioral Health Factors
               </h2>
               <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7', marginBottom: '16px'}}>
-                Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the sliders below to adjust assumptions based on CBP-specific data or conservative estimates.
+                Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the expandable panels below to adjust assumptions based on CBP-specific data or conservative estimates.
               </div>
             </div>
 
-            <div style={{background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '4px solid #10b981', borderRadius: '16px', padding: '32px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
-                <span style={{fontSize: '36px'}}>✅</span>
-                <h2 style={{fontSize: '28px', fontWeight: '800', color: '#065f46', margin: 0}}>
-                  Model Validation: Sliders & Comorbidity Working
-                </h2>
-              </div>
-              <div style={{fontSize: '16px', color: '#065f46', lineHeight: '1.7'}}>
-                All behavioral health sliders now drive ROI calculations in real-time. Comorbidity adjustment at {comorbidityOverlap}% prevents double-counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers.
-              </div>
-            </div>
-
-            {/* COMORBIDITY CONTROL */}
+            {/* Comorbidity Adjustment Panel */}
             <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
                 <span style={{fontSize: '36px'}}>🧮</span>
@@ -1566,7 +1554,8 @@ const CBPDashboard = () => {
                 </div>
               </div>
             </div>
-{/* PTSD PANEL */}
+
+            {/* PTSD EXPANDABLE PANEL */}
             <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'ptsd' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
               <button
                 onClick={() => setExpandedFactor(expandedFactor === 'ptsd' ? null : 'ptsd')}
@@ -1587,6 +1576,10 @@ const CBPDashboard = () => {
 
               {expandedFactor === 'ptsd' && (
                 <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                  <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                    <strong>Cost Drivers:</strong> PTSD drives workers' comp claims ({fmt(ptsdWcAvgCost)}), limited duty profiles (87 days average), accelerated separation (2x baseline risk), and long-term VA disability claims. Officers with untreated PTSD face significantly higher risk across all three cost pathways.
+                  </div>
+
                   <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px'}}>
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
@@ -1594,40 +1587,71 @@ const CBPDashboard = () => {
                       </label>
                       <input type="range" min="10" max="25" value={ptsdPrevalence}
                         onChange={(e) => setPtsdPrevalence(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 18% • Range: 10-25% in high-stress environments
+                      </div>
                     </div>
+
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
                         Coaching Effectiveness: {ptsdCoachingEffectiveness}%
                       </label>
                       <input type="range" min="15" max="35" value={ptsdCoachingEffectiveness}
                         onChange={(e) => setPtsdCoachingEffectiveness(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 25% • Conservative for early intervention
+                      </div>
                     </div>
+
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
                         WC Filing Rate: {ptsdWcFilingRate}%
                       </label>
                       <input type="range" min="5" max="15" value={ptsdWcFilingRate}
                         onChange={(e) => setPtsdWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 8% • Higher in high-stress roles
+                      </div>
                     </div>
+
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Avg Cost: {fmt(ptsdWcAvgCost)}
+                        Avg Claim Cost: {fmt(ptsdWcAvgCost)}
                       </label>
                       <input type="range" min="60000" max="110000" step="5000" value={ptsdWcAvgCost}
                         onChange={(e) => setPtsdWcAvgCost(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Range: $60K-$110K per claim
+                      </div>
                     </div>
+
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
                         Separation Rate: {ptsdSeparationRate}%
                       </label>
                       <input type="range" min="8" max="20" value={ptsdSeparationRate}
                         onChange={(e) => setPtsdSeparationRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                      <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                        Average: 12% • PTSD doubles separation odds
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                    <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                      Current Impact on ROI:
+                    </div>
+                    <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      • {behavioralHealthCalcs.ptsdAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br/>
+                      • {behavioralHealthCalcs.ptsdWcClaims} baseline claims × {fmt(ptsdWcAvgCost)} = {fmt(behavioralHealthCalcs.ptsdWcCost)}<br/>
+                      • BetterUp prevents {calculations.ptsdClaimsPrevented} claims = <strong>{fmt(calculations.ptsdWcSavings)} savings</strong>
                     </div>
                   </div>
                 </div>
               )}
             </div>
-            {/* DEPRESSION PANEL */}
+
+            {/* DEPRESSION EXPANDABLE PANEL */}
             <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'depression' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
               <button
                 onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')}
@@ -1638,7 +1662,7 @@ const CBPDashboard = () => {
                     😔 Depression & Burnout
                   </div>
                   <div style={{fontSize: '15px', color: '#64748b'}}>
-                    Affects {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.depressionWcClaims} claims • {fmt(depressionWcAvgCost)} avg
+                    Affects {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers • {behavioralHealthCalcs.depressionWcClaims} claims • {fmt(depressionWcAvgCost)} avg
                   </div>
                 </div>
                 <div style={{fontSize: '32px', color: '#c41230'}}>
@@ -1677,7 +1701,7 @@ const CBPDashboard = () => {
 
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Workers' Comp Filing Rate: {depressionWcFilingRate}%
+                        WC Filing Rate: {depressionWcFilingRate}%
                       </label>
                       <input type="range" min="5" max="15" value={depressionWcFilingRate}
                         onChange={(e) => setDepressionWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
@@ -1723,7 +1747,7 @@ const CBPDashboard = () => {
               )}
             </div>
 
-            {/* ANXIETY PANEL */}
+            {/* ANXIETY EXPANDABLE PANEL */}
             <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
               <button
                 onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')}
@@ -1734,7 +1758,7 @@ const CBPDashboard = () => {
                     😰 Anxiety & Stress
                   </div>
                   <div style={{fontSize: '15px', color: '#64748b'}}>
-                    Affects {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.anxietyWcClaims} claims • {fmt(anxietyWcAvgCost)} avg
+                    Affects {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers • {behavioralHealthCalcs.anxietyWcClaims} claims • {fmt(anxietyWcAvgCost)} avg
                   </div>
                 </div>
                 <div style={{fontSize: '32px', color: '#c41230'}}>
@@ -1773,7 +1797,7 @@ const CBPDashboard = () => {
 
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Workers' Comp Filing Rate: {anxietyWcFilingRate}%
+                        WC Filing Rate: {anxietyWcFilingRate}%
                       </label>
                       <input type="range" min="3" max="12" value={anxietyWcFilingRate}
                         onChange={(e) => setAnxietyWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
@@ -1819,7 +1843,7 @@ const CBPDashboard = () => {
               )}
             </div>
 
-            {/* SUD PANEL */}
+            {/* SUD EXPANDABLE PANEL */}
             <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'sud' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
               <button
                 onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')}
@@ -1830,7 +1854,7 @@ const CBPDashboard = () => {
                     🍺 Substance Use Disorders
                   </div>
                   <div style={{fontSize: '15px', color: '#64748b'}}>
-                    Affects {behavioralHealthCalcs.sudAffected.toLocaleString()} officers (adjusted) • {behavioralHealthCalcs.sudWcClaims} claims • {fmt(sudWcAvgCost)} avg
+                    Affects {behavioralHealthCalcs.sudAffected.toLocaleString()} officers • {behavioralHealthCalcs.sudWcClaims} claims • {fmt(sudWcAvgCost)} avg
                   </div>
                 </div>
                 <div style={{fontSize: '32px', color: '#c41230'}}>
@@ -1869,7 +1893,7 @@ const CBPDashboard = () => {
 
                     <div>
                       <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
-                        Workers' Comp Filing Rate: {sudWcFilingRate}%
+                        WC Filing Rate: {sudWcFilingRate}%
                       </label>
                       <input type="range" min="8" max="20" value={sudWcFilingRate}
                         onChange={(e) => setSudWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
@@ -1917,7 +1941,7 @@ const CBPDashboard = () => {
 
           </div>
         )}
-
+        
         {/* TAB 4: PROOF & VALIDATION */}
         {activeTab === 'proof' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
