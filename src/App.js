@@ -546,6 +546,15 @@ const CBPDashboard = () => {
   }).format(num);
 
   const pct = (num) => `${num.toFixed(1)}%`;
+  const getPersonnelType = (orgId) => {
+    if (orgId === 'cbp-wide') return 'officers and agents';
+    if (orgId.startsWith('usbp')) return 'agents';
+    return 'officers';
+  };
+
+  const getPersonnelLabel = (count, orgId) => {
+    return `${count.toLocaleString()} ${getPersonnelType(orgId)}`;
+  };
 
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
@@ -622,23 +631,23 @@ const CBPDashboard = () => {
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
 
 {/* COMPACT PROFESSIONAL HEADER */}
-      <div style={{maxWidth: '1100px', margin: '0 auto 28px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '32px 40px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
+      <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '24px 32px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
         <div style={{marginBottom: '24px'}}>
           <h1 style={{fontSize: '34px', fontWeight: '900', color: '#FFCC01', marginBottom: '10px', lineHeight: '1.2'}}>
             CBP Workforce Sustainability Dashboard
           </h1>
-          <p style={{fontSize: '15px', fontWeight: '600', color: '#cbd5e1', marginBottom: '0', lineHeight: '1.4'}}>
+          <p style={{fontSize: '14px', fontWeight: '600', color: '#cbd5e1', marginBottom: '0', lineHeight: '1.3'}}>
             Readiness, Retention and Cost Avoidance ROI Projections for Port Directors, Field Office Directors, and Sector Chiefs
           </p>
         </div>
 
-        <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '10px', padding: '16px 22px', border: '2px solid rgba(255,204,1,0.5)', marginBottom: '16px'}}>
-          <p style={{fontSize: '14.5px', color: '#ffffff', lineHeight: '1.7', marginBottom: '0'}}>
+        <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '8px', padding: '12px 16px', border: '2px solid rgba(255,204,1,0.5)', marginBottom: '12px'}}>
+          <p style={{fontSize: '13px', color: '#ffffff', lineHeight: '1.5', marginBottom: '0'}}>
             <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Port Directors, Field Office Directors, and Sector Chiefs. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability.
           </p>
         </div>
 
-        <div style={{fontSize: '13px', color: '#cbd5e1', lineHeight: '1.5', marginBottom: '20px', fontStyle: 'italic'}}>
+        <div style={{fontSize: '12px', color: '#cbd5e1', lineHeight: '1.4', marginBottom: '12px', fontStyle: 'italic'}}>
           Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
         </div>
 
@@ -664,7 +673,7 @@ const CBPDashboard = () => {
               <option value="">Choose your organization...</option>
               
               <optgroup label="📊 CBP Enterprise">
-                <option value="cbp-wide">CBP-Wide (All Components) - 60,000 officers</option>
+                <option value="cbp-wide">CBP-Wide (All Components) - 60,000 officers and agents</option>
               </optgroup>
               
               <optgroup label="🛂 Office of Field Operations">
@@ -1081,7 +1090,7 @@ const CBPDashboard = () => {
             )}
 
             {/* One Root Cause Section */}
-            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px'}}>
+            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '3px solid #64748b', borderRadius: '12px', padding: '20px 24px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
                 <span style={{fontSize: '36px'}}>🔗</span>
                 <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', margin: 0}}>
@@ -1089,7 +1098,7 @@ const CBPDashboard = () => {
                 </h2>
               </div>
 
-              <div style={{background: 'white', padding: '24px', borderRadius: '12px', border: '2px solid #64748b'}}>
+              <div style={{background: 'white', padding: '16px 20px', borderRadius: '10px', border: '2px solid #64748b'}}>
                 <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
                   Why This Matters for ROI Modeling
                 </div>
@@ -1100,7 +1109,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Comorbidity Box */}
-            <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+            <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '3px solid #f59e0b', borderRadius: '12px', padding: '20px 24px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
                 <span style={{fontSize: '36px'}}>🧮</span>
                 <h2 style={{fontSize: '26px', fontWeight: '800', color: '#92400e', margin: 0}}>
@@ -1112,7 +1121,7 @@ const CBPDashboard = () => {
                 In mental health, conditions often occur together (comorbidity). Someone with PTSD may also have depression. To avoid double-counting the same people multiple times, we apply a comorbidity adjustment of <strong>{comorbidityOverlap}% overlap</strong>.
               </div>
 
-              <div style={{background: 'white', padding: '28px', borderRadius: '12px', border: '2px solid #f59e0b'}}>
+              <div style={{background: 'white', padding: '16px 20px', borderRadius: '10px', border: '2px solid #f59e0b'}}>
                 <div style={{fontSize: '15px', color: '#78350f', lineHeight: '1.8'}}>
                   <strong>Current Impact:</strong><br/>
                   • Raw total (if independent): {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} officers<br/>
@@ -1591,7 +1600,7 @@ const CBPDashboard = () => {
                 In mental health, conditions often occur together (comorbidity). Someone with PTSD may also have depression. To avoid double-counting the same people multiple times, we apply a comorbidity adjustment. Research suggests <strong>30-40% overlap</strong> in law enforcement populations.
               </div>
 
-              <div style={{background: 'white', padding: '28px', borderRadius: '12px', border: '2px solid #f59e0b'}}>
+              <div style={{background: 'white', padding: '16px 20px', borderRadius: '10px', border: '2px solid #f59e0b'}}>
                 <label style={{display: 'block', fontSize: '18px', fontWeight: '700', marginBottom: '12px', color: '#92400e'}}>
                   Comorbidity Overlap: {comorbidityOverlap}%
                 </label>
