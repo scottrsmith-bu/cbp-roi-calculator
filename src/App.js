@@ -1333,7 +1333,7 @@ const CBPDashboard = () => {
               </div>
             </div>
 
-            {/* Net Savings Display */}
+            {/* Net Savings Display with Field Impact Callout */}
             <div style={{background: 'linear-gradient(135deg, #e8f4e0 0%, #d0eac0 100%)', border: '4px solid #5e9732', borderRadius: '16px', padding: '28px 40px', textAlign: 'center', boxShadow: '0 8px 24px rgba(22,163,74,0.25)'}}>
               <div style={{fontSize: '22px', fontWeight: '600', color: '#5e9732', marginBottom: '12px'}}>
                 Estimated Annual Net Savings
@@ -1344,6 +1344,68 @@ const CBPDashboard = () => {
               <div style={{fontSize: '18px', color: '#5e9732', marginBottom: '24px'}}>
                 ROI: <strong>{pct(calculations.roi)}</strong> • Total Savings: {fmt(calculations.totalSavings)} • Investment: {fmt(calculations.totalInvestment)}
               </div>
+
+              {/* FIELD IMPACT TRANSLATION CALLOUT */}
+              {viewMode === 'field' && (
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', marginTop: '24px'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '40px', height: '40px', background: '#005288', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'}}>
+                      🎯
+                    </div>
+                    <h3 style={{fontSize: '20px', fontWeight: '800', color: '#005288', margin: 0}}>
+                      Field Impact Translation
+                    </h3>
+                  </div>
+                  
+                  <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7', marginBottom: '20px'}}>
+                    While the financial ROI above speaks to budget decision-makers, here's what this means for <strong>your operational capacity</strong>:
+                  </div>
+
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
+                    <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '10px', border: '2px solid #005288'}}>
+                      <div style={{fontSize: '32px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                        {calculations.separationsPrevented}
+                      </div>
+                      <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                        Officers Retained
+                      </div>
+                      <div style={{fontSize: '12px', color: '#64748b'}}>
+                        Maintained staffing levels
+                      </div>
+                    </div>
+
+                    <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '10px', border: '2px solid #005288'}}>
+                      <div style={{fontSize: '32px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                        {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)}
+                      </div>
+                      <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                        Fewer on Limited Duty
+                      </div>
+                      <div style={{fontSize: '12px', color: '#64748b'}}>
+                        Increased mission-ready capacity
+                      </div>
+                    </div>
+
+                    <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '10px', border: '2px solid #005288'}}>
+                      <div style={{fontSize: '32px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                        {calculations.casesPrevented}
+                      </div>
+                      <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                        Discipline Cases Prevented
+                      </div>
+                      <div style={{fontSize: '12px', color: '#64748b'}}>
+                        Reduced command time burden
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{marginTop: '20px', padding: '16px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #cbd5e1'}}>
+                    <div style={{fontSize: '13px', color: '#475569', lineHeight: '1.6', textAlign: 'left'}}>
+                      <strong style={{color: '#005288'}}>Bottom Line for Field Commanders:</strong> BetterUp prevents {calculations.separationsPrevented} officers from leaving, keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more officers mission-ready (not on limited duty), and eliminates {calculations.casesPrevented} discipline investigations—freeing your command to focus on the mission instead of crisis management.
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Product Mix */}
