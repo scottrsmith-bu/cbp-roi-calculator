@@ -811,151 +811,7 @@ const CBPDashboard = () => {
         {activeTab === 'cost-problem' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
 
-            {/* DUAL-VIEW HERO CARD */}
-            {viewMode === 'enterprise' ? (
-              // ENTERPRISE COSTS VIEW
-              <div style={{background: 'linear-gradient(135deg, #c41230 0%, #8f0e28 100%)', color: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', boxShadow: '0 8px 24px rgba(220,38,38,0.3)'}}>
-                <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
-                  {orgData[org].name} faces an estimated annual burden of:
-                </div>
-                <div style={{fontSize: '72px', fontWeight: '900', marginBottom: '16px'}}>
-                  {fmt(calculations.totalSavings)}
-                </div>
-                <div style={{fontSize: '20px', fontWeight: '500', opacity: 0.9, maxWidth: '900px', margin: '0 auto'}}>
-                  in preventable costs from workforce challenges—before accounting for any intervention
-                </div>
-              </div>
-            ) : (
-              // FIELD IMPACT VIEW
-              <div style={{background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', color: 'white', borderRadius: '16px', padding: '48px', boxShadow: '0 8px 24px rgba(0,82,136,0.3)'}}>
-                <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
-                  {orgData[org].name} Operational Readiness Impact:
-                </div>
-                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginTop: '24px'}}>
-                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
-                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
-                      {calculations.separationsPrevented}
-                    </div>
-                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                      Officers at Risk of Separation
-                    </div>
-                    <div style={{fontSize: '13px', color: '#64748b'}}>
-                      Preventable behavioral health-driven exits
-                    </div>
-                  </div>
-                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
-                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
-                      {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20)}
-                    </div>
-                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                      Officers Non-Deployable
-                    </div>
-                    <div style={{fontSize: '13px', color: '#64748b'}}>
-                      On limited duty profiles (20% of affected)
-                    </div>
-                  </div>
-                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
-                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
-                      {calculations.claimsPrevented}
-                    </div>
-                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                      FECA Claims Preventable
-                    </div>
-                    <div style={{fontSize: '13px', color: '#64748b'}}>
-                      Mental health-related workers' comp
-                    </div>
-                  </div>
-                </div>
-                <div style={{marginTop: '24px', fontSize: '16px', opacity: 0.9}}>
-                  These operational impacts are what you see daily—officers on limited duty, vacancies from separations, and team degradation from wellness challenges
-                </div>
-              </div>
-            )}
-
-            {/* DUAL-VIEW COST CATEGORY CARDS */}
-            {viewMode === 'enterprise' ? (
-              // ENTERPRISE COSTS VIEW (Financial)
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
-                    💼 Retention Crisis
-                  </div>
-                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                    {fmt(calculations.retentionSavings)}
-                  </div>
-                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                    <strong>{calculations.behavioralSeparations.toLocaleString()} behavioral-driven separations</strong> annually (out of {calculations.baselineSeparations.toLocaleString()} total)
-                  </div>
-                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
-                    <strong>Cost Drivers:</strong><br/>
-                    • 12-month hiring timeline ($35K-45K salary during training)<br/>
-                    • 6-month academy + equipment ($75K-120K total)<br/>
-                    • 3-6 month field training with FTO supervision<br/>
-                    • 1-2 year productivity ramp<br/>
-                    • Institutional knowledge loss<br/>
-                    <br/>
-                    <strong>Model Logic:</strong><br/>
-                    • Baseline: {calculations.baselineSeparations.toLocaleString()} total separations<br/>
-                    • {calculations.behavioralSeparations.toLocaleString()} driven by behavioral health<br/>
-                    • After comorbidity: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers affected<br/>
-                    • BetterUp prevents {calculations.separationsPrevented.toLocaleString()} separations<br/>
-                    • Savings: {calculations.separationsPrevented} × $150K = {fmt(calculations.retentionSavings)}
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
-                    🏥 Workers' Comp - Mental Health Claims (FECA)
-                  </div>
-                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                    {fmt(calculations.wcSavings)}
-                  </div>
-                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                    <strong>{calculations.baselineWcClaims.toLocaleString()} baseline claims</strong> at {fmt(calculations.avgWcClaimCost)} average cost
-                  </div>
-                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
-                    <strong>Cost Drivers:</strong><br/>
-                    • PTSD claims: {fmt(ptsdWcAvgCost)} per case<br/>
-                    • Depression/anxiety: {fmt(depressionWcAvgCost)}-{fmt(anxietyWcAvgCost)} each<br/>
-                    • SUD treatment: {fmt(sudWcAvgCost)}<br/>
-                    • Absenteeism: 10-15 additional sick days/year<br/>
-                    • Presenteeism: 35% productivity loss<br/>
-                    <br/>
-                    <strong>Model Logic:</strong><br/>
-                    • Baseline: {calculations.baselineWcClaims.toLocaleString()} claims from {behavioralHealthCalcs.uniqueAffected.toLocaleString()} affected officers<br/>
-                    • PTSD: {behavioralHealthCalcs.ptsdWcClaims} • Depression: {behavioralHealthCalcs.depressionWcClaims} • Anxiety: {behavioralHealthCalcs.anxietyWcClaims} • SUD: {behavioralHealthCalcs.sudWcClaims}<br/>
-                    • BetterUp prevents {calculations.claimsPrevented} claims = {fmt(calculations.wcSavings)}
-                  </div>
-                </div>
-
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
-                    ⚖️ Professional Standards
-                  </div>
-                  <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                    {fmt(calculations.disciplineSavings)}
-                  </div>
-                  <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                    <strong>{calculations.casesPrevented} preventable discipline cases</strong> at ${calculations.casesPrevented > 0 ? Math.round(calculations.disciplineSavings / calculations.casesPrevented).toLocaleString() : '45,000'} average cost
-                  </div>
-                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
-                    <strong>Cost Drivers:</strong><br/>
-                    • Use-of-force investigations: $15K-25K per incident<br/>
-                    • Misconduct cases: $30K-50K (legal, admin time)<br/>
-                    • Substance abuse violations: $25K-40K<br/>
-                    • Terminations: $150K+ (replacement + institutional damage)<br/>
-                    • Reputation/morale impact on team performance<br/>
-                    <br/>
-                    <strong>Model Logic:</strong><br/>
-                    • Baseline: {calculations.baselineDisciplineCases.toLocaleString()} discipline cases annually (3.5% of workforce)<br/>
-                    • BetterUp's 22% professional standards lift × {(calculations.coverage * 100).toFixed(1)}% coverage = prevents {calculations.casesPrevented} cases<br/>
-                    • Savings: {calculations.casesPrevented} × $45K = {fmt(calculations.disciplineSavings)}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              // FIELD IMPACT VIEW (Operational)
+// FIELD IMPACT VIEW (Operational) - Expandable Cards
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
                 <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
@@ -1036,7 +892,6 @@ const CBPDashboard = () => {
                   </div>
                 </div>
               </div>
-            )}
 
             <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
@@ -1065,7 +920,7 @@ const CBPDashboard = () => {
               <div style={{fontSize: '24px', fontWeight: '700', color: '#0078ae', marginBottom: '12px'}}>
                 There's a Better Way Forward
               </div>
-              <div style={{fontSize: '17px', color: '#0078ae', lineHeight: '1.7', maxWidth: '1200px', margin: '0 auto 24px'}}>
+              <div style={{fontSize: '17px', color: '#0078ae', lineHeight: '1.7', maxWidth: '1100px', margin: '0 auto 24px'}}>
                 BetterUp's proven intervention framework addresses all three cost categories simultaneously by targeting root causes early, scaling across the entire workforce, and building leadership capability. Explore the ROI Model to see the financial impact.
               </div>
               <button
@@ -1941,7 +1796,7 @@ const CBPDashboard = () => {
 
           </div>
         )}
-        
+      
         {/* TAB 4: PROOF & VALIDATION */}
         {activeTab === 'proof' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
