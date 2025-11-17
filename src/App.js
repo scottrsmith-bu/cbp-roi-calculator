@@ -624,21 +624,19 @@ const CBPDashboard = () => {
 {/* COMPACT PROFESSIONAL HEADER */}
       <div style={{maxWidth: '1100px', margin: '0 auto 28px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '32px 40px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
         <div style={{marginBottom: '24px'}}>
-          <div style={{flex: 1}}>
-            <h1 style={{fontSize: '32px', fontWeight: '800', color: 'white', marginBottom: '10px', lineHeight: '1.2'}}>
-              CBP Workforce Sustainability Dashboard
-            </h1>
-            <p style={{fontSize: '15px', fontWeight: '600', color: '#cbd5e1', marginBottom: '14px', lineHeight: '1.4'}}>
-              Readiness, Retention and Cost Avoidance ROI Projections for Port Directors, Field Office Directors, and Sector Chiefs
-            </p>
-            <p style={{fontSize: '14px', color: '#e2e8f0', lineHeight: '1.6', maxWidth: '950px'}}>
-              Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
-            </p>
-          </div>
+          <h1 style={{fontSize: '34px', fontWeight: '900', color: '#FFCC01', marginBottom: '10px', lineHeight: '1.2'}}>
+            CBP Workforce Sustainability Dashboard
+          </h1>
+          <p style={{fontSize: '15px', fontWeight: '600', color: '#cbd5e1', marginBottom: '14px', lineHeight: '1.4'}}>
+            Readiness, Retention and Cost Avoidance ROI Projections for Port Directors, Field Office Directors, and Sector Chiefs
+          </p>
+          <p style={{fontSize: '14px', color: '#e2e8f0', lineHeight: '1.6', maxWidth: '950px'}}>
+            Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
+          </p>
         </div>
 
-        <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '10px', padding: '18px 22px', border: '1px solid rgba(255,204,1,0.4)', marginBottom: '20px'}}>
-          <p style={{fontSize: '13px', color: '#e2e8f0', lineHeight: '1.6', marginBottom: '0'}}>
+        <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '10px', padding: '20px 24px', border: '2px solid rgba(255,204,1,0.5)', marginBottom: '20px'}}>
+          <p style={{fontSize: '14.5px', color: '#ffffff', lineHeight: '1.7', marginBottom: '0'}}>
             <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Port Directors, Field Office Directors, and Sector Chiefs. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability.
           </p>
         </div>
