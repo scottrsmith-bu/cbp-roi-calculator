@@ -811,88 +811,295 @@ const CBPDashboard = () => {
         {activeTab === 'cost-problem' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
 
-// FIELD IMPACT VIEW (Operational) - Expandable Cards
+            {/* DUAL-VIEW HERO CARD */}
+            {viewMode === 'enterprise' ? (
+              // ENTERPRISE COSTS VIEW
+              <div style={{background: 'linear-gradient(135deg, #c41230 0%, #8f0e28 100%)', color: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', boxShadow: '0 8px 24px rgba(220,38,38,0.3)'}}>
+                <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
+                  {orgData[org].name} faces an estimated annual burden of:
+                </div>
+                <div style={{fontSize: '72px', fontWeight: '900', marginBottom: '16px'}}>
+                  {fmt(calculations.totalSavings)}
+                </div>
+                <div style={{fontSize: '20px', fontWeight: '500', opacity: 0.9, maxWidth: '900px', margin: '0 auto'}}>
+                  in preventable costs from workforce challenges—before accounting for any intervention
+                </div>
+              </div>
+            ) : (
+              // FIELD IMPACT VIEW
+              <div style={{background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', color: 'white', borderRadius: '16px', padding: '48px', boxShadow: '0 8px 24px rgba(0,82,136,0.3)'}}>
+                <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
+                  {orgData[org].name} Operational Readiness Impact:
+                </div>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginTop: '24px'}}>
+                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
+                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                      {calculations.separationsPrevented}
+                    </div>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                      Officers at Risk
+                    </div>
+                    <div style={{fontSize: '13px', color: '#64748b'}}>
+                      Preventable separations
+                    </div>
+                  </div>
+                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
+                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                      {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20)}
+                    </div>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                      Officers Non-Deployable
+                    </div>
+                    <div style={{fontSize: '13px', color: '#64748b'}}>
+                      On limited duty profiles
+                    </div>
+                  </div>
+                  <div style={{background: 'white', borderRadius: '12px', padding: '24px', textAlign: 'center'}}>
+                    <div style={{fontSize: '48px', fontWeight: '900', color: '#005288', marginBottom: '8px'}}>
+                      {calculations.claimsPrevented}
+                    </div>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
+                      FECA Claims Preventable
+                    </div>
+                    <div style={{fontSize: '13px', color: '#64748b'}}>
+                      Mental health workers' comp
+                    </div>
+                  </div>
+                </div>
+                <div style={{marginTop: '24px', fontSize: '16px', opacity: 0.9}}>
+                  These operational impacts are what you see daily—officers on limited duty, vacancies from separations, and team degradation from wellness challenges
+                </div>
+              </div>
+            )}
+
+            {/* DUAL-VIEW COST CATEGORY CARDS */}
+            {viewMode === 'enterprise' ? (
+              // ENTERPRISE COSTS VIEW (3 red financial cards)
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
-                    💼 Officers at Risk of Separation
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
+                    💼 Retention Crisis
                   </div>
                   <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                    {calculations.behavioralSeparations.toLocaleString()}
+                    {fmt(calculations.retentionSavings)}
                   </div>
                   <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                    Out of {calculations.baselineSeparations.toLocaleString()} total annual separations, <strong>{calculations.behavioralSeparations.toLocaleString()} are preventable</strong> through behavioral health intervention
+                    <strong>{calculations.behavioralSeparations.toLocaleString()} behavioral-driven separations</strong> annually
                   </div>
-                  <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#005288', lineHeight: '1.6'}}>
-                    <strong>Field Impact:</strong><br/>
-                    • Creates staffing gaps across {orgData[org].name}<br/>
-                    • Increases workload on remaining officers<br/>
-                    • Disrupts team cohesion and continuity<br/>
-                    • Forces overtime and shift coverage issues<br/>
-                    • Accelerates burnout in remaining workforce<br/>
+                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
+                    <strong>Cost Drivers:</strong><br/>
+                    • 12-month hiring timeline<br/>
+                    • 6-month academy + equipment<br/>
+                    • Field training with FTO<br/>
+                    • 1-2 year productivity ramp<br/>
                     <br/>
-                    <strong>BetterUp Prevention:</strong><br/>
-                    • Prevents {calculations.separationsPrevented.toLocaleString()} separations annually<br/>
-                    • Maintains operational capacity<br/>
-                    • Preserves institutional knowledge<br/>
-                    • Reduces hiring/training pipeline pressure
+                    <strong>Model Logic:</strong><br/>
+                    • Prevents {calculations.separationsPrevented.toLocaleString()} separations<br/>
+                    • Savings: {calculations.separationsPrevented} × $150K = {fmt(calculations.retentionSavings)}
                   </div>
                 </div>
 
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
-                    🏥 Officers on Limited Duty
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
+                    🏥 Workers' Comp (FECA)
                   </div>
                   <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                    {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20).toLocaleString()}
+                    {fmt(calculations.wcSavings)}
                   </div>
                   <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                    Approximately <strong>20% of {behavioralHealthCalcs.uniqueAffected.toLocaleString()} officers with behavioral health challenges</strong> are on limited duty profiles at any given time
+                    <strong>{calculations.baselineWcClaims.toLocaleString()} baseline claims</strong> at {fmt(calculations.avgWcClaimCost)} average
                   </div>
-                  <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#005288', lineHeight: '1.6'}}>
-                    <strong>Field Impact:</strong><br/>
-                    • Officers present but not fully mission-capable<br/>
-                    • Cannot perform full range of duties<br/>
-                    • Avg 87 limited duty days per officer<br/>
-                    • Reduces team operational capacity<br/>
-                    • Creates coverage gaps during critical operations<br/>
+                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
+                    <strong>Cost Drivers:</strong><br/>
+                    • PTSD claims: {fmt(ptsdWcAvgCost)}<br/>
+                    • Depression: {fmt(depressionWcAvgCost)}<br/>
+                    • Anxiety: {fmt(anxietyWcAvgCost)}<br/>
+                    • SUD: {fmt(sudWcAvgCost)}<br/>
                     <br/>
-                    <strong>BetterUp Impact:</strong><br/>
-                    • Early intervention reduces severity<br/>
-                    • Prevents escalation to limited duty status<br/>
-                    • Faster return to full duty when profiles occur<br/>
-                    • {calculations.claimsPrevented} fewer FECA claims = fewer long-term profiles
+                    <strong>Model Logic:</strong><br/>
+                    • BetterUp prevents {calculations.claimsPrevented} claims = {fmt(calculations.wcSavings)}
                   </div>
                 </div>
 
-                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #005288', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                  <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
-                    ⚖️ Discipline Cases Prevented
+                <div style={{background: 'white', borderRadius: '12px', padding: '24px', border: '3px solid #c41230', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#c41230', marginBottom: '12px'}}>
+                    ⚖️ Professional Standards
                   </div>
                   <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '16px'}}>
-                    {calculations.casesPrevented}
+                    {fmt(calculations.disciplineSavings)}
                   </div>
                   <div style={{fontSize: '15px', color: '#475569', marginBottom: '20px', lineHeight: '1.6'}}>
-                    Out of {calculations.baselineDisciplineCases.toLocaleString()} baseline discipline cases, <strong>{calculations.casesPrevented} are preventable</strong> through improved accountability and wellness
+                    <strong>{calculations.casesPrevented} preventable cases</strong> annually
                   </div>
-                  <div style={{background: '#e6f2f8', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#005288', lineHeight: '1.6'}}>
-                    <strong>Field Impact:</strong><br/>
-                    • Command time spent on investigations<br/>
-                    • Team morale degradation from incidents<br/>
-                    • Public trust and reputation concerns<br/>
-                    • Officer removal from duty during investigation<br/>
-                    • Leadership attention diverted from mission<br/>
+                  <div style={{background: '#fef2f2', padding: '16px', borderRadius: '8px', fontSize: '14px', color: '#6d0a1f', lineHeight: '1.6'}}>
+                    <strong>Cost Drivers:</strong><br/>
+                    • Use-of-force investigations<br/>
+                    • Misconduct cases<br/>
+                    • Substance violations<br/>
+                    • Terminations<br/>
                     <br/>
-                    <strong>BetterUp Prevention:</strong><br/>
-                    • Early behavioral health support<br/>
-                    • Stress management before crisis points<br/>
-                    • Leadership accountability development<br/>
-                    • Culture of wellness reduces incident rates
+                    <strong>Model Logic:</strong><br/>
+                    • 22% standards lift × {(calculations.coverage * 100).toFixed(1)}% coverage<br/>
+                    • Savings: {fmt(calculations.disciplineSavings)}
                   </div>
                 </div>
               </div>
+            ) : (
+              // FIELD IMPACT VIEW (3 expandable blue cards)
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
+                {/* CARD 1: Officers at Risk */}
+                <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'field-retention' ? '3px solid #005288' : '2px solid #cbd5e1'}}>
+                  <div 
+                    onClick={() => setExpandedFactor(expandedFactor === 'field-retention' ? null : 'field-retention')}
+                    style={{padding: '24px', background: expandedFactor === 'field-retention' ? '#e6f2f8' : 'white', cursor: 'pointer'}}
+                  >
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                      <div style={{flex: 1}}>
+                        <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                          💼 Officers at Risk of Separation
+                        </div>
+                        <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '8px'}}>
+                          {calculations.behavioralSeparations.toLocaleString()}
+                        </div>
+                        <div style={{fontSize: '13px', color: '#64748b'}}>
+                          {expandedFactor === 'field-retention' ? 'Click to collapse' : 'Click for details'}
+                        </div>
+                      </div>
+                      <div style={{fontSize: '32px', color: '#005288', marginLeft: '12px'}}>
+                        {expandedFactor === 'field-retention' ? '−' : '+'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {expandedFactor === 'field-retention' && (
+                    <div style={{padding: '24px', paddingTop: '0', background: '#f8fafc', borderTop: '2px solid #e6f2f8'}}>
+                      <div style={{fontSize: '14px', color: '#475569', marginBottom: '16px', lineHeight: '1.6'}}>
+                        Out of {calculations.baselineSeparations.toLocaleString()} total annual separations, <strong>{calculations.behavioralSeparations.toLocaleString()} are preventable</strong>
+                      </div>
+                      <div style={{background: 'white', padding: '16px', borderRadius: '8px', fontSize: '13px', color: '#005288', lineHeight: '1.7', border: '2px solid #e6f2f8'}}>
+                        <div style={{fontWeight: '700', marginBottom: '8px'}}>Field Impact:</div>
+                        • Creates staffing gaps<br/>
+                        • Increases workload on remaining officers<br/>
+                        • Disrupts team cohesion<br/>
+                        <br/>
+                        <div style={{fontWeight: '700', marginBottom: '8px'}}>BetterUp Prevention:</div>
+                        • Prevents {calculations.separationsPrevented.toLocaleString()} separations annually<br/>
+                        • Maintains operational capacity
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* CARD 2: Limited Duty */}
+                <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'field-limited' ? '3px solid #005288' : '2px solid #cbd5e1'}}>
+                  <div 
+                    onClick={() => setExpandedFactor(expandedFactor === 'field-limited' ? null : 'field-limited')}
+                    style={{padding: '24px', background: expandedFactor === 'field-limited' ? '#e6f2f8' : 'white', cursor: 'pointer'}}
+                  >
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                      <div style={{flex: 1}}>
+                        <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                          🏥 Officers on Limited Duty
+                        </div>
+                        <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '8px'}}>
+                          {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20).toLocaleString()}
+                        </div>
+                        <div style={{fontSize: '13px', color: '#64748b'}}>
+                          {expandedFactor === 'field-limited' ? 'Click to collapse' : 'Click for details'}
+                        </div>
+                      </div>
+                      <div style={{fontSize: '32px', color: '#005288', marginLeft: '12px'}}>
+                        {expandedFactor === 'field-limited' ? '−' : '+'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {expandedFactor === 'field-limited' && (
+                    <div style={{padding: '24px', paddingTop: '0', background: '#f8fafc', borderTop: '2px solid #e6f2f8'}}>
+                      <div style={{fontSize: '14px', color: '#475569', marginBottom: '16px', lineHeight: '1.6'}}>
+                        20% of affected officers on limited duty profiles
+                      </div>
+                      <div style={{background: 'white', padding: '16px', borderRadius: '8px', fontSize: '13px', color: '#005288', lineHeight: '1.7', border: '2px solid #e6f2f8'}}>
+                        <div style={{fontWeight: '700', marginBottom: '8px'}}>Field Impact:</div>
+                        • Not fully mission-capable<br/>
+                        • Avg 87 limited duty days<br/>
+                        • Reduces operational capacity<br/>
+                        <br/>
+                        <div style={{fontWeight: '700', marginBottom: '8px'}}>BetterUp Impact:</div>
+                        • Early intervention reduces severity<br/>
+                        • {calculations.claimsPrevented} fewer FECA claims
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* CARD 3: Discipline */}
+                <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'field-discipline' ? '3px solid #005288' : '2px solid #cbd5e1'}}>
+                  <div 
+                    onClick={() => setExpandedFactor(expandedFactor === 'field-discipline' ? null : 'field-discipline')}
+                    style={{padding: '24px', background: expandedFactor === 'field-discipline' ? '#e6f2f8' : 'white', cursor: 'pointer'}}
+                  >
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                      <div style={{flex: 1}}>
+                        <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
+                          ⚖️ Discipline Cases Prevented
+                        </div>
+                        <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '8px'}}>
+                          {calculations.casesPrevented}
+                        </div>
+                        <div style={{fontSize: '13px', color: '#64748b'}}>
+                          {expandedFactor === 'field-discipline' ? 'Click to collapse' : 'Click for details'}
+                        </div>
+                      </div>
+                      <div style={{fontSize: '32px', color: '#005288', marginLeft: '12px'}}>
+                        {expandedFactor === 'field-discipline' ? '−' : '+'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {expandedFactor === 'field-discipline' && (
+                    <div style={{padding: '24px', paddingTop: '0', background: '#f8fafc', borderTop: '2px solid #e6f2f8'}}>
+                      <div style={{fontSize: '14px', color: '#475569', marginBottom: '16px', lineHeight: '1.6'}}>
+                        Out of {calculations.baselineDisciplineCases.toLocaleString()} baseline cases, <strong>{calculations.casesPrevented} preventable</strong>
+                      </div>
+                      <div style={{background: 'white', padding: '16px', borderRadius: '8px', fontSize: '13px', color: '#005288', lineHeight: '1.7', border: '2px solid #e6f2f8'}}>
+                        <div style={{fontWeight: '700', marginBottom: '8px'}}>Field Impact:</div>
+                        • Command time on investigations<br/>
+                        • Team morale degradation<br/>
+                        • Public trust concerns<br/>
+                        <br/>
+                        <div style={{fontWeight: '700', marginBottom: '8px'}}>BetterUp Prevention:</div>
+                        • Early behavioral support<br/>
+                        • Leadership accountability
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* One Root Cause Section */}
+            <div style={{background: 'linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%)', border: '4px solid #64748b', borderRadius: '16px', padding: '32px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px'}}>
+                <span style={{fontSize: '36px'}}>🔗</span>
+                <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                  One Root Cause, Three Cost Symptoms
+                </h2>
+              </div>
+
+              <div style={{background: 'white', padding: '24px', borderRadius: '12px', border: '2px solid #64748b'}}>
+                <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
+                  Why This Matters for ROI Modeling
+                </div>
+                <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
+                  BetterUp addresses the <strong>root cause</strong> by building resilience and developing leadership capability <strong>before</strong> officers reach crisis points. Early intervention through continuous coaching prevents the behavioral health deterioration that drives all three cost categories. This is why our model applies <strong>comorbidity adjustments</strong> (currently {comorbidityOverlap}%) — to avoid double-counting the same officers across conditions and provide accurate, conservative ROI projections.
+                </div>
+              </div>
+            </div>
+
+            {/* Comorbidity Box */}
             <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
                 <span style={{fontSize: '36px'}}>🧮</span>
@@ -908,7 +1115,7 @@ const CBPDashboard = () => {
               <div style={{background: 'white', padding: '28px', borderRadius: '12px', border: '2px solid #f59e0b'}}>
                 <div style={{fontSize: '15px', color: '#78350f', lineHeight: '1.8'}}>
                   <strong>Current Impact:</strong><br/>
-                  • Raw total (if conditions were independent): {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} officers<br/>
+                  • Raw total (if independent): {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} officers<br/>
                   • Adjusted for {comorbidityOverlap}% overlap: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers<br/>
                   • Prevented double-counting: {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers<br/><br/>
                   <em>This ensures our ROI calculations are conservative and don't overstate the affected population.</em>
@@ -916,12 +1123,13 @@ const CBPDashboard = () => {
               </div>
             </div>
 
+            {/* Better Way Forward */}
             <div style={{background: 'linear-gradient(135deg, #e6f2f8 0%, #cce5f0 100%)', border: '3px solid #005288', borderRadius: '12px', padding: '32px', textAlign: 'center'}}>
               <div style={{fontSize: '24px', fontWeight: '700', color: '#0078ae', marginBottom: '12px'}}>
                 There's a Better Way Forward
               </div>
               <div style={{fontSize: '17px', color: '#0078ae', lineHeight: '1.7', maxWidth: '1100px', margin: '0 auto 24px'}}>
-                BetterUp's proven intervention framework addresses all three cost categories simultaneously by targeting root causes early, scaling across the entire workforce, and building leadership capability. Explore the ROI Model to see the financial impact.
+                BetterUp's proven intervention framework addresses all three cost categories simultaneously by targeting root causes early, scaling across the entire workforce, and building leadership capability.
               </div>
               <button
                 onClick={() => setActiveTab('roi-model')}
@@ -932,6 +1140,7 @@ const CBPDashboard = () => {
             </div>
           </div>
         )}
+
 {/* TAB 2: ROI MODEL */}
         {activeTab === 'roi-model' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
