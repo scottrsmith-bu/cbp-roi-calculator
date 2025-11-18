@@ -654,7 +654,7 @@ return <div>Loading...</div>;
     
     return { leadSeats, readySeats, totalSeats, activeUsers, coverage, totalInvestment,
       retentionSavings, wcSavings, disciplineSavings, totalSavings, netSavings, roi };
-  };
+    };
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0' }}>
