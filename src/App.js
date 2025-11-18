@@ -631,7 +631,7 @@ const CBPDashboard = () => {
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0'}}>
 
 {/* COMPACT PROFESSIONAL HEADER */}
-      <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
+      <div style={{margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
         <div style={{marginBottom: '16px'}}>
           <h1 style={{fontSize: '28px', fontWeight: '900', color: '#FFCC01', marginBottom: '6px', lineHeight: '1.2'}}>
             CBP Workforce Sustainability Dashboard
@@ -734,7 +734,7 @@ const CBPDashboard = () => {
       </div>
 
       {/* Tab Navigation with View Mode Toggle */}
-      <div style={{maxWidth: '1100px', margin: '0 auto 24px'}}>
+      <div style={{margin: '0 auto 24px'}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
           <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1}}>
             {[
@@ -803,7 +803,7 @@ const CBPDashboard = () => {
                 🏛️ Enterprise Costs
               </button>
             </div>
-            <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px', textAlign: 'right', maxWidth: '280px'}}>
+            <div style={{fontSize: '11px', color: '#64748b', marginTop: '4px', textAlign: 'right'}}>
               {viewMode === 'field' 
                 ? 'Shows operational impact you can see and influence' 
                 : 'Shows total costs distributed across DHS budgets'}
@@ -829,7 +829,7 @@ const CBPDashboard = () => {
                 <div style={{fontSize: '72px', fontWeight: '900', marginBottom: '16px'}}>
                   {fmt(calculations.totalSavings)}
                 </div>
-                <div style={{fontSize: '20px', fontWeight: '500', opacity: 0.9, maxWidth: '900px', margin: '0 auto'}}>
+                <div style={{fontSize: '20px', fontWeight: '500', opacity: 0.9, margin: '0 auto'}}>
                   in preventable costs from workforce challenges—before accounting for any intervention
                 </div>
               </div>
@@ -1136,7 +1136,7 @@ const CBPDashboard = () => {
               <div style={{fontSize: '24px', fontWeight: '700', color: '#0078ae', marginBottom: '12px'}}>
                 There's a Better Way Forward
               </div>
-              <div style={{fontSize: '17px', color: '#0078ae', lineHeight: '1.7', maxWidth: '1100px', margin: '0 auto 24px'}}>
+              <div style={{fontSize: '17px', color: '#0078ae', lineHeight: '1.7', margin: '0 auto 24px'}}>
                 BetterUp's proven intervention framework addresses all three cost categories simultaneously by targeting root causes early, scaling across the entire workforce, and building leadership capability.
               </div>
               <button
@@ -2628,7 +2628,7 @@ const CBPDashboard = () => {
               <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
                 {chatMessages.map((m, i) => (
                   <div key={i} style={{textAlign: m.type === 'user' ? 'right' : 'left'}}>
-                    <div style={{display: 'inline-block', maxWidth: '80%', padding: '12px', borderRadius: '8px',
+                    <div style={{display: 'inline-block', padding: '12px', borderRadius: '8px',
                       background: m.type === 'user' ? '#005288' : 'white',
                       color: m.type === 'user' ? 'white' : '#1f2937',
                       border: m.type === 'user' ? 'none' : '1px solid #e5e7eb', fontSize: '14px'}}>
