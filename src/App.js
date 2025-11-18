@@ -9,9 +9,9 @@ import React, { useState, useMemo } from 'react';
 // Shared layout container (use this everywhere)
 const container = {
   boxSizing: 'border-box',
-  maxWidth: 1100,
+  maxWidth: 1156,     // 1100 + 28 + 28 so inner width = 1100 again
   margin: '0 auto',
-  padding: '0 28px', // matches your header's inner padding
+  padding: '0 28px',
 };
 
 // Tiny global CSS reset for consistent sizing (borders don't add width)
@@ -660,7 +660,7 @@ const CBPDashboard = () => {
   <div style={{
     background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)',
     borderRadius: 12,
-    padding: '20px', // formerly '20px 28px' — padding now lives on the container
+    padding: '20px 28px', // formerly '20px 28px' — padding now lives on the container
     boxShadow: '0 6px 24px rgba(0,82,136,0.25)',
     border: '1px solid #0078ae'
   }}>
