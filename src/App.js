@@ -837,7 +837,7 @@ const CBPDashboard = () => {
               </div>
             ) : (
               // FIELD IMPACT VIEW
-              <div style={{background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', color: 'white', borderRadius: '16px', padding: '48px', boxShadow: '0 8px 24px rgba(0,82,136,0.3)'}}>
+              <div style={{background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', color: 'white', borderRadius: '16px', padding: '32px 48px', boxShadow: '0 8px 24px rgba(0,82,136,0.3)'}}>
                 <div style={{fontSize: '22px', fontWeight: '600', marginBottom: '16px', opacity: 0.95}}>
                   {orgData[org].name} Operational Readiness Impact:
                 </div>
