@@ -1565,7 +1565,7 @@ const CBPDashboard = () => {
           )}
           {/* TAB 3: FACTOR BREAKDOWN - Expandable Panels */}
           {activeTab === 'factors' && (
-            <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '32px', padding: '0'}}>
 
               {/* Introduction */}
               <div style={{background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
@@ -1810,7 +1810,8 @@ const CBPDashboard = () => {
 
             </div>
           )}
-          {/* ANXIETY EXPANDABLE PANEL */}
+
+              {/* ANXIETY EXPANDABLE PANEL */}
               <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
                 <button
                   onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')}
