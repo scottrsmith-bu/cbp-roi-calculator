@@ -1151,7 +1151,7 @@ const CBPDashboard = () => {
 
 {/* TAB 2: ROI MODEL */}
         {activeTab === 'roi-model' && (
-          <div style={{display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '1100px', margin: '0 auto'}}>
+          <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
 
 {/* Net Savings Display with Field Impact Callout */}
             <div style={{background: 'linear-gradient(135deg, #e8f4e0 0%, #d0eac0 100%)', border: '4px solid #5e9732', borderRadius: '16px', padding: '28px 40px', textAlign: 'center', boxShadow: '0 8px 24px rgba(22,163,74,0.25)'}}>
