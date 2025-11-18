@@ -570,6 +570,13 @@ const CBPDashboard = () => {
   }).format(num);
 
   const pct = (num) => `${num.toFixed(1)}%`;
+  
+  const roiDisplay = (num) => {
+    if (num >= 100) {
+      return `${(num / 100).toFixed(1)}X`;
+    }
+    return `${num.toFixed(1)}%`;
+  };
   const getPersonnelType = (orgId) => {
     if (orgId === 'cbp-wide') return 'officers and agents';
     if (orgId.startsWith('usbp')) return 'agents';
