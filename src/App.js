@@ -631,9 +631,9 @@ const CBPDashboard = () => {
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 24px'}}>
 
 {/* COMPACT PROFESSIONAL HEADER */}
-      <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '24px 32px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
-        <div style={{marginBottom: '24px'}}>
-          <h1 style={{fontSize: '34px', fontWeight: '900', color: '#FFCC01', marginBottom: '10px', lineHeight: '1.2'}}>
+      <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
+        <div style={{marginBottom: '16px'}}>
+          <h1 style={{fontSize: '28px', fontWeight: '900', color: '#FFCC01', marginBottom: '6px', lineHeight: '1.2'}}>
             CBP Workforce Sustainability Dashboard
           </h1>
           <p style={{fontSize: '14px', fontWeight: '600', color: '#cbd5e1', marginBottom: '0', lineHeight: '1.3'}}>
@@ -647,7 +647,7 @@ const CBPDashboard = () => {
           </p>
         </div>
 
-        <div style={{fontSize: '12px', color: '#cbd5e1', lineHeight: '1.4', marginBottom: '12px', fontStyle: 'italic'}}>
+        <div style={{fontSize: '11px', color: '#cbd5e1', lineHeight: '1.4', marginBottom: '12px', fontStyle: 'italic'}}>
           Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
         </div>
 
@@ -730,7 +730,6 @@ const CBPDashboard = () => {
               </optgroup>
             </select>
           </div>
-
         </div>
       </div>
 
@@ -1152,7 +1151,7 @@ const CBPDashboard = () => {
 
 {/* TAB 2: ROI MODEL */}
         {activeTab === 'roi-model' && (
-          <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+          <div style={{display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '1100px', margin: '0 auto'}}>
 
 {/* Net Savings Display with Field Impact Callout */}
             <div style={{background: 'linear-gradient(135deg, #e8f4e0 0%, #d0eac0 100%)', border: '4px solid #5e9732', borderRadius: '16px', padding: '28px 40px', textAlign: 'center', boxShadow: '0 8px 24px rgba(22,163,74,0.25)'}}>
@@ -1225,7 +1224,7 @@ const CBPDashboard = () => {
               <h2 style={{fontSize: '26px', fontWeight: '800', color: '#1e293b', marginBottom: '16px'}}>
                 Select Course of Action (COA)
               </h2>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px'}}>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
                 {[
                   {
                     id: 'pilot',
