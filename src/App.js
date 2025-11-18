@@ -751,7 +751,7 @@ const CBPDashboard = () => {
                 onClick={() => setActiveTab(tab.id)}
                 style={{
   padding: '10px 16px',
-  fontSize: '13px',
+  fontSize: '15px',
                   fontWeight: '600',
                   border: 'none',
                   borderRadius: '10px',
