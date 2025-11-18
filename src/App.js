@@ -1,3 +1,11 @@
+// ===== IMPORTS MUST BE FIRST =====
+import React, { useState, useMemo } from 'react';
+// add any other imports here, e.g.
+// import { Shield, Calculator } from 'lucide-react';
+// import "./App.css";
+
+// ===== THEN YOUR CONSTANTS/HELPERS =====
+
 // Shared layout container (use this everywhere)
 const container = {
   boxSizing: 'border-box',
@@ -15,8 +23,6 @@ function GlobalStyles() {
     `}</style>
   );
 }
-
-import React, { useState, useMemo } from 'react';
 
 // Theme
 const T = {
