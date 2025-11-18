@@ -6,7 +6,7 @@ import React, { useState, useMemo } from 'react';
 // Shared layout container (use this everywhere)
 const container = {
   boxSizing: 'border-box',
-  maxWidth: '1400px',
+  maxWidth: '1100px',
   margin: '0 auto',
 };
 
@@ -149,7 +149,6 @@ const MethodologyImpactSection = () => {
       </div>
     </div>
   );
-return <div>Loading...</div>;
 };
 
 const CBPDashboard = () => {
