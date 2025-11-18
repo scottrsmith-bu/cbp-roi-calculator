@@ -632,6 +632,7 @@ const CBPDashboard = () => {
 
 {/* COMPACT PROFESSIONAL HEADER */}
       <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
+        
         <div style={{marginBottom: '16px'}}>
           <h1 style={{fontSize: '28px', fontWeight: '900', color: '#FFCC01', marginBottom: '6px', lineHeight: '1.2'}}>
             CBP Workforce Sustainability Dashboard
