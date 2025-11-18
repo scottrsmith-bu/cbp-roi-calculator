@@ -649,10 +649,6 @@ const CBPDashboard = () => {
           </p>
         </div>
 
-        <div style={{fontSize: '11px', color: '#cbd5e1', lineHeight: '1.4', marginBottom: '12px', fontStyle: 'italic'}}>
-          Following BetterUp's 4-year Air Force partnership (11,000+ Airmen, +17% readiness, +6% retention, +15% resilience), this tool helps Port Directors, Field Office Directors, and Sector Chiefs understand how proven intervention frameworks address workforce sustainability challenges ahead of the 2028 Law Enforcement 6(c) retirement eligibility crisis.
-        </div>
-
         <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '0'}}>
           <div>
             <label style={{display: 'block', fontSize: '13px', fontWeight: '700', color: '#e2e8f0', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
@@ -750,8 +746,8 @@ const CBPDashboard = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 style={{
-  padding: '10px 16px',
-  fontSize: '15px',
+  padding: '12px 18px',
+  fontSize: '14px',
                   fontWeight: '600',
                   border: 'none',
                   borderRadius: '10px',
