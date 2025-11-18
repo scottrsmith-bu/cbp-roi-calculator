@@ -152,6 +152,7 @@ const MethodologyImpactSection = () => {
 return <div>Loading...</div>;
 };
 
+const CBPDashboard = () => {
   // Basic State Management
   const [org, setOrg] = useState('ofo');
   const [coa, setCoa] = useState('targeted');
@@ -2366,5 +2367,6 @@ return <div>Loading...</div>;
       )}
     </div>
 );
+};
 
 export default CBPDashboard;
