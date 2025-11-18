@@ -668,11 +668,11 @@ const CBPDashboard = () => {
             CBP Workforce Sustainability Dashboard
           </h1>
           <p style={{fontSize: '14px', fontWeight: '600', color: '#cbd5e1', marginBottom: '12px', lineHeight: '1.3'}}>
-            Readiness, Retention and Cost Avoidance ROI Projections for Port Directors, Field Office Directors, and Sector Chiefs
+            Readiness, Retention and Cost Avoidance ROI Projections for CBP Workforce
           </p>
 
         <div style={{background: 'rgba(0,82,136,0.25)', borderRadius: '8px', padding: '12px 16px', border: '2px solid rgba(255,204,1,0.5)', marginBottom: '12px'}}>
-          <p style={{fontSize: '13px', color: '#ffffff', lineHeight: '1.5', marginBottom: '0'}}>
+          <p style={{fontSize: '13px', color: '#ffffff', lineHeight: '1.5', marginBottom: '0', textAlign: 'center'}}>
             <strong style={{color: '#FFCC01'}}>Evidence-based ROI dashboard</strong> for CBP Port Directors, Field Office Directors, and Sector Chiefs. Demonstrates BetterUp's financial impact by addressing three interconnected workforce challenges: <strong style={{color: '#FFCC01'}}>(1) retention costs</strong> from behavioral health-driven separations, <strong style={{color: '#FFCC01'}}>(2) Workers' Comp (FECA)</strong> mental health claims and disability costs, and <strong style={{color: '#FFCC01'}}>(3) professional standards</strong> discipline failures—all through precision development targeting accountability, readiness, and workforce sustainability.
           </p>
         </div>
