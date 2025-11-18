@@ -6,7 +6,7 @@ import React, { useState, useMemo } from 'react';
 // Shared layout container (use this everywhere)
 const container = {
   boxSizing: 'border-box',
-  maxWidth: '1100px',
+  maxWidth: '1400px',
   margin: '0 auto',
 };
 
@@ -768,8 +768,8 @@ const CBPDashboard = () => {
 
       {/* Tab Navigation with View Mode Toggle */}
       <div style={container}>
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
-          <div style={{display: 'flex', gap: '4px', flexWrap: 'wrap', flex: 1}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '16px'}}>
+          <div style={{display: 'flex', gap: '4px', flexWrap: 'wrap'}}>
             {[
               { id: 'cost-problem', label: 'The Cost Problem', icon: '⚠️' },
               { id: 'roi-model', label: 'ROI Model', icon: '💰' },
@@ -798,7 +798,7 @@ const CBPDashboard = () => {
           </div>
 
           {/* VIEW MODE TOGGLE */}
-          <div>
+          <div style={{marginLeft: 'auto'}}>
             <div style={{display: 'flex', gap: '2px', alignItems: 'center', background: 'white', borderRadius: '12px', padding: '4px', border: '2px solid #005288', boxShadow: '0 2px 8px rgba(0,82,136,0.1)'}}>
               <button
                 onClick={() => setViewMode('field')}
@@ -1811,6 +1811,195 @@ const CBPDashboard = () => {
 
             </div>
           )}
+          {/* ANXIETY EXPANDABLE PANEL */}
+              <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+                <button
+                  onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')}
+                  style={{width: '100%', padding: '24px', background: expandedFactor === 'anxiety' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <div>
+                    <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                      😰 Anxiety & Stress
+                    </div>
+                    <div style={{fontSize: '15px', color: '#64748b'}}>
+                      Affects {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers • {behavioralHealthCalcs.anxietyWcClaims} claims • {fmt(anxietyWcAvgCost)} avg
+                    </div>
+                  </div>
+                  <div style={{fontSize: '32px', color: '#c41230'}}>
+                    {expandedFactor === 'anxiety' ? '−' : '+'}
+                  </div>
+                </button>
+
+                {expandedFactor === 'anxiety' && (
+                  <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                    <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      <strong>Cost Drivers:</strong> Chronic anxiety impairs tactical decision-making, increases use-of-force incidents, drives workers' comp claims ({fmt(anxietyWcAvgCost)}), and causes moderate absenteeism (8-10 days/year). Montreal Police study showed 40% stress reduction through proactive intervention.
+                    </div>
+
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px'}}>
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Prevalence: {anxietyPrevalence}%
+                        </label>
+                        <input type="range" min="10" max="20" value={anxietyPrevalence}
+                          onChange={(e) => setAnxietyPrevalence(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 15% • Range: 10-20%
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Coaching Effectiveness: {anxietyCoachingEffectiveness}%
+                        </label>
+                        <input type="range" min="10" max="30" value={anxietyCoachingEffectiveness}
+                          onChange={(e) => setAnxietyCoachingEffectiveness(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 20% • HeartMath: 40% stress reduction
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          WC Filing Rate: {anxietyWcFilingRate}%
+                        </label>
+                        <input type="range" min="3" max="12" value={anxietyWcFilingRate}
+                          onChange={(e) => setAnxietyWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 6% • Lower than PTSD/depression
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Avg Claim Cost: {fmt(anxietyWcAvgCost)}
+                        </label>
+                        <input type="range" min="35000" max="60000" step="2500" value={anxietyWcAvgCost}
+                          onChange={(e) => setAnxietyWcAvgCost(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Range: $35K-$60K per claim
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Separation Rate: {anxietySeparationRate}%
+                        </label>
+                        <input type="range" min="5" max="18" value={anxietySeparationRate}
+                          onChange={(e) => setAnxietySeparationRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 10% • Moderate attrition risk
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                      <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                        Current Impact on ROI:
+                      </div>
+                      <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                        • {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
+                        • {behavioralHealthCalcs.anxietyWcClaims} baseline claims × {fmt(anxietyWcAvgCost)} = {fmt(behavioralHealthCalcs.anxietyWcCost)}<br />
+                        • BetterUp prevents {calculations.anxietyClaimsPrevented} claims = <strong>{fmt(calculations.anxietyWcSavings)} savings</strong>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* SUD EXPANDABLE PANEL */}
+              <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'sud' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
+                <button
+                  onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')}
+                  style={{width: '100%', padding: '24px', background: expandedFactor === 'sud' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <div>
+                    <div style={{fontSize: '22px', fontWeight: '800', color: '#c41230', marginBottom: '8px'}}>
+                      🍺 Substance Use Disorders
+                    </div>
+                    <div style={{fontSize: '15px', color: '#64748b'}}>
+                      Affects {behavioralHealthCalcs.sudAffected.toLocaleString()} officers • {behavioralHealthCalcs.sudWcClaims} claims • {fmt(sudWcAvgCost)} avg
+                    </div>
+                  </div>
+                  <div style={{fontSize: '32px', color: '#c41230'}}>
+                    {expandedFactor === 'sud' ? '−' : '+'}
+                  </div>
+                </button>
+
+                {expandedFactor === 'sud' && (
+                  <div style={{padding: '24px', borderTop: '2px solid #fee2e2', background: '#fef2f2'}}>
+                    <div style={{marginBottom: '24px', fontSize: '15px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                      <strong>Cost Drivers:</strong> Substance use disorders create the highest discipline and termination risk. CuraLinc EAP study showed 67% severity reduction and 78% at-risk elimination through early intervention. Costs include treatment ({fmt(sudWcAvgCost)}), discipline cases ($45K), and terminations requiring replacement ($150K).
+                    </div>
+
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px'}}>
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Prevalence: {sudPrevalence}%
+                        </label>
+                        <input type="range" min="15" max="35" value={sudPrevalence}
+                          onChange={(e) => setSudPrevalence(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 25% • 2-3x general population
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Coaching Effectiveness: {sudCoachingEffectiveness}%
+                        </label>
+                        <input type="range" min="50" max="80" value={sudCoachingEffectiveness}
+                          onChange={(e) => setSudCoachingEffectiveness(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 67% • CuraLinc: 67% severity reduction
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          WC Filing Rate: {sudWcFilingRate}%
+                        </label>
+                        <input type="range" min="8" max="20" value={sudWcFilingRate}
+                          onChange={(e) => setSudWcFilingRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 15% • Includes injury-related claims
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Avg Claim Cost: {fmt(sudWcAvgCost)}
+                        </label>
+                        <input type="range" min="25000" max="55000" step="2500" value={sudWcAvgCost}
+                          onChange={(e) => setSudWcAvgCost(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Range: $25K-$55K per claim
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#6d0a1f'}}>
+                          Separation Rate: {sudSeparationRate}%
+                        </label>
+                        <input type="range" min="15" max="35" value={sudSeparationRate}
+                          onChange={(e) => setSudSeparationRate(parseInt(e.target.value))} style={{width: '100%'}} />
+                        <div style={{fontSize: '13px', color: '#8f0e28', marginTop: '4px'}}>
+                          Average: 25% • Highest termination risk
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{marginTop: '20px', padding: '16px', background: '#fff', borderRadius: '10px', border: '2px solid #fecaca'}}>
+                      <div style={{fontSize: '15px', color: '#6d0a1f', fontWeight: '600', marginBottom: '8px'}}>
+                        Current Impact on ROI:
+                      </div>
+                      <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
+                        • {behavioralHealthCalcs.sudAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
+                        • {behavioralHealthCalcs.sudWcClaims} baseline claims × {fmt(sudWcAvgCost)} = {fmt(behavioralHealthCalcs.sudWcCost)}<br />
+                        • BetterUp prevents {calculations.sudClaimsPrevented} claims = <strong>{fmt(calculations.sudWcSavings)} savings</strong>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
           {/* TAB 4: PROOF & VALIDATION */}
           {activeTab === 'proof' && (
             <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
