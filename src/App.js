@@ -1,3 +1,21 @@
+// Shared layout container (use this everywhere)
+const container = {
+  boxSizing: 'border-box',
+  maxWidth: 1100,
+  margin: '0 auto',
+  padding: '0 28px', // matches your header's inner padding
+};
+
+// Tiny global CSS reset for consistent sizing (borders don't add width)
+function GlobalStyles() {
+  return (
+    <style>{`
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body, #root { height: 100%; }
+    `}</style>
+  );
+}
+
 import React, { useState, useMemo } from 'react';
 
 // Theme
@@ -628,12 +646,18 @@ const CBPDashboard = () => {
       retentionSavings, wcSavings, disciplineSavings, totalSavings, netSavings, roi };
   };
   return (
-    <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0'}}>
+    <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0' }}>
+  <GlobalStyles />
 
 {/* COMPACT PROFESSIONAL HEADER */}
-      <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
-        
-        <div style={{marginBottom: '16px'}}>
+<div style={container}>
+  <div style={{
+    background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)',
+    borderRadius: 12,
+    padding: '20px', // formerly '20px 28px' — padding now lives on the container
+    boxShadow: '0 6px 24px rgba(0,82,136,0.25)',
+    border: '1px solid #0078ae'
+  }}>
           <h1 style={{fontSize: '28px', fontWeight: '900', color: '#FFCC01', marginBottom: '6px', lineHeight: '1.2'}}>
             CBP Workforce Sustainability Dashboard
           </h1>
@@ -731,7 +755,7 @@ const CBPDashboard = () => {
       </div>
 
       {/* Tab Navigation with View Mode Toggle */}
-      <div style={{maxWidth: '1100px', margin: '0 auto 24px'}}>
+<div style={container}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
           <div style={{display: 'flex', gap: '4px', flexWrap: 'wrap', flex: 1}}>
             {[
@@ -810,7 +834,7 @@ const CBPDashboard = () => {
       </div>
 
       {/* Main Content Area */}
-      <div style={{maxWidth: '1100px', margin: '0 auto'}}>
+<div style={container}>
 
         {/* TAB 1: THE COST PROBLEM */}
         {activeTab === 'cost-problem' && (
