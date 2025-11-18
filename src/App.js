@@ -1109,30 +1109,6 @@ const CBPDashboard = () => {
               </div>
             </div>
 
-            {/* Comorbidity Box */}
-            <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '3px solid #f59e0b', borderRadius: '12px', padding: '20px 24px'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
-                <span style={{fontSize: '36px'}}>🧮</span>
-                <h2 style={{fontSize: '26px', fontWeight: '800', color: '#92400e', margin: 0}}>
-                  Comorbidity Adjustment Explained
-                </h2>
-              </div>
-
-              <div style={{fontSize: '16px', color: '#78350f', lineHeight: '1.7', marginBottom: '24px'}}>
-                In mental health, conditions often occur together (comorbidity). Someone with PTSD may also have depression. To avoid double-counting the same people multiple times, we apply a comorbidity adjustment of <strong>{comorbidityOverlap}% overlap</strong>.
-              </div>
-
-              <div style={{background: 'white', padding: '16px 20px', borderRadius: '10px', border: '2px solid #f59e0b'}}>
-                <div style={{fontSize: '15px', color: '#78350f', lineHeight: '1.8'}}>
-                  <strong>Current Impact:</strong><br/>
-                  • Raw total (if independent): {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} officers<br/>
-                  • Adjusted for {comorbidityOverlap}% overlap: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique officers<br/>
-                  • Prevented double-counting: {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers<br/><br/>
-                  <em>This ensures our ROI calculations are conservative and don't overstate the affected population.</em>
-                </div>
-              </div>
-            </div>
-
             {/* Better Way Forward */}
             <div style={{background: 'linear-gradient(135deg, #e6f2f8 0%, #cce5f0 100%)', border: '3px solid #005288', borderRadius: '12px', padding: '32px', textAlign: 'center'}}>
               <div style={{fontSize: '24px', fontWeight: '700', color: '#0078ae', marginBottom: '12px'}}>
