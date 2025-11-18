@@ -629,7 +629,6 @@ const CBPDashboard = () => {
   };
   return (
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0'}}>
-      <div style={{maxWidth: '1100px', margin: '0 auto'}}>
 
 {/* COMPACT PROFESSIONAL HEADER */}
       <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
@@ -2630,7 +2629,6 @@ const CBPDashboard = () => {
         </div>
      )}
       </div>
-    </div>
     </div>
     );
   };
