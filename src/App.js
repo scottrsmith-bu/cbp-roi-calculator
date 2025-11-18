@@ -631,7 +631,7 @@ const CBPDashboard = () => {
     <div style={{fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0'}}>
 
 {/* COMPACT PROFESSIONAL HEADER */}
-      <div style={{margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
+      <div style={{maxWidth: '1100px', margin: '0 auto 20px', background: 'linear-gradient(135deg, #005288 0%, #003a5d 100%)', borderRadius: '12px', padding: '20px 28px', boxShadow: '0 6px 24px rgba(0,82,136,0.25)', border: '1px solid #0078ae'}}>
         <div style={{marginBottom: '16px'}}>
           <h1 style={{fontSize: '28px', fontWeight: '900', color: '#FFCC01', marginBottom: '6px', lineHeight: '1.2'}}>
             CBP Workforce Sustainability Dashboard
@@ -734,7 +734,7 @@ const CBPDashboard = () => {
       </div>
 
       {/* Tab Navigation with View Mode Toggle */}
-      <div style={{margin: '0 auto 24px'}}>
+      <div style={{maxWidth: '1100px', margin: '0 auto 24px'}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
           <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1}}>
             {[
