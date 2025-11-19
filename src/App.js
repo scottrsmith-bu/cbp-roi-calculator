@@ -1558,8 +1558,7 @@ const CBPDashboard = () => {
                 </button>
               </div>
             </div>
-          </div>
-        )}
+          )}
           {/* TAB 3: FACTOR BREAKDOWN - Expandable Panels */}
           {activeTab === 'factors' && (
             <div style={{display: 'flex', flexDirection: 'column', gap: '32px', padding: '0'}}>
