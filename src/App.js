@@ -1574,7 +1574,7 @@ const CBPDashboard = () => {
               </div>
 
               {/* Comorbidity Adjustment Panel */}
-              <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
+              <div style={{background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '3px solid #f59e0b', borderRadius: '12px', padding: '16px 20px'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
                   <span style={{fontSize: '36px'}}>🧮</span>
                   <h2 style={{fontSize: '26px', fontWeight: '800', color: '#92400e', margin: 0}}>
