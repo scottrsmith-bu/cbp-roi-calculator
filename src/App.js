@@ -765,7 +765,7 @@ const CBPDashboard = () => {
 
       {/* Tab Navigation with View Mode Toggle */}
       <div style={container}>
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '16px'}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', marginBottom: '16px', flexWrap: 'wrap', gap: '16px'}}>
           <div style={{display: 'flex', gap: '4px', flexWrap: 'wrap'}}>
             {[
               { id: 'cost-problem', label: 'The Cost Problem', icon: '⚠️' },
