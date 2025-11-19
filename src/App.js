@@ -839,7 +839,7 @@ const CBPDashboard = () => {
         </div>
 
         {/* Main Content Area */}
-        <div style={container}></div>
+        <div style={container}>
         {/* TAB 1: THE COST PROBLEM */}
           {activeTab === 'cost-problem' && (
             <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
