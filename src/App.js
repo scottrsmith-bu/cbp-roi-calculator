@@ -404,7 +404,7 @@ const CBPDashboard = () => {
     'usbp-del': { name: 'USBP - Del Rio', officers: 1200, type: 'usbp-sector' },
     'usbp-lrt': { name: 'USBP - Laredo', officers: 1600, type: 'usbp-sector' }
   }), []);
-// COMORBIDITY-ADJUSTED BEHAVIORAL HEALTH CALCULATIONS
+  // COMORBIDITY-ADJUSTED BEHAVIORAL HEALTH CALCULATIONS
   const behavioralHealthCalcs = useMemo(() => {
     const totalOfficers = orgData[org].officers;
 
@@ -462,8 +462,7 @@ const CBPDashboard = () => {
       ptsdWcAvgCost, depressionWcAvgCost, anxietyWcAvgCost, sudWcAvgCost,
       ptsdSeparationRate, depressionSeparationRate, anxietySeparationRate, sudSeparationRate,
       comorbidityOverlap]);
-
-  // MAIN ROI CALCULATIONS
+      // MAIN ROI CALCULATIONS
   const calculations = useMemo(() => {
     const data = orgData[org];
 
@@ -659,7 +658,6 @@ const CBPDashboard = () => {
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0' }}>
       <GlobalStyles />
-
       {/* COMPACT PROFESSIONAL HEADER */}
       <div style={container}>
         <div style={{
@@ -1304,7 +1302,6 @@ const CBPDashboard = () => {
                   }}>
                   {showCoaComparison ? '▼ Hide COA Comparison' : '📊 Compare All 3 COAs Side-by-Side'}
                 </button>
-
                 {/* COA COMPARISON MODAL */}
                 {showCoaComparison && (
                   <div style={{marginTop: '20px', background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: '16px', padding: '32px'}}>
@@ -1381,7 +1378,7 @@ const CBPDashboard = () => {
                                 📈 Return on Investment
                               </div>
                               <div style={{fontSize: '36px', fontWeight: '900', color: isSelected ? '#005288' : '#92400e'}}>
-                                {scenario.roi.toFixed(0)}%
+                                {roiDisplay(scenario.roi)}
                               </div>
                               <div style={{fontSize: '13px', color: isSelected ? '#005288' : '#78350f', marginTop: '4px'}}>
                                 Net: {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1 }).format(scenario.netSavings)}
@@ -1430,7 +1427,7 @@ const CBPDashboard = () => {
                                 {name: 'Pilot', roi: pilotScenario.roi},
                                 {name: 'Targeted', roi: targetedScenario.roi},
                                 {name: 'Scaled', roi: scaledScenario.roi}
-                              ].sort((a,b) => b.roi - a.roi)[0].name} ({Math.max(pilotScenario.roi, targetedScenario.roi, scaledScenario.roi).toFixed(0)}% ROI)<br />
+                              ].sort((a,b) => b.roi - a.roi)[0].name} ({roiDisplay(Math.max(pilotScenario.roi, targetedScenario.roi, scaledScenario.roi))})<br />
                               • <strong>Maximum total impact:</strong> Scaled COA delivers {fmt(scaledScenario.netSavings)} net savings — {fmt(scaledScenario.netSavings - pilotScenario.netSavings)} more than Pilot
                             </>
                           );
@@ -1471,7 +1468,6 @@ const CBPDashboard = () => {
                   )}
                 </div>
               </div>
-
               {/* Product Mix */}
               <div style={{background: 'white', borderRadius: '12px', padding: '20px 28px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #3b82f6'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
@@ -1562,7 +1558,8 @@ const CBPDashboard = () => {
                 </button>
               </div>
             </div>
-          )}
+          </div>
+        )}
           {/* TAB 3: FACTOR BREAKDOWN - Expandable Panels */}
           {activeTab === 'factors' && (
             <div style={{display: 'flex', flexDirection: 'column', gap: '32px', padding: '0'}}>
@@ -1617,7 +1614,6 @@ const CBPDashboard = () => {
                   </div>
                 </div>
               </div>
-
               {/* PTSD EXPANDABLE PANEL */}
               <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'ptsd' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
                 <button
@@ -1712,7 +1708,6 @@ const CBPDashboard = () => {
                   </div>
                 )}
               </div>
-
               {/* DEPRESSION EXPANDABLE PANEL */}
               <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'depression' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
                 <button
@@ -1807,10 +1802,6 @@ const CBPDashboard = () => {
                   </div>
                 )}
               </div>
-
-            </div>
-          )}
-
               {/* ANXIETY EXPANDABLE PANEL */}
               <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? '3px solid #c41230' : '2px solid #e2e8f0'}}>
                 <button
@@ -1897,9 +1888,9 @@ const CBPDashboard = () => {
                         Current Impact on ROI:
                       </div>
                       <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                        • {behavioralHealthCalcs.anxietyAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
-                        • {behavioralHealthCalcs.anxietyWcClaims} baseline claims × {fmt(anxietyWcAvgCost)} = {fmt(behavioralHealthCalcs.anxietyWcCost)}<br />
-                        • BetterUp prevents {calculations.anxietyClaimsPrevented} claims = <strong>{fmt(calculations.anxietyWcSavings)} savings</strong>
+                        • {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
+                        • {behavioralHealthCalcs.depressionWcClaims} baseline claims × {fmt(depressionWcAvgCost)} = {fmt(behavioralHealthCalcs.depressionWcCost)}<br />
+                        • BetterUp prevents {calculations.depressionClaimsPrevented} claims = <strong>{fmt(calculations.depressionWcSavings)} savings</strong>
                       </div>
                     </div>
                   </div>
@@ -1999,7 +1990,8 @@ const CBPDashboard = () => {
                   </div>
                 )}
               </div>
-
+            </div>
+          )}
           {/* TAB 4: PROOF & VALIDATION */}
           {activeTab === 'proof' && (
             <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
@@ -2058,7 +2050,209 @@ const CBPDashboard = () => {
                   ))}
                 </div>
 
-                {/* Research Sources & Methodology - Expandable */}
+                {/* Weapons School Translation to CBP */}
+                <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '24px 32px 32px 32px', marginTop: '32px'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                    <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px'}}>📚</div>
+                    <h2 style={{fontSize: '24px', fontWeight: '800', color: '#4338ca', margin: 0}}>
+                      From Air Force Weapons School: Mastery Framework Applied to CBP
+                    </h2>
+                  </div>
+
+                  <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7', marginBottom: '24px'}}>
+                    The Air Force Weapons School program developed elite pilots using a structured mastery framework focused on <strong>decision-making under pressure, communication under pressure, cognitive agility, stress regulation, resilience, and values clarity</strong>. These same peak performance skills directly translate to CBP's high-stakes law enforcement environment.
+                  </div>
+                 
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #6366f1', textAlign: 'center'}}>
+                      <div style={{fontSize: '28px', marginBottom: '8px'}}>🪞</div>
+                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>1. REFLECT</div>
+                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>WPM assessment identifies strengths & gaps</div>
+                    </div>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #8b5cf6', textAlign: 'center'}}>
+                      <div style={{fontSize: '28px', marginBottom: '8px'}}>📖</div>
+                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>2. LEARN</div>
+                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Personalized journeys + curated resources</div>
+                    </div>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #a78bfa', textAlign: 'center'}}>
+                      <div style={{fontSize: '28px', marginBottom: '8px'}}>🎯</div>
+                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>3. PRACTICE</div>
+                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>AI role-play + coaching rehearsal</div>
+                    </div>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #c4b5fd', textAlign: 'center'}}>
+                      <div style={{fontSize: '28px', marginBottom: '8px'}}>✅</div>
+                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>4. COMMIT</div>
+                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Action plans at critical moments</div>
+                    </div>
+                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #ddd6fe', textAlign: 'center'}}>
+                      <div style={{fontSize: '28px', marginBottom: '8px'}}>📊</div>
+                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>5. MEASURE</div>
+                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Pre-post growth assessments</div>
+                    </div>
+                  </div>
+
+                  <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
+                    <h3 style={{fontSize: '16px', fontWeight: '700', color: '#4338ca', marginBottom: '12px'}}>
+                      Weapons School Skills → CBP Operational Challenges
+                    </h3>
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
+                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                        <strong style={{color: '#4338ca'}}>Use-of-Force Decisions:</strong> Practice high-pressure scenarios through AI role-play before real encounters
+                      </div>
+                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                        <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies for volatile public interactions
+                      </div>
+                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                        <strong style={{color: '#4338ca'}}>Post-Incident Recovery:</strong> Just-in-time stress management after traumatic events
+                      </div>
+                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
+                        <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at critical 3-5yr, 10-15yr, pre-2028 retirement points
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '16px', border: '2px solid #818cf8'}}>
+                    <p style={{fontSize: '13px', color: '#3730a3', margin: 0, lineHeight: 1.6}}>
+                      <strong style={{color: '#4338ca'}}>From Weapons School to CBP:</strong> The same mastery framework that helped elite pilots strengthen decision-making under pressure, cognitive agility, and stress regulation translates directly to CBP officers and agents facing high-stakes law enforcement decisions—from port-of-entry inspections to border encounters to critical incident responses.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* JAMA 2024 Study */}
+              <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+                  <span style={{fontSize: '36px'}}>🔬</span>
+                  <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                    JAMA 2024: Peer-Reviewed Clinical Validation
+                  </h2>
+                </div>
+                
+                <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7', fontStyle: 'italic'}}>
+                  "Enhanced Behavioral Health Benefits and Mental Health Outcomes: A Randomized Clinical Trial"<br />
+                  Published in JAMA Health Forum, April 2024
+                </div>
+
+                <div style={{background: '#f1f5f9', padding: '24px', borderRadius: '12px', marginBottom: '24px'}}>
+                  <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
+                    🎯 Key Finding: 21.6% Reduction in Burnout & Mental Health Conditions
+                  </div>
+                  <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
+                    Randomized controlled trial with 1,132 participants across multiple employers showed that <strong>enhanced behavioral health benefits (including coaching and digital CBT) reduced mental health symptoms by 21.6%</strong> compared to traditional EAP-only control groups. Effect sizes were consistent across depression, anxiety, and burnout measures.
+                  </div>
+                </div>
+              </div>
+
+              {/* Montreal Police Study */}
+              <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
+                  <span style={{fontSize: '36px'}}>🚔</span>
+                  <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', margin: 0}}>
+                    Montreal Police: 22-Year Suicide Prevention Program
+                  </h2>
+                </div>
+                
+                <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
+                  Montreal Police Service implemented a comprehensive early intervention program combining peer support, psychological services, and organizational culture change. The 22-year longitudinal study provides the gold standard for law enforcement suicide prevention.
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px'}}>
+                  <div style={{background: '#fef2f2', padding: '24px', borderRadius: '12px', border: '3px solid #c41230', textAlign: 'center'}}>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#8f0e28', marginBottom: '12px'}}>
+                      Before Program (Baseline)
+                    </div>
+                    <div style={{fontSize: '56px', fontWeight: '900', color: '#c41230', marginBottom: '8px'}}>
+                      29.4
+                    </div>
+                    <div style={{fontSize: '15px', color: '#6d0a1f'}}>
+                      suicides per 100,000 officers/year
+                    </div>
+                  </div>
+
+                  <div style={{background: '#e8f4e0', padding: '24px', borderRadius: '12px', border: '3px solid #5e9732', textAlign: 'center'}}>
+                    <div style={{fontSize: '16px', fontWeight: '600', color: '#5e9732', marginBottom: '12px'}}>
+                      After Program (22 years)
+                    </div>
+                    <div style={{fontSize: '56px', fontWeight: '900', color: '#5e9732', marginBottom: '8px'}}>
+                      10.2
+                    </div>
+                    <div style={{fontSize: '15px', color: '#4a7628'}}>
+                      suicides per 100,000 officers/year
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{background: '#e6f2f8', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
+                  <div style={{fontSize: '20px', fontWeight: '800', color: '#0078ae', marginBottom: '16px', textAlign: 'center'}}>
+                    65% Reduction in Suicide Rate — Lives Saved Through Prevention
+                  </div>
+                  <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7', textAlign: 'center'}}>
+                    The program's success came from <strong>early detection, peer support networks, destigmatization of help-seeking, and organizational leadership commitment</strong>. These same principles underpin BetterUp's approach for CBP.
+                  </div>
+                </div>
+              </div>
+
+              {/* Model Assumptions */}
+              <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
+                <h2 style={{fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
+                  📐 Model Assumptions & Conservative Estimates
+                </h2>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px'}}>
+                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                      Retention Impact (7% Lift)
+                    </div>
+                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                      Based on Air Force +7% career commitment over 4 years. Model assumes only behavioral/burnout-driven separations are preventable through coaching (not mission-related transfers). Conservative compared to private sector coaching studies showing 10-15% retention improvements.
+                    </div>
+                  </div>
+
+                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                      Readiness Impact (Comorbidity-Adjusted)
+                    </div>
+                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                      Uses {comorbidityOverlap}% comorbidity overlap to avoid double-counting officers with multiple conditions. JAMA 21.6% symptom reduction validates clinical effectiveness. Montreal Police 40% stress reduction and CuraLinc 67% SUD severity reduction support factor-specific assumptions.
+                    </div>
+                  </div>
+
+                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                      Professional Standards (22% Lift)
+                    </div>
+                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                      Based on improved leadership culture reducing discipline cases. CuraLinc EAP showed 67% alcohol severity reduction (major discipline driver). Model assumes 3.5% baseline discipline rate and only applies lift to behaviorally-driven cases.
+                    </div>
+                  </div>
+
+                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                      Engagement Rate (65%)
+                    </div>
+                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                      Conservative assumption. Air Force achieves 75%+ engagement. Model uses 65% to account for operational tempo challenges and stigma in law enforcement culture. Digital-first model enables higher engagement than traditional EAP (3-5%).
+                    </div>
+                  </div>
+
+                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                      Cost Assumptions
+                    </div>
+                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                      Replacement cost: $150K (validated by SHRM and GAO). Workers' Comp: Adjustable by condition in Factor Breakdown tab. Discipline case: $45K average (investigation, legal, admin). All costs based on federal data sources.
+                    </div>
+                  </div>
+
+                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
+                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
+                      Comorbidity Adjustment
+                    </div>
+                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
+                      Currently set at {comorbidityOverlap}% overlap. Research shows 30-40% of officers with one mental health condition have comorbid diagnoses. This prevents double-counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers across conditions.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Research Sources & Methodology - Expandable */}
               <div style={{background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
                 <button
                   onClick={() => setShowResearch(!showResearch)}
@@ -2250,210 +2444,6 @@ const CBPDashboard = () => {
                     </div>
                   </div>
                 )}
-              </div>
-
-                {/* Weapons School Translation to CBP */}
-                <div style={{background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)', border: '4px solid #6366f1', borderRadius: '16px', padding: '24px 32px 32px 32px', marginTop: '32px'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
-                    <div style={{width: '48px', height: '48px', background: '#6366f1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px'}}>📚</div>
-                    <h2 style={{fontSize: '24px', fontWeight: '800', color: '#4338ca', margin: 0}}>
-                      From Air Force Weapons School: Mastery Framework Applied to CBP
-                    </h2>
-                  </div>
-
-                  <div style={{fontSize: '16px', color: '#475569', lineHeight: '1.7', marginBottom: '24px'}}>
-                    The Air Force Weapons School program developed elite pilots using a structured mastery framework focused on <strong>decision-making under pressure, communication under pressure, cognitive agility, stress regulation, resilience, and values clarity</strong>. These same peak performance skills directly translate to CBP's high-stakes law enforcement environment.
-                  </div>
-                 
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px'}}>
-                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #6366f1', textAlign: 'center'}}>
-                      <div style={{fontSize: '28px', marginBottom: '8px'}}>🪞</div>
-                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>1. REFLECT</div>
-                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>WPM assessment identifies strengths & gaps</div>
-                    </div>
-                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #8b5cf6', textAlign: 'center'}}>
-                      <div style={{fontSize: '28px', marginBottom: '8px'}}>📖</div>
-                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>2. LEARN</div>
-                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Personalized journeys + curated resources</div>
-                    </div>
-                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #a78bfa', textAlign: 'center'}}>
-                      <div style={{fontSize: '28px', marginBottom: '8px'}}>🎯</div>
-                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>3. PRACTICE</div>
-                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>AI role-play + coaching rehearsal</div>
-                    </div>
-                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #c4b5fd', textAlign: 'center'}}>
-                      <div style={{fontSize: '28px', marginBottom: '8px'}}>✅</div>
-                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>4. COMMIT</div>
-                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Action plans at critical moments</div>
-                    </div>
-                    <div style={{background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid #ddd6fe', textAlign: 'center'}}>
-                      <div style={{fontSize: '28px', marginBottom: '8px'}}>📊</div>
-                      <div style={{fontSize: '11px', fontWeight: '700', color: '#1e293b', marginBottom: '6px'}}>5. MEASURE</div>
-                      <div style={{fontSize: '10px', color: '#64748b', lineHeight: 1.4}}>Pre-post growth assessments</div>
-                    </div>
-                  </div>
-
-                  <div style={{background: 'white', borderRadius: '12px', padding: '20px', border: '2px solid #818cf8'}}>
-                    <h3 style={{fontSize: '16px', fontWeight: '700', color: '#4338ca', marginBottom: '12px'}}>
-                      Weapons School Skills → CBP Operational Challenges
-                    </h3>
-                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: '#475569'}}>
-                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                        <strong style={{color: '#4338ca'}}>Use-of-Force Decisions:</strong> Practice high-pressure scenarios through AI role-play before real encounters
-                      </div>
-                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                        <strong style={{color: '#4338ca'}}>De-escalation:</strong> Rehearse communication strategies for volatile public interactions
-                      </div>
-                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                        <strong style={{color: '#4338ca'}}>Post-Incident Recovery:</strong> Just-in-time stress management after traumatic events
-                      </div>
-                      <div style={{background: '#f5f3ff', borderRadius: '8px', padding: '12px', border: '1px solid #c7d2fe'}}>
-                        <strong style={{color: '#4338ca'}}>Career Decisions:</strong> Clarity at critical 3-5yr, 10-15yr, pre-2028 retirement points
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{background: '#c7d2fe', borderRadius: '12px', padding: '16px', marginTop: '16px', border: '2px solid #818cf8'}}>
-                    <p style={{fontSize: '13px', color: '#3730a3', margin: 0, lineHeight: 1.6}}>
-                      <strong style={{color: '#4338ca'}}>From Weapons School to CBP:</strong> The same mastery framework that helped elite pilots strengthen decision-making under pressure, cognitive agility, and stress regulation translates directly to CBP officers and agents facing high-stakes law enforcement decisions—from port-of-entry inspections to border encounters to critical incident responses.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* JAMA 2024 Study */}
-              <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
-                  <span style={{fontSize: '36px'}}>🔬</span>
-                  <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', margin: 0}}>
-                    JAMA 2024: Peer-Reviewed Clinical Validation
-                  </h2>
-                </div>
-                
-                <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7', fontStyle: 'italic'}}>
-                  "Enhanced Behavioral Health Benefits and Mental Health Outcomes: A Randomized Clinical Trial"<br />
-                  Published in JAMA Health Forum, April 2024
-                </div>
-
-                <div style={{background: '#f1f5f9', padding: '24px', borderRadius: '12px', marginBottom: '24px'}}>
-                  <div style={{fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '16px'}}>
-                    🎯 Key Finding: 21.6% Reduction in Burnout & Mental Health Conditions
-                  </div>
-                  <div style={{fontSize: '15px', color: '#475569', lineHeight: '1.7'}}>
-                    Randomized controlled trial with 1,132 participants across multiple employers showed that <strong>enhanced behavioral health benefits (including coaching and digital CBT) reduced mental health symptoms by 21.6%</strong> compared to traditional EAP-only control groups. Effect sizes were consistent across depression, anxiety, and burnout measures.
-                  </div>
-                </div>
-              </div>
-
-              {/* Montreal Police Study */}
-              <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px'}}>
-                  <span style={{fontSize: '36px'}}>🚔</span>
-                  <h2 style={{fontSize: '28px', fontWeight: '800', color: '#1e293b', margin: 0}}>
-                    Montreal Police: 22-Year Suicide Prevention Program
-                  </h2>
-                </div>
-                
-                <div style={{fontSize: '16px', color: '#475569', marginBottom: '24px', lineHeight: '1.7'}}>
-                  Montreal Police Service implemented a comprehensive early intervention program combining peer support, psychological services, and organizational culture change. The 22-year longitudinal study provides the gold standard for law enforcement suicide prevention.
-                </div>
-
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px'}}>
-                  <div style={{background: '#fef2f2', padding: '24px', borderRadius: '12px', border: '3px solid #c41230', textAlign: 'center'}}>
-                    <div style={{fontSize: '16px', fontWeight: '600', color: '#8f0e28', marginBottom: '12px'}}>
-                      Before Program (Baseline)
-                    </div>
-                    <div style={{fontSize: '56px', fontWeight: '900', color: '#c41230', marginBottom: '8px'}}>
-                      29.4
-                    </div>
-                    <div style={{fontSize: '15px', color: '#6d0a1f'}}>
-                      suicides per 100,000 officers/year
-                    </div>
-                  </div>
-
-                  <div style={{background: '#e8f4e0', padding: '24px', borderRadius: '12px', border: '3px solid #5e9732', textAlign: 'center'}}>
-                    <div style={{fontSize: '16px', fontWeight: '600', color: '#5e9732', marginBottom: '12px'}}>
-                      After Program (22 years)
-                    </div>
-                    <div style={{fontSize: '56px', fontWeight: '900', color: '#5e9732', marginBottom: '8px'}}>
-                      10.2
-                    </div>
-                    <div style={{fontSize: '15px', color: '#4a7628'}}>
-                      suicides per 100,000 officers/year
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{background: '#e6f2f8', padding: '24px', borderRadius: '12px', border: '2px solid #005288'}}>
-                  <div style={{fontSize: '20px', fontWeight: '800', color: '#0078ae', marginBottom: '16px', textAlign: 'center'}}>
-                    65% Reduction in Suicide Rate — Lives Saved Through Prevention
-                  </div>
-                  <div style={{fontSize: '15px', color: '#0078ae', lineHeight: '1.7', textAlign: 'center'}}>
-                    The program's success came from <strong>early detection, peer support networks, destigmatization of help-seeking, and organizational leadership commitment</strong>. These same principles underpin BetterUp's approach for CBP.
-                  </div>
-                </div>
-              </div>
-
-              {/* Model Assumptions */}
-              <div style={{background: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}>
-                <h2 style={{fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '20px'}}>
-                  📐 Model Assumptions & Conservative Estimates
-                </h2>
-                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px'}}>
-                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
-                      Retention Impact (7% Lift)
-                    </div>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      Based on Air Force +7% career commitment over 4 years. Model assumes only behavioral/burnout-driven separations are preventable through coaching (not mission-related transfers). Conservative compared to private sector coaching studies showing 10-15% retention improvements.
-                    </div>
-                  </div>
-
-                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
-                      Readiness Impact (Comorbidity-Adjusted)
-                    </div>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      Uses {comorbidityOverlap}% comorbidity overlap to avoid double-counting officers with multiple conditions. JAMA 21.6% symptom reduction validates clinical effectiveness. Montreal Police 40% stress reduction and CuraLinc 67% SUD severity reduction support factor-specific assumptions.
-                    </div>
-                  </div>
-
-                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
-                      Professional Standards (22% Lift)
-                    </div>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      Based on improved leadership culture reducing discipline cases. CuraLinc EAP showed 67% alcohol severity reduction (major discipline driver). Model assumes 3.5% baseline discipline rate and only applies lift to behaviorally-driven cases.
-                    </div>
-                  </div>
-
-                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
-                      Engagement Rate (65%)
-                    </div>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      Conservative assumption. Air Force achieves 75%+ engagement. Model uses 65% to account for operational tempo challenges and stigma in law enforcement culture. Digital-first model enables higher engagement than traditional EAP (3-5%).
-                    </div>
-                  </div>
-
-                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
-                      Cost Assumptions
-                    </div>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      Replacement cost: $150K (validated by SHRM and GAO). Workers' Comp: Adjustable by condition in Factor Breakdown tab. Discipline case: $45K average (investigation, legal, admin). All costs based on federal data sources.
-                    </div>
-                  </div>
-
-                  <div style={{background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '2px solid #e2e8f0'}}>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '12px'}}>
-                      Comorbidity Adjustment
-                    </div>
-                    <div style={{fontSize: '14px', color: '#475569', lineHeight: '1.7'}}>
-                      Currently set at {comorbidityOverlap}% overlap. Research shows 30-40% of officers with one mental health condition have comorbid diagnoses. This prevents double-counting {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} officers across conditions.
-                    </div>
-                  </div>
-                </div>
               </div>
 
             </div>
@@ -2682,6 +2672,7 @@ const CBPDashboard = () => {
             </div>
           )}
         </div>
+      </div>
 
       {/* FLOATING CHATBOT */}
       {!showChatbot && (
@@ -2745,11 +2736,11 @@ const CBPDashboard = () => {
                 fontSize: '14px', fontWeight: '600', cursor: 'pointer'}}>
               Send
             </button>
-</div>
+          </div>
         </div>
       )}
     </div>
-);
+  );
 };
 
 export default CBPDashboard;
