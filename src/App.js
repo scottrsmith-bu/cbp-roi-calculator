@@ -870,7 +870,7 @@ const CBPDashboard = () => {
                         {calculations.separationsPrevented}
                       </div>
                       <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                        Officers at Risk
+                        ${getPersonnelCapitalized(org)} at Risk
                       </div>
                       <div style={{fontSize: '13px', color: '#64748b'}}>
                         Preventable separations
@@ -881,7 +881,7 @@ const CBPDashboard = () => {
                         {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20)}
                       </div>
                       <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                        Officers Non-Deployable
+                        ${getPersonnelCapitalized(org)} Non-Deployable
                       </div>
                       <div style={{fontSize: '13px', color: '#64748b'}}>
                         On limited duty profiles
@@ -982,7 +982,7 @@ const CBPDashboard = () => {
                 // FIELD IMPACT VIEW (3 expandable blue cards)
                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
-                  {/* CARD 1: Officers at Risk */}
+                  {/* CARD 1: ${getPersonnelCapitalized(org)} at Risk */}
                   <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'field-retention' ? '3px solid #005288' : '2px solid #cbd5e1'}}>
                     <div 
                       onClick={() => setExpandedFactor(expandedFactor === 'field-retention' ? null : 'field-retention')}
@@ -990,7 +990,7 @@ const CBPDashboard = () => {
                       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                         <div style={{flex: 1}}>
                           <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
-                            💼 Officers at Risk of Separation
+                            💼 {getPersonnelCapitalized(org)} at Risk of Separation
                           </div>
                           <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '8px'}}>
                             {calculations.behavioralSeparations.toLocaleString()}
@@ -1032,7 +1032,7 @@ const CBPDashboard = () => {
                       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                         <div style={{flex: 1}}>
                           <div style={{fontSize: '18px', fontWeight: '700', color: '#005288', marginBottom: '12px'}}>
-                            🏥 Officers on Limited Duty
+                            🏥 {getPersonnelCapitalized(org)} on Limited Duty
                           </div>
                           <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b', marginBottom: '8px'}}>
                             {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20).toLocaleString()}
@@ -1183,7 +1183,7 @@ const CBPDashboard = () => {
                           {calculations.separationsPrevented}
                         </div>
                         <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                          Officers Retained
+                          <strong style={{color: '#005288'}}>Bottom Line for Field Commanders:</strong> BetterUp prevents {calculations.separationsPrevented} officers from leaving, keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more officers mission-ready (not on limited duty), and eliminates {calculations.casesPrevented} discipline investigations—freeing your command to focus on the mission instead of crisis management.
                         </div>
                         <div style={{fontSize: '12px', color: '#64748b'}}>
                           Maintained staffing levels
@@ -1196,6 +1196,31 @@ const CBPDashboard = () => {
                         </div>
                         <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
                           Fewer on Limited Duty
+```
+(This one is actually fine as-is - no change needed)
+
+---
+
+**Find:**
+```
+BetterUp prevents {calculations.separationsPrevented} officers from leaving
+```
+
+**Replace with:**
+```
+BetterUp prevents {calculations.separationsPrevented} {getPersonnelType(org)} from leaving
+```
+
+---
+
+**Find:**
+```
+keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more officers mission-ready
+```
+
+**Replace with:**
+```
+keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more {getPersonnelType(org)} mission-ready
                         </div>
                         <div style={{fontSize: '12px', color: '#64748b'}}>
                           Increased mission-ready capacity
@@ -1699,7 +1724,7 @@ const CBPDashboard = () => {
                         Current Impact on ROI:
                       </div>
                       <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                        • {behavioralHealthCalcs.ptsdAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
+                        • {behavioralHealthCalcs.ptsdAffected.toLocaleString()} {getPersonnelType(org)} affected (after comorbidity adjustment)<br />
                         • {behavioralHealthCalcs.ptsdWcClaims} baseline claims × {fmt(ptsdWcAvgCost)} = {fmt(behavioralHealthCalcs.ptsdWcCost)}<br />
                         • BetterUp prevents {calculations.ptsdClaimsPrevented} claims = <strong>{fmt(calculations.ptsdWcSavings)} savings</strong>
                       </div>
@@ -1793,7 +1818,7 @@ const CBPDashboard = () => {
                         Current Impact on ROI:
                       </div>
                       <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                        • {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
+                        • {behavioralHealthCalcs.depressionAffected.toLocaleString()} {getPersonnelType(org)} affected (after comorbidity adjustment)<br />
                         • {behavioralHealthCalcs.depressionWcClaims} baseline claims × {fmt(depressionWcAvgCost)} = {fmt(behavioralHealthCalcs.depressionWcCost)}<br />
                         • BetterUp prevents {calculations.depressionClaimsPrevented} claims = <strong>{fmt(calculations.depressionWcSavings)} savings</strong>
                       </div>
@@ -1887,7 +1912,7 @@ const CBPDashboard = () => {
                         Current Impact on ROI:
                       </div>
                       <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                        • {behavioralHealthCalcs.depressionAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
+                        • {behavioralHealthCalcs.depressionAffected.toLocaleString()} {getPersonnelType(org)} affected (after comorbidity adjustment)<br />
                         • {behavioralHealthCalcs.depressionWcClaims} baseline claims × {fmt(depressionWcAvgCost)} = {fmt(behavioralHealthCalcs.depressionWcCost)}<br />
                         • BetterUp prevents {calculations.depressionClaimsPrevented} claims = <strong>{fmt(calculations.depressionWcSavings)} savings</strong>
                       </div>
@@ -1981,7 +2006,7 @@ const CBPDashboard = () => {
                         Current Impact on ROI:
                       </div>
                       <div style={{fontSize: '14px', color: '#6d0a1f', lineHeight: '1.7'}}>
-                        • {behavioralHealthCalcs.sudAffected.toLocaleString()} officers affected (after comorbidity adjustment)<br />
+                        • {behavioralHealthCalcs.sudAffected.toLocaleString()} {getPersonnelType(org)} affected (after comorbidity adjustment)<br />
                         • {behavioralHealthCalcs.sudWcClaims} baseline claims × {fmt(sudWcAvgCost)} = {fmt(behavioralHealthCalcs.sudWcCost)}<br />
                         • BetterUp prevents {calculations.sudClaimsPrevented} claims = <strong>{fmt(calculations.sudWcSavings)} savings</strong>
                       </div>
