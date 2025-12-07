@@ -583,6 +583,18 @@ const CBPDashboard = () => {
     return `${count.toLocaleString()} ${getPersonnelType(orgId)}`;
   };
 
+  const getPersonnelSingular = (orgId) => {
+    if (orgId === 'cbp-wide') return 'officer/agent';
+    if (orgId.startsWith('usbp')) return 'agent';
+    return 'officer';
+  };
+
+  const getPersonnelCapitalized = (orgId) => {
+    if (orgId === 'cbp-wide') return 'Officers & Agents';
+    if (orgId.startsWith('usbp')) return 'Agents';
+    return 'Officers';
+  };
+
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
     const responses = {
