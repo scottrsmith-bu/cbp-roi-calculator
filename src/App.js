@@ -882,7 +882,7 @@ const CBPDashboard = () => {
                         {calculations.separationsPrevented}
                       </div>
                       <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                        ${getPersonnelCapitalized(org)} at Risk
+                        {getPersonnelCapitalized(org)} at Risk
                       </div>
                       <div style={{fontSize: '13px', color: '#64748b'}}>
                         Preventable separations
@@ -994,7 +994,7 @@ const CBPDashboard = () => {
                 // FIELD IMPACT VIEW (3 expandable blue cards)
                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', padding: '0'}}>
 
-                  {/* CARD 1: ${getPersonnelCapitalized(org)} at Risk */}
+                  {/* CARD 1: {getPersonnelCapitalized(org)} at Risk */}
                   <div style={{background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'field-retention' ? '3px solid #005288' : '2px solid #cbd5e1'}}>
                     <div 
                       onClick={() => setExpandedFactor(expandedFactor === 'field-retention' ? null : 'field-retention')}
