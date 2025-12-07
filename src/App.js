@@ -568,9 +568,9 @@ const CBPDashboard = () => {
   
   const roiDisplay = (num) => {
     if (num >= 100) {
-      return `{(num / 100).toFixed(1)}X`;
+      return `${(num / 100).toFixed(1)}X`;
     }
-    return `{num.toFixed(1)}%`;
+    return `${num.toFixed(1)}%`;
   };
 
   const getPersonnelType = (orgId) => {
@@ -1195,7 +1195,7 @@ const CBPDashboard = () => {
                           {calculations.separationsPrevented}
                         </div>
                         <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                          <strong style={{color: '#005288'}}>Bottom Line for Field Commanders:</strong> BetterUp prevents {calculations.separationsPrevented} officers from leaving, keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more officers mission-ready (not on limited duty), and eliminates {calculations.casesPrevented} discipline investigations—freeing your command to focus on the mission instead of crisis management.
+                          <strong style={{color: '#005288'}}>{getPersonnelType(org)} from leaving</strong> BetterUp prevents {calculations.separationsPrevented} officers from leaving, keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more {getPersonnelType(org)} mission-ready (not on limited duty), and eliminates {calculations.casesPrevented} discipline investigations—freeing your command to focus on the mission instead of crisis management.
                         </div>
                         <div style={{fontSize: '12px', color: '#64748b'}}>
                           Maintained staffing levels
@@ -1227,7 +1227,7 @@ BetterUp prevents {calculations.separationsPrevented} {getPersonnelType(org)} fr
 
 **Find:**
 ```
-keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more officers mission-ready
+keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more {getPersonnelType(org)} mission-ready
 ```
 
 **Replace with:**
@@ -1254,7 +1254,7 @@ keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage)
 
                     <div style={{marginTop: '20px', padding: '16px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #cbd5e1'}}>
                       <div style={{fontSize: '13px', color: '#475569', lineHeight: '1.6', textAlign: 'left'}}>
-                        <strong style={{color: '#005288'}}>Bottom Line for Field Commanders:</strong> BetterUp prevents {calculations.separationsPrevented} officers from leaving, keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more officers mission-ready (not on limited duty), and eliminates {calculations.casesPrevented} discipline investigations—freeing your command to focus on the mission instead of crisis management.
+                        <strong style={{color: '#005288'}}>{getPersonnelType(org)} from leaving</strong> BetterUp prevents {calculations.separationsPrevented} officers from leaving, keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more {getPersonnelType(org)} mission-ready (not on limited duty), and eliminates {calculations.casesPrevented} discipline investigations—freeing your command to focus on the mission instead of crisis management.
                       </div>
                     </div>
                   </div>
