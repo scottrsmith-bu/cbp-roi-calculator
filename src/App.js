@@ -1195,10 +1195,10 @@ const CBPDashboard = () => {
                           {calculations.separationsPrevented}
                         </div>
                         <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                          <strong style={{color: '#005288'}}>{getPersonnelType(org)} from leaving</strong> BetterUp prevents {calculations.separationsPrevented} officers from leaving, keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more {getPersonnelType(org)} mission-ready (not on limited duty), and eliminates {calculations.casesPrevented} discipline investigations—freeing your command to focus on the mission instead of crisis management.
+                          {getPersonnelCapitalized(org)} Retained
                         </div>
                         <div style={{fontSize: '12px', color: '#64748b'}}>
-                          Maintained staffing levels
+                          Mission-ready, not separated
                         </div>
                       </div>
 
