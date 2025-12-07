@@ -1208,34 +1208,9 @@ const CBPDashboard = () => {
                         </div>
                         <div style={{fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
                           Fewer on Limited Duty
-```
-(This one is actually fine as-is - no change needed)
-
----
-
-**Find:**
-```
-BetterUp prevents {calculations.separationsPrevented} officers from leaving
-```
-
-**Replace with:**
-```
-BetterUp prevents {calculations.separationsPrevented} {getPersonnelType(org)} from leaving
-```
-
----
-
-**Find:**
-```
-keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more {getPersonnelType(org)} mission-ready
-```
-
-**Replace with:**
-```
-keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage) * 0.20)} more {getPersonnelType(org)} mission-ready
                         </div>
                         <div style={{fontSize: '12px', color: '#64748b'}}>
-                          Increased mission-ready capacity
+                          Operational capacity maintained
                         </div>
                       </div>
 
