@@ -564,13 +564,13 @@ const CBPDashboard = () => {
     maximumFractionDigits: 0,
   }).format(num);
 
-  const pct = (num) => `${num.toFixed(1)}%`;
+  const pct = (num) => `{num.toFixed(1)}%`;
   
   const roiDisplay = (num) => {
     if (num >= 100) {
-      return `${(num / 100).toFixed(1)}X`;
+      return `{(num / 100).toFixed(1)}X`;
     }
-    return `${num.toFixed(1)}%`;
+    return `{num.toFixed(1)}%`;
   };
 
   const getPersonnelType = (orgId) => {
@@ -580,7 +580,7 @@ const CBPDashboard = () => {
   };
 
   const getPersonnelLabel = (count, orgId) => {
-    return `${count.toLocaleString()} ${getPersonnelType(orgId)}`;
+    return `{count.toLocaleString()} {getPersonnelType(orgId)}`;
   };
 
   const getPersonnelSingular = (orgId) => {
@@ -893,7 +893,7 @@ const CBPDashboard = () => {
                         {Math.round(behavioralHealthCalcs.uniqueAffected * 0.20)}
                       </div>
                       <div style={{fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '4px'}}>
-                        ${getPersonnelCapitalized(org)} Non-Deployable
+                        {getPersonnelCapitalized(org)} Non-Deployable
                       </div>
                       <div style={{fontSize: '13px', color: '#64748b'}}>
                         On limited duty profiles
@@ -1552,7 +1552,7 @@ keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage)
                       type="number"
                       value={manualLeadSeats === null ? '' : manualLeadSeats}
                       onChange={(e) => setManualLeadSeats(e.target.value === '' ? null : parseInt(e.target.value))}
-                      placeholder={`Default: ${calculations.leadSeats}`}
+                      placeholder={`Default: {calculations.leadSeats}`}
                       style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
                     />
                   </div>
@@ -1565,7 +1565,7 @@ keeps {Math.round(behavioralHealthCalcs.uniqueAffected * (calculations.coverage)
                       type="number"
                       value={manualReadySeats === null ? '' : manualReadySeats}
                       onChange={(e) => setManualReadySeats(e.target.value === '' ? null : parseInt(e.target.value))}
-                      placeholder={`Default: ${calculations.readySeats}`}
+                      placeholder={`Default: {calculations.readySeats}`}
                       style={{width: '100%', padding: '10px', fontSize: '15px', border: '2px solid #e2e8f0', borderRadius: '8px'}}
                     />
                   </div>
