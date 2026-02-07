@@ -311,7 +311,6 @@ const CBPDashboard = () => {
   // ===== HELPER FUNCTIONS =====
   const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
   const fmtCompact = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1 }).format(num);
-  const pct = (num) => `${num.toFixed(1)}%`;
   const roiDisplay = (num) => num >= 100 ? `${(num / 100).toFixed(1)}X` : `${num.toFixed(1)}%`;
 
   const getPersonnelType = (orgId) => {
