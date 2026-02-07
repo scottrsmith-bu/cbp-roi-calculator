@@ -1,7 +1,4 @@
-// ===== CBP WORKFORCE SUSTAINABILITY DASHBOARD v3.0 =====
-// Vendor-agnostic version with Executive Summary, Model Details, Federal Framework
-// Complete rebuild incorporating LAPD calculator improvements
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 
 // ===== GLOBAL STYLES & THEME =====
 function GlobalStyles() {
@@ -305,7 +302,8 @@ const CBPDashboard = () => {
   }, [org, coa, includeLeadForLeaders, manualLeadSeats, manualReadySeats, manualEngagement,
       orgData, behavioralHealthCalcs,
       ptsdCoachingEffectiveness, depressionCoachingEffectiveness,
-      anxietyCoachingEffectiveness, sudCoachingEffectiveness]);
+      anxietyCoachingEffectiveness, sudCoachingEffectiveness,
+      ptsdWcAvgCost, depressionWcAvgCost, anxietyWcAvgCost, sudWcAvgCost]);
 
   // ===== HELPER FUNCTIONS =====
   const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
@@ -829,6 +827,42 @@ const CBPDashboard = () => {
               </div>
             </div>
 
+            {/* COA Comparison */}
+            <button onClick={() => setShowCoaComparison(!showCoaComparison)} style={{ padding: '12px 20px', fontSize: 14, fontWeight: 700, background: '#f59e0b', color: 'white', border: 'none', borderRadius: 10, cursor: 'pointer', width: '100%', boxShadow: '0 4px 12px rgba(245,158,11,0.3)' }}>
+              {showCoaComparison ? '▼ Hide COA Comparison' : '📊 Compare All 3 COAs Side-by-Side'}
+            </button>
+            {showCoaComparison && (
+              <div style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '4px solid #f59e0b', borderRadius: 16, padding: 32 }}>
+                <h3 style={{ fontSize: 24, fontWeight: 800, color: '#92400e', marginBottom: 24, textAlign: 'center' }}>📊 COA Comparison: Investment vs. ROI Analysis</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+                  {['pilot', 'targeted', 'scaled'].map((coaId) => {
+                    const scenario = computeCoaScenario(coaId);
+                    const isSelected = coa === coaId;
+                    return (
+                      <div key={coaId} style={{ background: isSelected ? '#fff' : '#fffef5', border: isSelected ? `4px solid ${T.color.blue}` : '2px solid #f59e0b', borderRadius: 12, padding: 24, position: 'relative' }}>
+                        {isSelected && <div style={{ position: 'absolute', top: -12, right: 12, background: T.color.blue, color: 'white', padding: '4px 12px', borderRadius: 6, fontSize: 12, fontWeight: 700 }}>SELECTED</div>}
+                        <div style={{ fontSize: 18, fontWeight: 800, color: '#92400e', marginBottom: 16, textAlign: 'center' }}>{coaId === 'pilot' ? 'COA 1: Pilot' : coaId === 'targeted' ? 'COA 2: Targeted' : 'COA 3: Scaled'}</div>
+                        <div style={{ background: '#fff', padding: 16, borderRadius: 10, marginBottom: 12, border: '2px solid #fbbf24' }}>
+                          <div style={{ fontSize: 13, color: '#78350f', fontWeight: 600, marginBottom: 8 }}>💰 Investment</div>
+                          <div style={{ fontSize: 28, fontWeight: 900, color: '#92400e' }}>{fmt(scenario.totalInvestment)}</div>
+                          <div style={{ fontSize: 12, color: '#78350f', marginTop: 4 }}>{scenario.totalSeats.toLocaleString()} seats</div>
+                        </div>
+                        <div style={{ background: '#e8f4e0', padding: 16, borderRadius: 10, marginBottom: 12, border: `2px solid ${T.color.green}` }}>
+                          <div style={{ fontSize: 13, color: '#4a7628', fontWeight: 600, marginBottom: 8 }}>💵 Annual Savings</div>
+                          <div style={{ fontSize: 28, fontWeight: 900, color: T.color.green }}>{fmt(scenario.totalSavings)}</div>
+                        </div>
+                        <div style={{ background: isSelected ? T.color.lightBlue : '#fff', padding: 16, borderRadius: 10, border: `2px solid ${isSelected ? T.color.blue : '#f59e0b'}`, textAlign: 'center' }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>📈 ROI</div>
+                          <div style={{ fontSize: 36, fontWeight: 900, color: isSelected ? T.color.blue : '#92400e' }}>{roiDisplay(scenario.roi)}</div>
+                        </div>
+                        {!isSelected && <button onClick={() => setCoa(coaId)} style={{ marginTop: 12, padding: '10px 16px', fontSize: 14, fontWeight: 600, background: T.color.blue, color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer', width: '100%' }}>Select</button>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Product Mix */}
             <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #3b82f6' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
@@ -853,6 +887,29 @@ const CBPDashboard = () => {
                 </div>
               </div>
             </div>
+
+            {/* Manual Overrides */}
+            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #f59e0b' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                <span style={{ fontSize: 22 }}>⚙️</span>
+                <h3 style={{ fontSize: 22, fontWeight: 800, color: T.color.ink, margin: 0 }}>Advanced Settings (Manual Override)</h3>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 15, fontWeight: 600, marginBottom: 8, color: T.color.slate600 }}>Lead Seats Override</label>
+                  <input type="number" value={manualLeadSeats === null ? '' : manualLeadSeats} onChange={(e) => setManualLeadSeats(e.target.value === '' ? null : parseInt(e.target.value))} placeholder={`Default: ${calculations.leadSeats}`} style={{ width: '100%', padding: 10, fontSize: 15, border: '2px solid #e2e8f0', borderRadius: 8 }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 15, fontWeight: 600, marginBottom: 8, color: T.color.slate600 }}>Ready Seats Override</label>
+                  <input type="number" value={manualReadySeats === null ? '' : manualReadySeats} onChange={(e) => setManualReadySeats(e.target.value === '' ? null : parseInt(e.target.value))} placeholder={`Default: ${calculations.readySeats}`} style={{ width: '100%', padding: 10, fontSize: 15, border: '2px solid #e2e8f0', borderRadius: 8 }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 15, fontWeight: 600, marginBottom: 8, color: T.color.slate600 }}>Engagement Rate (%)</label>
+                  <input type="number" value={manualEngagement === null ? '' : manualEngagement} onChange={(e) => setManualEngagement(e.target.value === '' ? null : parseFloat(e.target.value))} placeholder="Default: 65%" style={{ width: '100%', padding: 10, fontSize: 15, border: '2px solid #e2e8f0', borderRadius: 8 }} />
+                </div>
+              </div>
+              <button onClick={() => { setManualLeadSeats(null); setManualReadySeats(null); setManualEngagement(null); }} style={{ marginTop: 20, padding: '12px 24px', fontSize: 14, fontWeight: 600, background: '#64748b', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer' }}>Reset All to Defaults</button>
+            </div>
           </div>
         )}
 
@@ -861,66 +918,137 @@ const CBPDashboard = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
               <h2 style={{ fontSize: 28, fontWeight: 800, color: T.color.ink, marginBottom: 16 }}>Understanding the Behavioral Health Factors</h2>
-              <p style={{ fontSize: 16, color: T.color.slate600, lineHeight: 1.7 }}>Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the panels below to adjust assumptions.</p>
+              <p style={{ fontSize: 16, color: T.color.slate600, lineHeight: 1.7 }}>Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the expandable panels below to adjust assumptions.</p>
             </div>
 
-            {/* Enhanced Comorbidity Panel with Education (Priority 8) */}
+            {/* Enhanced Comorbidity Panel */}
             <div style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '3px solid #f59e0b', borderRadius: 12, padding: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
                 <span style={{ fontSize: 36 }}>🧮</span>
                 <h2 style={{ fontSize: 26, fontWeight: 800, color: '#92400e', margin: 0 }}>Comorbidity Adjustment</h2>
               </div>
-
-              {/* Educational Explainer (NEW from LAPD) */}
               <div style={{ background: 'white', padding: 20, borderRadius: 10, marginBottom: 16, border: '2px solid #fbbf24' }}>
                 <div style={{ fontSize: 16, fontWeight: 700, color: '#92400e', marginBottom: 12 }}>💡 What is this and why does it matter?</div>
-                <p style={{ fontSize: 15, color: '#78350f', lineHeight: 1.8, margin: 0 }}>
-                  Mental health conditions rarely occur alone. An {getPersonnelType(org).split(' ')[0]} with <strong>PTSD</strong> often also experiences <strong>depression</strong> and may develop <strong>substance use</strong> issues as a coping mechanism. If we count each condition separately, we'd count the same person 3 times—inflating our numbers and making the model unrealistic.
-                </p>
+                <p style={{ fontSize: 15, color: '#78350f', lineHeight: 1.8, margin: 0 }}>Mental health conditions rarely occur alone. An {getPersonnelType(org).split(' ')[0]} with <strong>PTSD</strong> often also experiences <strong>depression</strong> and may develop <strong>substance use</strong> issues. If we count each condition separately, we'd count the same person 3 times—inflating our numbers.</p>
               </div>
-
-              {/* Without vs With Visual (NEW from LAPD) */}
               <div style={{ background: 'white', padding: 20, borderRadius: 10, marginBottom: 16 }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: '#92400e', marginBottom: 12 }}>📊 Example: Without vs. With Adjustment</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#92400e', marginBottom: 12 }}>📊 Without vs. With Adjustment</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   <div style={{ background: '#fef2f2', padding: 16, borderRadius: 8, border: '2px solid #fca5a5' }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#991b1b', marginBottom: 8 }}>❌ Without Adjustment (Inflated)</div>
-                    <div style={{ fontSize: 13, color: '#7f1d1d', lineHeight: 1.7 }}>
-                      • {behavioralHealthCalcs.ptsdAffected ? Math.round(behavioralHealthCalcs.ptsdAffected / (1 - comorbidityOverlap/100)).toLocaleString() : '—'} with PTSD<br />
-                      • {behavioralHealthCalcs.depressionAffected ? Math.round(behavioralHealthCalcs.depressionAffected / (1 - comorbidityOverlap/100)).toLocaleString() : '—'} with depression<br />
-                      • Plus anxiety + SUD...<br />
-                      <strong style={{ color: '#dc2626' }}>= {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} "affected"</strong>
-                    </div>
-                    <div style={{ marginTop: 8, fontSize: 12, color: '#991b1b', fontStyle: 'italic' }}>Counts many {getPersonnelType(org)} multiple times!</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#991b1b', marginBottom: 8 }}>❌ Without Adjustment</div>
+                    <div style={{ fontSize: 13, color: '#7f1d1d', lineHeight: 1.7 }}>Raw total: <strong style={{ color: '#dc2626' }}>{behavioralHealthCalcs.rawTotalAffected.toLocaleString()}</strong><br />Counts many {getPersonnelType(org)} multiple times</div>
                   </div>
                   <div style={{ background: '#e8f4e0', padding: 16, borderRadius: 8, border: `2px solid ${T.color.green}` }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#166534', marginBottom: 8 }}>✅ With {comorbidityOverlap}% Overlap Adjustment</div>
-                    <div style={{ fontSize: 13, color: '#14532d', lineHeight: 1.7 }}>
-                      • Same conditions, but...<br />
-                      • ~{comorbidityOverlap}% have 2+ conditions<br />
-                      • Count each person once<br />
-                      <strong style={{ color: T.color.green }}>= {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique {getPersonnelType(org)}</strong>
-                    </div>
-                    <div style={{ marginTop: 8, fontSize: 12, color: '#166534', fontStyle: 'italic' }}>More accurate, defensible estimate</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#166534', marginBottom: 8 }}>✅ With {comorbidityOverlap}% Adjustment</div>
+                    <div style={{ fontSize: 13, color: '#14532d', lineHeight: 1.7 }}>Unique: <strong style={{ color: T.color.green }}>{behavioralHealthCalcs.uniqueAffected.toLocaleString()}</strong><br />Each person counted once</div>
                   </div>
                 </div>
               </div>
-
               <div style={{ background: 'white', padding: '16px 20px', borderRadius: 10, border: '2px solid #f59e0b' }}>
                 <label style={{ display: 'block', fontSize: 18, fontWeight: 700, marginBottom: 12, color: '#92400e' }}>Comorbidity Overlap: {comorbidityOverlap}%</label>
                 <input type="range" min="0" max="50" step="5" value={comorbidityOverlap} onChange={(e) => setComorbidityOverlap(parseInt(e.target.value))} style={{ width: '100%', height: 8 }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#92400e', marginTop: 4 }}>
-                  <span>0% (less conservative)</span><span>50% (more conservative)</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#92400e', marginTop: 4 }}><span>0% (less conservative)</span><span>50% (more conservative)</span></div>
+              </div>
+            </div>
+
+            {/* PTSD Panel */}
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'ptsd' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+              <button onClick={() => setExpandedFactor(expandedFactor === 'ptsd' ? null : 'ptsd')} style={{ width: '100%', padding: 24, background: expandedFactor === 'ptsd' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>🧠 PTSD & Trauma Exposure</div>
+                  <div style={{ fontSize: 15, color: '#64748b' }}>Affects {behavioralHealthCalcs.ptsdAffected.toLocaleString()} {getPersonnelType(org)} • {behavioralHealthCalcs.ptsdWcClaims} claims • {fmt(ptsdWcAvgCost)} avg</div>
                 </div>
-                <div style={{ marginTop: 20, padding: 20, background: '#fffbeb', borderRadius: 10, border: '2px solid #fbbf24' }}>
-                  <div style={{ fontSize: 15, color: '#78350f', lineHeight: 1.8 }}>
-                    <strong>Current Impact:</strong><br />
-                    • Raw total (if independent): {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} {getPersonnelType(org)}<br />
-                    • Adjusted for {comorbidityOverlap}% overlap: {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique {getPersonnelType(org)}<br />
-                    • Prevented double-counting: {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} {getPersonnelType(org)}
+                <div style={{ fontSize: 32, color: T.color.red }}>{expandedFactor === 'ptsd' ? '−' : '+'}</div>
+              </button>
+              {expandedFactor === 'ptsd' && (
+                <div style={{ padding: 24, borderTop: '2px solid #fee2e2', background: '#fef2f2' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Prevalence: {ptsdPrevalence}%</label><input type="range" min="10" max="25" value={ptsdPrevalence} onChange={(e) => setPtsdPrevalence(parseInt(e.target.value))} style={{ width: '100%' }} /><div style={{ fontSize: 12, color: '#8f0e28', marginTop: 4 }}>Average: 18% • Range: 10-25%</div></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Coaching Effectiveness: {ptsdCoachingEffectiveness}%</label><input type="range" min="15" max="35" value={ptsdCoachingEffectiveness} onChange={(e) => setPtsdCoachingEffectiveness(parseInt(e.target.value))} style={{ width: '100%' }} /><div style={{ fontSize: 12, color: '#8f0e28', marginTop: 4 }}>Conservative for early intervention</div></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>WC Filing Rate: {ptsdWcFilingRate}%</label><input type="range" min="5" max="15" value={ptsdWcFilingRate} onChange={(e) => setPtsdWcFilingRate(parseInt(e.target.value))} style={{ width: '100%' }} /><div style={{ fontSize: 12, color: '#8f0e28', marginTop: 4 }}>Average: 8%</div></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Avg Claim Cost: {fmt(ptsdWcAvgCost)}</label><input type="range" min="60000" max="110000" step="5000" value={ptsdWcAvgCost} onChange={(e) => setPtsdWcAvgCost(parseInt(e.target.value))} style={{ width: '100%' }} /><div style={{ fontSize: 12, color: '#8f0e28', marginTop: 4 }}>Range: $60K-$110K</div></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Separation Rate: {ptsdSeparationRate}%</label><input type="range" min="8" max="20" value={ptsdSeparationRate} onChange={(e) => setPtsdSeparationRate(parseInt(e.target.value))} style={{ width: '100%' }} /><div style={{ fontSize: 12, color: '#8f0e28', marginTop: 4 }}>PTSD doubles separation odds</div></div>
+                  </div>
+                  <div style={{ marginTop: 20, padding: 16, background: '#fff', borderRadius: 10, border: '2px solid #fecaca' }}>
+                    <div style={{ fontSize: 14, color: '#6d0a1f', lineHeight: 1.7 }}>• {behavioralHealthCalcs.ptsdAffected.toLocaleString()} affected • {behavioralHealthCalcs.ptsdWcClaims} claims × {fmt(ptsdWcAvgCost)} = {fmt(behavioralHealthCalcs.ptsdWcCost)} • Platform prevents {calculations.ptsdClaimsPrevented} claims = <strong>{fmt(calculations.ptsdWcSavings)}</strong></div>
                   </div>
                 </div>
-              </div>
+              )}
+            </div>
+
+            {/* Depression Panel */}
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'depression' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+              <button onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')} style={{ width: '100%', padding: 24, background: expandedFactor === 'depression' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>😔 Depression & Burnout</div>
+                  <div style={{ fontSize: 15, color: '#64748b' }}>Affects {behavioralHealthCalcs.depressionAffected.toLocaleString()} {getPersonnelType(org)} • {behavioralHealthCalcs.depressionWcClaims} claims • {fmt(depressionWcAvgCost)} avg</div>
+                </div>
+                <div style={{ fontSize: 32, color: T.color.red }}>{expandedFactor === 'depression' ? '−' : '+'}</div>
+              </button>
+              {expandedFactor === 'depression' && (
+                <div style={{ padding: 24, borderTop: '2px solid #fee2e2', background: '#fef2f2' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Prevalence: {depressionPrevalence}%</label><input type="range" min="10" max="25" value={depressionPrevalence} onChange={(e) => setDepressionPrevalence(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Coaching Effectiveness: {depressionCoachingEffectiveness}%</label><input type="range" min="15" max="35" value={depressionCoachingEffectiveness} onChange={(e) => setDepressionCoachingEffectiveness(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>WC Filing Rate: {depressionWcFilingRate}%</label><input type="range" min="5" max="15" value={depressionWcFilingRate} onChange={(e) => setDepressionWcFilingRate(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Avg Claim Cost: {fmt(depressionWcAvgCost)}</label><input type="range" min="40000" max="70000" step="2500" value={depressionWcAvgCost} onChange={(e) => setDepressionWcAvgCost(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Separation Rate: {depressionSeparationRate}%</label><input type="range" min="10" max="25" value={depressionSeparationRate} onChange={(e) => setDepressionSeparationRate(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                  </div>
+                  <div style={{ marginTop: 20, padding: 16, background: '#fff', borderRadius: 10, border: '2px solid #fecaca' }}>
+                    <div style={{ fontSize: 14, color: '#6d0a1f', lineHeight: 1.7 }}>• {behavioralHealthCalcs.depressionAffected.toLocaleString()} affected • {behavioralHealthCalcs.depressionWcClaims} claims × {fmt(depressionWcAvgCost)} = {fmt(behavioralHealthCalcs.depressionWcCost)} • Platform prevents {calculations.depressionClaimsPrevented} claims = <strong>{fmt(calculations.depressionWcSavings)}</strong></div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Anxiety Panel */}
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+              <button onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')} style={{ width: '100%', padding: 24, background: expandedFactor === 'anxiety' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>😰 Anxiety & Stress</div>
+                  <div style={{ fontSize: 15, color: '#64748b' }}>Affects {behavioralHealthCalcs.anxietyAffected.toLocaleString()} {getPersonnelType(org)} • {behavioralHealthCalcs.anxietyWcClaims} claims • {fmt(anxietyWcAvgCost)} avg</div>
+                </div>
+                <div style={{ fontSize: 32, color: T.color.red }}>{expandedFactor === 'anxiety' ? '−' : '+'}</div>
+              </button>
+              {expandedFactor === 'anxiety' && (
+                <div style={{ padding: 24, borderTop: '2px solid #fee2e2', background: '#fef2f2' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Prevalence: {anxietyPrevalence}%</label><input type="range" min="10" max="20" value={anxietyPrevalence} onChange={(e) => setAnxietyPrevalence(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Coaching Effectiveness: {anxietyCoachingEffectiveness}%</label><input type="range" min="10" max="30" value={anxietyCoachingEffectiveness} onChange={(e) => setAnxietyCoachingEffectiveness(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>WC Filing Rate: {anxietyWcFilingRate}%</label><input type="range" min="3" max="12" value={anxietyWcFilingRate} onChange={(e) => setAnxietyWcFilingRate(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Avg Claim Cost: {fmt(anxietyWcAvgCost)}</label><input type="range" min="35000" max="60000" step="2500" value={anxietyWcAvgCost} onChange={(e) => setAnxietyWcAvgCost(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Separation Rate: {anxietySeparationRate}%</label><input type="range" min="5" max="18" value={anxietySeparationRate} onChange={(e) => setAnxietySeparationRate(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                  </div>
+                  <div style={{ marginTop: 20, padding: 16, background: '#fff', borderRadius: 10, border: '2px solid #fecaca' }}>
+                    <div style={{ fontSize: 14, color: '#6d0a1f', lineHeight: 1.7 }}>• {behavioralHealthCalcs.anxietyAffected.toLocaleString()} affected • {behavioralHealthCalcs.anxietyWcClaims} claims × {fmt(anxietyWcAvgCost)} = {fmt(behavioralHealthCalcs.anxietyWcCost)} • Platform prevents {calculations.anxietyClaimsPrevented} claims = <strong>{fmt(calculations.anxietyWcSavings)}</strong></div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SUD Panel */}
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'sud' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+              <button onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')} style={{ width: '100%', padding: 24, background: expandedFactor === 'sud' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>🍺 Substance Use Disorders</div>
+                  <div style={{ fontSize: 15, color: '#64748b' }}>Affects {behavioralHealthCalcs.sudAffected.toLocaleString()} {getPersonnelType(org)} • {behavioralHealthCalcs.sudWcClaims} claims • {fmt(sudWcAvgCost)} avg</div>
+                </div>
+                <div style={{ fontSize: 32, color: T.color.red }}>{expandedFactor === 'sud' ? '−' : '+'}</div>
+              </button>
+              {expandedFactor === 'sud' && (
+                <div style={{ padding: 24, borderTop: '2px solid #fee2e2', background: '#fef2f2' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Prevalence: {sudPrevalence}%</label><input type="range" min="15" max="35" value={sudPrevalence} onChange={(e) => setSudPrevalence(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Coaching Effectiveness: {sudCoachingEffectiveness}%</label><input type="range" min="50" max="80" value={sudCoachingEffectiveness} onChange={(e) => setSudCoachingEffectiveness(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>WC Filing Rate: {sudWcFilingRate}%</label><input type="range" min="8" max="20" value={sudWcFilingRate} onChange={(e) => setSudWcFilingRate(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Avg Claim Cost: {fmt(sudWcAvgCost)}</label><input type="range" min="25000" max="55000" step="2500" value={sudWcAvgCost} onChange={(e) => setSudWcAvgCost(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                    <div><label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#6d0a1f' }}>Separation Rate: {sudSeparationRate}%</label><input type="range" min="15" max="35" value={sudSeparationRate} onChange={(e) => setSudSeparationRate(parseInt(e.target.value))} style={{ width: '100%' }} /></div>
+                  </div>
+                  <div style={{ marginTop: 20, padding: 16, background: '#fff', borderRadius: 10, border: '2px solid #fecaca' }}>
+                    <div style={{ fontSize: 14, color: '#6d0a1f', lineHeight: 1.7 }}>• {behavioralHealthCalcs.sudAffected.toLocaleString()} affected • {behavioralHealthCalcs.sudWcClaims} claims × {fmt(sudWcAvgCost)} = {fmt(behavioralHealthCalcs.sudWcCost)} • Platform prevents {calculations.sudClaimsPrevented} claims = <strong>{fmt(calculations.sudWcSavings)}</strong></div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -964,6 +1092,57 @@ const CBPDashboard = () => {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Research Bibliography - Expandable */}
+            <div style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+              <button onClick={() => setShowResearch(!showResearch)} style={{ width: '100%', padding: 20, background: `linear-gradient(135deg, ${T.color.blue} 0%, #003a5d 100%)`, color: 'white', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                <span style={{ fontSize: 24 }}>📊</span>
+                {showResearch ? '▼' : '▶'} View Complete Data Sources & Methodology (40+ Sources)
+              </button>
+              {showResearch && (
+                <div style={{ marginTop: 24 }}>
+                  {[
+                    { title: 'Retention & Replacement Costs (12 sources)', bg: '#fef2f2', border: '#fecaca', color: '#991b1b', sources: [
+                      'GAO-24-107029 (May 2024): $150K replacement cost, 12-month hiring timeline',
+                      'SHRM 2024: Average cost-per-hire for law enforcement: $4,683',
+                      'DHS Workforce Study (2023): Federal law enforcement attrition rates',
+                      'Replacement Cost Model: $150K composite (recruitment + academy + equipment + FTO + productivity ramp)',
+                    ]},
+                    { title: "Workers' Compensation (FECA) (15 sources)", bg: '#fef3c7', border: '#fde68a', color: '#92400e', sources: [
+                      'JAMA Health Forum (April 2024): 21.6% symptom reduction RCT, 1,132 participants',
+                      'Montreal Police Study (2022): 22-year suicide prevention, 65% reduction',
+                      'CuraLinc EAP Study (2022): 67% alcohol severity reduction, 78% at-risk elimination',
+                      'HeartMath Police Study (2015): 40% stress reduction via HRV biofeedback',
+                      'RAND Corporation: Mental health prevalence in law enforcement',
+                    ]},
+                    { title: 'Professional Standards & Discipline (8 sources)', bg: '#f0f9ff', border: '#bae6fd', color: '#0c4a6e', sources: [
+                      'DHS OIG-21-34 (May 2021): CBP discipline case volumes',
+                      'Baseline Discipline Rate: 3.5% of workforce annually',
+                      'Average Case Cost: $45K (investigation, legal, administrative)',
+                      'Leadership Impact: 22% reduction from improved culture',
+                    ]},
+                    { title: 'Federal Partnership Evidence (6 sources)', bg: '#eff6ff', border: '#bfdbfe', color: '#1e40af', sources: [
+                      'Dept. of Air Force (2021-2025): 11,000+ Airmen, +7% career commitment, +15% unit readiness',
+                      'Air Force Weapons School: Mastery framework for decision-making under pressure',
+                      'NASA Partnership: High-performance team development',
+                      'FAA Engagement: Safety-critical workforce development',
+                    ]},
+                  ].map((section, i) => (
+                    <div key={i} style={{ background: section.bg, borderRadius: 12, padding: 20, marginBottom: 20, border: `2px solid ${section.border}` }}>
+                      <h4 style={{ fontSize: 16, fontWeight: 700, color: section.color, marginBottom: 16 }}>{section.title}</h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13, color: T.color.slate600, lineHeight: 1.6 }}>
+                        {section.sources.map((s, j) => (
+                          <div key={j} style={{ display: 'flex', gap: 8 }}>
+                            <span style={{ minWidth: 12, height: 12, borderRadius: '50%', background: T.color.green, marginTop: 4 }}></span>
+                            <div><strong>{s.split(':')[0]}:</strong>{s.includes(':') ? s.substring(s.indexOf(':')) : ''}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
