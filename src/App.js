@@ -1,3 +1,6 @@
+// ===== CBP WORKFORCE SUSTAINABILITY DASHBOARD v3.0 =====
+// Vendor-agnostic version with Executive Summary, Model Details, Federal Framework
+// Complete rebuild incorporating LAPD calculator improvements
 import React, { useState, useMemo } from 'react';
 
 // ===== GLOBAL STYLES & THEME =====
@@ -364,7 +367,7 @@ const CBPDashboard = () => {
 
   // ===== RENDER =====
   return (
-    <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', background: '#f8fafc', minHeight: '100vh', padding: '40px 0' }}>
+    <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', background: 'linear-gradient(180deg, #e8eff5 0%, #dce5ed 40%, #e2e8f0 100%)', minHeight: '100vh', padding: '40px 0' }}>
       <GlobalStyles />
 
       {/* ===== HEADER ===== */}
@@ -418,7 +421,7 @@ const CBPDashboard = () => {
               { id: 'model-details', label: 'Model Details', icon: '🔧' },
               { id: 'implementation', label: 'Implementation', icon: '🚀' },
             ].map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{ padding: '10px 14px', fontSize: 13, fontWeight: 600, border: 'none', borderRadius: 10, cursor: 'pointer', background: activeTab === tab.id ? T.color.blue : 'white', color: activeTab === tab.id ? 'white' : T.color.slate600, boxShadow: activeTab === tab.id ? '0 4px 12px rgba(0,82,136,0.3)' : '0 2px 4px rgba(0,0,0,0.05)', transition: 'all 0.2s' }}>
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{ padding: '10px 14px', fontSize: 13, fontWeight: 600, border: activeTab === tab.id ? 'none' : '1px solid #cbd5e1', borderRadius: 10, cursor: 'pointer', background: activeTab === tab.id ? T.color.blue : 'white', color: activeTab === tab.id ? 'white' : T.color.slate600, boxShadow: activeTab === tab.id ? '0 4px 12px rgba(0,82,136,0.3)' : '0 2px 6px rgba(0,0,0,0.06)', transition: 'all 0.2s' }}>
                 {tab.icon} {tab.label}
               </button>
             ))}
@@ -434,7 +437,7 @@ const CBPDashboard = () => {
         {/* ===== TAB 0: EXECUTIVE SUMMARY (NEW) ===== */}
         {activeTab === 'executive-summary' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <div style={{ background: 'white', borderRadius: 16, padding: 40, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 16, padding: 40, boxShadow: '0 6px 20px rgba(0,51,102,0.08), 0 1px 3px rgba(0,0,0,0.06)', border: '1px solid #cbd5e1', borderLeft: `4px solid ${T.color.blue}` }}>
               <div style={{ textAlign: 'center', marginBottom: 32 }}>
                 <div style={{ fontSize: 14, color: T.color.gold, fontWeight: 700, letterSpacing: 1, marginBottom: 8 }}>BOTTOM LINE UP FRONT</div>
                 <h2 style={{ fontSize: 32, fontWeight: 900, color: T.color.blue, margin: 0, lineHeight: 1.2 }}>{orgData[org].name} Workforce Sustainability Business Case</h2>
@@ -589,7 +592,7 @@ const CBPDashboard = () => {
                 { icon: '🏥', title: "Workers' Comp (FECA)", amount: calculations.wcSavings, detail: `${calculations.baselineWcClaims} baseline claims at ${fmt(calculations.avgWcClaimCost)} average`, drivers: [`PTSD claims: ${fmt(ptsdWcAvgCost)}`, `Depression: ${fmt(depressionWcAvgCost)}`, `Anxiety: ${fmt(anxietyWcAvgCost)}`, `SUD: ${fmt(sudWcAvgCost)}`], logic: `Platform prevents ${calculations.claimsPrevented} claims = ${fmt(calculations.wcSavings)}` },
                 { icon: '⚖️', title: 'Professional Standards', amount: calculations.disciplineSavings, detail: `${calculations.casesPrevented} preventable cases annually`, drivers: ['Use-of-force investigations', 'Misconduct cases', 'Substance violations', 'Terminations'], logic: `22% standards lift × ${(calculations.coverage * 100).toFixed(1)}% coverage = ${fmt(calculations.disciplineSavings)}` },
               ].map((card, i) => (
-                <div key={i} style={{ background: 'white', borderRadius: 12, padding: 24, border: viewMode === 'enterprise' ? `3px solid ${T.color.red}` : `2px solid ${T.color.blue}`, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                <div key={i} style={{ background: 'white', borderRadius: 12, padding: 24, border: viewMode === 'enterprise' ? `3px solid ${T.color.red}` : `2px solid ${T.color.blue}`, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
                   <div style={{ fontSize: 18, fontWeight: 700, color: viewMode === 'enterprise' ? T.color.red : T.color.blue, marginBottom: 12 }}>{card.icon} {card.title}</div>
                   <div style={{ fontSize: 42, fontWeight: 900, color: T.color.ink, marginBottom: 16 }}>{fmt(card.amount)}</div>
                   <div style={{ fontSize: 15, color: T.color.slate600, marginBottom: 20, lineHeight: 1.6 }}><strong>{card.detail}</strong></div>
@@ -634,7 +637,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* FECA */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <span style={{ fontSize: 28 }}>🏥</span>
                 <h3 style={{ fontSize: 24, fontWeight: 800, color: T.color.ink, margin: 0 }}>Federal Employees' Compensation Act (FECA)</h3>
@@ -652,7 +655,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* 6(c) Retirement */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <span style={{ fontSize: 28 }}>⏰</span>
                 <h3 style={{ fontSize: 24, fontWeight: 800, color: T.color.ink, margin: 0 }}>Law Enforcement 6(c) Retirement Provisions</h3>
@@ -681,7 +684,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* FEVS Rankings */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <span style={{ fontSize: 28 }}>📊</span>
                 <h3 style={{ fontSize: 24, fontWeight: 800, color: T.color.ink, margin: 0 }}>Federal Employee Viewpoint Survey (FEVS) Data</h3>
@@ -707,7 +710,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* DHS Resilience Framework */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <span style={{ fontSize: 28 }}>🛡️</span>
                 <h3 style={{ fontSize: 24, fontWeight: 800, color: T.color.ink, margin: 0 }}>DHS Resilience Framework (2018)</h3>
@@ -735,7 +738,7 @@ const CBPDashboard = () => {
         {activeTab === 'roi-model' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {/* Current Infrastructure Assessment (NEW) */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 28, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 28, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                 <span style={{ fontSize: 32 }}>🏥</span>
                 <h2 style={{ fontSize: 24, fontWeight: 800, color: T.color.ink, margin: 0 }}>Current CBP Wellness Infrastructure</h2>
@@ -777,7 +780,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* COA Selection */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <h2 style={{ fontSize: 26, fontWeight: 800, color: T.color.ink, marginBottom: 16 }}>Select Course of Action (COA)</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
                 {[
@@ -864,7 +867,7 @@ const CBPDashboard = () => {
             )}
 
             {/* Product Mix */}
-            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #3b82f6' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: '2px solid #3b82f6' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <span style={{ fontSize: 22 }}>💼</span>
                 <h3 style={{ fontSize: 22, fontWeight: 800, color: T.color.ink, margin: 0 }}>Product Mix & Investment</h3>
@@ -889,7 +892,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Manual Overrides */}
-            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '2px solid #f59e0b' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: '2px solid #f59e0b' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                 <span style={{ fontSize: 22 }}>⚙️</span>
                 <h3 style={{ fontSize: 22, fontWeight: 800, color: T.color.ink, margin: 0 }}>Advanced Settings (Manual Override)</h3>
@@ -916,7 +919,7 @@ const CBPDashboard = () => {
         {/* Remaining tabs use same patterns - abbreviated for file size */}
         {activeTab === 'factors' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <h2 style={{ fontSize: 28, fontWeight: 800, color: T.color.ink, marginBottom: 16 }}>Understanding the Behavioral Health Factors</h2>
               <p style={{ fontSize: 16, color: T.color.slate600, lineHeight: 1.7 }}>Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the expandable panels below to adjust assumptions.</p>
             </div>
@@ -952,7 +955,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* PTSD Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'ptsd' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'ptsd' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'ptsd' ? null : 'ptsd')} style={{ width: '100%', padding: 24, background: expandedFactor === 'ptsd' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>🧠 PTSD & Trauma Exposure</div>
@@ -977,7 +980,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Depression Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'depression' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'depression' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')} style={{ width: '100%', padding: 24, background: expandedFactor === 'depression' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>😔 Depression & Burnout</div>
@@ -1002,7 +1005,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Anxiety Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'anxiety' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'anxiety' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')} style={{ width: '100%', padding: 24, background: expandedFactor === 'anxiety' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>😰 Anxiety & Stress</div>
@@ -1027,7 +1030,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* SUD Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: expandedFactor === 'sud' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'sud' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')} style={{ width: '100%', padding: 24, background: expandedFactor === 'sud' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>🍺 Substance Use Disorders</div>
@@ -1056,7 +1059,7 @@ const CBPDashboard = () => {
         {activeTab === 'proof' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <MethodologyImpactSection />
-            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <h2 style={{ fontSize: 28, fontWeight: 800, color: T.color.ink, marginBottom: 20 }}>🎖️ Department of Air Force: Federal Translation</h2>
               <div style={{ fontSize: 16, color: T.color.slate600, lineHeight: 1.7, marginBottom: 24 }}>Multi-year partnership demonstrates proven outcomes in high-stress federal environments directly comparable to CBP.</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
@@ -1076,7 +1079,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* JAMA, Montreal, CuraLinc abbreviated */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <h2 style={{ fontSize: 28, fontWeight: 800, color: T.color.ink, marginBottom: 20 }}>🔬 Additional Clinical Validation</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
                 {[
@@ -1095,7 +1098,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Research Bibliography - Expandable */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <button onClick={() => setShowResearch(!showResearch)} style={{ width: '100%', padding: 20, background: `linear-gradient(135deg, ${T.color.blue} 0%, #003a5d 100%)`, color: 'white', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
                 <span style={{ fontSize: 24 }}>📊</span>
                 {showResearch ? '▼' : '▶'} View Complete Data Sources & Methodology (40+ Sources)
@@ -1156,7 +1159,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Core Formulas */}
-            <div style={{ background: 'white', borderRadius: 12, padding: 28, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 28, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <h3 style={{ fontSize: 24, fontWeight: 800, color: T.color.ink, marginBottom: 20 }}>Core Formulas</h3>
               {[
                 { step: 1, title: 'Behavioral Health Population (Comorbidity-Adjusted)', formula: 'Raw Affected = Σ(Officers × Condition Prevalence %)\nUnique Affected = Raw × (1 - Comorbidity Overlap %)', example: `${orgData[org].name}: Raw ${behavioralHealthCalcs.rawTotalAffected.toLocaleString()} → Adjusted ${behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique`, color: '#7c3aed' },
@@ -1191,7 +1194,7 @@ const CBPDashboard = () => {
 
         {activeTab === 'implementation' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
               <h2 style={{ fontSize: 28, fontWeight: 800, color: T.color.ink, marginBottom: 24 }}>🚀 Recommended Next Steps</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, marginBottom: 24 }}>
                 {[
