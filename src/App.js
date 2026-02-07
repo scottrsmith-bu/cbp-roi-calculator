@@ -1021,33 +1021,93 @@ const CBPDashboard = () => {
               <p style={{ fontSize: 16, color: T.color.slate600, lineHeight: 1.7 }}>Workers' comp, retention, and discipline costs are driven by four behavioral health factors. Use the expandable panels below to adjust assumptions.</p>
             </div>
 
-            {/* Enhanced Comorbidity Panel */}
+            {/* Enhanced Comorbidity Panel - Full LAPD-style */}
             <div style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '3px solid #f59e0b', borderRadius: 12, padding: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
                 <span style={{ fontSize: 36 }}>🧮</span>
                 <h2 style={{ fontSize: 26, fontWeight: 800, color: '#92400e', margin: 0 }}>Comorbidity Adjustment</h2>
               </div>
+
+              {/* What is this */}
               <div style={{ background: 'white', padding: 20, borderRadius: 10, marginBottom: 16, border: '2px solid #fbbf24' }}>
                 <div style={{ fontSize: 16, fontWeight: 700, color: '#92400e', marginBottom: 12 }}>💡 What is this and why does it matter?</div>
-                <p style={{ fontSize: 15, color: '#78350f', lineHeight: 1.8, margin: 0 }}>Mental health conditions rarely occur alone. An {getPersonnelType(org).split(' ')[0]} with <strong>PTSD</strong> often also experiences <strong>depression</strong> and may develop <strong>substance use</strong> issues. If we count each condition separately, we'd count the same person 3 times—inflating our numbers.</p>
+                <p style={{ fontSize: 15, color: '#78350f', lineHeight: 1.8, margin: 0 }}>
+                  Mental health conditions rarely occur alone. An {getPersonnelType(org).split(' ')[0]} with <strong>PTSD</strong> often also experiences <strong>depression</strong> and may develop <strong>substance use</strong> issues as a coping mechanism. If we count each condition separately, we'd count the same {getPersonnelType(org).split(' ')[0]} 3 times—inflating our numbers and making the model unrealistic.
+                </p>
               </div>
+
+              {/* Without vs With - Full detail */}
               <div style={{ background: 'white', padding: 20, borderRadius: 10, marginBottom: 16 }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: '#92400e', marginBottom: 12 }}>📊 Without vs. With Adjustment</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#92400e', marginBottom: 12 }}>📊 Example: Without vs. With Adjustment</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   <div style={{ background: '#fef2f2', padding: 16, borderRadius: 8, border: '2px solid #fca5a5' }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#991b1b', marginBottom: 8 }}>❌ Without Adjustment</div>
-                    <div style={{ fontSize: 13, color: '#7f1d1d', lineHeight: 1.7 }}>Raw total: <strong style={{ color: '#dc2626' }}>{behavioralHealthCalcs.rawTotalAffected.toLocaleString()}</strong><br />Counts many {getPersonnelType(org)} multiple times</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#991b1b', marginBottom: 8 }}>❌ Without Adjustment (Inflated)</div>
+                    <div style={{ fontSize: 13, color: '#7f1d1d', lineHeight: 1.7 }}>
+                      • {Math.round(orgData[org].officers * (ptsdPrevalence / 100)).toLocaleString()} with PTSD<br />
+                      • {Math.round(orgData[org].officers * (depressionPrevalence / 100)).toLocaleString()} with depression<br />
+                      • {Math.round(orgData[org].officers * (anxietyPrevalence / 100)).toLocaleString()} with anxiety<br />
+                      • {Math.round(orgData[org].officers * (sudPrevalence / 100)).toLocaleString()} with SUD<br />
+                      <strong style={{ color: '#dc2626' }}>= {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} "affected {getPersonnelType(org)}"</strong>
+                    </div>
+                    <div style={{ marginTop: 8, fontSize: 12, color: '#991b1b', fontStyle: 'italic' }}>Counts many {getPersonnelType(org)} multiple times!</div>
                   </div>
                   <div style={{ background: '#e8f4e0', padding: 16, borderRadius: 8, border: `2px solid ${T.color.green}` }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#166534', marginBottom: 8 }}>✅ With {comorbidityOverlap}% Adjustment</div>
-                    <div style={{ fontSize: 13, color: '#14532d', lineHeight: 1.7 }}>Unique: <strong style={{ color: T.color.green }}>{behavioralHealthCalcs.uniqueAffected.toLocaleString()}</strong><br />Each person counted once</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#166534', marginBottom: 8 }}>✅ With {comorbidityOverlap}% Overlap Adjustment</div>
+                    <div style={{ fontSize: 13, color: '#14532d', lineHeight: 1.7 }}>
+                      • Same conditions, but...<br />
+                      • ~{comorbidityOverlap}% have 2+ conditions<br />
+                      • Count each person once<br />
+                      <strong style={{ color: T.color.green }}>= {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique {getPersonnelType(org)}</strong>
+                    </div>
+                    <div style={{ marginTop: 8, fontSize: 12, color: '#166534', fontStyle: 'italic' }}>More accurate, defensible estimate</div>
                   </div>
                 </div>
               </div>
+
+              {/* Slider + Model Impact */}
               <div style={{ background: 'white', padding: '16px 20px', borderRadius: 10, border: '2px solid #f59e0b' }}>
                 <label style={{ display: 'block', fontSize: 18, fontWeight: 700, marginBottom: 12, color: '#92400e' }}>Comorbidity Overlap: {comorbidityOverlap}%</label>
                 <input type="range" min="0" max="50" step="5" value={comorbidityOverlap} onChange={(e) => setComorbidityOverlap(parseInt(e.target.value))} style={{ width: '100%', height: 8 }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#92400e', marginTop: 4 }}><span>0% (less conservative)</span><span>50% (more conservative)</span></div>
+
+                <div style={{ marginTop: 20, padding: 20, background: T.color.lightBlue, borderRadius: 10, border: `2px solid ${T.color.blue}` }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: T.color.blue, marginBottom: 8 }}>📈 Model Impact</div>
+                  <div style={{ fontSize: 14, color: T.color.blue, lineHeight: 1.8 }}>
+                    <strong>Before adjustment:</strong> {behavioralHealthCalcs.rawTotalAffected.toLocaleString()} {getPersonnelType(org)}<br />
+                    <strong>After adjustment:</strong> {behavioralHealthCalcs.uniqueAffected.toLocaleString()} unique {getPersonnelType(org)}<br />
+                    <strong>Reduction:</strong> {behavioralHealthCalcs.comorbidityReduction.toLocaleString()} {getPersonnelType(org)} no longer double-counted
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* How to Use These Sliders - Guidance Section */}
+            <div style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: `2px solid ${T.color.blue}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                <span style={{ fontSize: 24 }}>🎯</span>
+                <div style={{ fontSize: 20, fontWeight: 800, color: T.color.ink }}>How to Use the Adjustment Sliders</div>
+              </div>
+              <div style={{ fontSize: 14, color: T.color.slate600, lineHeight: 1.8, marginBottom: 16 }}>
+                This model has <strong>two layers of adjustable assumptions</strong> that work together:
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 10, border: '2px solid #e2e8f0' }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: T.color.blue, marginBottom: 8 }}>1️⃣ Condition-Level Sliders (Below)</div>
+                  <div style={{ fontSize: 13, color: T.color.slate600, lineHeight: 1.7 }}>
+                    Adjust PTSD, depression, anxiety, and SUD <strong>prevalence rates, WC filing rates, claim costs, and separation rates</strong>. These feed the bottom-up calculation that determines how many {getPersonnelType(org)} are affected and what the costs are per condition. Use these when you have condition-specific data from your organization.
+                  </div>
+                </div>
+                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 10, border: '2px solid #e2e8f0' }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: T.color.blue, marginBottom: 8 }}>2️⃣ Comorbidity Overlap (Above)</div>
+                  <div style={{ fontSize: 13, color: T.color.slate600, lineHeight: 1.7 }}>
+                    Controls how much the conditions <strong>overlap</strong> (officers with multiple diagnoses). Higher overlap = more conservative estimate. At 35%, we reduce the raw affected count by 35% to avoid double-counting. Research suggests <strong>30-40% overlap</strong> in law enforcement populations.
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginTop: 16, padding: 16, background: '#fffbeb', borderRadius: 10, border: '2px solid #fbbf24' }}>
+                <div style={{ fontSize: 14, color: '#78350f', lineHeight: 1.7 }}>
+                  <strong>💡 Tip for stakeholder meetings:</strong> Start with default values (research-backed). Then ask: "Does this match what you're seeing in your field office/sector?" Adjust sliders in real-time based on their input. This creates ownership of the assumptions and makes the ROI projection theirs, not ours.
+                </div>
               </div>
             </div>
 
@@ -1058,7 +1118,7 @@ const CBPDashboard = () => {
                 <div style={{ fontSize: 18, fontWeight: 800, color: T.color.ink }}>About Effectiveness Rates</div>
               </div>
               <div style={{ fontSize: 14, color: T.color.slate600, lineHeight: 1.7 }}>
-                Effectiveness rates in the model are based on <strong>proven Air Force results</strong>: +7% career commitment (retention), +17% mission readiness, and +15% resilience improvement. These are hardcoded as the evidence base. Use the sliders below to adjust <strong>prevalence rates, costs, and separation rates</strong> based on your organization's specific data.
+                Effectiveness rates in the model are based on <strong>proven Air Force results</strong>: +7% career commitment (retention), +17% mission readiness, and +15% resilience improvement. These rates are hardcoded into the model. Use the sliders below to adjust <strong>prevalence rates, costs, and separation rates</strong> based on your organization's specific data.
               </div>
             </div>
 
