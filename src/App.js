@@ -592,7 +592,7 @@ const CBPDashboard = () => {
                 { icon: '🏥', title: "Workers' Comp (FECA)", amount: calculations.wcSavings, detail: `${calculations.baselineWcClaims} baseline claims at ${fmt(calculations.avgWcClaimCost)} average`, drivers: [`PTSD claims: ${fmt(ptsdWcAvgCost)}`, `Depression: ${fmt(depressionWcAvgCost)}`, `Anxiety: ${fmt(anxietyWcAvgCost)}`, `SUD: ${fmt(sudWcAvgCost)}`], logic: `Platform prevents ${calculations.claimsPrevented} claims = ${fmt(calculations.wcSavings)}` },
                 { icon: '⚖️', title: 'Professional Standards', amount: calculations.disciplineSavings, detail: `${calculations.casesPrevented} preventable cases annually`, drivers: ['Use-of-force investigations', 'Misconduct cases', 'Substance violations', 'Terminations'], logic: `22% standards lift × ${(calculations.coverage * 100).toFixed(1)}% coverage = ${fmt(calculations.disciplineSavings)}` },
               ].map((card, i) => (
-                <div key={i} style={{ background: 'white', borderRadius: 12, padding: 24, border: viewMode === 'enterprise' ? `3px solid ${T.color.red}` : `2px solid ${T.color.blue}`, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+                <div key={i} style={{ background: 'white', borderRadius: 12, padding: 24, border: viewMode === 'enterprise' ? `3px solid ${T.color.red}` : `2px solid ${T.color.blue}`, boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)' }}>
                   <div style={{ fontSize: 18, fontWeight: 700, color: viewMode === 'enterprise' ? T.color.red : T.color.blue, marginBottom: 12 }}>{card.icon} {card.title}</div>
                   <div style={{ fontSize: 42, fontWeight: 900, color: T.color.ink, marginBottom: 16 }}>{fmt(card.amount)}</div>
                   <div style={{ fontSize: 15, color: T.color.slate600, marginBottom: 20, lineHeight: 1.6 }}><strong>{card.detail}</strong></div>
@@ -867,7 +867,7 @@ const CBPDashboard = () => {
             )}
 
             {/* Product Mix */}
-            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: '2px solid #3b82f6' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '2px solid #3b82f6' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <span style={{ fontSize: 22 }}>💼</span>
                 <h3 style={{ fontSize: 22, fontWeight: 800, color: T.color.ink, margin: 0 }}>Product Mix & Investment</h3>
@@ -892,7 +892,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Manual Overrides */}
-            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: '2px solid #f59e0b' }}>
+            <div style={{ background: 'white', borderRadius: 12, padding: '20px 28px 28px', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '2px solid #f59e0b' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                 <span style={{ fontSize: 22 }}>⚙️</span>
                 <h3 style={{ fontSize: 22, fontWeight: 800, color: T.color.ink, margin: 0 }}>Advanced Settings (Manual Override)</h3>
@@ -955,7 +955,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* PTSD Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'ptsd' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: expandedFactor === 'ptsd' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'ptsd' ? null : 'ptsd')} style={{ width: '100%', padding: 24, background: expandedFactor === 'ptsd' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>🧠 PTSD & Trauma Exposure</div>
@@ -980,7 +980,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Depression Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'depression' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: expandedFactor === 'depression' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'depression' ? null : 'depression')} style={{ width: '100%', padding: 24, background: expandedFactor === 'depression' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>😔 Depression & Burnout</div>
@@ -1005,7 +1005,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* Anxiety Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'anxiety' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: expandedFactor === 'anxiety' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'anxiety' ? null : 'anxiety')} style={{ width: '100%', padding: 24, background: expandedFactor === 'anxiety' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>😰 Anxiety & Stress</div>
@@ -1030,7 +1030,7 @@ const CBPDashboard = () => {
             </div>
 
             {/* SUD Panel */}
-            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', border: expandedFactor === 'sud' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
+            <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,51,102,0.07), 0 1px 3px rgba(0,0,0,0.05)', border: expandedFactor === 'sud' ? `3px solid ${T.color.red}` : '2px solid #e2e8f0' }}>
               <button onClick={() => setExpandedFactor(expandedFactor === 'sud' ? null : 'sud')} style={{ width: '100%', padding: 24, background: expandedFactor === 'sud' ? '#fef2f2' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: 22, fontWeight: 800, color: T.color.red, marginBottom: 8 }}>🍺 Substance Use Disorders</div>
